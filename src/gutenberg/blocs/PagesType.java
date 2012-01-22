@@ -26,33 +26,72 @@
 
                         /**
                         * field for Page
+                        * This was an Array!
                         */
 
                         
-                                    protected gutenberg.blocs.PageType localPage ;
+                                    protected gutenberg.blocs.PageType[] localPage ;
                                 
 
                            /**
                            * Auto generated getter method
-                           * @return gutenberg.blocs.PageType
+                           * @return gutenberg.blocs.PageType[]
                            */
-                           public  gutenberg.blocs.PageType getPage(){
+                           public  gutenberg.blocs.PageType[] getPage(){
                                return localPage;
                            }
 
                            
                         
-                            /**
-                               * Auto generated setter method
-                               * @param param Page
-                               */
-                               public void setPage(gutenberg.blocs.PageType param){
-                            
-                                            this.localPage=param;
-                                    
 
-                               }
+
+                               
+                              /**
+                               * validate the array for Page
+                               */
+                              protected void validatePage(gutenberg.blocs.PageType[] param){
+                             
+                              if ((param != null) && (param.length < 1)){
+                                throw new java.lang.RuntimeException();
+                              }
+                              
+                              }
+
+
+                             /**
+                              * Auto generated setter method
+                              * @param param Page
+                              */
+                              public void setPage(gutenberg.blocs.PageType[] param){
+                              
+                                   validatePage(param);
+
+                               
+                                      this.localPage=param;
+                              }
+
+                               
+                             
+                             /**
+                             * Auto generated add method for the array for convenience
+                             * @param param gutenberg.blocs.PageType
+                             */
+                             public void addPage(gutenberg.blocs.PageType param){
+                                   if (localPage == null){
+                                   localPage = new gutenberg.blocs.PageType[]{};
+                                   }
+
                             
+
+                               java.util.List list =
+                            org.apache.axis2.databinding.utils.ConverterUtil.toList(localPage);
+                               list.add(param);
+                               this.localPage =
+                             (gutenberg.blocs.PageType[])list.toArray(
+                            new gutenberg.blocs.PageType[list.size()]);
+
+                             }
+                             
 
      
      
@@ -113,12 +152,24 @@
                
                    }
                
-                                            if (localPage==null){
-                                                 throw new org.apache.axis2.databinding.ADBException("page cannot be null!!");
+                                       if (localPage!=null){
+                                            for (int i = 0;i < localPage.length;i++){
+                                                if (localPage[i] != null){
+                                                 localPage[i].serialize(new javax.xml.namespace.QName("","page"),
+                                                           xmlWriter);
+                                                } else {
+                                                   
+                                                           throw new org.apache.axis2.databinding.ADBException("page cannot be null!!");
+                                                    
+                                                }
+
                                             }
-                                           localPage.serialize(new javax.xml.namespace.QName("","page"),
-                                               xmlWriter);
+                                     } else {
                                         
+                                               throw new org.apache.axis2.databinding.ADBException("page cannot be null!!");
+                                        
+                                    }
+                                 
                     xmlWriter.writeEndElement();
                
 
@@ -304,15 +355,27 @@
                  java.util.ArrayList attribList = new java.util.ArrayList();
 
                 
-                            elementList.add(new javax.xml.namespace.QName("",
-                                                                      "page"));
-                            
-                            
-                                    if (localPage==null){
-                                         throw new org.apache.axis2.databinding.ADBException("page cannot be null!!");
+                             if (localPage!=null) {
+                                 for (int i = 0;i < localPage.length;i++){
+
+                                    if (localPage[i] != null){
+                                         elementList.add(new javax.xml.namespace.QName("",
+                                                                          "page"));
+                                         elementList.add(localPage[i]);
+                                    } else {
+                                        
+                                               throw new org.apache.axis2.databinding.ADBException("page cannot be null !!");
+                                            
                                     }
-                                    elementList.add(localPage);
-                                
+
+                                 }
+                             } else {
+                                 
+                                        throw new org.apache.axis2.databinding.ADBException("page cannot be null!!");
+                                    
+                             }
+
+                        
 
                 return new org.apache.axis2.databinding.utils.reader.ADBXMLStreamReaderImpl(qName, elementList.toArray(), attribList.toArray());
             
@@ -388,15 +451,48 @@
                     
                     reader.next();
                 
+                        java.util.ArrayList list1 = new java.util.ArrayList();
+                    
                                     
                                     while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
                                 
                                     if (reader.isStartElement() && new javax.xml.namespace.QName("","page").equals(reader.getName())){
                                 
-                                                object.setPage(gutenberg.blocs.PageType.Factory.parse(reader));
-                                              
-                                        reader.next();
                                     
+                                    
+                                    // Process the array and step past its final element's end.
+                                    list1.add(gutenberg.blocs.PageType.Factory.parse(reader));
+                                                                
+                                                        //loop until we find a start element that is not part of this array
+                                                        boolean loopDone1 = false;
+                                                        while(!loopDone1){
+                                                            // We should be at the end element, but make sure
+                                                            while (!reader.isEndElement())
+                                                                reader.next();
+                                                            // Step out of this element
+                                                            reader.next();
+                                                            // Step to next element event.
+                                                            while (!reader.isStartElement() && !reader.isEndElement())
+                                                                reader.next();
+                                                            if (reader.isEndElement()){
+                                                                //two continuous end elements means we are exiting the xml structure
+                                                                loopDone1 = true;
+                                                            } else {
+                                                                if (new javax.xml.namespace.QName("","page").equals(reader.getName())){
+                                                                    list1.add(gutenberg.blocs.PageType.Factory.parse(reader));
+                                                                        
+                                                                }else{
+                                                                    loopDone1 = true;
+                                                                }
+                                                            }
+                                                        }
+                                                        // call the converter utility  to convert and set the array
+                                                        
+                                                        object.setPage((gutenberg.blocs.PageType[])
+                                                            org.apache.axis2.databinding.utils.ConverterUtil.convertToArray(
+                                                                gutenberg.blocs.PageType.class,
+                                                                list1));
+                                                            
                               }  // End of if for expected property start element
                                 
                                 else{

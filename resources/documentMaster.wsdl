@@ -26,7 +26,7 @@
       
             <xsd:complexType name="pagesType">
             	<xsd:sequence>
-            		<xsd:element name="page" type="tns:pageType"/>
+            		<xsd:element maxOccurs="unbounded" minOccurs="1" name="page" type="tns:pageType"/>
             	</xsd:sequence>
             </xsd:complexType>
     
