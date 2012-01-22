@@ -1,5 +1,7 @@
 package gutenberg.workers;
 
+import java.io.PrintWriter;
+
 import gutenberg.blocs.AssignmentType;
 import gutenberg.blocs.ManifestType;
 import gutenberg.blocs.QuizType;
@@ -15,6 +17,8 @@ public class Scribe {
 	}
 	
 	public ManifestType generate(QuizType quiz) {
+		ManifestType manifest = null;
+		
 		
 		return new ManifestType();
 	}
@@ -26,4 +30,5 @@ public class Scribe {
 	
 	private String MINT;
 	private Vault vault;
+	private PrintWriter writer;
 }

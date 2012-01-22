@@ -28,7 +28,7 @@
              */
             private void clearAllSettingTrackers() {
             
-                   localReceiptTracker = false;
+                   localManifestTracker = false;
                 
                    localErrorTracker = false;
                 
@@ -36,20 +36,20 @@
         
 
                         /**
-                        * field for Receipt
+                        * field for Manifest
                         */
 
                         
-                                    protected gutenberg.blocs.ManifestType localReceipt ;
+                                    protected gutenberg.blocs.ManifestType localManifest ;
                                 
                            /*  This tracker boolean wil be used to detect whether the user called the set method
                           *   for this attribute. It will be used to determine whether to include this field
                            *   in the serialized XML
                            */
-                           protected boolean localReceiptTracker = false ;
+                           protected boolean localManifestTracker = false ;
 
-                           public boolean isReceiptSpecified(){
-                               return localReceiptTracker;
+                           public boolean isManifestSpecified(){
+                               return localManifestTracker;
                            }
 
                            
@@ -58,22 +58,22 @@
                            * Auto generated getter method
                            * @return gutenberg.blocs.ManifestType
                            */
-                           public  gutenberg.blocs.ManifestType getReceipt(){
-                               return localReceipt;
+                           public  gutenberg.blocs.ManifestType getManifest(){
+                               return localManifest;
                            }
 
                            
                         
                             /**
                                * Auto generated setter method
-                               * @param param Receipt
+                               * @param param Manifest
                                */
-                               public void setReceipt(gutenberg.blocs.ManifestType param){
+                               public void setManifest(gutenberg.blocs.ManifestType param){
                             
                                 clearAllSettingTrackers();
-                            localReceiptTracker = param != null;
+                            localManifestTracker = param != null;
                                    
-                                            this.localReceipt=param;
+                                            this.localManifest=param;
                                     
 
                                }
@@ -181,11 +181,11 @@
 
                
                    }
-                if (localReceiptTracker){
-                                            if (localReceipt==null){
-                                                 throw new org.apache.axis2.databinding.ADBException("receipt cannot be null!!");
+                if (localManifestTracker){
+                                            if (localManifest==null){
+                                                 throw new org.apache.axis2.databinding.ADBException("manifest cannot be null!!");
                                             }
-                                           localReceipt.serialize(new javax.xml.namespace.QName("","receipt"),
+                                           localManifest.serialize(new javax.xml.namespace.QName("","manifest"),
                                                xmlWriter);
                                         } if (localErrorTracker){
                                     namespace = "";
@@ -390,15 +390,15 @@
                  java.util.ArrayList elementList = new java.util.ArrayList();
                  java.util.ArrayList attribList = new java.util.ArrayList();
 
-                 if (localReceiptTracker){
+                 if (localManifestTracker){
                             elementList.add(new javax.xml.namespace.QName("",
-                                                                      "receipt"));
+                                                                      "manifest"));
                             
                             
-                                    if (localReceipt==null){
-                                         throw new org.apache.axis2.databinding.ADBException("receipt cannot be null!!");
+                                    if (localManifest==null){
+                                         throw new org.apache.axis2.databinding.ADBException("manifest cannot be null!!");
                                     }
-                                    elementList.add(localReceipt);
+                                    elementList.add(localManifest);
                                 } if (localErrorTracker){
                                       elementList.add(new javax.xml.namespace.QName("",
                                                                       "error"));
@@ -487,9 +487,9 @@
                 while(!reader.isEndElement()) {
                     if (reader.isStartElement() ){
                 
-                                    if (reader.isStartElement() && new javax.xml.namespace.QName("","receipt").equals(reader.getName())){
+                                    if (reader.isStartElement() && new javax.xml.namespace.QName("","manifest").equals(reader.getName())){
                                 
-                                                object.setReceipt(gutenberg.blocs.ManifestType.Factory.parse(reader));
+                                                object.setManifest(gutenberg.blocs.ManifestType.Factory.parse(reader));
                                               
                                         reader.next();
                                     
