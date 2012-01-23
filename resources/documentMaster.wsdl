@@ -11,7 +11,8 @@
       	<xsd:sequence>
       		<xsd:element name="id" type="xsd:string"/>
       		<xsd:element name="teacherId" type="xsd:string"/>
-      		<xsd:element name="pages" type="tns:pagesType"/>
+      		<xsd:element maxOccurs="unbounded" minOccurs="1" name="page" type="tns:pageType">
+      		</xsd:element>
 
       	</xsd:sequence>
       </xsd:complexType>
@@ -19,21 +20,18 @@
       <xsd:complexType name="manifestType">
       	<xsd:sequence>
       		<xsd:element name="root" type="xsd:string"/>
-      		<xsd:element maxOccurs="unbounded" minOccurs="0" name="images" type="xsd:string"/>
-      		<xsd:element maxOccurs="unbounded" minOccurs="0" name="documents" type="xsd:string"/>
+      		<xsd:element maxOccurs="unbounded" minOccurs="0" name="image" type="tns:entryType">
+      		</xsd:element>
+      		<xsd:element maxOccurs="unbounded" minOccurs="0" name="document" type="tns:entryType">
+      		</xsd:element>
       	</xsd:sequence>
       </xsd:complexType>
       
-            <xsd:complexType name="pagesType">
-            	<xsd:sequence>
-            		<xsd:element maxOccurs="unbounded" minOccurs="1" name="page" type="tns:pageType"/>
-            	</xsd:sequence>
-            </xsd:complexType>
     
             <xsd:complexType name="pageType">
             	<xsd:sequence>
             		<xsd:element name="number" type="xsd:int"/>
-            		<xsd:element maxOccurs="1" minOccurs="1" name="questions" type="tns:idListType">
+            		<xsd:element maxOccurs="unbounded" minOccurs="1" name="question" type="tns:entryType">
             		</xsd:element>
             	</xsd:sequence>
             </xsd:complexType>
@@ -55,38 +53,43 @@
             <xsd:complexType name="assignmentType">
             	<xsd:sequence>
             		<xsd:element name="quiz" type="tns:quizType"/>
-            		<xsd:element maxOccurs="1" minOccurs="1" name="students" type="tns:studentsType">
+            		<xsd:element maxOccurs="unbounded" minOccurs="1" name="students" type="tns:studentType">
             		</xsd:element>
             	</xsd:sequence>
             </xsd:complexType>
     
-            <xsd:element name="viewQuestions" type="tns:idListType"/>
-            
-        
-            <xsd:complexType name="idListType">
-            	<xsd:sequence>
-            		<xsd:element maxOccurs="unbounded" minOccurs="1" name="id" type="xsd:string"/>
-            	</xsd:sequence>
-            </xsd:complexType>
+            <xsd:element name="viewQuestions" type="tns:entryListType">
+            </xsd:element>
+
+
     
             <xsd:element name="viewQuestionsResponse" type="tns:responseType">
             </xsd:element>
     
-            <xsd:element name="viewScans" type="tns:idListType"/>
-            
+            <xsd:element name="viewScans" type="tns:entryListType"/>
+
             <xsd:element name="viewScansResponse" type="tns:responseType">
             </xsd:element>
     
-            <xsd:complexType name="studentsType">
-            	<xsd:sequence>
-            		<xsd:element maxOccurs="unbounded" minOccurs="1" name="student" type="tns:studentType"/>
-            	</xsd:sequence>
-            </xsd:complexType>
     
             <xsd:complexType name="studentType">
             	<xsd:sequence>
             		<xsd:element name="id" type="xsd:string"/>
             		<xsd:element name="name" type="xsd:string"/>
+            	</xsd:sequence>
+            </xsd:complexType>
+    
+            <xsd:complexType name="entryType">
+            	<xsd:sequence>
+            		<xsd:element name="id" type="xsd:string"/>
+            		<xsd:element maxOccurs="1" minOccurs="0" name="name" type="xsd:string">
+            		</xsd:element>
+            	</xsd:sequence>
+            </xsd:complexType>
+    
+            <xsd:complexType name="entryListType">
+            	<xsd:sequence>
+            		<xsd:element maxOccurs="unbounded" minOccurs="1" name="entry" type="tns:entryType"/>
             	</xsd:sequence>
             </xsd:complexType>
     </xsd:schema>

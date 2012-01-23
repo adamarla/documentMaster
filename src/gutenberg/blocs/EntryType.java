@@ -1,6 +1,6 @@
 
 /**
- * StudentsType.java
+ * EntryType.java
  *
  * This file was auto-generated from WSDL
  * by the Apache Axis2 version: 1.6.1  Built on : Aug 31, 2011 (12:23:23 CEST)
@@ -11,87 +11,90 @@
             
 
             /**
-            *  StudentsType bean class
+            *  EntryType bean class
             */
             @SuppressWarnings({"unchecked","unused"})
         
-        public  class StudentsType
+        public  class EntryType
         implements org.apache.axis2.databinding.ADBBean{
         /* This type was generated from the piece of schema that had
-                name = studentsType
+                name = entryType
                 Namespace URI = http://gutenberg/blocs
                 Namespace Prefix = ns1
                 */
             
 
                         /**
-                        * field for Student
-                        * This was an Array!
+                        * field for Id
                         */
 
                         
-                                    protected gutenberg.blocs.StudentType[] localStudent ;
+                                    protected java.lang.String localId ;
                                 
 
                            /**
                            * Auto generated getter method
-                           * @return gutenberg.blocs.StudentType[]
+                           * @return java.lang.String
                            */
-                           public  gutenberg.blocs.StudentType[] getStudent(){
-                               return localStudent;
+                           public  java.lang.String getId(){
+                               return localId;
                            }
 
                            
                         
-
-
-                               
-                              /**
-                               * validate the array for Student
+                            /**
+                               * Auto generated setter method
+                               * @param param Id
                                */
-                              protected void validateStudent(gutenberg.blocs.StudentType[] param){
-                             
-                              if ((param != null) && (param.length < 1)){
-                                throw new java.lang.RuntimeException();
-                              }
-                              
-                              }
+                               public void setId(java.lang.String param){
+                            
+                                            this.localId=param;
+                                    
 
-
-                             /**
-                              * Auto generated setter method
-                              * @param param Student
-                              */
-                              public void setStudent(gutenberg.blocs.StudentType[] param){
-                              
-                                   validateStudent(param);
-
-                               
-                                      this.localStudent=param;
-                              }
-
-                               
-                             
-                             /**
-                             * Auto generated add method for the array for convenience
-                             * @param param gutenberg.blocs.StudentType
-                             */
-                             public void addStudent(gutenberg.blocs.StudentType param){
-                                   if (localStudent == null){
-                                   localStudent = new gutenberg.blocs.StudentType[]{};
-                                   }
-
+                               }
                             
 
-                               java.util.List list =
-                            org.apache.axis2.databinding.utils.ConverterUtil.toList(localStudent);
-                               list.add(param);
-                               this.localStudent =
-                             (gutenberg.blocs.StudentType[])list.toArray(
-                            new gutenberg.blocs.StudentType[list.size()]);
+                        /**
+                        * field for Name
+                        */
 
-                             }
-                             
+                        
+                                    protected java.lang.String localName ;
+                                
+                           /*  This tracker boolean wil be used to detect whether the user called the set method
+                          *   for this attribute. It will be used to determine whether to include this field
+                           *   in the serialized XML
+                           */
+                           protected boolean localNameTracker = false ;
+
+                           public boolean isNameSpecified(){
+                               return localNameTracker;
+                           }
+
+                           
+
+                           /**
+                           * Auto generated getter method
+                           * @return java.lang.String
+                           */
+                           public  java.lang.String getName(){
+                               return localName;
+                           }
+
+                           
+                        
+                            /**
+                               * Auto generated setter method
+                               * @param param Name
+                               */
+                               public void setName(java.lang.String param){
+                            localNameTracker = param != null;
+                                   
+                                            this.localName=param;
+                                    
+
+                               }
+                            
 
      
      
@@ -141,35 +144,53 @@
                    java.lang.String namespacePrefix = registerPrefix(xmlWriter,"http://gutenberg/blocs");
                    if ((namespacePrefix != null) && (namespacePrefix.trim().length() > 0)){
                        writeAttribute("xsi","http://www.w3.org/2001/XMLSchema-instance","type",
-                           namespacePrefix+":studentsType",
+                           namespacePrefix+":entryType",
                            xmlWriter);
                    } else {
                        writeAttribute("xsi","http://www.w3.org/2001/XMLSchema-instance","type",
-                           "studentsType",
+                           "entryType",
                            xmlWriter);
                    }
 
                
                    }
                
-                                       if (localStudent!=null){
-                                            for (int i = 0;i < localStudent.length;i++){
-                                                if (localStudent[i] != null){
-                                                 localStudent[i].serialize(new javax.xml.namespace.QName("","student"),
-                                                           xmlWriter);
-                                                } else {
-                                                   
-                                                           throw new org.apache.axis2.databinding.ADBException("student cannot be null!!");
-                                                    
-                                                }
+                                    namespace = "";
+                                    writeStartElement(null, namespace, "id", xmlWriter);
+                             
 
-                                            }
-                                     } else {
+                                          if (localId==null){
+                                              // write the nil attribute
+                                              
+                                                     throw new org.apache.axis2.databinding.ADBException("id cannot be null!!");
+                                                  
+                                          }else{
+
                                         
-                                               throw new org.apache.axis2.databinding.ADBException("student cannot be null!!");
+                                                   xmlWriter.writeCharacters(localId);
+                                            
+                                          }
+                                    
+                                   xmlWriter.writeEndElement();
+                              if (localNameTracker){
+                                    namespace = "";
+                                    writeStartElement(null, namespace, "name", xmlWriter);
+                             
+
+                                          if (localName==null){
+                                              // write the nil attribute
+                                              
+                                                     throw new org.apache.axis2.databinding.ADBException("name cannot be null!!");
+                                                  
+                                          }else{
+
                                         
-                                    }
-                                 
+                                                   xmlWriter.writeCharacters(localName);
+                                            
+                                          }
+                                    
+                                   xmlWriter.writeEndElement();
+                             }
                     xmlWriter.writeEndElement();
                
 
@@ -355,27 +376,24 @@
                  java.util.ArrayList attribList = new java.util.ArrayList();
 
                 
-                             if (localStudent!=null) {
-                                 for (int i = 0;i < localStudent.length;i++){
-
-                                    if (localStudent[i] != null){
-                                         elementList.add(new javax.xml.namespace.QName("",
-                                                                          "student"));
-                                         elementList.add(localStudent[i]);
-                                    } else {
-                                        
-                                               throw new org.apache.axis2.databinding.ADBException("student cannot be null !!");
-                                            
-                                    }
-
-                                 }
-                             } else {
+                                      elementList.add(new javax.xml.namespace.QName("",
+                                                                      "id"));
                                  
-                                        throw new org.apache.axis2.databinding.ADBException("student cannot be null!!");
-                                    
-                             }
-
-                        
+                                        if (localId != null){
+                                            elementList.add(org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localId));
+                                        } else {
+                                           throw new org.apache.axis2.databinding.ADBException("id cannot be null!!");
+                                        }
+                                     if (localNameTracker){
+                                      elementList.add(new javax.xml.namespace.QName("",
+                                                                      "name"));
+                                 
+                                        if (localName != null){
+                                            elementList.add(org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localName));
+                                        } else {
+                                           throw new org.apache.axis2.databinding.ADBException("name cannot be null!!");
+                                        }
+                                    }
 
                 return new org.apache.axis2.databinding.utils.reader.ADBXMLStreamReaderImpl(qName, elementList.toArray(), attribList.toArray());
             
@@ -400,9 +418,9 @@
         * Postcondition: If this object is an element, the reader is positioned at its end element
         *                If this object is a complex type, the reader is positioned at the end element of its outer element
         */
-        public static StudentsType parse(javax.xml.stream.XMLStreamReader reader) throws java.lang.Exception{
-            StudentsType object =
-                new StudentsType();
+        public static EntryType parse(javax.xml.stream.XMLStreamReader reader) throws java.lang.Exception{
+            EntryType object =
+                new EntryType();
 
             int event;
             java.lang.String nillableValue = null;
@@ -426,10 +444,10 @@
 
                     java.lang.String type = fullTypeName.substring(fullTypeName.indexOf(":")+1);
                     
-                            if (!"studentsType".equals(type)){
+                            if (!"entryType".equals(type)){
                                 //find namespace for the prefix
                                 java.lang.String nsUri = reader.getNamespaceContext().getNamespaceURI(nsPrefix);
-                                return (StudentsType)gutenberg.blocs.ExtensionMapper.getTypeObject(
+                                return (EntryType)gutenberg.blocs.ExtensionMapper.getTypeObject(
                                      nsUri,type,reader);
                               }
                         
@@ -451,55 +469,43 @@
                     
                     reader.next();
                 
-                        java.util.ArrayList list1 = new java.util.ArrayList();
-                    
                                     
                                     while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
                                 
-                                    if (reader.isStartElement() && new javax.xml.namespace.QName("","student").equals(reader.getName())){
+                                    if (reader.isStartElement() && new javax.xml.namespace.QName("","id").equals(reader.getName())){
                                 
+                                    java.lang.String content = reader.getElementText();
                                     
+                                              object.setId(
+                                                    org.apache.axis2.databinding.utils.ConverterUtil.convertToString(content));
+                                              
+                                        reader.next();
                                     
-                                    // Process the array and step past its final element's end.
-                                    list1.add(gutenberg.blocs.StudentType.Factory.parse(reader));
-                                                                
-                                                        //loop until we find a start element that is not part of this array
-                                                        boolean loopDone1 = false;
-                                                        while(!loopDone1){
-                                                            // We should be at the end element, but make sure
-                                                            while (!reader.isEndElement())
-                                                                reader.next();
-                                                            // Step out of this element
-                                                            reader.next();
-                                                            // Step to next element event.
-                                                            while (!reader.isStartElement() && !reader.isEndElement())
-                                                                reader.next();
-                                                            if (reader.isEndElement()){
-                                                                //two continuous end elements means we are exiting the xml structure
-                                                                loopDone1 = true;
-                                                            } else {
-                                                                if (new javax.xml.namespace.QName("","student").equals(reader.getName())){
-                                                                    list1.add(gutenberg.blocs.StudentType.Factory.parse(reader));
-                                                                        
-                                                                }else{
-                                                                    loopDone1 = true;
-                                                                }
-                                                            }
-                                                        }
-                                                        // call the converter utility  to convert and set the array
-                                                        
-                                                        object.setStudent((gutenberg.blocs.StudentType[])
-                                                            org.apache.axis2.databinding.utils.ConverterUtil.convertToArray(
-                                                                gutenberg.blocs.StudentType.class,
-                                                                list1));
-                                                            
                               }  // End of if for expected property start element
                                 
                                 else{
                                     // A start element we are not expecting indicates an invalid parameter was passed
                                     throw new org.apache.axis2.databinding.ADBException("Unexpected subelement " + reader.getName());
                                 }
-                              
+                            
+                                    
+                                    while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
+                                
+                                    if (reader.isStartElement() && new javax.xml.namespace.QName("","name").equals(reader.getName())){
+                                
+                                    java.lang.String content = reader.getElementText();
+                                    
+                                              object.setName(
+                                                    org.apache.axis2.databinding.utils.ConverterUtil.convertToString(content));
+                                              
+                                        reader.next();
+                                    
+                              }  // End of if for expected property start element
+                                
+                                    else {
+                                        
+                                    }
+                                  
                             while (!reader.isStartElement() && !reader.isEndElement())
                                 reader.next();
                             

@@ -33,29 +33,19 @@
               
                   if (
                   "http://gutenberg/blocs".equals(namespaceURI) &&
+                  "entryListType".equals(typeName)){
+                   
+                            return  gutenberg.blocs.EntryListType.Factory.parse(reader);
+                        
+
+                  }
+
+              
+                  if (
+                  "http://gutenberg/blocs".equals(namespaceURI) &&
                   "manifestType".equals(typeName)){
                    
                             return  gutenberg.blocs.ManifestType.Factory.parse(reader);
-                        
-
-                  }
-
-              
-                  if (
-                  "http://gutenberg/blocs".equals(namespaceURI) &&
-                  "pagesType".equals(typeName)){
-                   
-                            return  gutenberg.blocs.PagesType.Factory.parse(reader);
-                        
-
-                  }
-
-              
-                  if (
-                  "http://gutenberg/blocs".equals(namespaceURI) &&
-                  "studentsType".equals(typeName)){
-                   
-                            return  gutenberg.blocs.StudentsType.Factory.parse(reader);
                         
 
                   }
@@ -83,9 +73,9 @@
               
                   if (
                   "http://gutenberg/blocs".equals(namespaceURI) &&
-                  "idListType".equals(typeName)){
+                  "entryType".equals(typeName)){
                    
-                            return  gutenberg.blocs.IdListType.Factory.parse(reader);
+                            return  gutenberg.blocs.EntryType.Factory.parse(reader);
                         
 
                   }

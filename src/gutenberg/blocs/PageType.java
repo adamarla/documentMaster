@@ -55,34 +55,73 @@
                             
 
                         /**
-                        * field for Questions
+                        * field for Question
+                        * This was an Array!
                         */
 
                         
-                                    protected gutenberg.blocs.IdListType localQuestions ;
+                                    protected gutenberg.blocs.EntryType[] localQuestion ;
                                 
 
                            /**
                            * Auto generated getter method
-                           * @return gutenberg.blocs.IdListType
+                           * @return gutenberg.blocs.EntryType[]
                            */
-                           public  gutenberg.blocs.IdListType getQuestions(){
-                               return localQuestions;
+                           public  gutenberg.blocs.EntryType[] getQuestion(){
+                               return localQuestion;
                            }
 
                            
                         
-                            /**
-                               * Auto generated setter method
-                               * @param param Questions
-                               */
-                               public void setQuestions(gutenberg.blocs.IdListType param){
-                            
-                                            this.localQuestions=param;
-                                    
 
-                               }
+
+                               
+                              /**
+                               * validate the array for Question
+                               */
+                              protected void validateQuestion(gutenberg.blocs.EntryType[] param){
+                             
+                              if ((param != null) && (param.length < 1)){
+                                throw new java.lang.RuntimeException();
+                              }
+                              
+                              }
+
+
+                             /**
+                              * Auto generated setter method
+                              * @param param Question
+                              */
+                              public void setQuestion(gutenberg.blocs.EntryType[] param){
+                              
+                                   validateQuestion(param);
+
+                               
+                                      this.localQuestion=param;
+                              }
+
+                               
+                             
+                             /**
+                             * Auto generated add method for the array for convenience
+                             * @param param gutenberg.blocs.EntryType
+                             */
+                             public void addQuestion(gutenberg.blocs.EntryType param){
+                                   if (localQuestion == null){
+                                   localQuestion = new gutenberg.blocs.EntryType[]{};
+                                   }
+
                             
+
+                               java.util.List list =
+                            org.apache.axis2.databinding.utils.ConverterUtil.toList(localQuestion);
+                               list.add(param);
+                               this.localQuestion =
+                             (gutenberg.blocs.EntryType[])list.toArray(
+                            new gutenberg.blocs.EntryType[list.size()]);
+
+                             }
+                             
 
      
      
@@ -156,12 +195,24 @@
                                     
                                    xmlWriter.writeEndElement();
                              
-                                            if (localQuestions==null){
-                                                 throw new org.apache.axis2.databinding.ADBException("questions cannot be null!!");
+                                       if (localQuestion!=null){
+                                            for (int i = 0;i < localQuestion.length;i++){
+                                                if (localQuestion[i] != null){
+                                                 localQuestion[i].serialize(new javax.xml.namespace.QName("","question"),
+                                                           xmlWriter);
+                                                } else {
+                                                   
+                                                           throw new org.apache.axis2.databinding.ADBException("question cannot be null!!");
+                                                    
+                                                }
+
                                             }
-                                           localQuestions.serialize(new javax.xml.namespace.QName("","questions"),
-                                               xmlWriter);
+                                     } else {
                                         
+                                               throw new org.apache.axis2.databinding.ADBException("question cannot be null!!");
+                                        
+                                    }
+                                 
                     xmlWriter.writeEndElement();
                
 
@@ -353,15 +404,27 @@
                                 elementList.add(
                                    org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localNumber));
                             
-                            elementList.add(new javax.xml.namespace.QName("",
-                                                                      "questions"));
-                            
-                            
-                                    if (localQuestions==null){
-                                         throw new org.apache.axis2.databinding.ADBException("questions cannot be null!!");
+                             if (localQuestion!=null) {
+                                 for (int i = 0;i < localQuestion.length;i++){
+
+                                    if (localQuestion[i] != null){
+                                         elementList.add(new javax.xml.namespace.QName("",
+                                                                          "question"));
+                                         elementList.add(localQuestion[i]);
+                                    } else {
+                                        
+                                               throw new org.apache.axis2.databinding.ADBException("question cannot be null !!");
+                                            
                                     }
-                                    elementList.add(localQuestions);
-                                
+
+                                 }
+                             } else {
+                                 
+                                        throw new org.apache.axis2.databinding.ADBException("question cannot be null!!");
+                                    
+                             }
+
+                        
 
                 return new org.apache.axis2.databinding.utils.reader.ADBXMLStreamReaderImpl(qName, elementList.toArray(), attribList.toArray());
             
@@ -437,6 +500,8 @@
                     
                     reader.next();
                 
+                        java.util.ArrayList list2 = new java.util.ArrayList();
+                    
                                     
                                     while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
                                 
@@ -459,12 +524,43 @@
                                     
                                     while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
                                 
-                                    if (reader.isStartElement() && new javax.xml.namespace.QName("","questions").equals(reader.getName())){
+                                    if (reader.isStartElement() && new javax.xml.namespace.QName("","question").equals(reader.getName())){
                                 
-                                                object.setQuestions(gutenberg.blocs.IdListType.Factory.parse(reader));
-                                              
-                                        reader.next();
                                     
+                                    
+                                    // Process the array and step past its final element's end.
+                                    list2.add(gutenberg.blocs.EntryType.Factory.parse(reader));
+                                                                
+                                                        //loop until we find a start element that is not part of this array
+                                                        boolean loopDone2 = false;
+                                                        while(!loopDone2){
+                                                            // We should be at the end element, but make sure
+                                                            while (!reader.isEndElement())
+                                                                reader.next();
+                                                            // Step out of this element
+                                                            reader.next();
+                                                            // Step to next element event.
+                                                            while (!reader.isStartElement() && !reader.isEndElement())
+                                                                reader.next();
+                                                            if (reader.isEndElement()){
+                                                                //two continuous end elements means we are exiting the xml structure
+                                                                loopDone2 = true;
+                                                            } else {
+                                                                if (new javax.xml.namespace.QName("","question").equals(reader.getName())){
+                                                                    list2.add(gutenberg.blocs.EntryType.Factory.parse(reader));
+                                                                        
+                                                                }else{
+                                                                    loopDone2 = true;
+                                                                }
+                                                            }
+                                                        }
+                                                        // call the converter utility  to convert and set the array
+                                                        
+                                                        object.setQuestion((gutenberg.blocs.EntryType[])
+                                                            org.apache.axis2.databinding.utils.ConverterUtil.convertToArray(
+                                                                gutenberg.blocs.EntryType.class,
+                                                                list2));
+                                                            
                               }  // End of if for expected property start element
                                 
                                 else{

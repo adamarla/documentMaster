@@ -24,7 +24,7 @@ public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
 	 */
 
 	public gutenberg.blocs.ViewScansResponse viewScans(
-			gutenberg.blocs.ViewScans viewScans0) {
+			gutenberg.blocs.ViewScans viewScans) {
 		// TODO : fill this with the necessary business logic
 		throw new java.lang.UnsupportedOperationException("Please implement "
 				+ this.getClass().getName() + "#viewScans");
@@ -38,36 +38,36 @@ public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
 	 */
 
 	public gutenberg.blocs.ViewQuestionsResponse viewQuestions(
-			gutenberg.blocs.ViewQuestions viewQuestions2) {
+			gutenberg.blocs.ViewQuestions viewQuestions) {
 		// TODO : fill this with the necessary business logic
 		throw new java.lang.UnsupportedOperationException("Please implement "
 				+ this.getClass().getName() + "#viewQuestions");
 	}
 
 	/**
-	 * Auto generated method signature.
+	 * Auto generated method signature
 	 * 
-	 * @param buildQuiz
-	 * @return buildQuizResponse
+	 * @param buildQuiz4
+	 * @return buildQuizResponse5
 	 */
 
 	public gutenberg.blocs.BuildQuizResponse buildQuiz(
-			gutenberg.blocs.BuildQuiz buildQuiz) {	
+			gutenberg.blocs.BuildQuiz buildQuiz) {
 		Config config = null;
 		Vault vault = null;
 		Scribe scribe = null;
-		ResponseType response = new ResponseType();		
+		ResponseType response = new ResponseType();
 		try {
 			config = new Config();
 			vault = new Vault(config.getPath(Resource.vault));
-			scribe = new Scribe(config.getPath(Resource.mint),
-					config.getPath(Resource.shared));
-			scribe.setVault(vault);			
+			scribe = new Scribe(config.getPath(Resource.mint), config
+					.getPath(Resource.shared));
+			scribe.setVault(vault);
 			scribe.generate(buildQuiz.getBuildQuiz());
-			response.setManifest(scribe.getManifest());			
+			response.setManifest(scribe.getManifest());
 		} catch (Exception e) {
 			response.setError(e.getMessage());
-		}		
+		}
 		BuildQuizResponse buildQuizResponse = new BuildQuizResponse();
 		buildQuizResponse.setBuildQuizResponse(response);
 		return buildQuizResponse;
@@ -76,8 +76,8 @@ public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
 	/**
 	 * Auto generated method signature
 	 * 
-	 * @param assignQuiz
-	 * @return assignQuizResponse
+	 * @param assignQuiz6
+	 * @return assignQuizResponse7
 	 */
 
 	public gutenberg.blocs.AssignQuizResponse assignQuiz(

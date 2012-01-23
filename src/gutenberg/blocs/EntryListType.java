@@ -1,6 +1,6 @@
 
 /**
- * PagesType.java
+ * EntryListType.java
  *
  * This file was auto-generated from WSDL
  * by the Apache Axis2 version: 1.6.1  Built on : Aug 31, 2011 (12:23:23 CEST)
@@ -11,34 +11,34 @@
             
 
             /**
-            *  PagesType bean class
+            *  EntryListType bean class
             */
             @SuppressWarnings({"unchecked","unused"})
         
-        public  class PagesType
+        public  class EntryListType
         implements org.apache.axis2.databinding.ADBBean{
         /* This type was generated from the piece of schema that had
-                name = pagesType
+                name = entryListType
                 Namespace URI = http://gutenberg/blocs
                 Namespace Prefix = ns1
                 */
             
 
                         /**
-                        * field for Page
+                        * field for Entry
                         * This was an Array!
                         */
 
                         
-                                    protected gutenberg.blocs.PageType[] localPage ;
+                                    protected gutenberg.blocs.EntryType[] localEntry ;
                                 
 
                            /**
                            * Auto generated getter method
-                           * @return gutenberg.blocs.PageType[]
+                           * @return gutenberg.blocs.EntryType[]
                            */
-                           public  gutenberg.blocs.PageType[] getPage(){
-                               return localPage;
+                           public  gutenberg.blocs.EntryType[] getEntry(){
+                               return localEntry;
                            }
 
                            
@@ -47,9 +47,9 @@
 
                                
                               /**
-                               * validate the array for Page
+                               * validate the array for Entry
                                */
-                              protected void validatePage(gutenberg.blocs.PageType[] param){
+                              protected void validateEntry(gutenberg.blocs.EntryType[] param){
                              
                               if ((param != null) && (param.length < 1)){
                                 throw new java.lang.RuntimeException();
@@ -60,35 +60,35 @@
 
                              /**
                               * Auto generated setter method
-                              * @param param Page
+                              * @param param Entry
                               */
-                              public void setPage(gutenberg.blocs.PageType[] param){
+                              public void setEntry(gutenberg.blocs.EntryType[] param){
                               
-                                   validatePage(param);
+                                   validateEntry(param);
 
                                
-                                      this.localPage=param;
+                                      this.localEntry=param;
                               }
 
                                
                              
                              /**
                              * Auto generated add method for the array for convenience
-                             * @param param gutenberg.blocs.PageType
+                             * @param param gutenberg.blocs.EntryType
                              */
-                             public void addPage(gutenberg.blocs.PageType param){
-                                   if (localPage == null){
-                                   localPage = new gutenberg.blocs.PageType[]{};
+                             public void addEntry(gutenberg.blocs.EntryType param){
+                                   if (localEntry == null){
+                                   localEntry = new gutenberg.blocs.EntryType[]{};
                                    }
 
                             
 
                                java.util.List list =
-                            org.apache.axis2.databinding.utils.ConverterUtil.toList(localPage);
+                            org.apache.axis2.databinding.utils.ConverterUtil.toList(localEntry);
                                list.add(param);
-                               this.localPage =
-                             (gutenberg.blocs.PageType[])list.toArray(
-                            new gutenberg.blocs.PageType[list.size()]);
+                               this.localEntry =
+                             (gutenberg.blocs.EntryType[])list.toArray(
+                            new gutenberg.blocs.EntryType[list.size()]);
 
                              }
                              
@@ -141,32 +141,32 @@
                    java.lang.String namespacePrefix = registerPrefix(xmlWriter,"http://gutenberg/blocs");
                    if ((namespacePrefix != null) && (namespacePrefix.trim().length() > 0)){
                        writeAttribute("xsi","http://www.w3.org/2001/XMLSchema-instance","type",
-                           namespacePrefix+":pagesType",
+                           namespacePrefix+":entryListType",
                            xmlWriter);
                    } else {
                        writeAttribute("xsi","http://www.w3.org/2001/XMLSchema-instance","type",
-                           "pagesType",
+                           "entryListType",
                            xmlWriter);
                    }
 
                
                    }
                
-                                       if (localPage!=null){
-                                            for (int i = 0;i < localPage.length;i++){
-                                                if (localPage[i] != null){
-                                                 localPage[i].serialize(new javax.xml.namespace.QName("","page"),
+                                       if (localEntry!=null){
+                                            for (int i = 0;i < localEntry.length;i++){
+                                                if (localEntry[i] != null){
+                                                 localEntry[i].serialize(new javax.xml.namespace.QName("","entry"),
                                                            xmlWriter);
                                                 } else {
                                                    
-                                                           throw new org.apache.axis2.databinding.ADBException("page cannot be null!!");
+                                                           throw new org.apache.axis2.databinding.ADBException("entry cannot be null!!");
                                                     
                                                 }
 
                                             }
                                      } else {
                                         
-                                               throw new org.apache.axis2.databinding.ADBException("page cannot be null!!");
+                                               throw new org.apache.axis2.databinding.ADBException("entry cannot be null!!");
                                         
                                     }
                                  
@@ -355,23 +355,23 @@
                  java.util.ArrayList attribList = new java.util.ArrayList();
 
                 
-                             if (localPage!=null) {
-                                 for (int i = 0;i < localPage.length;i++){
+                             if (localEntry!=null) {
+                                 for (int i = 0;i < localEntry.length;i++){
 
-                                    if (localPage[i] != null){
+                                    if (localEntry[i] != null){
                                          elementList.add(new javax.xml.namespace.QName("",
-                                                                          "page"));
-                                         elementList.add(localPage[i]);
+                                                                          "entry"));
+                                         elementList.add(localEntry[i]);
                                     } else {
                                         
-                                               throw new org.apache.axis2.databinding.ADBException("page cannot be null !!");
+                                               throw new org.apache.axis2.databinding.ADBException("entry cannot be null !!");
                                             
                                     }
 
                                  }
                              } else {
                                  
-                                        throw new org.apache.axis2.databinding.ADBException("page cannot be null!!");
+                                        throw new org.apache.axis2.databinding.ADBException("entry cannot be null!!");
                                     
                              }
 
@@ -400,9 +400,9 @@
         * Postcondition: If this object is an element, the reader is positioned at its end element
         *                If this object is a complex type, the reader is positioned at the end element of its outer element
         */
-        public static PagesType parse(javax.xml.stream.XMLStreamReader reader) throws java.lang.Exception{
-            PagesType object =
-                new PagesType();
+        public static EntryListType parse(javax.xml.stream.XMLStreamReader reader) throws java.lang.Exception{
+            EntryListType object =
+                new EntryListType();
 
             int event;
             java.lang.String nillableValue = null;
@@ -426,10 +426,10 @@
 
                     java.lang.String type = fullTypeName.substring(fullTypeName.indexOf(":")+1);
                     
-                            if (!"pagesType".equals(type)){
+                            if (!"entryListType".equals(type)){
                                 //find namespace for the prefix
                                 java.lang.String nsUri = reader.getNamespaceContext().getNamespaceURI(nsPrefix);
-                                return (PagesType)gutenberg.blocs.ExtensionMapper.getTypeObject(
+                                return (EntryListType)gutenberg.blocs.ExtensionMapper.getTypeObject(
                                      nsUri,type,reader);
                               }
                         
@@ -456,12 +456,12 @@
                                     
                                     while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
                                 
-                                    if (reader.isStartElement() && new javax.xml.namespace.QName("","page").equals(reader.getName())){
+                                    if (reader.isStartElement() && new javax.xml.namespace.QName("","entry").equals(reader.getName())){
                                 
                                     
                                     
                                     // Process the array and step past its final element's end.
-                                    list1.add(gutenberg.blocs.PageType.Factory.parse(reader));
+                                    list1.add(gutenberg.blocs.EntryType.Factory.parse(reader));
                                                                 
                                                         //loop until we find a start element that is not part of this array
                                                         boolean loopDone1 = false;
@@ -478,8 +478,8 @@
                                                                 //two continuous end elements means we are exiting the xml structure
                                                                 loopDone1 = true;
                                                             } else {
-                                                                if (new javax.xml.namespace.QName("","page").equals(reader.getName())){
-                                                                    list1.add(gutenberg.blocs.PageType.Factory.parse(reader));
+                                                                if (new javax.xml.namespace.QName("","entry").equals(reader.getName())){
+                                                                    list1.add(gutenberg.blocs.EntryType.Factory.parse(reader));
                                                                         
                                                                 }else{
                                                                     loopDone1 = true;
@@ -488,9 +488,9 @@
                                                         }
                                                         // call the converter utility  to convert and set the array
                                                         
-                                                        object.setPage((gutenberg.blocs.PageType[])
+                                                        object.setEntry((gutenberg.blocs.EntryType[])
                                                             org.apache.axis2.databinding.utils.ConverterUtil.convertToArray(
-                                                                gutenberg.blocs.PageType.class,
+                                                                gutenberg.blocs.EntryType.class,
                                                                 list1));
                                                             
                               }  // End of if for expected property start element

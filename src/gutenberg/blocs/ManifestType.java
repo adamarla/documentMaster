@@ -55,31 +55,31 @@
                             
 
                         /**
-                        * field for Images
+                        * field for Image
                         * This was an Array!
                         */
 
                         
-                                    protected java.lang.String[] localImages ;
+                                    protected gutenberg.blocs.EntryType[] localImage ;
                                 
                            /*  This tracker boolean wil be used to detect whether the user called the set method
                           *   for this attribute. It will be used to determine whether to include this field
                            *   in the serialized XML
                            */
-                           protected boolean localImagesTracker = false ;
+                           protected boolean localImageTracker = false ;
 
-                           public boolean isImagesSpecified(){
-                               return localImagesTracker;
+                           public boolean isImageSpecified(){
+                               return localImageTracker;
                            }
 
                            
 
                            /**
                            * Auto generated getter method
-                           * @return java.lang.String[]
+                           * @return gutenberg.blocs.EntryType[]
                            */
-                           public  java.lang.String[] getImages(){
-                               return localImages;
+                           public  gutenberg.blocs.EntryType[] getImage(){
+                               return localImage;
                            }
 
                            
@@ -88,78 +88,78 @@
 
                                
                               /**
-                               * validate the array for Images
+                               * validate the array for Image
                                */
-                              protected void validateImages(java.lang.String[] param){
+                              protected void validateImage(gutenberg.blocs.EntryType[] param){
                              
                               }
 
 
                              /**
                               * Auto generated setter method
-                              * @param param Images
+                              * @param param Image
                               */
-                              public void setImages(java.lang.String[] param){
+                              public void setImage(gutenberg.blocs.EntryType[] param){
                               
-                                   validateImages(param);
+                                   validateImage(param);
 
-                               localImagesTracker = param != null;
+                               localImageTracker = param != null;
                                       
-                                      this.localImages=param;
+                                      this.localImage=param;
                               }
 
                                
                              
                              /**
                              * Auto generated add method for the array for convenience
-                             * @param param java.lang.String
+                             * @param param gutenberg.blocs.EntryType
                              */
-                             public void addImages(java.lang.String param){
-                                   if (localImages == null){
-                                   localImages = new java.lang.String[]{};
+                             public void addImage(gutenberg.blocs.EntryType param){
+                                   if (localImage == null){
+                                   localImage = new gutenberg.blocs.EntryType[]{};
                                    }
 
                             
                                  //update the setting tracker
-                                localImagesTracker = true;
+                                localImageTracker = true;
                             
 
                                java.util.List list =
-                            org.apache.axis2.databinding.utils.ConverterUtil.toList(localImages);
+                            org.apache.axis2.databinding.utils.ConverterUtil.toList(localImage);
                                list.add(param);
-                               this.localImages =
-                             (java.lang.String[])list.toArray(
-                            new java.lang.String[list.size()]);
+                               this.localImage =
+                             (gutenberg.blocs.EntryType[])list.toArray(
+                            new gutenberg.blocs.EntryType[list.size()]);
 
                              }
                              
 
                         /**
-                        * field for Documents
+                        * field for Document
                         * This was an Array!
                         */
 
                         
-                                    protected java.lang.String[] localDocuments ;
+                                    protected gutenberg.blocs.EntryType[] localDocument ;
                                 
                            /*  This tracker boolean wil be used to detect whether the user called the set method
                           *   for this attribute. It will be used to determine whether to include this field
                            *   in the serialized XML
                            */
-                           protected boolean localDocumentsTracker = false ;
+                           protected boolean localDocumentTracker = false ;
 
-                           public boolean isDocumentsSpecified(){
-                               return localDocumentsTracker;
+                           public boolean isDocumentSpecified(){
+                               return localDocumentTracker;
                            }
 
                            
 
                            /**
                            * Auto generated getter method
-                           * @return java.lang.String[]
+                           * @return gutenberg.blocs.EntryType[]
                            */
-                           public  java.lang.String[] getDocuments(){
-                               return localDocuments;
+                           public  gutenberg.blocs.EntryType[] getDocument(){
+                               return localDocument;
                            }
 
                            
@@ -168,48 +168,48 @@
 
                                
                               /**
-                               * validate the array for Documents
+                               * validate the array for Document
                                */
-                              protected void validateDocuments(java.lang.String[] param){
+                              protected void validateDocument(gutenberg.blocs.EntryType[] param){
                              
                               }
 
 
                              /**
                               * Auto generated setter method
-                              * @param param Documents
+                              * @param param Document
                               */
-                              public void setDocuments(java.lang.String[] param){
+                              public void setDocument(gutenberg.blocs.EntryType[] param){
                               
-                                   validateDocuments(param);
+                                   validateDocument(param);
 
-                               localDocumentsTracker = param != null;
+                               localDocumentTracker = param != null;
                                       
-                                      this.localDocuments=param;
+                                      this.localDocument=param;
                               }
 
                                
                              
                              /**
                              * Auto generated add method for the array for convenience
-                             * @param param java.lang.String
+                             * @param param gutenberg.blocs.EntryType
                              */
-                             public void addDocuments(java.lang.String param){
-                                   if (localDocuments == null){
-                                   localDocuments = new java.lang.String[]{};
+                             public void addDocument(gutenberg.blocs.EntryType param){
+                                   if (localDocument == null){
+                                   localDocument = new gutenberg.blocs.EntryType[]{};
                                    }
 
                             
                                  //update the setting tracker
-                                localDocumentsTracker = true;
+                                localDocumentTracker = true;
                             
 
                                java.util.List list =
-                            org.apache.axis2.databinding.utils.ConverterUtil.toList(localDocuments);
+                            org.apache.axis2.databinding.utils.ConverterUtil.toList(localDocument);
                                list.add(param);
-                               this.localDocuments =
-                             (java.lang.String[])list.toArray(
-                            new java.lang.String[list.size()]);
+                               this.localDocument =
+                             (gutenberg.blocs.EntryType[])list.toArray(
+                            new gutenberg.blocs.EntryType[list.size()]);
 
                              }
                              
@@ -290,61 +290,43 @@
                                           }
                                     
                                    xmlWriter.writeEndElement();
-                              if (localImagesTracker){
-                             if (localImages!=null) {
-                                   namespace = "";
-                                   for (int i = 0;i < localImages.length;i++){
-                                        
-                                            if (localImages[i] != null){
-                                        
-                                                writeStartElement(null, namespace, "images", xmlWriter);
-
-                                            
-                                                        xmlWriter.writeCharacters(org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localImages[i]));
-                                                    
-                                                xmlWriter.writeEndElement();
-                                              
+                              if (localImageTracker){
+                                       if (localImage!=null){
+                                            for (int i = 0;i < localImage.length;i++){
+                                                if (localImage[i] != null){
+                                                 localImage[i].serialize(new javax.xml.namespace.QName("","image"),
+                                                           xmlWriter);
                                                 } else {
                                                    
-                                                           // we have to do nothing since minOccurs is zero
-                                                       
+                                                        // we don't have to do any thing since minOccures is zero
+                                                    
                                                 }
 
-                                   }
-                             } else {
-                                 
-                                         throw new org.apache.axis2.databinding.ADBException("images cannot be null!!");
-                                    
-                             }
-
-                        } if (localDocumentsTracker){
-                             if (localDocuments!=null) {
-                                   namespace = "";
-                                   for (int i = 0;i < localDocuments.length;i++){
+                                            }
+                                     } else {
                                         
-                                            if (localDocuments[i] != null){
+                                               throw new org.apache.axis2.databinding.ADBException("image cannot be null!!");
                                         
-                                                writeStartElement(null, namespace, "documents", xmlWriter);
-
-                                            
-                                                        xmlWriter.writeCharacters(org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localDocuments[i]));
-                                                    
-                                                xmlWriter.writeEndElement();
-                                              
+                                    }
+                                 } if (localDocumentTracker){
+                                       if (localDocument!=null){
+                                            for (int i = 0;i < localDocument.length;i++){
+                                                if (localDocument[i] != null){
+                                                 localDocument[i].serialize(new javax.xml.namespace.QName("","document"),
+                                                           xmlWriter);
                                                 } else {
                                                    
-                                                           // we have to do nothing since minOccurs is zero
-                                                       
+                                                        // we don't have to do any thing since minOccures is zero
+                                                    
                                                 }
 
-                                   }
-                             } else {
-                                 
-                                         throw new org.apache.axis2.databinding.ADBException("documents cannot be null!!");
-                                    
-                             }
-
-                        }
+                                            }
+                                     } else {
+                                        
+                                               throw new org.apache.axis2.databinding.ADBException("document cannot be null!!");
+                                        
+                                    }
+                                 }
                     xmlWriter.writeEndElement();
                
 
@@ -538,51 +520,47 @@
                                         } else {
                                            throw new org.apache.axis2.databinding.ADBException("root cannot be null!!");
                                         }
-                                     if (localImagesTracker){
-                            if (localImages!=null){
-                                  for (int i = 0;i < localImages.length;i++){
-                                      
-                                         if (localImages[i] != null){
-                                          elementList.add(new javax.xml.namespace.QName("",
-                                                                              "images"));
-                                          elementList.add(
-                                          org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localImages[i]));
-                                          } else {
-                                             
-                                                    // have to do nothing
-                                                
-                                          }
-                                      
+                                     if (localImageTracker){
+                             if (localImage!=null) {
+                                 for (int i = 0;i < localImage.length;i++){
 
-                                  }
-                            } else {
-                              
-                                    throw new org.apache.axis2.databinding.ADBException("images cannot be null!!");
-                                
-                            }
+                                    if (localImage[i] != null){
+                                         elementList.add(new javax.xml.namespace.QName("",
+                                                                          "image"));
+                                         elementList.add(localImage[i]);
+                                    } else {
+                                        
+                                                // nothing to do
+                                            
+                                    }
 
-                        } if (localDocumentsTracker){
-                            if (localDocuments!=null){
-                                  for (int i = 0;i < localDocuments.length;i++){
-                                      
-                                         if (localDocuments[i] != null){
-                                          elementList.add(new javax.xml.namespace.QName("",
-                                                                              "documents"));
-                                          elementList.add(
-                                          org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localDocuments[i]));
-                                          } else {
-                                             
-                                                    // have to do nothing
-                                                
-                                          }
-                                      
+                                 }
+                             } else {
+                                 
+                                        throw new org.apache.axis2.databinding.ADBException("image cannot be null!!");
+                                    
+                             }
 
-                                  }
-                            } else {
-                              
-                                    throw new org.apache.axis2.databinding.ADBException("documents cannot be null!!");
-                                
-                            }
+                        } if (localDocumentTracker){
+                             if (localDocument!=null) {
+                                 for (int i = 0;i < localDocument.length;i++){
+
+                                    if (localDocument[i] != null){
+                                         elementList.add(new javax.xml.namespace.QName("",
+                                                                          "document"));
+                                         elementList.add(localDocument[i]);
+                                    } else {
+                                        
+                                                // nothing to do
+                                            
+                                    }
+
+                                 }
+                             } else {
+                                 
+                                        throw new org.apache.axis2.databinding.ADBException("document cannot be null!!");
+                                    
+                             }
 
                         }
 
@@ -686,42 +664,43 @@
                                     
                                     while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
                                 
-                                    if (reader.isStartElement() && new javax.xml.namespace.QName("","images").equals(reader.getName())){
+                                    if (reader.isStartElement() && new javax.xml.namespace.QName("","image").equals(reader.getName())){
                                 
                                     
                                     
                                     // Process the array and step past its final element's end.
-                                    list2.add(reader.getElementText());
-                                            
-                                            //loop until we find a start element that is not part of this array
-                                            boolean loopDone2 = false;
-                                            while(!loopDone2){
-                                                // Ensure we are at the EndElement
-                                                while (!reader.isEndElement()){
-                                                    reader.next();
-                                                }
-                                                // Step out of this element
-                                                reader.next();
-                                                // Step to next element event.
-                                                while (!reader.isStartElement() && !reader.isEndElement())
-                                                    reader.next();
-                                                if (reader.isEndElement()){
-                                                    //two continuous end elements means we are exiting the xml structure
-                                                    loopDone2 = true;
-                                                } else {
-                                                    if (new javax.xml.namespace.QName("","images").equals(reader.getName())){
-                                                         list2.add(reader.getElementText());
+                                    list2.add(gutenberg.blocs.EntryType.Factory.parse(reader));
+                                                                
+                                                        //loop until we find a start element that is not part of this array
+                                                        boolean loopDone2 = false;
+                                                        while(!loopDone2){
+                                                            // We should be at the end element, but make sure
+                                                            while (!reader.isEndElement())
+                                                                reader.next();
+                                                            // Step out of this element
+                                                            reader.next();
+                                                            // Step to next element event.
+                                                            while (!reader.isStartElement() && !reader.isEndElement())
+                                                                reader.next();
+                                                            if (reader.isEndElement()){
+                                                                //two continuous end elements means we are exiting the xml structure
+                                                                loopDone2 = true;
+                                                            } else {
+                                                                if (new javax.xml.namespace.QName("","image").equals(reader.getName())){
+                                                                    list2.add(gutenberg.blocs.EntryType.Factory.parse(reader));
+                                                                        
+                                                                }else{
+                                                                    loopDone2 = true;
+                                                                }
+                                                            }
+                                                        }
+                                                        // call the converter utility  to convert and set the array
                                                         
-                                                    }else{
-                                                        loopDone2 = true;
-                                                    }
-                                                }
-                                            }
-                                            // call the converter utility  to convert and set the array
-                                            
-                                                    object.setImages((java.lang.String[])
-                                                        list2.toArray(new java.lang.String[list2.size()]));
-                                                
+                                                        object.setImage((gutenberg.blocs.EntryType[])
+                                                            org.apache.axis2.databinding.utils.ConverterUtil.convertToArray(
+                                                                gutenberg.blocs.EntryType.class,
+                                                                list2));
+                                                            
                               }  // End of if for expected property start element
                                 
                                     else {
@@ -731,42 +710,43 @@
                                     
                                     while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
                                 
-                                    if (reader.isStartElement() && new javax.xml.namespace.QName("","documents").equals(reader.getName())){
+                                    if (reader.isStartElement() && new javax.xml.namespace.QName("","document").equals(reader.getName())){
                                 
                                     
                                     
                                     // Process the array and step past its final element's end.
-                                    list3.add(reader.getElementText());
-                                            
-                                            //loop until we find a start element that is not part of this array
-                                            boolean loopDone3 = false;
-                                            while(!loopDone3){
-                                                // Ensure we are at the EndElement
-                                                while (!reader.isEndElement()){
-                                                    reader.next();
-                                                }
-                                                // Step out of this element
-                                                reader.next();
-                                                // Step to next element event.
-                                                while (!reader.isStartElement() && !reader.isEndElement())
-                                                    reader.next();
-                                                if (reader.isEndElement()){
-                                                    //two continuous end elements means we are exiting the xml structure
-                                                    loopDone3 = true;
-                                                } else {
-                                                    if (new javax.xml.namespace.QName("","documents").equals(reader.getName())){
-                                                         list3.add(reader.getElementText());
+                                    list3.add(gutenberg.blocs.EntryType.Factory.parse(reader));
+                                                                
+                                                        //loop until we find a start element that is not part of this array
+                                                        boolean loopDone3 = false;
+                                                        while(!loopDone3){
+                                                            // We should be at the end element, but make sure
+                                                            while (!reader.isEndElement())
+                                                                reader.next();
+                                                            // Step out of this element
+                                                            reader.next();
+                                                            // Step to next element event.
+                                                            while (!reader.isStartElement() && !reader.isEndElement())
+                                                                reader.next();
+                                                            if (reader.isEndElement()){
+                                                                //two continuous end elements means we are exiting the xml structure
+                                                                loopDone3 = true;
+                                                            } else {
+                                                                if (new javax.xml.namespace.QName("","document").equals(reader.getName())){
+                                                                    list3.add(gutenberg.blocs.EntryType.Factory.parse(reader));
+                                                                        
+                                                                }else{
+                                                                    loopDone3 = true;
+                                                                }
+                                                            }
+                                                        }
+                                                        // call the converter utility  to convert and set the array
                                                         
-                                                    }else{
-                                                        loopDone3 = true;
-                                                    }
-                                                }
-                                            }
-                                            // call the converter utility  to convert and set the array
-                                            
-                                                    object.setDocuments((java.lang.String[])
-                                                        list3.toArray(new java.lang.String[list3.size()]));
-                                                
+                                                        object.setDocument((gutenberg.blocs.EntryType[])
+                                                            org.apache.axis2.databinding.utils.ConverterUtil.convertToArray(
+                                                                gutenberg.blocs.EntryType.class,
+                                                                list3));
+                                                            
                               }  // End of if for expected property start element
                                 
                                     else {

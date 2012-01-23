@@ -30,14 +30,14 @@
                         */
 
                         
-                                    protected gutenberg.blocs.IdListType localViewScans ;
+                                    protected gutenberg.blocs.EntryListType localViewScans ;
                                 
 
                            /**
                            * Auto generated getter method
-                           * @return gutenberg.blocs.IdListType
+                           * @return gutenberg.blocs.EntryListType
                            */
-                           public  gutenberg.blocs.IdListType getViewScans(){
+                           public  gutenberg.blocs.EntryListType getViewScans(){
                                return localViewScans;
                            }
 
@@ -47,7 +47,7 @@
                                * Auto generated setter method
                                * @param param ViewScans
                                */
-                               public void setViewScans(gutenberg.blocs.IdListType param){
+                               public void setViewScans(gutenberg.blocs.EntryListType param){
                             
                                             this.localViewScans=param;
                                     
@@ -323,7 +323,7 @@
                 
                                     if (reader.isStartElement() && new javax.xml.namespace.QName("http://gutenberg/blocs","viewScans").equals(reader.getName())){
                                 
-                                                object.setViewScans(gutenberg.blocs.IdListType.Factory.parse(reader));
+                                                object.setViewScans(gutenberg.blocs.EntryListType.Factory.parse(reader));
                                             
                               }  // End of if for expected property start element
                                 
