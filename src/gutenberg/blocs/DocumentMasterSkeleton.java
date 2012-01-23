@@ -60,10 +60,11 @@ public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
 		try {
 			config = new Config();
 			vault = new Vault(config.getPath(Resource.vault));
-			scribe = new Scribe(config.getPath(Resource.mint));
+			scribe = new Scribe(config.getPath(Resource.mint),
+					config.getPath(Resource.shared));
 			scribe.setVault(vault);			
-			ManifestType manifest = scribe.generate(buildQuiz.getBuildQuiz());
-			response.setManifest(manifest);			
+			scribe.generate(buildQuiz.getBuildQuiz());
+			response.setManifest(scribe.getManifest());			
 		} catch (Exception e) {
 			response.setError(e.getMessage());
 		}		

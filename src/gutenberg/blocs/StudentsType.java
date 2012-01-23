@@ -1,6 +1,6 @@
 
 /**
- * AssignmentType.java
+ * StudentsType.java
  *
  * This file was auto-generated from WSDL
  * by the Apache Axis2 version: 1.6.1  Built on : Aug 31, 2011 (12:23:23 CEST)
@@ -11,78 +11,87 @@
             
 
             /**
-            *  AssignmentType bean class
+            *  StudentsType bean class
             */
             @SuppressWarnings({"unchecked","unused"})
         
-        public  class AssignmentType
+        public  class StudentsType
         implements org.apache.axis2.databinding.ADBBean{
         /* This type was generated from the piece of schema that had
-                name = assignmentType
+                name = studentsType
                 Namespace URI = http://gutenberg/blocs
                 Namespace Prefix = ns1
                 */
             
 
                         /**
-                        * field for Quiz
+                        * field for Student
+                        * This was an Array!
                         */
 
                         
-                                    protected gutenberg.blocs.QuizType localQuiz ;
+                                    protected gutenberg.blocs.StudentType[] localStudent ;
                                 
 
                            /**
                            * Auto generated getter method
-                           * @return gutenberg.blocs.QuizType
+                           * @return gutenberg.blocs.StudentType[]
                            */
-                           public  gutenberg.blocs.QuizType getQuiz(){
-                               return localQuiz;
+                           public  gutenberg.blocs.StudentType[] getStudent(){
+                               return localStudent;
                            }
 
                            
                         
-                            /**
-                               * Auto generated setter method
-                               * @param param Quiz
+
+
+                               
+                              /**
+                               * validate the array for Student
                                */
-                               public void setQuiz(gutenberg.blocs.QuizType param){
+                              protected void validateStudent(gutenberg.blocs.StudentType[] param){
+                             
+                              if ((param != null) && (param.length < 1)){
+                                throw new java.lang.RuntimeException();
+                              }
+                              
+                              }
+
+
+                             /**
+                              * Auto generated setter method
+                              * @param param Student
+                              */
+                              public void setStudent(gutenberg.blocs.StudentType[] param){
+                              
+                                   validateStudent(param);
+
+                               
+                                      this.localStudent=param;
+                              }
+
+                               
+                             
+                             /**
+                             * Auto generated add method for the array for convenience
+                             * @param param gutenberg.blocs.StudentType
+                             */
+                             public void addStudent(gutenberg.blocs.StudentType param){
+                                   if (localStudent == null){
+                                   localStudent = new gutenberg.blocs.StudentType[]{};
+                                   }
+
                             
-                                            this.localQuiz=param;
-                                    
 
-                               }
-                            
+                               java.util.List list =
+                            org.apache.axis2.databinding.utils.ConverterUtil.toList(localStudent);
+                               list.add(param);
+                               this.localStudent =
+                             (gutenberg.blocs.StudentType[])list.toArray(
+                            new gutenberg.blocs.StudentType[list.size()]);
 
-                        /**
-                        * field for Students
-                        */
-
-                        
-                                    protected gutenberg.blocs.StudentsType localStudents ;
-                                
-
-                           /**
-                           * Auto generated getter method
-                           * @return gutenberg.blocs.StudentsType
-                           */
-                           public  gutenberg.blocs.StudentsType getStudents(){
-                               return localStudents;
-                           }
-
-                           
-                        
-                            /**
-                               * Auto generated setter method
-                               * @param param Students
-                               */
-                               public void setStudents(gutenberg.blocs.StudentsType param){
-                            
-                                            this.localStudents=param;
-                                    
-
-                               }
-                            
+                             }
+                             
 
      
      
@@ -132,29 +141,35 @@
                    java.lang.String namespacePrefix = registerPrefix(xmlWriter,"http://gutenberg/blocs");
                    if ((namespacePrefix != null) && (namespacePrefix.trim().length() > 0)){
                        writeAttribute("xsi","http://www.w3.org/2001/XMLSchema-instance","type",
-                           namespacePrefix+":assignmentType",
+                           namespacePrefix+":studentsType",
                            xmlWriter);
                    } else {
                        writeAttribute("xsi","http://www.w3.org/2001/XMLSchema-instance","type",
-                           "assignmentType",
+                           "studentsType",
                            xmlWriter);
                    }
 
                
                    }
                
-                                            if (localQuiz==null){
-                                                 throw new org.apache.axis2.databinding.ADBException("quiz cannot be null!!");
+                                       if (localStudent!=null){
+                                            for (int i = 0;i < localStudent.length;i++){
+                                                if (localStudent[i] != null){
+                                                 localStudent[i].serialize(new javax.xml.namespace.QName("","student"),
+                                                           xmlWriter);
+                                                } else {
+                                                   
+                                                           throw new org.apache.axis2.databinding.ADBException("student cannot be null!!");
+                                                    
+                                                }
+
                                             }
-                                           localQuiz.serialize(new javax.xml.namespace.QName("","quiz"),
-                                               xmlWriter);
+                                     } else {
                                         
-                                            if (localStudents==null){
-                                                 throw new org.apache.axis2.databinding.ADBException("students cannot be null!!");
-                                            }
-                                           localStudents.serialize(new javax.xml.namespace.QName("","students"),
-                                               xmlWriter);
+                                               throw new org.apache.axis2.databinding.ADBException("student cannot be null!!");
                                         
+                                    }
+                                 
                     xmlWriter.writeEndElement();
                
 
@@ -340,24 +355,27 @@
                  java.util.ArrayList attribList = new java.util.ArrayList();
 
                 
-                            elementList.add(new javax.xml.namespace.QName("",
-                                                                      "quiz"));
-                            
-                            
-                                    if (localQuiz==null){
-                                         throw new org.apache.axis2.databinding.ADBException("quiz cannot be null!!");
+                             if (localStudent!=null) {
+                                 for (int i = 0;i < localStudent.length;i++){
+
+                                    if (localStudent[i] != null){
+                                         elementList.add(new javax.xml.namespace.QName("",
+                                                                          "student"));
+                                         elementList.add(localStudent[i]);
+                                    } else {
+                                        
+                                               throw new org.apache.axis2.databinding.ADBException("student cannot be null !!");
+                                            
                                     }
-                                    elementList.add(localQuiz);
-                                
-                            elementList.add(new javax.xml.namespace.QName("",
-                                                                      "students"));
-                            
-                            
-                                    if (localStudents==null){
-                                         throw new org.apache.axis2.databinding.ADBException("students cannot be null!!");
-                                    }
-                                    elementList.add(localStudents);
-                                
+
+                                 }
+                             } else {
+                                 
+                                        throw new org.apache.axis2.databinding.ADBException("student cannot be null!!");
+                                    
+                             }
+
+                        
 
                 return new org.apache.axis2.databinding.utils.reader.ADBXMLStreamReaderImpl(qName, elementList.toArray(), attribList.toArray());
             
@@ -382,9 +400,9 @@
         * Postcondition: If this object is an element, the reader is positioned at its end element
         *                If this object is a complex type, the reader is positioned at the end element of its outer element
         */
-        public static AssignmentType parse(javax.xml.stream.XMLStreamReader reader) throws java.lang.Exception{
-            AssignmentType object =
-                new AssignmentType();
+        public static StudentsType parse(javax.xml.stream.XMLStreamReader reader) throws java.lang.Exception{
+            StudentsType object =
+                new StudentsType();
 
             int event;
             java.lang.String nillableValue = null;
@@ -408,10 +426,10 @@
 
                     java.lang.String type = fullTypeName.substring(fullTypeName.indexOf(":")+1);
                     
-                            if (!"assignmentType".equals(type)){
+                            if (!"studentsType".equals(type)){
                                 //find namespace for the prefix
                                 java.lang.String nsUri = reader.getNamespaceContext().getNamespaceURI(nsPrefix);
-                                return (AssignmentType)gutenberg.blocs.ExtensionMapper.getTypeObject(
+                                return (StudentsType)gutenberg.blocs.ExtensionMapper.getTypeObject(
                                      nsUri,type,reader);
                               }
                         
@@ -433,31 +451,48 @@
                     
                     reader.next();
                 
+                        java.util.ArrayList list1 = new java.util.ArrayList();
+                    
                                     
                                     while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
                                 
-                                    if (reader.isStartElement() && new javax.xml.namespace.QName("","quiz").equals(reader.getName())){
+                                    if (reader.isStartElement() && new javax.xml.namespace.QName("","student").equals(reader.getName())){
                                 
-                                                object.setQuiz(gutenberg.blocs.QuizType.Factory.parse(reader));
-                                              
-                                        reader.next();
                                     
-                              }  // End of if for expected property start element
-                                
-                                else{
-                                    // A start element we are not expecting indicates an invalid parameter was passed
-                                    throw new org.apache.axis2.databinding.ADBException("Unexpected subelement " + reader.getName());
-                                }
-                            
                                     
-                                    while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
-                                
-                                    if (reader.isStartElement() && new javax.xml.namespace.QName("","students").equals(reader.getName())){
-                                
-                                                object.setStudents(gutenberg.blocs.StudentsType.Factory.parse(reader));
-                                              
-                                        reader.next();
-                                    
+                                    // Process the array and step past its final element's end.
+                                    list1.add(gutenberg.blocs.StudentType.Factory.parse(reader));
+                                                                
+                                                        //loop until we find a start element that is not part of this array
+                                                        boolean loopDone1 = false;
+                                                        while(!loopDone1){
+                                                            // We should be at the end element, but make sure
+                                                            while (!reader.isEndElement())
+                                                                reader.next();
+                                                            // Step out of this element
+                                                            reader.next();
+                                                            // Step to next element event.
+                                                            while (!reader.isStartElement() && !reader.isEndElement())
+                                                                reader.next();
+                                                            if (reader.isEndElement()){
+                                                                //two continuous end elements means we are exiting the xml structure
+                                                                loopDone1 = true;
+                                                            } else {
+                                                                if (new javax.xml.namespace.QName("","student").equals(reader.getName())){
+                                                                    list1.add(gutenberg.blocs.StudentType.Factory.parse(reader));
+                                                                        
+                                                                }else{
+                                                                    loopDone1 = true;
+                                                                }
+                                                            }
+                                                        }
+                                                        // call the converter utility  to convert and set the array
+                                                        
+                                                        object.setStudent((gutenberg.blocs.StudentType[])
+                                                            org.apache.axis2.databinding.utils.ConverterUtil.convertToArray(
+                                                                gutenberg.blocs.StudentType.class,
+                                                                list1));
+                                                            
                               }  // End of if for expected property start element
                                 
                                 else{

@@ -7,8 +7,7 @@ public class Config {
 	
 	public Config() throws Exception {
 		Properties properties = new Properties();
-		properties.loadFromXML(new FileInputStream(
-				"./webapps/axis2/WEB-INF/classes/hiero.properties"));
+		properties.loadFromXML(new FileInputStream("/opt/gutenberg/config.xml"));
 		bankRoot = properties.getProperty("BANK_ROOT");				
 	}
 	

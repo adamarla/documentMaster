@@ -58,7 +58,7 @@
             <xsd:complexType name="assignmentType">
             	<xsd:sequence>
             		<xsd:element name="quiz" type="tns:quizType"></xsd:element>
-            		<xsd:element name="students" type="tns:idListType"
+            		<xsd:element name="students" type="tns:studentsType"
             			maxOccurs="1" minOccurs="1">
             		</xsd:element>
             	</xsd:sequence>
@@ -82,6 +82,19 @@
             <xsd:element name="viewScansResponse"
             	type="tns:responseType">
             </xsd:element>
+    
+            <xsd:complexType name="studentsType">
+            	<xsd:sequence>
+            		<xsd:element name="student" type="tns:studentType" maxOccurs="unbounded" minOccurs="1"></xsd:element>
+            	</xsd:sequence>
+            </xsd:complexType>
+    
+            <xsd:complexType name="studentType">
+            	<xsd:sequence>
+            		<xsd:element name="id" type="xsd:string"></xsd:element>
+            		<xsd:element name="name" type="xsd:string"></xsd:element>
+            	</xsd:sequence>
+            </xsd:complexType>
     </xsd:schema>
   </wsdl:types>
   <wsdl:message name="buildQuiz">

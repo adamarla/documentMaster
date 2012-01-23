@@ -23,6 +23,16 @@
               
                   if (
                   "http://gutenberg/blocs".equals(namespaceURI) &&
+                  "studentType".equals(typeName)){
+                   
+                            return  gutenberg.blocs.StudentType.Factory.parse(reader);
+                        
+
+                  }
+
+              
+                  if (
+                  "http://gutenberg/blocs".equals(namespaceURI) &&
                   "manifestType".equals(typeName)){
                    
                             return  gutenberg.blocs.ManifestType.Factory.parse(reader);
@@ -36,6 +46,16 @@
                   "pagesType".equals(typeName)){
                    
                             return  gutenberg.blocs.PagesType.Factory.parse(reader);
+                        
+
+                  }
+
+              
+                  if (
+                  "http://gutenberg/blocs".equals(namespaceURI) &&
+                  "studentsType".equals(typeName)){
+                   
+                            return  gutenberg.blocs.StudentsType.Factory.parse(reader);
                         
 
                   }
