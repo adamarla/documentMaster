@@ -71,6 +71,7 @@ public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
 		BuildQuizResponse buildQuizResponse = new BuildQuizResponse();
 		buildQuizResponse.setBuildQuizResponse(response);
 		return buildQuizResponse;
+
 	}
 
 	/**

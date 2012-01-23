@@ -185,10 +185,10 @@
                                             if (localManifest==null){
                                                  throw new org.apache.axis2.databinding.ADBException("manifest cannot be null!!");
                                             }
-                                           localManifest.serialize(new javax.xml.namespace.QName("","manifest"),
+                                           localManifest.serialize(new javax.xml.namespace.QName("http://gutenberg/blocs","manifest"),
                                                xmlWriter);
                                         } if (localErrorTracker){
-                                    namespace = "";
+                                    namespace = "http://gutenberg/blocs";
                                     writeStartElement(null, namespace, "error", xmlWriter);
                              
 
@@ -391,7 +391,7 @@
                  java.util.ArrayList attribList = new java.util.ArrayList();
 
                  if (localManifestTracker){
-                            elementList.add(new javax.xml.namespace.QName("",
+                            elementList.add(new javax.xml.namespace.QName("http://gutenberg/blocs",
                                                                       "manifest"));
                             
                             
@@ -400,7 +400,7 @@
                                     }
                                     elementList.add(localManifest);
                                 } if (localErrorTracker){
-                                      elementList.add(new javax.xml.namespace.QName("",
+                                      elementList.add(new javax.xml.namespace.QName("http://gutenberg/blocs",
                                                                       "error"));
                                  
                                         if (localError != null){
@@ -487,7 +487,7 @@
                 while(!reader.isEndElement()) {
                     if (reader.isStartElement() ){
                 
-                                    if (reader.isStartElement() && new javax.xml.namespace.QName("","manifest").equals(reader.getName())){
+                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://gutenberg/blocs","manifest").equals(reader.getName())){
                                 
                                                 object.setManifest(gutenberg.blocs.ManifestType.Factory.parse(reader));
                                               
@@ -497,7 +497,7 @@
                                 
                                         else
                                     
-                                    if (reader.isStartElement() && new javax.xml.namespace.QName("","error").equals(reader.getName())){
+                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://gutenberg/blocs","error").equals(reader.getName())){
                                 
                                     java.lang.String content = reader.getElementText();
                                     

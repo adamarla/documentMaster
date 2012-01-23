@@ -182,7 +182,7 @@
                
                    }
                
-                                    namespace = "";
+                                    namespace = "http://gutenberg/blocs";
                                     writeStartElement(null, namespace, "number", xmlWriter);
                              
                                                if (localNumber==java.lang.Integer.MIN_VALUE) {
@@ -198,7 +198,7 @@
                                        if (localQuestion!=null){
                                             for (int i = 0;i < localQuestion.length;i++){
                                                 if (localQuestion[i] != null){
-                                                 localQuestion[i].serialize(new javax.xml.namespace.QName("","question"),
+                                                 localQuestion[i].serialize(new javax.xml.namespace.QName("http://gutenberg/blocs","question"),
                                                            xmlWriter);
                                                 } else {
                                                    
@@ -398,7 +398,7 @@
                  java.util.ArrayList attribList = new java.util.ArrayList();
 
                 
-                                      elementList.add(new javax.xml.namespace.QName("",
+                                      elementList.add(new javax.xml.namespace.QName("http://gutenberg/blocs",
                                                                       "number"));
                                  
                                 elementList.add(
@@ -408,7 +408,7 @@
                                  for (int i = 0;i < localQuestion.length;i++){
 
                                     if (localQuestion[i] != null){
-                                         elementList.add(new javax.xml.namespace.QName("",
+                                         elementList.add(new javax.xml.namespace.QName("http://gutenberg/blocs",
                                                                           "question"));
                                          elementList.add(localQuestion[i]);
                                     } else {
@@ -505,7 +505,7 @@
                                     
                                     while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
                                 
-                                    if (reader.isStartElement() && new javax.xml.namespace.QName("","number").equals(reader.getName())){
+                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://gutenberg/blocs","number").equals(reader.getName())){
                                 
                                     java.lang.String content = reader.getElementText();
                                     
@@ -524,7 +524,7 @@
                                     
                                     while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
                                 
-                                    if (reader.isStartElement() && new javax.xml.namespace.QName("","question").equals(reader.getName())){
+                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://gutenberg/blocs","question").equals(reader.getName())){
                                 
                                     
                                     
@@ -546,7 +546,7 @@
                                                                 //two continuous end elements means we are exiting the xml structure
                                                                 loopDone2 = true;
                                                             } else {
-                                                                if (new javax.xml.namespace.QName("","question").equals(reader.getName())){
+                                                                if (new javax.xml.namespace.QName("http://gutenberg/blocs","question").equals(reader.getName())){
                                                                     list2.add(gutenberg.blocs.EntryType.Factory.parse(reader));
                                                                         
                                                                 }else{

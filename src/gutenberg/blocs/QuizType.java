@@ -212,7 +212,7 @@
                
                    }
                
-                                    namespace = "";
+                                    namespace = "http://gutenberg/blocs";
                                     writeStartElement(null, namespace, "id", xmlWriter);
                              
 
@@ -230,7 +230,7 @@
                                     
                                    xmlWriter.writeEndElement();
                              
-                                    namespace = "";
+                                    namespace = "http://gutenberg/blocs";
                                     writeStartElement(null, namespace, "teacherId", xmlWriter);
                              
 
@@ -251,7 +251,7 @@
                                        if (localPage!=null){
                                             for (int i = 0;i < localPage.length;i++){
                                                 if (localPage[i] != null){
-                                                 localPage[i].serialize(new javax.xml.namespace.QName("","page"),
+                                                 localPage[i].serialize(new javax.xml.namespace.QName("http://gutenberg/blocs","page"),
                                                            xmlWriter);
                                                 } else {
                                                    
@@ -451,7 +451,7 @@
                  java.util.ArrayList attribList = new java.util.ArrayList();
 
                 
-                                      elementList.add(new javax.xml.namespace.QName("",
+                                      elementList.add(new javax.xml.namespace.QName("http://gutenberg/blocs",
                                                                       "id"));
                                  
                                         if (localId != null){
@@ -460,7 +460,7 @@
                                            throw new org.apache.axis2.databinding.ADBException("id cannot be null!!");
                                         }
                                     
-                                      elementList.add(new javax.xml.namespace.QName("",
+                                      elementList.add(new javax.xml.namespace.QName("http://gutenberg/blocs",
                                                                       "teacherId"));
                                  
                                         if (localTeacherId != null){
@@ -473,7 +473,7 @@
                                  for (int i = 0;i < localPage.length;i++){
 
                                     if (localPage[i] != null){
-                                         elementList.add(new javax.xml.namespace.QName("",
+                                         elementList.add(new javax.xml.namespace.QName("http://gutenberg/blocs",
                                                                           "page"));
                                          elementList.add(localPage[i]);
                                     } else {
@@ -570,7 +570,7 @@
                                     
                                     while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
                                 
-                                    if (reader.isStartElement() && new javax.xml.namespace.QName("","id").equals(reader.getName())){
+                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://gutenberg/blocs","id").equals(reader.getName())){
                                 
                                     java.lang.String content = reader.getElementText();
                                     
@@ -589,7 +589,7 @@
                                     
                                     while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
                                 
-                                    if (reader.isStartElement() && new javax.xml.namespace.QName("","teacherId").equals(reader.getName())){
+                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://gutenberg/blocs","teacherId").equals(reader.getName())){
                                 
                                     java.lang.String content = reader.getElementText();
                                     
@@ -608,7 +608,7 @@
                                     
                                     while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
                                 
-                                    if (reader.isStartElement() && new javax.xml.namespace.QName("","page").equals(reader.getName())){
+                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://gutenberg/blocs","page").equals(reader.getName())){
                                 
                                     
                                     
@@ -630,7 +630,7 @@
                                                                 //two continuous end elements means we are exiting the xml structure
                                                                 loopDone3 = true;
                                                             } else {
-                                                                if (new javax.xml.namespace.QName("","page").equals(reader.getName())){
+                                                                if (new javax.xml.namespace.QName("http://gutenberg/blocs","page").equals(reader.getName())){
                                                                     list3.add(gutenberg.blocs.PageType.Factory.parse(reader));
                                                                         
                                                                 }else{

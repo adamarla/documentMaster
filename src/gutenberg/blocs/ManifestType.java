@@ -273,7 +273,7 @@
                
                    }
                
-                                    namespace = "";
+                                    namespace = "http://gutenberg/blocs";
                                     writeStartElement(null, namespace, "root", xmlWriter);
                              
 
@@ -294,7 +294,7 @@
                                        if (localImage!=null){
                                             for (int i = 0;i < localImage.length;i++){
                                                 if (localImage[i] != null){
-                                                 localImage[i].serialize(new javax.xml.namespace.QName("","image"),
+                                                 localImage[i].serialize(new javax.xml.namespace.QName("http://gutenberg/blocs","image"),
                                                            xmlWriter);
                                                 } else {
                                                    
@@ -312,7 +312,7 @@
                                        if (localDocument!=null){
                                             for (int i = 0;i < localDocument.length;i++){
                                                 if (localDocument[i] != null){
-                                                 localDocument[i].serialize(new javax.xml.namespace.QName("","document"),
+                                                 localDocument[i].serialize(new javax.xml.namespace.QName("http://gutenberg/blocs","document"),
                                                            xmlWriter);
                                                 } else {
                                                    
@@ -512,7 +512,7 @@
                  java.util.ArrayList attribList = new java.util.ArrayList();
 
                 
-                                      elementList.add(new javax.xml.namespace.QName("",
+                                      elementList.add(new javax.xml.namespace.QName("http://gutenberg/blocs",
                                                                       "root"));
                                  
                                         if (localRoot != null){
@@ -525,7 +525,7 @@
                                  for (int i = 0;i < localImage.length;i++){
 
                                     if (localImage[i] != null){
-                                         elementList.add(new javax.xml.namespace.QName("",
+                                         elementList.add(new javax.xml.namespace.QName("http://gutenberg/blocs",
                                                                           "image"));
                                          elementList.add(localImage[i]);
                                     } else {
@@ -546,7 +546,7 @@
                                  for (int i = 0;i < localDocument.length;i++){
 
                                     if (localDocument[i] != null){
-                                         elementList.add(new javax.xml.namespace.QName("",
+                                         elementList.add(new javax.xml.namespace.QName("http://gutenberg/blocs",
                                                                           "document"));
                                          elementList.add(localDocument[i]);
                                     } else {
@@ -645,7 +645,7 @@
                                     
                                     while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
                                 
-                                    if (reader.isStartElement() && new javax.xml.namespace.QName("","root").equals(reader.getName())){
+                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://gutenberg/blocs","root").equals(reader.getName())){
                                 
                                     java.lang.String content = reader.getElementText();
                                     
@@ -664,7 +664,7 @@
                                     
                                     while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
                                 
-                                    if (reader.isStartElement() && new javax.xml.namespace.QName("","image").equals(reader.getName())){
+                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://gutenberg/blocs","image").equals(reader.getName())){
                                 
                                     
                                     
@@ -686,7 +686,7 @@
                                                                 //two continuous end elements means we are exiting the xml structure
                                                                 loopDone2 = true;
                                                             } else {
-                                                                if (new javax.xml.namespace.QName("","image").equals(reader.getName())){
+                                                                if (new javax.xml.namespace.QName("http://gutenberg/blocs","image").equals(reader.getName())){
                                                                     list2.add(gutenberg.blocs.EntryType.Factory.parse(reader));
                                                                         
                                                                 }else{
@@ -710,7 +710,7 @@
                                     
                                     while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
                                 
-                                    if (reader.isStartElement() && new javax.xml.namespace.QName("","document").equals(reader.getName())){
+                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://gutenberg/blocs","document").equals(reader.getName())){
                                 
                                     
                                     
@@ -732,7 +732,7 @@
                                                                 //two continuous end elements means we are exiting the xml structure
                                                                 loopDone3 = true;
                                                             } else {
-                                                                if (new javax.xml.namespace.QName("","document").equals(reader.getName())){
+                                                                if (new javax.xml.namespace.QName("http://gutenberg/blocs","document").equals(reader.getName())){
                                                                     list3.add(gutenberg.blocs.EntryType.Factory.parse(reader));
                                                                         
                                                                 }else{

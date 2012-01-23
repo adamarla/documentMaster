@@ -185,13 +185,13 @@
                                             if (localQuiz==null){
                                                  throw new org.apache.axis2.databinding.ADBException("quiz cannot be null!!");
                                             }
-                                           localQuiz.serialize(new javax.xml.namespace.QName("","quiz"),
+                                           localQuiz.serialize(new javax.xml.namespace.QName("http://gutenberg/blocs","quiz"),
                                                xmlWriter);
                                         
                                        if (localStudents!=null){
                                             for (int i = 0;i < localStudents.length;i++){
                                                 if (localStudents[i] != null){
-                                                 localStudents[i].serialize(new javax.xml.namespace.QName("","students"),
+                                                 localStudents[i].serialize(new javax.xml.namespace.QName("http://gutenberg/blocs","students"),
                                                            xmlWriter);
                                                 } else {
                                                    
@@ -391,7 +391,7 @@
                  java.util.ArrayList attribList = new java.util.ArrayList();
 
                 
-                            elementList.add(new javax.xml.namespace.QName("",
+                            elementList.add(new javax.xml.namespace.QName("http://gutenberg/blocs",
                                                                       "quiz"));
                             
                             
@@ -404,7 +404,7 @@
                                  for (int i = 0;i < localStudents.length;i++){
 
                                     if (localStudents[i] != null){
-                                         elementList.add(new javax.xml.namespace.QName("",
+                                         elementList.add(new javax.xml.namespace.QName("http://gutenberg/blocs",
                                                                           "students"));
                                          elementList.add(localStudents[i]);
                                     } else {
@@ -501,7 +501,7 @@
                                     
                                     while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
                                 
-                                    if (reader.isStartElement() && new javax.xml.namespace.QName("","quiz").equals(reader.getName())){
+                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://gutenberg/blocs","quiz").equals(reader.getName())){
                                 
                                                 object.setQuiz(gutenberg.blocs.QuizType.Factory.parse(reader));
                                               
@@ -517,7 +517,7 @@
                                     
                                     while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
                                 
-                                    if (reader.isStartElement() && new javax.xml.namespace.QName("","students").equals(reader.getName())){
+                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://gutenberg/blocs","students").equals(reader.getName())){
                                 
                                     
                                     
@@ -539,7 +539,7 @@
                                                                 //two continuous end elements means we are exiting the xml structure
                                                                 loopDone2 = true;
                                                             } else {
-                                                                if (new javax.xml.namespace.QName("","students").equals(reader.getName())){
+                                                                if (new javax.xml.namespace.QName("http://gutenberg/blocs","students").equals(reader.getName())){
                                                                     list2.add(gutenberg.blocs.StudentType.Factory.parse(reader));
                                                                         
                                                                 }else{

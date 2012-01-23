@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://gutenberg/blocs" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="documentMaster" targetNamespace="http://gutenberg/blocs">
   <wsdl:types>
-    <xsd:schema targetNamespace="http://gutenberg/blocs">
+    <xsd:schema targetNamespace="http://gutenberg/blocs" elementFormDefault="qualified">
       <xsd:element name="buildQuiz" type="tns:quizType">
       </xsd:element>
       <xsd:element name="buildQuizResponse" type="tns:responseType">

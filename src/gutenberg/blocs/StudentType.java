@@ -143,7 +143,7 @@
                
                    }
                
-                                    namespace = "";
+                                    namespace = "http://gutenberg/blocs";
                                     writeStartElement(null, namespace, "id", xmlWriter);
                              
 
@@ -161,7 +161,7 @@
                                     
                                    xmlWriter.writeEndElement();
                              
-                                    namespace = "";
+                                    namespace = "http://gutenberg/blocs";
                                     writeStartElement(null, namespace, "name", xmlWriter);
                              
 
@@ -364,7 +364,7 @@
                  java.util.ArrayList attribList = new java.util.ArrayList();
 
                 
-                                      elementList.add(new javax.xml.namespace.QName("",
+                                      elementList.add(new javax.xml.namespace.QName("http://gutenberg/blocs",
                                                                       "id"));
                                  
                                         if (localId != null){
@@ -373,7 +373,7 @@
                                            throw new org.apache.axis2.databinding.ADBException("id cannot be null!!");
                                         }
                                     
-                                      elementList.add(new javax.xml.namespace.QName("",
+                                      elementList.add(new javax.xml.namespace.QName("http://gutenberg/blocs",
                                                                       "name"));
                                  
                                         if (localName != null){
@@ -460,7 +460,7 @@
                                     
                                     while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
                                 
-                                    if (reader.isStartElement() && new javax.xml.namespace.QName("","id").equals(reader.getName())){
+                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://gutenberg/blocs","id").equals(reader.getName())){
                                 
                                     java.lang.String content = reader.getElementText();
                                     
@@ -479,7 +479,7 @@
                                     
                                     while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
                                 
-                                    if (reader.isStartElement() && new javax.xml.namespace.QName("","name").equals(reader.getName())){
+                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://gutenberg/blocs","name").equals(reader.getName())){
                                 
                                     java.lang.String content = reader.getElementText();
                                     
