@@ -4,28 +4,34 @@ import java.io.FileInputStream;
 import java.util.Properties;
 
 public class Config {
-	
+
 	public Config() throws Exception {
 		Properties properties = new Properties();
-		properties.loadFromXML(new FileInputStream("/opt/gutenberg/config.xml"));
-		bankRoot = properties.getProperty("BANK_ROOT");				
+		properties
+				.loadFromXML(new FileInputStream("/opt/gutenberg/config.xml"));
+		bankRoot = properties.getProperty("BANK_ROOT");
 	}
-	
+
 	public String getPath(Resource id) {
 		String path = bankRoot;
-		switch(id) {
-			case bank:				
-			case mint:
-				path += "/mint";
-			case locker:
-				path += "/locker";
-			case vault:
-				path += "/vault";
-			case shared:
-				path += "/shared";
-			default:				
+		switch (id) {
+		case bank:
+			break;
+		case mint:
+			path += "/mint";
+			break;
+		case locker:
+			path += "/locker";
+			break;
+		case vault:
+			path += "/vault";
+			break;
+		case shared:
+			path += "/shared";
+			break;
+		default:
 		}
-		return path;		
+		return path;
 	}
 
 	private String bankRoot;
