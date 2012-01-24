@@ -30,6 +30,9 @@ public class Filer {
 	}
 	
 	public void copy(File source, File target) throws Exception {
+		if (!source.exists() || !source.canRead()) {
+			throw new Exception(source.getPath() + " does not exist or cannot be read");
+		}
 		byte[] bbuf = new byte[DECENT_SIZE];
 		FileInputStream filein = new FileInputStream(source);
 		FileOutputStream fileout = new FileOutputStream(target);

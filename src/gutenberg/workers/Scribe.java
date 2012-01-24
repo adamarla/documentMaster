@@ -1,6 +1,8 @@
 package gutenberg.workers;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import gutenberg.blocs.AssignmentType;
 import gutenberg.blocs.EntryType;
@@ -30,7 +32,9 @@ public class Scribe {
 		File staging = new File(MINT + "/" + quiz.getId() + "/" + "staging");
 		if (!quizDir.exists()) {
 			quizDir.mkdir();
+			quizDir.setExecutable(true, false);
 			staging.mkdir();
+			staging.setExecutable(true, false);
 		}
 		manifest.setRoot(quizDir.getPath());
 		
@@ -109,12 +113,14 @@ public class Scribe {
 		StringBuilder contents = new StringBuilder();
 		EntryType[] questionIds = page.getQuestion();
 		Filer filer = new Filer();
+		String question = null;
 		for(int i = 0; i < questionIds.length; i++) {
 			if (qrcode != null) {
 				qrcode += questionIds[i].getId();
 				contents.append(qrcode).append("\n");
 			}
-			contents.append(vault.getContent(questionIds[i].getId(), "tex")[0]);
+			question = vault.getContent(questionIds[i].getId(), "tex")[0];
+			contents.append(question);
 			File[] files = vault.getFiles(questionIds[i].getId(), "gnuplot");
 			for (int j = 0; j < files.length; j++) {			
 				filer.copy(files[i], new File(staging.getPath() + "/" + files[i].getName()));
@@ -127,7 +133,13 @@ public class Scribe {
 		ProcessBuilder processBuilder = new ProcessBuilder("make", "dir="+quiz.getId());
 		File mintDir = new File(MINT);
 		processBuilder.directory(mintDir);
+		processBuilder.redirectErrorStream(true);
 		Process process = processBuilder.start();
+		BufferedReader reader = new BufferedReader (new InputStreamReader(process.getInputStream()));
+		String line = null;
+		while ((line = reader.readLine()) != null) {
+			System.out.println(line);
+		}
 		return process.waitFor();				
 	}
 	
