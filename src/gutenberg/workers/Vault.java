@@ -37,6 +37,10 @@ public class Vault {
 		File directory = new File(VAULT + "/" + id);
 		return directory.listFiles(new VaultFilter(filter));
 	}
+
+	public String getPath() throws Exception {
+		return this.VAULT ;
+	}
 	
 	private Filer filer;
 	private String VAULT;
