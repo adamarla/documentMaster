@@ -123,7 +123,7 @@ public class Scribe {
 			contents.append(question);
 			File[] files = vault.getFiles(questionIds[i].getId(), "gnuplot");
 			for (int j = 0; j < files.length; j++) {			
-				filer.copy(files[i], new File(staging.getPath() + "/" + files[i].getName()));
+				filer.copy(files[j], new File(staging.getPath() + "/" + files[j].getName()));
 			}
 		}
 		return contents.toString();
