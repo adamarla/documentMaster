@@ -1,7 +1,6 @@
 package gutenberg.workers;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.PrintWriter;
 import gutenberg.blocs.AssignmentType;
 import gutenberg.blocs.EntryType;
@@ -51,24 +50,29 @@ public class Scribe {
 			page = buildPage(pages[i], staging);
 			preview[i].println(page);
 			preview[i].print(docEnd);
-			preview[i].close();
+			preview[i].close();			
 			answerkey.println(page);
+			images[2*i] = new EntryType();
 			images[2*i].setId(i+"page.jpg");
+			images[2*i+1] = new EntryType();
 			images[2*i+1].setId(i+"thumb.jpg");
 			if (i == pages.length-1) {
 				answerkey.println("\\newpage");
-			}			
-			answerkey.flush();
+			}
 		}
+		if (answerkey.checkError())
+			throw new Exception("Check returned with error ") ;
 		answerkey.close();
 		EntryType[] documents = new EntryType[1];
+		documents[0] = new EntryType();
 		documents[0].setId("answerkey.pdf");
-		manifest.setImage(images);
-		manifest.setDocument(documents);
 		
 		int ret = make(quiz) ;
 		if (ret != 0) {
-			throw new Exception("Make returned with" + ret) ;
+			throw new Exception("Make returned with: " + ret) ;
+		} else {
+			manifest.setImage(images);
+			manifest.setDocument(documents);			
 		}
 	}
 	

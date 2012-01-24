@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<wsdl:definitions name="documentMaster" targetNamespace="http://gutenberg/blocs" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://gutenberg/blocs" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+<wsdl:definitions targetNamespace="http://gutenberg/blocs" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://gutenberg/blocs" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
   <wsdl:types>
     <xsd:schema elementFormDefault="qualified" targetNamespace="http://gutenberg/blocs">
       <xsd:element name="buildQuiz" type="tns:quizType">

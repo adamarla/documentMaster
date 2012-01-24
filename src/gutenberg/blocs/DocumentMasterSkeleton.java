@@ -24,7 +24,7 @@ public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
 	 */
 
 	public gutenberg.blocs.ViewScansResponse viewScans(
-			gutenberg.blocs.ViewScans viewScans) {
+			gutenberg.blocs.ViewScans viewScans0) {
 		// TODO : fill this with the necessary business logic
 		throw new java.lang.UnsupportedOperationException("Please implement "
 				+ this.getClass().getName() + "#viewScans");
@@ -38,7 +38,7 @@ public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
 	 */
 
 	public gutenberg.blocs.ViewQuestionsResponse viewQuestions(
-			gutenberg.blocs.ViewQuestions viewQuestions) {
+			gutenberg.blocs.ViewQuestions viewQuestions2) {
 		// TODO : fill this with the necessary business logic
 		throw new java.lang.UnsupportedOperationException("Please implement "
 				+ this.getClass().getName() + "#viewQuestions");
@@ -71,7 +71,6 @@ public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
 		BuildQuizResponse buildQuizResponse = new BuildQuizResponse();
 		buildQuizResponse.setBuildQuizResponse(response);
 		return buildQuizResponse;
-
 	}
 
 	/**
@@ -82,7 +81,7 @@ public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
 	 */
 
 	public gutenberg.blocs.AssignQuizResponse assignQuiz(
-			gutenberg.blocs.AssignQuiz assignQuiz) {
+			gutenberg.blocs.AssignQuiz assignQuiz6) {
 		// TODO : fill this with the necessary business logic
 		throw new java.lang.UnsupportedOperationException("Please implement "
 				+ this.getClass().getName() + "#assignQuiz");
