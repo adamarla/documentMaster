@@ -18,7 +18,7 @@ public class Vault {
 	 */
 	public String[] getContent(String id, String filter) throws Exception {
 		File directory = new File(VAULT + "/" + id);
-		File[] files = directory.listFiles(new VaultFilter(filter));
+		File[] files = directory.listFiles(new NameFilter(filter));
 		String[] contents = new String[files.length];
 		for (int i = 0; i < files.length; i++) {			
 			contents[i] = filer.get(files[i]);			
@@ -35,7 +35,7 @@ public class Vault {
 	 */ 
 	public File[] getFiles(String id, String filter) throws Exception{
 		File directory = new File(VAULT + "/" + id);
-		return directory.listFiles(new VaultFilter(filter));
+		return directory.listFiles(new NameFilter(filter));
 	}
 
 	public String getPath() throws Exception {
@@ -46,17 +46,3 @@ public class Vault {
 	private String VAULT;
 }
 
-class VaultFilter implements FilenameFilter {
-
-	public VaultFilter(String filter) {
-		this.filter = filter;
-	}
-	
-	@Override
-	public boolean accept(File dir, String name) {
-		return name.endsWith(filter);
-	}
-	
-	private String filter;
-	
-}

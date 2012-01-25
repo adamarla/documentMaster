@@ -2,13 +2,19 @@ package gutenberg.workers;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.sql.Date;
+import java.text.DateFormat;
+
 import gutenberg.blocs.AssignmentType;
 import gutenberg.blocs.EntryType;
 import gutenberg.blocs.ManifestType;
 import gutenberg.blocs.PageType;
 import gutenberg.blocs.QuizType;
+import gutenberg.blocs.StudentType;
 
 public class Scribe {
 
@@ -30,7 +36,7 @@ public class Scribe {
 	 */
 	public void generate(QuizType quiz) throws Exception {
 		File quizDir = new File(MINT + "/" + quiz.getId());
-		File staging = new File(MINT + "/" + quiz.getId() + "/" + "staging");
+		File staging = new File(quizDir + "/staging");
 		if (!quizDir.exists()) {
 			quizDir.mkdir();
 			quizDir.setExecutable(true, false);
@@ -40,11 +46,12 @@ public class Scribe {
 
 		PrintWriter answerkey = new PrintWriter(staging + "/answer-key.tex");
 		// TODO substitute teacherId
-		answerkey.println(preamble);
-		answerkey.println("\\printanswers");
+		answerkey.println(preamble.replace("Prof. Dumbledore",
+				"Ms. Actual Teacher"));
+		answerkey.println(printanswers);
 		answerkey.println(docBegin);
 
-		PageType[] pages = quiz.getPage();		
+		PageType[] pages = quiz.getPage();
 		PrintWriter preview = null;
 		String page = null;
 		for (int i = 0; i < pages.length; i++) {
@@ -57,7 +64,7 @@ public class Scribe {
 
 			answerkey.println(page);
 			if (i < pages.length - 1) {
-				answerkey.println("\\newpage");
+				answerkey.println(newpage);
 			}
 		}
 		answerkey.println(docEnd);
@@ -67,30 +74,61 @@ public class Scribe {
 		prepareManifest(quizDir.getPath(), pages.length);
 	}
 
-	private void prepareManifest(String path, int length) {
-		manifest.setRoot(path);
-		EntryType[] images = new EntryType[length * 2];
-		for (int i = 0; i < length; i++) {
-			images[2 * i] = new EntryType();
-			images[2 * i].setId(i + "page.jpg");
-			images[2 * i + 1] = new EntryType();
-			images[2 * i + 1].setId(i + "thumb.jpg");
-		}
-		EntryType[] documents = new EntryType[1];
-		documents[0] = new EntryType();
-		documents[0].setId("answerkey.pdf");
-		manifest.setImage(images);
-		manifest.setDocument(documents);
-	}
-
 	/**
 	 * create an assignment
 	 * 
 	 * @param assignment
+	 * @throws Exception
 	 */
-	public void generate(AssignmentType assignment) {
+	public void generate(AssignmentType assignment) throws Exception {
+		QuizType quiz = assignment.getQuiz();
+		
+		File quizDir = new File(MINT + "/" + quiz.getId());
+		File staging = new File(quizDir + "/staging");
+		if (!quizDir.exists()) {
+			throw new Exception("Cannot assign non-existant quiz: "
+					+ quiz.getId());
+		}
+		
+		int totalPages = staging.list(new NameFilter("page")).length;
+		
+		PrintWriter composite = new PrintWriter(staging + "/assignment.tex");
+		PrintWriter individual = null;
 
+		StudentType[] students = assignment.getStudents();
+		for (int i = 0; i < students.length; i++) {
+			
+			individual = new PrintWriter(staging + "/" + students[0].getId() + "-assignment.tex");			
+			int pageNumber = 1;
+			
+			String line = null;
+			BufferedReader reader = new BufferedReader(new FileReader(MINT + "/"
+					+ quiz.getId() + "/answer-key.tex"));			
+			while ((line = reader.readLine()) != null) {
+				
+				line = line.trim();
+				if (line.startsWith(newpage)) {
+					pageNumber++;
+				}
+				
+				if (line.startsWith(question)) {
+					String questionId = line.substring(line.indexOf('['), line.indexOf(']'));
+					String qrc = String.format("%1$.%2$.%3$.%4$",
+							quiz.getId(), pageNumber, totalPages,  
+							questionId, students[i].getId(), students[i].getName());
+					composite.println(qrc);
+					individual.println(qrc);
+				}
+				
+				if (!line.startsWith(printanswers)) {
+					composite.println();//blank newline
+				}
+			}
+			composite.flush();
+			individual.close();
+		}
 	}
+
 
 	public ManifestType getManifest() {
 		return manifest;
@@ -98,8 +136,11 @@ public class Scribe {
 
 	private String MINT;
 	private String preamble, docBegin, docEnd;
+	private final String printanswers = "\\printanswers",
+			newpage = "\\newpage", question = "\\question";
 	private Vault vault;
 	private ManifestType manifest;
+	
 
 	private void loadShared(String shared) throws Exception {
 		Filer filer = new Filer();
@@ -107,50 +148,6 @@ public class Scribe {
 		docBegin = filer.get(shared + "/doc_begin.tex");
 		docEnd = filer.get(shared + "/doc_end.tex");
 
-	}
-
-	private boolean copyPlotFilesFor(QuizType quiz) throws Exception {
-		PageType[] pages = quiz.getPage();
-		String here = this.MINT + "/" + quiz.getId() + "/staging";
-		Filer f = new Filer();
-
-		for (int i = 0; i < pages.length; i++) {
-			PageType page = pages[i];
-			EntryType[] questions = page.getQuestion();
-			String vault = this.vault.getPath();
-
-			for (int j = 0; j < questions.length; j++) {
-				String qid = questions[j].getId();
-				String plot = vault + "/" + qid + "/figure.gnuplot";
-				String target = here + "/" + qid + ".gnuplot";
-
-				f.copy(plot, target);
-				System.out.println(" Copied " + plot + " ---> " + target);
-			}
-		}
-		return true;
-	}
-
-	private String[] readPages(QuizType quiz) throws Exception {
-		PageType[] pages = quiz.getPage();
-		String[] document = new String[pages.length];
-		String vault = this.vault.getPath();
-		Filer f = new Filer();
-
-		for (int i = 0; i < pages.length; i++) {
-			EntryType[] questions = pages[i].getQuestion();
-			StringBuilder content = new StringBuilder();
-
-			for (int j = 0; j < questions.length; j++) {
-				String qid = questions[j].getId();
-				String path = vault + "/" + qid + "/question.tex";
-
-				content.append(f.get(new File(path))); // check for file
-														// existence?
-			}
-			document[i] = content.toString();
-		}
-		return document;
 	}
 
 	private String buildPage(PageType page, File staging) throws Exception {
@@ -161,7 +158,6 @@ public class Scribe {
 			throws Exception {
 		StringBuilder contents = new StringBuilder();
 		EntryType[] questionIds = page.getQuestion();
-		Filer filer = new Filer();
 		String question = null;
 		for (int i = 0; i < questionIds.length; i++) {
 			if (qrcode != null) {
@@ -170,14 +166,19 @@ public class Scribe {
 			}
 			question = vault.getContent(questionIds[i].getId(), "tex")[0];
 			contents.append(question);
-			
-			File[] files = vault.getFiles(questionIds[i].getId(), "gnuplot");
-			for (int j = 0; j < files.length; j++) {
-				filer.copy(files[j], new File(staging.getPath() + "/"
-						+ files[j].getName()));
-			}
+			copyResources(questionIds[i].getId(), staging);
 		}
 		return contents.toString();
+	}
+
+	private void copyResources(String questionId, File staging)
+			throws Exception {
+		Filer filer = new Filer();
+		File[] files = vault.getFiles(questionId, "gnuplot");
+		for (int j = 0; j < files.length; j++) {
+			filer.copy(files[j], new File(staging.getPath() + "/"
+					+ files[j].getName()));
+		}
 	}
 
 	private int make(QuizType quiz) throws Exception {
@@ -194,6 +195,22 @@ public class Scribe {
 			System.out.println(line);
 		}
 		return process.waitFor();
+	}
+
+	private void prepareManifest(String path, int length) {
+		manifest.setRoot(path);
+		EntryType[] images = new EntryType[length * 2];
+		for (int i = 0; i < length; i++) {
+			images[2 * i] = new EntryType();
+			images[2 * i].setId(i + "page.jpg");
+			images[2 * i + 1] = new EntryType();
+			images[2 * i + 1].setId(i + "thumb.jpg");
+		}
+		EntryType[] documents = new EntryType[1];
+		documents[0] = new EntryType();
+		documents[0].setId("answerkey.pdf");
+		manifest.setImage(images);
+		manifest.setDocument(documents);
 	}
 
 }
