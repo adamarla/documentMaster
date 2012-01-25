@@ -69,7 +69,7 @@ public class Scribe {
 		}
 		answerkey.println(docEnd);
 		answerkey.close();
-
+		
 		System.out.println("Return Code: " + make(quiz));
 		prepareManifest(quizDir.getPath(), pages.length);
 	}
@@ -134,6 +134,12 @@ public class Scribe {
 			composite.flush();
 			individual.close();
 		}
+		
+		composite.close();
+		
+		System.out.println("Return Code: " + make(quiz));
+		manifest = new ManifestType();
+		manifest.setRoot(staging.getPath());
 	}
 
 	public ManifestType getManifest() {
