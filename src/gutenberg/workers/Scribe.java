@@ -41,20 +41,24 @@ public class Scribe {
     copyPlotFilesFor(quiz) ;
     String[] pages = readPages(quiz) ;
     
-    // First, generate the answer-key.tex file 
-    PrintWriter answerkey = new PrintWriter(staging + "/answer-key.tex");
-    //TODO substitute teacherId 
-    answerkey.println(preamble);
-    answerkey.println("\\printanswers");
-    answerkey.println(docBegin);
+    // First, generate the answer-key.tex & blueprint.tex file
     
-    for (int i = 0 ; i < pages.length ; i++) {
-      answerkey.println(pages[i]);
-      answerkey.println("\\newpage") ;
+    PrintWriter[] targets = {new PrintWriter(staging + "/answer-key.tex"),
+    		                 new PrintWriter(staging + "/blueprint.tex")} ;
+    
+    for (int i = 0 ; i < targets.length ; i++) {
+    	targets[i].println(preamble);
+    	if (i == 0) targets[i].println("\\printanswers");
+    	targets[i].println(docBegin) ;
+    	
+    	for (int j = 0 ; j < pages.length ; j++) {
+    		targets[i].println(pages[j]);
+    		targets[i].println("\\newpage") ;
+    	}
+    	targets[i].println(docEnd) ;
+    	targets[i].close() ;
     }
-    answerkey.println(docEnd) ;
-    answerkey.close() ;
-    
+
     // Then, generate the preview .tex files for each page
     // Remember, each preview is a self-contained .tex file in itself 
     for (int i = 0 ; i < pages.length ; i++) {
@@ -79,21 +83,21 @@ public class Scribe {
       preview[i].println(page);
       preview[i].print(docEnd);
       preview[i].close();      
-      answerkey.println(page);
+      answerKey.println(page);
       images[2*i] = new EntryType();
       images[2*i].setId(i+"page.jpg");
       images[2*i+1] = new EntryType();
       images[2*i+1].setId(i+"thumb.jpg");
       if (i == pages.length-1) {
-        answerkey.println("\\newpage");
+        answerKey.println("\\newpage");
       }
     }
-    if (answerkey.checkError())
+    if (answerKey.checkError())
       throw new Exception("Check returned with error ") ;
-    answerkey.close();
+    answerKey.close();
     EntryType[] documents = new EntryType[1];
     documents[0] = new EntryType();
-    documents[0].setId("answerkey.pdf");
+    documents[0].setId("answerKey.pdf");
     */
     
     int ret = make(quiz) ;
@@ -173,31 +177,6 @@ public class Scribe {
       document[i] = content.toString() ;
     }
     return document ;
-  }
-  
-  private String buildPage(PageType page, File staging) throws Exception {
-    return buildPage(page, staging, null);
-  }
-    
-  private String buildPage(PageType page, File staging, String qrcode) throws Exception {
-    StringBuilder contents = new StringBuilder();
-    EntryType[] questionIds = page.getQuestion();
-    //Filer filer = new Filer();
-    String question = null;
-    for(int i = 0; i < questionIds.length; i++) {
-      if (qrcode != null) {
-        qrcode += questionIds[i].getId();
-        contents.append(qrcode).append("\n");
-      }
-      question = vault.getContent(questionIds[i].getId(), "tex")[0];
-      contents.append(question);
-      /*File[] files = vault.getFiles(questionIds[i].getId(), "gnuplot");
-      for (int j = 0; j < files.length; j++) {      
-        filer.copy(files[j], new File(staging.getPath() + "/" + files[j].getName()));
-      }
-      */
-    }
-    return contents.toString();
   }
 
   private int make(QuizType quiz) throws Exception {
