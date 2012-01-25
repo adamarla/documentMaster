@@ -47,7 +47,7 @@ public class Scribe {
 		PrintWriter answerkey = new PrintWriter(staging + "/answer-key.tex");
 		// TODO substitute teacherId
 		answerkey.println(preamble.replace("Prof. Dumbledore",
-				"Ms. Actual Teacher"));
+				quiz.getTeacherId()));
 		answerkey.println(printanswers);
 		answerkey.println(docBegin);
 
@@ -82,53 +82,59 @@ public class Scribe {
 	 */
 	public void generate(AssignmentType assignment) throws Exception {
 		QuizType quiz = assignment.getQuiz();
-		
+
 		File quizDir = new File(MINT + "/" + quiz.getId());
 		File staging = new File(quizDir + "/staging");
 		if (!quizDir.exists()) {
 			throw new Exception("Cannot assign non-existant quiz: "
 					+ quiz.getId());
 		}
-		
+
 		int totalPages = staging.list(new NameFilter("page")).length;
-		
+
 		PrintWriter composite = new PrintWriter(staging + "/assignment.tex");
 		PrintWriter individual = null;
 
 		StudentType[] students = assignment.getStudents();
 		for (int i = 0; i < students.length; i++) {
-			
-			individual = new PrintWriter(staging + "/" + students[i].getId() + "-assignment.tex");			
+
+			individual = new PrintWriter(staging + "/" + students[i].getId()
+					+ "-assignment.tex");
 			int pageNumber = 1;
-			
+
 			String line = null;
-			BufferedReader reader = new BufferedReader(new FileReader(MINT + "/"
-					+ quiz.getId() + "/answer-key.tex"));			
+			BufferedReader reader = new BufferedReader(new FileReader(MINT
+					+ "/" + quiz.getId() + "/answer-key.tex"));
 			while ((line = reader.readLine()) != null) {
-				
-				line = line.trim();
+
+				line = line.trim();				
 				if (line.startsWith(newpage)) {
 					pageNumber++;
 				}
-				
+
 				if (line.startsWith(question)) {
-					String questionId = line.substring(line.indexOf('['), line.indexOf(']'));
-					String qrc = String.format("%1$.%2$.%3$.%4$,%5$,%6$",
-							quiz.getId(), pageNumber, totalPages,  
-							questionId, students[i].getId(), students[i].getName());
-					composite.println(qrc);
-					individual.println(qrc);
+					String questionId = line.substring(line.indexOf('['), line
+							.indexOf(']'));
+					line = String.format("QRC>%1$.%2$.%3$.%4$,%5$,%6$\n%7$", quiz
+							.getId(), pageNumber, totalPages, questionId,
+							students[i].getId(), students[i].getName(), line);
 				}
 				
-				if (!line.startsWith(printanswers)) {
-					composite.println();
+				if (line.startsWith(docAuthor)) {
+					line = String.format("{%1$}", students[i].getName());
 				}
+
+				if (line.startsWith(printanswers)) {
+					line = "";
+				}
+				
+				composite.println(line);
+				individual.println(line);
 			}
 			composite.flush();
 			individual.close();
 		}
 	}
-
 
 	public ManifestType getManifest() {
 		return manifest;
@@ -136,11 +142,10 @@ public class Scribe {
 
 	private String MINT;
 	private String preamble, docBegin, docEnd;
-	private final String printanswers = "\\printanswers",
+	private final String printanswers = "\\printanswers", docAuthor = "\\DocAuthor",
 			newpage = "\\newpage", question = "\\question";
 	private Vault vault;
 	private ManifestType manifest;
-	
 
 	private void loadShared(String shared) throws Exception {
 		Filer filer = new Filer();
