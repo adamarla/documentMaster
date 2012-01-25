@@ -112,11 +112,11 @@ public class Scribe {
 				}
 
 				if (line.startsWith(question)) {
-					String questionId = line.substring(line.indexOf('['), line
+					String questionId = line.substring(line.indexOf('[')+1, line
 							.indexOf(']'));
-					line = String.format("QRC>%1$.%2$.%3$.%4$,%5$,%6$\n%7$", quiz
-							.getId(), pageNumber, totalPages, questionId,
-							students[i].getId(), students[i].getName(), line);
+					line = "QRC>" + quiz.getId() + "." + pageNumber + "." + totalPages
+						+ "." + questionId + "." + students[i].getId()
+						+ "." + students[i].getName() + "\n" + line;
 				}
 				
 				if (line.startsWith(docAuthor)) {
