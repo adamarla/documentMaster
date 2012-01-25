@@ -98,7 +98,7 @@ public class Scribe {
 		StudentType[] students = assignment.getStudents();
 		for (int i = 0; i < students.length; i++) {
 			
-			individual = new PrintWriter(staging + "/" + students[0].getId() + "-assignment.tex");			
+			individual = new PrintWriter(staging + "/" + students[i].getId() + "-assignment.tex");			
 			int pageNumber = 1;
 			
 			String line = null;
@@ -113,7 +113,7 @@ public class Scribe {
 				
 				if (line.startsWith(question)) {
 					String questionId = line.substring(line.indexOf('['), line.indexOf(']'));
-					String qrc = String.format("%1$.%2$.%3$.%4$",
+					String qrc = String.format("%1$.%2$.%3$.%4$,%5$,%6$",
 							quiz.getId(), pageNumber, totalPages,  
 							questionId, students[i].getId(), students[i].getName());
 					composite.println(qrc);
@@ -121,7 +121,7 @@ public class Scribe {
 				}
 				
 				if (!line.startsWith(printanswers)) {
-					composite.println();//blank newline
+					composite.println();
 				}
 			}
 			composite.flush();
