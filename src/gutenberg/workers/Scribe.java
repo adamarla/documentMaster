@@ -103,8 +103,7 @@ public class Scribe {
 			int pageNumber = 1;
 
 			String line = null;
-			BufferedReader reader = new BufferedReader(new FileReader(MINT
-					+ "/" + quiz.getId() + "/answer-key.tex"));
+			BufferedReader reader = new BufferedReader(new FileReader(staging + "/answer-key.tex"));
 			while ((line = reader.readLine()) != null) {
 
 				line = line.trim();				

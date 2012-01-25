@@ -81,10 +81,25 @@ public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
 	 */
 
 	public gutenberg.blocs.AssignQuizResponse assignQuiz(
-			gutenberg.blocs.AssignQuiz assignQuiz6) {
-		// TODO : fill this with the necessary business logic
-		throw new java.lang.UnsupportedOperationException("Please implement "
-				+ this.getClass().getName() + "#assignQuiz");
+			gutenberg.blocs.AssignQuiz assignQuiz) {
+		Config config = null;
+		Vault vault = null;
+		Scribe scribe = null;
+		ResponseType response = new ResponseType();
+		try {
+			config = new Config();
+			vault = new Vault(config.getPath(Resource.vault));
+			scribe = new Scribe(config.getPath(Resource.mint), config
+					.getPath(Resource.shared));
+			scribe.setVault(vault);
+			scribe.generate(assignQuiz.getAssignQuiz());
+			response.setManifest(scribe.getManifest());
+		} catch (Exception e) {
+			response.setError(e.getMessage());
+		}
+		AssignQuizResponse assignQuizResponse = new AssignQuizResponse();
+		assignQuizResponse.setAssignQuizResponse(response);
+		return assignQuizResponse;
 	}
 
 }
