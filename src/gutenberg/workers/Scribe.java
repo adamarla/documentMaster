@@ -120,7 +120,7 @@ public class Scribe {
 				}
 
 				if (line.startsWith(docAuthor)) {
-					line = String.format("{%s}", students[i].getName());
+					line = String.format(docAuthor + "{%s}", students[i].getName());
 				}
 
 				if (line.startsWith(printanswers)) {
