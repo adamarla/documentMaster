@@ -2,13 +2,9 @@ package gutenberg.workers;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.sql.Date;
-import java.text.DateFormat;
-
 import gutenberg.blocs.AssignmentType;
 import gutenberg.blocs.EntryType;
 import gutenberg.blocs.ManifestType;
@@ -55,6 +51,7 @@ public class Scribe {
 		String page = null;
 		for (int i = 0; i < pages.length; i++) {
 			preview = new PrintWriter(staging + "/page" + i + ".tex");
+			preview.println(preamble.replace("Prof. Dumbledore", "The Teacher"));
 			preview.println(docBegin);
 			page = buildPage(pages[i], staging);
 			preview.println(page);
