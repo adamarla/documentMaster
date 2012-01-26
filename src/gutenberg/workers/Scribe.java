@@ -126,8 +126,12 @@ public class Scribe {
     String        quizId = assignment.getQuiz().getId() ;
     String        blueprint = MINT + quizId + "/staging/blueprint.tex.skip" ;
     StudentType[] students = assignment.getStudents() ;
+    String        composite = MINT + quizId + "/staging/composite.tex" ;
+    BufferedWriter  quizTex =   new BufferedWriter(new FileWriter(composite)) ;
     
     this.manifest.setRoot(MINT + quizId) ; 
+    writePreamble(quizTex, "Hogwarts School", "Prof. Dumbledore");
+    beginDoc(quizTex) ;
     
     for(int i = 0 ; i < students.length ; i++) {
       StudentType student = students[i] ; 
@@ -137,34 +141,46 @@ public class Scribe {
       // target in the Makefile because of the space b/w the first and 
       // last names. Hence, we need to generate a file name that would
       // be a valid target
-      String      fileName = quizId + "-" + id + "-" + name.split(" ")[0] ;
-      String      target = MINT + quizId + "/staging/" + fileName + ".tex" ;
-      BufferedReader reader = new BufferedReader(new FileReader(blueprint)) ;
-      BufferedWriter writer = new BufferedWriter(new FileWriter(target)) ;
+      String      baseQR = quizId + "-" + id + "-" + name.split(" ")[0] ;
+      String      atomic = MINT + quizId + "/staging/" + baseQR + ".tex" ;
       String      line = null ; 
       int         currPage = 1, currQues = 1 ;
+
+      BufferedReader reader = new BufferedReader(new FileReader(blueprint)) ;
+      BufferedWriter perStudent = new BufferedWriter(new FileWriter(atomic)) ;
       
-      writePreamble(writer, "Hogwarts School", name) ;
-      beginDoc(writer) ;
+      writePreamble(perStudent, "Hogwarts School", name) ;
+      beginDoc(perStudent) ;
+
+      BufferedWriter[] targets = {quizTex, perStudent} ;
       
       while ((line = reader.readLine()) != null) {
         if (line.contains("\\insertQR")) {
-          String qrCode = fileName + "-" + currPage + "-" + currQues ;
-          writer.write("\\insertQR{" + qrCode + "}") ;
-          writer.newLine() ;
+          String qrCode = baseQR + "-" + currPage + "-" + currQues ;
+          for (int j = 0 ; j < targets.length ; j++) {
+            targets[j].write("\\insertQR{" + qrCode + "}") ;
+            targets[j].newLine() ;
+          }
           continue ; // effectively, replace the \insertQR place-holder
         } else if (line.contains("\\newpage")) {
           currPage += 1 ;
         } else if (line.contains("\\question")) {
           currQues += 1 ;
         } 
-        writer.write(line) ;
-        writer.newLine() ;
+        for (int j = 0 ; j < targets.length ; j++) {
+          targets[j].write(line) ;
+          targets[j].newLine() ;
+        }
       }
-      endDoc(writer) ;
+      
+      resetPageNumbering(quizTex) ;
+      endDoc(perStudent) ;
       reader.close() ;
-      writer.close() ;
+      perStudent.close() ;
     }
+    endDoc(quizTex) ;
+    quizTex.close() ;
+
     int ret = make(quizId) ;
   }
   
@@ -210,6 +226,11 @@ public class Scribe {
     stream.newLine() ;
     stream.write("\\end{document}") ;
     return true ;
+  }
+  
+  private void resetPageNumbering(BufferedWriter stream) throws Exception {
+	  stream.write("\\setcounter{page}{1}") ;
+	  stream.newLine() ;
   }
   
   private boolean copyPlotFilesFor(QuizType quiz) throws Exception {
