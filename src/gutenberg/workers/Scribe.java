@@ -46,8 +46,7 @@ public class Scribe {
 
 		PrintWriter answerkey = new PrintWriter(staging + "/answer-key.tex");
 		// TODO substitute teacherId
-		answerkey.println(preamble.replace("Prof. Dumbledore",
-				quiz.getTeacherId()));
+		answerkey.println(preamble.replace("Prof. Dumbledore", "The Teacher"));
 		answerkey.println(printanswers);
 		answerkey.println(docBegin);
 
@@ -69,7 +68,7 @@ public class Scribe {
 		}
 		answerkey.println(docEnd);
 		answerkey.close();
-		
+
 		System.out.println("Return Code: " + make(quiz));
 		prepareManifest(quizDir.getPath(), pages.length);
 	}
@@ -103,39 +102,48 @@ public class Scribe {
 			int pageNumber = 1;
 
 			String line = null;
-			BufferedReader reader = new BufferedReader(new FileReader(staging + "/answer-key.tex"));
+			BufferedReader reader = new BufferedReader(new FileReader(staging
+					+ "/answer-key.tex"));
 			while ((line = reader.readLine()) != null) {
 
-				line = line.trim();				
+				line = line.trim();
 				if (line.startsWith(newpage)) {
 					pageNumber++;
 				}
 
 				if (line.startsWith(question)) {
-					String questionId = line.substring(line.indexOf('[')+1, line
-							.indexOf(']'));
-					line = "QRC>" + quiz.getId() + "." + pageNumber + "." + totalPages
-						+ "." + questionId + "." + students[i].getId()
-						+ "." + students[i].getName() + "\n" + line;
+					String questionId = line.substring(line.indexOf('[') + 1,
+							line.indexOf(']'));
+					line = String.format("QRC> %s.%s.%s.%s.%s.%s\n%s", quiz
+							.getId(), pageNumber, totalPages, questionId,
+							students[i].getId(), students[i].getName(), line);
 				}
-				
+
 				if (line.startsWith(docAuthor)) {
-					line = String.format("{%1$}", students[i].getName());
+					line = String.format("{%s}", students[i].getName());
 				}
 
 				if (line.startsWith(printanswers)) {
 					line = "";
 				}
-				
-				composite.println(line);
+
 				individual.println(line);
+				// docBegin and docEnd print only once for composite document
+				if (line.startsWith(beginDocument) && i != 0) {
+					line = "";
+				}
+				if (line.startsWith(endDocument) && i != students.length-1) {
+					line = "";
+				}
+				composite.println(line);
+
 			}
 			composite.flush();
 			individual.close();
 		}
-		
+
 		composite.close();
-		
+
 		System.out.println("Return Code: " + make(quiz));
 		manifest = new ManifestType();
 		manifest.setRoot(staging.getPath());
@@ -147,8 +155,10 @@ public class Scribe {
 
 	private String MINT;
 	private String preamble, docBegin, docEnd;
-	private final String printanswers = "\\printanswers", docAuthor = "\\DocAuthor",
-			newpage = "\\newpage", question = "\\question";
+	private final String printanswers = "\\printanswers",
+			docAuthor = "\\DocAuthor", newpage = "\\newpage",
+			question = "\\question", beginDocument = "\\begin{document}",
+			endDocument = "\\end{document}";
 	private Vault vault;
 	private ManifestType manifest;
 
@@ -174,7 +184,7 @@ public class Scribe {
 				qrcode += questionIds[i].getId();
 				contents.append(qrcode).append("\n");
 			}
-			question = vault.getContent(questionIds[i].getId(), "tex")[0];
+			question = vault.getContent(questionIds[i].getId(), "question.tex")[0];
 			contents.append(question);
 			copyResources(questionIds[i].getId(), staging);
 		}
@@ -184,7 +194,7 @@ public class Scribe {
 	private void copyResources(String questionId, File staging)
 			throws Exception {
 		Filer filer = new Filer();
-		File[] files = vault.getFiles(questionId, "gnuplot");
+		File[] files = vault.getFiles(questionId, "figure.gnuplot");
 		for (int j = 0; j < files.length; j++) {
 			filer.copy(files[j], new File(staging.getPath() + "/"
 					+ files[j].getName()));
