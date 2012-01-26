@@ -173,7 +173,11 @@ public class Scribe {
         }
       }
       
+      // We are not yet done with the composite document. So, do the following
       resetPageNumbering(quizTex) ;
+      resetQuestionNumbering(quizTex) ;
+      
+      // But we are done with the per-student document. So, close the stream
       endDoc(perStudent) ;
       reader.close() ;
       perStudent.close() ;
@@ -230,6 +234,11 @@ public class Scribe {
   
   private void resetPageNumbering(BufferedWriter stream) throws Exception {
 	  stream.write("\\setcounter{page}{1}") ;
+	  stream.newLine() ;
+  }
+  
+  private void resetQuestionNumbering(BufferedWriter stream) throws Exception {
+	  stream.write("\\setcounter{question}{0}") ;
 	  stream.newLine() ;
   }
   
