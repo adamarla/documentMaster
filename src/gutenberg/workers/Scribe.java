@@ -133,7 +133,12 @@ public class Scribe {
       StudentType student = students[i] ; 
       String      name = student.getName() ;
       String      id = student.getId() ;
-      String      target = MINT + quizId + "/staging/" + id + "-" + name + ".tex" ;
+      // The human-readable 'name' passed here would be an invalid 
+      // target in the Makefile because of the space b/w the first and 
+      // last names. Hence, we need to generate a file name that would
+      // be a valid target
+      String      fileName = quizId + "-" + id + "-" + name.split(" ")[0] ;
+      String      target = MINT + quizId + "/staging/" + fileName + ".tex" ;
       BufferedReader reader = new BufferedReader(new FileReader(blueprint)) ;
       BufferedWriter writer = new BufferedWriter(new FileWriter(target)) ;
       String      line = null ; 
@@ -144,7 +149,7 @@ public class Scribe {
       
       while ((line = reader.readLine()) != null) {
         if (line.contains("\\insertQR")) {
-          String qrCode = quizId + "." + id + "." + currPage + "." + currQues ;
+          String qrCode = fileName + "-" + currPage + "-" + currQues ;
           writer.write("\\insertQR{" + qrCode + "}") ;
           writer.newLine() ;
           continue ; // effectively, replace the \insertQR place-holder
