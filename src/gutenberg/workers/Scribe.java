@@ -1,19 +1,24 @@
 package gutenberg.workers;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+
 import gutenberg.blocs.AssignmentType;
 import gutenberg.blocs.EntryType;
 import gutenberg.blocs.ManifestType;
 import gutenberg.blocs.PageType;
 import gutenberg.blocs.QuizType;
+import gutenberg.blocs.StudentType;
 
 public class Scribe {
   
   public Scribe(String mint, String shared) throws Exception {
-    MINT = mint;
+    MINT = mint + "/" ;
     loadShared(shared);
     manifest = new ManifestType();
   }
@@ -44,19 +49,21 @@ public class Scribe {
     // First, generate the answer-key.tex & blueprint.tex file
     
     PrintWriter[] targets = {new PrintWriter(staging + "/answer-key.tex"),
-    		                 new PrintWriter(staging + "/blueprint.tex")} ;
+                         new PrintWriter(staging + "/blueprint.tex.skip")} ;
     
     for (int i = 0 ; i < targets.length ; i++) {
-    	targets[i].println(preamble);
-    	if (i == 0) targets[i].println("\\printanswers");
-    	targets[i].println(docBegin) ;
-    	
-    	for (int j = 0 ; j < pages.length ; j++) {
-    		targets[i].println(pages[j]);
-    		targets[i].println("\\newpage") ;
-    	}
-    	targets[i].println(docEnd) ;
-    	targets[i].close() ;
+      
+      if (i == 0) {
+        targets[i].println(preamble);
+        targets[i].println("\\printanswers");
+        targets[i].println(docBegin) ;
+      }
+      for (int j = 0 ; j < pages.length ; j++) {
+        targets[i].println(pages[j]);
+        targets[i].println("\\newpage") ;
+      }
+      if ( i == 0) targets[i].println(docEnd) ;
+      targets[i].close() ;
     }
 
     // Then, generate the preview .tex files for each page
@@ -100,7 +107,7 @@ public class Scribe {
     documents[0].setId("answerKey.pdf");
     */
     
-    int ret = make(quiz) ;
+    int ret = make(quiz.getId()) ;
     /*
     if (ret != 0) {
       throw new Exception("Make returned with: " + ret) ;
@@ -115,8 +122,45 @@ public class Scribe {
    * create an assignment
    * @param assignment
    */
-  public void generate(AssignmentType assignment) {
-
+  public void generate(AssignmentType assignment) throws Exception {
+    String        quizId = assignment.getQuiz().getId() ;
+    String        blueprint = MINT + quizId + "/staging/blueprint.tex.skip" ;
+    StudentType[] students = assignment.getStudents() ;
+    
+    this.manifest.setRoot(MINT + quizId) ; 
+    
+    for(int i = 0 ; i < students.length ; i++) {
+      StudentType student = students[i] ; 
+      String      name = student.getName() ;
+      String      id = student.getId() ;
+      String      target = MINT + quizId + "/staging/" + id + "-" + name + ".tex" ;
+      BufferedReader reader = new BufferedReader(new FileReader(blueprint)) ;
+      BufferedWriter writer = new BufferedWriter(new FileWriter(target)) ;
+      String      line = null ; 
+      int         currPage = 1, currQues = 1 ;
+      
+      writePreamble(writer, "Hogwarts School", name) ;
+      beginDoc(writer) ;
+      
+      while ((line = reader.readLine()) != null) {
+        if (line.contains("\\insertQR")) {
+          String qrCode = quizId + "." + id + "." + currPage + "." + currQues ;
+          writer.write("\\insertQR{" + qrCode + "}") ;
+          writer.newLine() ;
+          continue ; // effectively, replace the \insertQR place-holder
+        } else if (line.contains("\\newpage")) {
+          currPage += 1 ;
+        } else if (line.contains("\\question")) {
+          currQues += 1 ;
+        } 
+        writer.write(line) ;
+        writer.newLine() ;
+      }
+      endDoc(writer) ;
+      reader.close() ;
+      writer.close() ;
+    }
+    int ret = make(quizId) ;
   }
   
   public ManifestType getManifest() {
@@ -134,6 +178,33 @@ public class Scribe {
     docBegin = filer.get(shared+ "/doc_begin.tex");
     docEnd = filer.get(shared + "/doc_end.tex");    
 
+  }
+  
+  private boolean writePreamble(BufferedWriter stream, String school, String author) throws Exception {
+    stream.write("\\documentclass[justified]{tufte-exam}") ;
+    stream.newLine() ;
+    stream.write("\\School{" + school + "}") ;
+    stream.newLine() ;
+    stream.write("\\DocAuthor{" + author + "}") ;
+    stream.newLine() ;
+    stream.write("\\fancyfoot[C]{\\copyright\\, Gutenberg}") ;
+    stream.newLine() ;
+    return true ;
+  }
+  
+  private boolean beginDoc(BufferedWriter stream) throws Exception {
+    stream.write("\\begin{document}") ;
+    stream.newLine() ;
+    stream.write("\\begin{questions}") ;
+    stream.newLine() ;
+    return true ;
+  };
+  
+  private boolean endDoc(BufferedWriter stream) throws Exception {
+    stream.write("\\end{questions}") ;
+    stream.newLine() ;
+    stream.write("\\end{document}") ;
+    return true ;
   }
   
   private boolean copyPlotFilesFor(QuizType quiz) throws Exception {
@@ -172,6 +243,7 @@ public class Scribe {
         String qid = questions[j].getId() ;
         String path = vault + "/" + qid + "/question.tex" ;
         
+        content.append("\\insertQR{QRC}\n") ;
         content.append(f.get(new File(path))) ; // check for file existence?    
       }
       document[i] = content.toString() ;
@@ -179,8 +251,8 @@ public class Scribe {
     return document ;
   }
 
-  private int make(QuizType quiz) throws Exception {
-    ProcessBuilder processBuilder = new ProcessBuilder("make", "dir="+quiz.getId());
+  private int make(String quizId) throws Exception {
+    ProcessBuilder processBuilder = new ProcessBuilder("make", "dir=" + quizId);
     File mintDir = new File(MINT);
     processBuilder.directory(mintDir);
     processBuilder.redirectErrorStream(true);
