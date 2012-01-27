@@ -129,8 +129,12 @@ public class Scribe {
     String        composite = MINT + quizId + "/staging/composite.tex" ;
     BufferedWriter  quizTex =   new BufferedWriter(new FileWriter(composite)) ;
     
+    // Not strictly correct. Needs WSDL change
+    String        school = assignment.getQuiz().getTeacherId() ;
+    
     this.manifest.setRoot(MINT + quizId) ; 
-    writePreamble(quizTex, "Hogwarts School", "Prof. Dumbledore");
+   
+    writePreamble(quizTex, school, "Prof. Dumbledore");
     beginDoc(quizTex) ;
     
     for(int i = 0 ; i < students.length ; i++) {
@@ -149,7 +153,7 @@ public class Scribe {
       BufferedReader reader = new BufferedReader(new FileReader(blueprint)) ;
       BufferedWriter perStudent = new BufferedWriter(new FileWriter(atomic)) ;
       
-      writePreamble(perStudent, "Hogwarts School", name) ;
+      writePreamble(perStudent,school, name) ;
       beginDoc(perStudent) ;
 
       BufferedWriter[] targets = {quizTex, perStudent} ;
