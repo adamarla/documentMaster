@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.nio.file.Files;
+
 import gutenberg.blocs.AssignmentType;
 import gutenberg.blocs.EntryType;
 import gutenberg.blocs.ManifestType;
@@ -14,10 +16,9 @@ import gutenberg.blocs.StudentType;
 
 public class Scribe {
 
-	public Scribe(String mint, String shared) throws Exception {
+	public Scribe(String mint, String webroot) throws Exception {
 		MINT = mint;
-		loadShared(shared);
-		manifest = new ManifestType();
+		this.webroot = webroot;
 	}
 
 	public void setVault(Vault vault) {
@@ -31,43 +32,42 @@ public class Scribe {
 	 * @throws Exception
 	 */
 	public void generate(QuizType quiz) throws Exception {
-		File quizDir = new File(MINT + "/" + quiz.getId());
-		File staging = new File(quizDir + "/staging");
+		String quizId = quiz.getQuiz().getId();
+		quizDir = new File(MINT + "/" + quizId);
+		staging = new File(quizDir + "/staging");
 		if (!quizDir.exists()) {
 			quizDir.mkdir();
-			quizDir.setExecutable(true, false);
 			staging.mkdir();
-			staging.setExecutable(true, false);
 		}
 
 		PrintWriter answerkey = new PrintWriter(staging + "/answer-key.tex");
-		// TODO substitute teacherId
-		answerkey.println(preamble.replace("Prof. Dumbledore", "The Teacher"));
+		writePreamble(answerkey, quiz.getSchool().getName(), quiz.getTeacher().getName());
+		beginDoc(answerkey);
 		answerkey.println(printanswers);
-		answerkey.println(docBegin);
 
 		PageType[] pages = quiz.getPage();
 		PrintWriter preview = null;
 		String page = null;
 		for (int i = 0; i < pages.length; i++) {
-			preview = new PrintWriter(staging + "/page" + i + ".tex");
-			preview.println(preamble.replace("Prof. Dumbledore", "The Teacher"));
-			preview.println(docBegin);
-			page = buildPage(pages[i], staging);
+			preview = new PrintWriter(staging + "/page-" + i + ".tex");
+			writePreamble(preview, quiz.getSchool().getName(), quiz.getTeacher().getName());
+			beginDoc(preview);
+			preview.println(printanswers);
+			
+			page = preparePage(pages[i]);
 			preview.println(page);
-			preview.print(docEnd);
-			preview.close();
-
 			answerkey.println(page);
+			endDoc(preview);
+			preview.close();
 			if (i < pages.length - 1) {
 				answerkey.println(newpage);
 			}
 		}
-		answerkey.println(docEnd);
+		endDoc(answerkey);
 		answerkey.close();
 
-		System.out.println("Return Code: " + make(quiz));
-		prepareManifest(quizDir.getPath(), pages.length);
+		System.out.println("Return Code: " + make(quizId));
+		prepareManifest(quiz);
 	}
 
 	/**
@@ -77,50 +77,60 @@ public class Scribe {
 	 * @throws Exception
 	 */
 	public void generate(AssignmentType assignment) throws Exception {
-		QuizType quiz = assignment.getQuiz();
-
-		File quizDir = new File(MINT + "/" + quiz.getId());
-		File staging = new File(quizDir + "/staging");
+		String quizId = assignment.getQuiz().getId();
+		String instanceId = assignment.getInstance().getId(); 
+		quizDir = new File(MINT + "/" + quizId);		
 		if (!quizDir.exists()) {
 			throw new Exception("Cannot assign non-existant quiz: "
-					+ quiz.getId());
+					+ quizId);
+		} else {
+			instanceDir = new File(quizDir + "/" + instanceId);
+			instanceDir.mkdir();
+			//Note: staging directory is different from quizDir/staging
+			//this is quizDir/instanceDir/staging
+			staging = new File(instanceDir + "/staging");
+			staging.mkdir();
+			Files.createSymbolicLink(new File(staging + "figure.gnuplot").toPath(), 
+									new File(quizDir + "/staging/figure.gnuplot").toPath());
 		}
 
-		int totalPages = staging.list(new NameFilter("page")).length;
+		int totalPages = quizDir.list(new NameFilter("page")).length;
 
 		PrintWriter composite = new PrintWriter(staging + "/assignment.tex");
 		PrintWriter individual = null;
 
-		StudentType[] students = assignment.getStudents();
+		EntryType[] students = assignment.getStudents();
 		for (int i = 0; i < students.length; i++) {
 
 			individual = new PrintWriter(staging + "/" + students[i].getId()
 					+ "-assignment.tex");
-			int pageNumber = 1;
+			int pageNumber = 1, questionNumber = 1;
 
-			String line = null;
-			BufferedReader reader = new BufferedReader(new FileReader(staging
-					+ "/answer-key.tex"));
+			String line = null, text = null;
+			BufferedReader reader = new BufferedReader(new FileReader(quizDir + "/staging/answer-key.tex"));
 			while ((line = reader.readLine()) != null) {
 
-				line = line.trim();
-				if (line.startsWith(newpage)) {
+				text = line.trim();
+				if (text.startsWith(newpage)) {
 					pageNumber++;
 				}
 
-				if (line.startsWith(question)) {
-					String questionId = line.substring(line.indexOf('[') + 1,
-							line.indexOf(']'));
-					line = String.format("QRC> %s.%s.%s.%s.%s.%s\n%s", quiz
-							.getId(), pageNumber, totalPages, questionId,
-							students[i].getId(), students[i].getName(), line);
+				if (text.startsWith(question)) {
+					questionNumber++;
+				}
+					
+				if (text.startsWith(insertQR)) {
+					line = line.replace("QRC", String.format("%s.%s.%s.%s.%s.%s",
+							quizId, pageNumber, totalPages, questionNumber,
+							students[i].getId(), students[i].getName()));
 				}
 
-				if (line.startsWith(docAuthor)) {
-					line = String.format(docAuthor + "{%s}", students[i].getName());
+				if (text.startsWith(docAuthor)) {
+					line = String.format(docAuthor + "{%s}",
+							students[i].getName());
 				}
 
-				if (line.startsWith(printanswers)) {
+				if (text.startsWith(printanswers)) {
 					line = "";
 				}
 
@@ -129,21 +139,26 @@ public class Scribe {
 				if (line.startsWith(beginDocument) && i != 0) {
 					line = "";
 				}
-				if (line.startsWith(endDocument) && i != students.length-1) {
+				if (line.startsWith(endDocument) && i != students.length - 1) {
 					line = "";
 				}
 				composite.println(line);
 
 			}
-			composite.flush();
+			
+		      // We are not yet done with the composite document. So, do the following
+		      resetPageNumbering(composite);
+		      resetQuestionNumbering(composite);
+		      
+			endDoc(individual);
 			individual.close();
+			composite.flush();			
 		}
-
+		endDoc(composite);
 		composite.close();
 
-		System.out.println("Return Code: " + make(quiz));
-		manifest = new ManifestType();
-		manifest.setRoot(staging.getPath());
+		System.out.println("Return Code: " + make(quizId + "/" + instanceId));
+		prepareManifest(assignment);
 	}
 
 	public ManifestType getManifest() {
@@ -151,56 +166,66 @@ public class Scribe {
 	}
 
 	private String MINT;
-	private String preamble, docBegin, docEnd;
+	private File staging, quizDir, instanceDir;
+	private String webroot;
 	private final String printanswers = "\\printanswers",
 			docAuthor = "\\DocAuthor", newpage = "\\newpage",
 			question = "\\question", beginDocument = "\\begin{document}",
-			endDocument = "\\end{document}";
+			beginQuestions = "\\{beginQuestions}", insertQR = "\\insertQR{QRC}",
+			endQuestions = "\\end{questions}", endDocument = "\\end{document}";
 	private Vault vault;
 	private ManifestType manifest;
 
-	private void loadShared(String shared) throws Exception {
-		Filer filer = new Filer();
-		preamble = filer.get(shared + "/preamble.tex");
-		docBegin = filer.get(shared + "/doc_begin.tex");
-		docEnd = filer.get(shared + "/doc_end.tex");
-
-	}
-
-	private String buildPage(PageType page, File staging) throws Exception {
-		return buildPage(page, staging, null);
-	}
-
-	private String buildPage(PageType page, File staging, String qrcode)
-			throws Exception {
+	private String preparePage(PageType page) throws Exception {
 		StringBuilder contents = new StringBuilder();
 		EntryType[] questionIds = page.getQuestion();
 		String question = null;
+		File[] resources = null;
 		for (int i = 0; i < questionIds.length; i++) {
-			if (qrcode != null) {
-				qrcode += questionIds[i].getId();
-				contents.append(qrcode).append("\n");
-			}
 			question = vault.getContent(questionIds[i].getId(), "question.tex")[0];
+			contents.append(insertQR).append('\n');
 			contents.append(question);
-			copyResources(questionIds[i].getId(), staging);
+			resources = vault
+					.getFiles(questionIds[i].getId(), "figure.gnuplot");
+			linkResources(resources[0]);
 		}
 		return contents.toString();
 	}
 
-	private void copyResources(String questionId, File staging)
-			throws Exception {
-		Filer filer = new Filer();
-		File[] files = vault.getFiles(questionId, "figure.gnuplot");
-		for (int j = 0; j < files.length; j++) {
-			filer.copy(files[j], new File(staging.getPath() + "/"
-					+ files[j].getName()));
-		}
+	private void linkResources(File resource) throws Exception {
+		File target = new File(staging.getPath() + "/" + resource.getName());
+		Files.createSymbolicLink(target.toPath(), resource.toPath());
 	}
 
-	private int make(QuizType quiz) throws Exception {
+	private void writePreamble(PrintWriter writer, String school, String author)
+			throws Exception {
+		writer.println("\\documentclass[justified]{tufte-exam}");
+		writer.println("\\School{" + school + "}");
+		writer.println("\\DocAuthor{" + author + "}");
+		writer.println("\\fancyfoot[C]{\\copyright\\, Gutenberg}");
+	}
+
+	private void beginDoc(PrintWriter writer) throws Exception {
+		writer.println(beginDocument);
+		writer.println(beginQuestions);
+	}
+
+	private void endDoc(PrintWriter writer) throws Exception {
+		writer.println(endDocument);
+		writer.println(endQuestions);
+	}
+
+	private void resetPageNumbering(PrintWriter writer) throws Exception {
+		writer.println("\\setcounter{page}{1}");
+	}
+
+	private void resetQuestionNumbering(PrintWriter writer) throws Exception {
+		writer.println("\\setcounter{question}{0}");
+	}
+	
+	private int make(String dir) throws Exception {
 		ProcessBuilder processBuilder = new ProcessBuilder("make", "dir="
-				+ quiz.getId());
+				+ dir);
 		File mintDir = new File(MINT);
 		processBuilder.directory(mintDir);
 		processBuilder.redirectErrorStream(true);
@@ -214,19 +239,57 @@ public class Scribe {
 		return process.waitFor();
 	}
 
-	private void prepareManifest(String path, int length) {
-		manifest.setRoot(path);
-		EntryType[] images = new EntryType[length * 2];
-		for (int i = 0; i < length; i++) {
-			images[2 * i] = new EntryType();
-			images[2 * i].setId(i + "page.jpg");
-			images[2 * i + 1] = new EntryType();
-			images[2 * i + 1].setId(i + "thumb.jpg");
+	private void prepareManifest(QuizType quiz) throws Exception {
+		manifest = new ManifestType();
+		manifest.setRoot(webroot + quizDir.getName());
+		int pages = quiz.getPage().length;
+		EntryType[] images = new EntryType[pages * 2];
+		String filename = null;
+		for (int i = 0; i < pages; i++) {
+			filename = "page-" + i + ".jpg";
+			if (new File(quizDir.getPath() + filename).exists()) {
+				images[2 * i] = new EntryType();
+				images[2 * i].setId(filename);
+			} else {
+				throw new Exception(filename
+						+ " missing! All files not prepared.");
+			}
+			filename = "thumb" + i + ".jpg";
+			if (new File(quizDir.getPath() + filename).exists()) {
+				images[2 * i + 1] = new EntryType();
+				images[2 * i + 1].setId(filename);
+			} else {
+				throw new Exception(filename
+						+ " missing! All Quiz files not prepared.");
+			}
 		}
+		manifest.setImage(images);
 		EntryType[] documents = new EntryType[1];
 		documents[0] = new EntryType();
 		documents[0].setId("answerkey.pdf");
-		manifest.setImage(images);
+		manifest.setDocument(documents);
+	}
+
+	private void prepareManifest(AssignmentType assignment) throws Exception {
+		manifest = new ManifestType();
+		manifest.setRoot(webroot + quizDir.getName() + "/" + instanceDir.getName());
+		EntryType[] students = assignment.getStudents();
+		EntryType[] documents = new EntryType[students.length + 1];
+		String filename = null;
+		for (int i = 0; i < students.length; i++) {
+			filename = instanceDir.getPath() + "/" + students[i].getId()
+					+ "-assignment.jpg";
+			if (new File(filename).exists()) {
+				documents[i] = new EntryType();
+				documents[i].setId(filename);
+			} else {
+				throw new Exception(filename
+						+ " missing! All assignment files not prepared.");
+			}
+		}
+		documents[students.length] = new EntryType();
+		documents[students.length].setId(quizDir.getParent()
+				+ "/assignment.jpg");
 		manifest.setDocument(documents);
 	}
 

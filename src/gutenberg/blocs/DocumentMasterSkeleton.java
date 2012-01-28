@@ -24,7 +24,7 @@ public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
 	 */
 
 	public gutenberg.blocs.ViewScansResponse viewScans(
-			gutenberg.blocs.ViewScans viewScans0) {
+			gutenberg.blocs.ViewScans viewScans) {
 		// TODO : fill this with the necessary business logic
 		throw new java.lang.UnsupportedOperationException("Please implement "
 				+ this.getClass().getName() + "#viewScans");
@@ -38,7 +38,7 @@ public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
 	 */
 
 	public gutenberg.blocs.ViewQuestionsResponse viewQuestions(
-			gutenberg.blocs.ViewQuestions viewQuestions2) {
+			gutenberg.blocs.ViewQuestions viewQuestions) {
 		// TODO : fill this with the necessary business logic
 		throw new java.lang.UnsupportedOperationException("Please implement "
 				+ this.getClass().getName() + "#viewQuestions");
@@ -60,8 +60,8 @@ public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
 		try {
 			config = new Config();
 			vault = new Vault(config.getPath(Resource.vault));
-			scribe = new Scribe(config.getPath(Resource.mint), config
-					.getPath(Resource.shared));
+			scribe = new Scribe(config.getPath(Resource.mint),
+					config.getPath(Resource.webroot));
 			scribe.setVault(vault);
 			scribe.generate(buildQuiz.getBuildQuiz());
 			response.setManifest(scribe.getManifest());
@@ -89,8 +89,8 @@ public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
 		try {
 			config = new Config();
 			vault = new Vault(config.getPath(Resource.vault));
-			scribe = new Scribe(config.getPath(Resource.mint), config
-					.getPath(Resource.shared));
+			scribe = new Scribe(config.getPath(Resource.mint),
+					config.getPath(Resource.webroot));
 			scribe.setVault(vault);
 			scribe.generate(assignQuiz.getAssignQuiz());
 			response.setManifest(scribe.getManifest());

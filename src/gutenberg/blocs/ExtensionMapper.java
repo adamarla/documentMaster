@@ -23,16 +23,6 @@
               
                   if (
                   "http://gutenberg/blocs".equals(namespaceURI) &&
-                  "studentType".equals(typeName)){
-                   
-                            return  gutenberg.blocs.StudentType.Factory.parse(reader);
-                        
-
-                  }
-
-              
-                  if (
-                  "http://gutenberg/blocs".equals(namespaceURI) &&
                   "entryListType".equals(typeName)){
                    
                             return  gutenberg.blocs.EntryListType.Factory.parse(reader);

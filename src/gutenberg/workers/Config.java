@@ -10,6 +10,7 @@ public class Config {
 		properties
 				.loadFromXML(new FileInputStream("/opt/gutenberg/config.xml"));
 		bankRoot = properties.getProperty("BANK_ROOT");
+		webRoot = properties.getProperty("WEB_ROOT");
 	}
 
 	public String getPath(Resource id) {
@@ -29,10 +30,12 @@ public class Config {
 		case shared:
 			path += "/shared";
 			break;
+		case webroot:
+			path = webRoot;
 		default:
 		}
 		return path;
 	}
 
-	private String bankRoot;
+	private String bankRoot, webRoot;
 }

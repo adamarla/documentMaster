@@ -1,13 +1,13 @@
 package gutenberg.workers;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FilenameFilter;
+import java.nio.file.Files;
 
 public class Vault {
 	
 	public Vault(String vault) {
 		VAULT = vault;
-		filer = new Filer();
 	}
 	
 	/**
@@ -21,13 +21,14 @@ public class Vault {
 		File[] files = directory.listFiles(new NameFilter(filter));
 		String[] contents = new String[files.length];
 		for (int i = 0; i < files.length; i++) {			
-			contents[i] = filer.get(files[i]);			
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			Files.copy(files[i].toPath(), baos);
+			contents[i] = baos.toString();
 		}		
 		return contents;
 	}
 
 	/**
-	 * copies the given resource(s) into destination folder
 	 * @param id - question id
 	 * @param filter - type of content e.g. "tex", "gnuplot" etc.
 	 * @return TODO
@@ -42,7 +43,6 @@ public class Vault {
 		return this.VAULT ;
 	}
 	
-	private Filer filer;
 	private String VAULT;
 }
 
