@@ -3,6 +3,7 @@ package gutenberg.workers;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.nio.file.Files;
@@ -90,8 +91,7 @@ public class Scribe {
 			//this is quizDir/instanceDir/staging
 			staging = new File(instanceDir + "/staging");
 			staging.mkdir();
-			Files.createSymbolicLink(new File(staging + "figure.gnuplot").toPath(), 
-									new File(quizDir + "/staging/figure.gnuplot").toPath());
+			referenceQuizResources(quizId);
 		}
 
 		int totalPages = quizDir.list(new NameFilter("page")).length;
@@ -157,10 +157,11 @@ public class Scribe {
 		endDoc(composite);
 		composite.close();
 
-		System.out.println("Return Code: " + make(quizId + "/" + instanceId));
+		//System.out.println("Return Code: " + make(quizId + "/" + instanceId));
 		prepareManifest(assignment);
 	}
 
+	
 	public ManifestType getManifest() {
 		return manifest;
 	}
@@ -187,16 +188,24 @@ public class Scribe {
 			contents.append(question);
 			resources = vault
 					.getFiles(questionIds[i].getId(), "figure.gnuplot");
-			linkResources(resources[0], String.valueOf(page.getNumber()) + "_" + 
-					String.valueOf(i));
+			linkResources(resources[0], questionIds[i].getId());
 		}
 		return contents.toString();
 	}
 
 	private void linkResources(File resource, String plotId) throws Exception {
 		File target = new File(staging.getPath() + "/" + plotId + ".gnuplot");
-		Files.createSymbolicLink(target.toPath(), resource.toPath());
+		if (!target.exists())
+			Files.createSymbolicLink(target.toPath(), resource.toPath());
 	}
+	
+	private void referenceQuizResources(String quizId) throws IOException {
+		File[] files = (new File(quizDir + "/staging")).listFiles(new NameFilter("gnuplot"));
+		for (int i = 0; i < files.length; i++) {
+			Files.createSymbolicLink(files[i].toPath(), new File(staging + files[i].getName()).toPath());
+		}
+	}
+
 
 	private void writePreamble(PrintWriter writer, String school, String author)
 			throws Exception {

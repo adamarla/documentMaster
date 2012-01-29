@@ -26,7 +26,7 @@ public class TestDriver {
 			AssignmentType assignment = new AssignmentType();			
 			QuizType quiz = new QuizType();
 			EntryType quizid = new EntryType();
-			quizid.setId("quiz61");
+			quizid.setId("1004");
 			quiz.setQuiz(quizid);
 			EntryType teacher = new EntryType();
 			teacher.setId("7675");
@@ -69,9 +69,8 @@ public class TestDriver {
 			
 			AssignQuiz assignQuizReq = new AssignQuiz();
 			assignQuizReq.setAssignQuiz(assignment);
-			//service.assignQuiz(assignQuizReq);
-			
-			service.buildQuiz(request);			
+			service.assignQuiz(assignQuizReq);					
+			//service.buildQuiz(request);			
 		} catch (Exception e) {
 			
 		}
