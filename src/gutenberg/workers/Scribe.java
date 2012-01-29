@@ -171,7 +171,7 @@ public class Scribe {
 	private final String printanswers = "\\printanswers",
 			docAuthor = "\\DocAuthor", newpage = "\\newpage",
 			question = "\\question", beginDocument = "\\begin{document}",
-			beginQuestions = "\\{beginQuestions}", insertQR = "\\insertQR{QRC}",
+			beginQuestions = "\\begin{questions}", insertQR = "\\insertQR{QRC}",
 			endQuestions = "\\end{questions}", endDocument = "\\end{document}";
 	private Vault vault;
 	private ManifestType manifest;
@@ -211,8 +211,8 @@ public class Scribe {
 	}
 
 	private void endDoc(PrintWriter writer) throws Exception {
-		writer.println(endDocument);
 		writer.println(endQuestions);
+		writer.println(endDocument);
 	}
 
 	private void resetPageNumbering(PrintWriter writer) throws Exception {
