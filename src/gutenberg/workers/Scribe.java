@@ -157,7 +157,7 @@ public class Scribe {
 		endDoc(composite);
 		composite.close();
 
-		//System.out.println("Return Code: " + make(quizId + "/" + instanceId));
+		System.out.println("Return Code: " + make(quizId + "/" + instanceId));
 		prepareManifest(assignment);
 	}
 
@@ -202,7 +202,7 @@ public class Scribe {
 	private void referenceQuizResources(String quizId) throws IOException {
 		File[] files = (new File(quizDir + "/staging")).listFiles(new NameFilter("gnuplot"));
 		for (int i = 0; i < files.length; i++) {
-			Files.createSymbolicLink(files[i].toPath(), new File(staging + files[i].getName()).toPath());
+			Files.createSymbolicLink(new File(staging + "/" + files[i].getName()).toPath(), files[i].toPath());
 		}
 	}
 
