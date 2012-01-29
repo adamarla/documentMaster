@@ -1,13 +1,13 @@
 package gutenberg.workers;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FilenameFilter;
+import java.nio.file.Files;
 
 public class Vault {
 	
 	public Vault(String vault) {
 		VAULT = vault;
-		filer = new Filer();
 	}
 	
 	/**
@@ -18,16 +18,17 @@ public class Vault {
 	 */
 	public String[] getContent(String id, String filter) throws Exception {
 		File directory = new File(VAULT + "/" + id);
-		File[] files = directory.listFiles(new VaultFilter(filter));
+		File[] files = directory.listFiles(new NameFilter(filter));
 		String[] contents = new String[files.length];
 		for (int i = 0; i < files.length; i++) {			
-			contents[i] = filer.get(files[i]);			
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			Files.copy(files[i].toPath(), baos);
+			contents[i] = baos.toString();
 		}		
 		return contents;
 	}
 
 	/**
-	 * copies the given resource(s) into destination folder
 	 * @param id - question id
 	 * @param filter - type of content e.g. "tex", "gnuplot" etc.
 	 * @return TODO
@@ -35,28 +36,13 @@ public class Vault {
 	 */ 
 	public File[] getFiles(String id, String filter) throws Exception{
 		File directory = new File(VAULT + "/" + id);
-		return directory.listFiles(new VaultFilter(filter));
+		return directory.listFiles(new NameFilter(filter));
 	}
 
 	public String getPath() throws Exception {
 		return this.VAULT ;
 	}
 	
-	private Filer filer;
 	private String VAULT;
 }
 
-class VaultFilter implements FilenameFilter {
-
-	public VaultFilter(String filter) {
-		this.filter = filter;
-	}
-	
-	@Override
-	public boolean accept(File dir, String name) {
-		return name.endsWith(filter);
-	}
-	
-	private String filter;
-	
-}

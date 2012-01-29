@@ -2,97 +2,90 @@
 <wsdl:definitions targetNamespace="http://gutenberg/blocs" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://gutenberg/blocs" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
   <wsdl:types>
     <xsd:schema elementFormDefault="qualified" targetNamespace="http://gutenberg/blocs">
-      <xsd:element name="buildQuiz" type="tns:quizType">
-      </xsd:element>
-      <xsd:element name="buildQuizResponse" type="tns:responseType">
-      </xsd:element>
+			<xsd:element name="buildQuiz" type="tns:quizType">
+			</xsd:element>
+			<xsd:element name="buildQuizResponse" type="tns:responseType">
+			</xsd:element>
 
-      <xsd:complexType name="quizType">
-      	<xsd:sequence>
-      		<xsd:element name="id" type="xsd:string"/>
-      		<xsd:element name="teacherId" type="xsd:string"/>
-      		<xsd:element maxOccurs="unbounded" minOccurs="1" name="page" type="tns:pageType">
-      		</xsd:element>
+			<xsd:complexType name="quizType">
+				<xsd:sequence>
+					<xsd:element name="quiz" type="tns:entryType"/>
+					<xsd:element name="teacher" type="tns:entryType"/>
+					<xsd:element name="school" type="tns:entryType"/>
+					<xsd:element maxOccurs="unbounded" minOccurs="1" name="page" type="tns:pageType">					
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
 
-      	</xsd:sequence>
-      </xsd:complexType>
-
-      <xsd:complexType name="manifestType">
-      	<xsd:sequence>
-      		<xsd:element name="root" type="xsd:string"/>
-      		<xsd:element maxOccurs="unbounded" minOccurs="0" name="image" type="tns:entryType">
-      		</xsd:element>
-      		<xsd:element maxOccurs="unbounded" minOccurs="0" name="document" type="tns:entryType">
-      		</xsd:element>
-      	</xsd:sequence>
-      </xsd:complexType>
-      
-    
-            <xsd:complexType name="pageType">
-            	<xsd:sequence>
-            		<xsd:element name="number" type="xsd:int"/>
-            		<xsd:element maxOccurs="unbounded" minOccurs="1" name="question" type="tns:entryType">
-            		</xsd:element>
-            	</xsd:sequence>
-            </xsd:complexType>
-    
-        
-            <xsd:complexType name="responseType">
-            	<xsd:choice>
-            		<xsd:element name="manifest" type="tns:manifestType">
-            		</xsd:element>
-            		<xsd:element name="error" type="xsd:string"/>
-            	</xsd:choice>
-            </xsd:complexType>
-    
-            <xsd:element name="assignQuiz" type="tns:assignmentType"/>
-            
-            <xsd:element name="assignQuizResponse" type="tns:responseType">
-            </xsd:element>
-            
-            <xsd:complexType name="assignmentType">
-            	<xsd:sequence>
-            		<xsd:element name="quiz" type="tns:quizType"/>
-            		<xsd:element maxOccurs="unbounded" minOccurs="1" name="students" type="tns:studentType">
-            		</xsd:element>
-            	</xsd:sequence>
-            </xsd:complexType>
-    
-            <xsd:element name="viewQuestions" type="tns:entryListType">
-            </xsd:element>
+			<xsd:complexType name="manifestType">
+				<xsd:sequence>
+					<xsd:element name="root" type="xsd:string"/>
+					<xsd:element maxOccurs="unbounded" minOccurs="0" name="image" type="tns:entryType">
+					</xsd:element>
+					<xsd:element maxOccurs="unbounded" minOccurs="0" name="document" type="tns:entryType">
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
 
 
-    
-            <xsd:element name="viewQuestionsResponse" type="tns:responseType">
-            </xsd:element>
-    
-            <xsd:element name="viewScans" type="tns:entryListType"/>
+			<xsd:complexType name="pageType">
+				<xsd:sequence>
+					<xsd:element name="number" type="xsd:int"/>
+					<xsd:element maxOccurs="unbounded" minOccurs="1" name="question" type="tns:entryType">
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
 
-            <xsd:element name="viewScansResponse" type="tns:responseType">
-            </xsd:element>
-    
-    
-            <xsd:complexType name="studentType">
-            	<xsd:sequence>
-            		<xsd:element name="id" type="xsd:string"/>
-            		<xsd:element name="name" type="xsd:string"/>
-            	</xsd:sequence>
-            </xsd:complexType>
-    
-            <xsd:complexType name="entryType">
-            	<xsd:sequence>
-            		<xsd:element name="id" type="xsd:string"/>
-            		<xsd:element maxOccurs="1" minOccurs="0" name="name" type="xsd:string">
-            		</xsd:element>
-            	</xsd:sequence>
-            </xsd:complexType>
-    
-            <xsd:complexType name="entryListType">
-            	<xsd:sequence>
-            		<xsd:element maxOccurs="unbounded" minOccurs="1" name="entry" type="tns:entryType"/>
-            	</xsd:sequence>
-            </xsd:complexType>
-    </xsd:schema>
+
+			<xsd:complexType name="responseType">
+				<xsd:choice>
+					<xsd:element name="manifest" type="tns:manifestType">
+					</xsd:element>
+					<xsd:element name="error" type="xsd:string"/>
+				</xsd:choice>
+			</xsd:complexType>
+
+			<xsd:element name="assignQuiz" type="tns:assignmentType"/>
+
+			<xsd:element name="assignQuizResponse" type="tns:responseType">
+			</xsd:element>
+
+			<xsd:complexType name="assignmentType">
+				<xsd:sequence>
+					<xsd:element name="quiz" type="tns:entryType"/>
+					<xsd:element name="instance" type="tns:entryType"/>
+					<xsd:element maxOccurs="unbounded" minOccurs="1" name="students" type="tns:entryType">
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+
+			<xsd:element name="viewQuestions" type="tns:entryListType">
+			</xsd:element>
+
+
+
+			<xsd:element name="viewQuestionsResponse" type="tns:responseType">
+			</xsd:element>
+
+			<xsd:element name="viewScans" type="tns:entryListType"/>
+
+			<xsd:element name="viewScansResponse" type="tns:responseType">
+			</xsd:element>
+
+			<xsd:complexType name="entryType">
+				<xsd:sequence>
+					<xsd:element name="id" type="xsd:string"/>
+					<xsd:element maxOccurs="1" minOccurs="0" name="name" type="xsd:string">
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+
+			<xsd:complexType name="entryListType">
+				<xsd:sequence>
+					<xsd:element maxOccurs="unbounded" minOccurs="1" name="entry" type="tns:entryType"/>
+				</xsd:sequence>
+			</xsd:complexType>
+		</xsd:schema>
   </wsdl:types>
   <wsdl:message name="buildQuiz">
     <wsdl:part name="parameters" element="tns:buildQuiz">

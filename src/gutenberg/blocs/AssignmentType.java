@@ -29,14 +29,14 @@
                         */
 
                         
-                                    protected gutenberg.blocs.QuizType localQuiz ;
+                                    protected gutenberg.blocs.EntryType localQuiz ;
                                 
 
                            /**
                            * Auto generated getter method
-                           * @return gutenberg.blocs.QuizType
+                           * @return gutenberg.blocs.EntryType
                            */
-                           public  gutenberg.blocs.QuizType getQuiz(){
+                           public  gutenberg.blocs.EntryType getQuiz(){
                                return localQuiz;
                            }
 
@@ -46,9 +46,39 @@
                                * Auto generated setter method
                                * @param param Quiz
                                */
-                               public void setQuiz(gutenberg.blocs.QuizType param){
+                               public void setQuiz(gutenberg.blocs.EntryType param){
                             
                                             this.localQuiz=param;
+                                    
+
+                               }
+                            
+
+                        /**
+                        * field for Instance
+                        */
+
+                        
+                                    protected gutenberg.blocs.EntryType localInstance ;
+                                
+
+                           /**
+                           * Auto generated getter method
+                           * @return gutenberg.blocs.EntryType
+                           */
+                           public  gutenberg.blocs.EntryType getInstance(){
+                               return localInstance;
+                           }
+
+                           
+                        
+                            /**
+                               * Auto generated setter method
+                               * @param param Instance
+                               */
+                               public void setInstance(gutenberg.blocs.EntryType param){
+                            
+                                            this.localInstance=param;
                                     
 
                                }
@@ -60,14 +90,14 @@
                         */
 
                         
-                                    protected gutenberg.blocs.StudentType[] localStudents ;
+                                    protected gutenberg.blocs.EntryType[] localStudents ;
                                 
 
                            /**
                            * Auto generated getter method
-                           * @return gutenberg.blocs.StudentType[]
+                           * @return gutenberg.blocs.EntryType[]
                            */
-                           public  gutenberg.blocs.StudentType[] getStudents(){
+                           public  gutenberg.blocs.EntryType[] getStudents(){
                                return localStudents;
                            }
 
@@ -79,7 +109,7 @@
                               /**
                                * validate the array for Students
                                */
-                              protected void validateStudents(gutenberg.blocs.StudentType[] param){
+                              protected void validateStudents(gutenberg.blocs.EntryType[] param){
                              
                               if ((param != null) && (param.length < 1)){
                                 throw new java.lang.RuntimeException();
@@ -92,7 +122,7 @@
                               * Auto generated setter method
                               * @param param Students
                               */
-                              public void setStudents(gutenberg.blocs.StudentType[] param){
+                              public void setStudents(gutenberg.blocs.EntryType[] param){
                               
                                    validateStudents(param);
 
@@ -104,11 +134,11 @@
                              
                              /**
                              * Auto generated add method for the array for convenience
-                             * @param param gutenberg.blocs.StudentType
+                             * @param param gutenberg.blocs.EntryType
                              */
-                             public void addStudents(gutenberg.blocs.StudentType param){
+                             public void addStudents(gutenberg.blocs.EntryType param){
                                    if (localStudents == null){
-                                   localStudents = new gutenberg.blocs.StudentType[]{};
+                                   localStudents = new gutenberg.blocs.EntryType[]{};
                                    }
 
                             
@@ -117,8 +147,8 @@
                             org.apache.axis2.databinding.utils.ConverterUtil.toList(localStudents);
                                list.add(param);
                                this.localStudents =
-                             (gutenberg.blocs.StudentType[])list.toArray(
-                            new gutenberg.blocs.StudentType[list.size()]);
+                             (gutenberg.blocs.EntryType[])list.toArray(
+                            new gutenberg.blocs.EntryType[list.size()]);
 
                              }
                              
@@ -186,6 +216,12 @@
                                                  throw new org.apache.axis2.databinding.ADBException("quiz cannot be null!!");
                                             }
                                            localQuiz.serialize(new javax.xml.namespace.QName("http://gutenberg/blocs","quiz"),
+                                               xmlWriter);
+                                        
+                                            if (localInstance==null){
+                                                 throw new org.apache.axis2.databinding.ADBException("instance cannot be null!!");
+                                            }
+                                           localInstance.serialize(new javax.xml.namespace.QName("http://gutenberg/blocs","instance"),
                                                xmlWriter);
                                         
                                        if (localStudents!=null){
@@ -400,6 +436,15 @@
                                     }
                                     elementList.add(localQuiz);
                                 
+                            elementList.add(new javax.xml.namespace.QName("http://gutenberg/blocs",
+                                                                      "instance"));
+                            
+                            
+                                    if (localInstance==null){
+                                         throw new org.apache.axis2.databinding.ADBException("instance cannot be null!!");
+                                    }
+                                    elementList.add(localInstance);
+                                
                              if (localStudents!=null) {
                                  for (int i = 0;i < localStudents.length;i++){
 
@@ -496,14 +541,30 @@
                     
                     reader.next();
                 
-                        java.util.ArrayList list2 = new java.util.ArrayList();
+                        java.util.ArrayList list3 = new java.util.ArrayList();
                     
                                     
                                     while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
                                 
                                     if (reader.isStartElement() && new javax.xml.namespace.QName("http://gutenberg/blocs","quiz").equals(reader.getName())){
                                 
-                                                object.setQuiz(gutenberg.blocs.QuizType.Factory.parse(reader));
+                                                object.setQuiz(gutenberg.blocs.EntryType.Factory.parse(reader));
+                                              
+                                        reader.next();
+                                    
+                              }  // End of if for expected property start element
+                                
+                                else{
+                                    // A start element we are not expecting indicates an invalid parameter was passed
+                                    throw new org.apache.axis2.databinding.ADBException("Unexpected subelement " + reader.getName());
+                                }
+                            
+                                    
+                                    while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
+                                
+                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://gutenberg/blocs","instance").equals(reader.getName())){
+                                
+                                                object.setInstance(gutenberg.blocs.EntryType.Factory.parse(reader));
                                               
                                         reader.next();
                                     
@@ -522,11 +583,11 @@
                                     
                                     
                                     // Process the array and step past its final element's end.
-                                    list2.add(gutenberg.blocs.StudentType.Factory.parse(reader));
+                                    list3.add(gutenberg.blocs.EntryType.Factory.parse(reader));
                                                                 
                                                         //loop until we find a start element that is not part of this array
-                                                        boolean loopDone2 = false;
-                                                        while(!loopDone2){
+                                                        boolean loopDone3 = false;
+                                                        while(!loopDone3){
                                                             // We should be at the end element, but make sure
                                                             while (!reader.isEndElement())
                                                                 reader.next();
@@ -537,22 +598,22 @@
                                                                 reader.next();
                                                             if (reader.isEndElement()){
                                                                 //two continuous end elements means we are exiting the xml structure
-                                                                loopDone2 = true;
+                                                                loopDone3 = true;
                                                             } else {
                                                                 if (new javax.xml.namespace.QName("http://gutenberg/blocs","students").equals(reader.getName())){
-                                                                    list2.add(gutenberg.blocs.StudentType.Factory.parse(reader));
+                                                                    list3.add(gutenberg.blocs.EntryType.Factory.parse(reader));
                                                                         
                                                                 }else{
-                                                                    loopDone2 = true;
+                                                                    loopDone3 = true;
                                                                 }
                                                             }
                                                         }
                                                         // call the converter utility  to convert and set the array
                                                         
-                                                        object.setStudents((gutenberg.blocs.StudentType[])
+                                                        object.setStudents((gutenberg.blocs.EntryType[])
                                                             org.apache.axis2.databinding.utils.ConverterUtil.convertToArray(
-                                                                gutenberg.blocs.StudentType.class,
-                                                                list2));
+                                                                gutenberg.blocs.EntryType.class,
+                                                                list3));
                                                             
                               }  // End of if for expected property start element
                                 

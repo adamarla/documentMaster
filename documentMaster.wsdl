@@ -12,12 +12,12 @@
 
 			<xsd:complexType name="quizType">
 				<xsd:sequence>
-					<xsd:element name="id" type="xsd:string"></xsd:element>
-					<xsd:element name="teacherId" type="xsd:string"></xsd:element>
+					<xsd:element name="quiz" type="tns:entryType"></xsd:element>
+					<xsd:element name="teacher" type="tns:entryType"></xsd:element>
+					<xsd:element name="school" type="tns:entryType"></xsd:element>
 					<xsd:element name="page" type="tns:pageType" maxOccurs="unbounded"
-						minOccurs="1">
+						minOccurs="1">					
 					</xsd:element>
-
 				</xsd:sequence>
 			</xsd:complexType>
 
@@ -59,8 +59,9 @@
 
 			<xsd:complexType name="assignmentType">
 				<xsd:sequence>
-					<xsd:element name="quiz" type="tns:quizType"></xsd:element>
-					<xsd:element name="students" type="tns:studentType"
+					<xsd:element name="quiz" type="tns:entryType"></xsd:element>
+					<xsd:element name="instance" type="tns:entryType"></xsd:element>
+					<xsd:element name="students" type="tns:entryType"
 						maxOccurs="unbounded" minOccurs="1">
 					</xsd:element>
 				</xsd:sequence>
@@ -78,14 +79,6 @@
 
 			<xsd:element name="viewScansResponse" type="tns:responseType">
 			</xsd:element>
-
-
-			<xsd:complexType name="studentType">
-				<xsd:sequence>
-					<xsd:element name="id" type="xsd:string"></xsd:element>
-					<xsd:element name="name" type="xsd:string"></xsd:element>
-				</xsd:sequence>
-			</xsd:complexType>
 
 			<xsd:complexType name="entryType">
 				<xsd:sequence>

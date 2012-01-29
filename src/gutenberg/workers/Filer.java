@@ -1,9 +1,8 @@
 package gutenberg.workers;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.FileReader;
+import java.nio.file.Files;
 
 public class Filer {
 	
@@ -11,18 +10,13 @@ public class Filer {
 		return get(new File(filepath));
 	}	
 	
-	public String get(File file) throws Exception {
+	public String get(File file) throws Exception {		
 		if (!file.exists() || !file.canRead()) {
 			throw new Exception(file.getPath() + " does not exist or cannot be read");
 		}		
-		char[] cbuf = new char[DECENT_SIZE];
-		StringBuilder builder = new StringBuilder();
-		FileReader reader = new FileReader(file);
-		int charsRead = 0;
-		while ((charsRead = reader.read(cbuf)) != -1) {			
-			builder.append(cbuf, 0, charsRead);
-		}
-		return builder.toString();
+		ByteArrayOutputStream baos = new ByteArrayOutputStream(DECENT_SIZE);
+		Files.copy(file.toPath(), baos);		
+		return baos.toString();		
 	}
 	
 	public void copy(String sourcepath, String targetpath) throws Exception {
@@ -33,16 +27,9 @@ public class Filer {
 		if (!source.exists() || !source.canRead()) {
 			throw new Exception(source.getPath() + " does not exist or cannot be read");
 		}
-		byte[] bbuf = new byte[DECENT_SIZE];
-		FileInputStream filein = new FileInputStream(source);
-		FileOutputStream fileout = new FileOutputStream(target);
-		int bytesread = 0;
-		while ((bytesread = filein.read(bbuf)) != -1) {
-			fileout.write(bbuf, 0, bytesread);
-		}
-		filein.close();
-		fileout.close();
-	}
+		
+		Files.createSymbolicLink(target.toPath(), source.toPath());
+	}		
 	
 	private int DECENT_SIZE = 1024;
 
