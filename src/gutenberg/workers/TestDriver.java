@@ -25,7 +25,7 @@ public class TestDriver {
 			AssignmentType assignment = new AssignmentType();			
 			QuizType quiz = new QuizType();
 			EntryType quizid = new EntryType();
-			quizid.setId("1004");
+			quizid.setId("sanj");
 			quiz.setQuiz(quizid);
 			EntryType teacher = new EntryType();
 			teacher.setId("7675");

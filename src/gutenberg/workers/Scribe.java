@@ -88,27 +88,26 @@ public class Scribe {
 		String quizId = assignment.getQuiz().getId();
 		String instanceId = assignment.getInstance().getId();
 		File quizDir = new File(MINT + "/" + quizId);
+		File instanceDir = new File(quizDir + "/" + instanceId);
+		File staging = new File(instanceDir + "/staging");
 
 		if (!quizDir.exists()) {
 			throw new Exception("Sorry! Cannot assign non-existant quiz: "
 					+ quizId);
 		}
-		File instanceDir = new File(quizDir + "/" + instanceId);
-		instanceDir.mkdir();
 		// Note: staging directory is different from quizDir/staging
 		// this is quizDir/instanceDir/staging
-		File staging = new File(instanceDir + "/staging");
+		instanceDir.mkdir();
 		staging.mkdir();
 
 		// link the plot files from the original quiz staging folder
-		File quiz_staging = new File(quizDir + "/staging");
+		File quiz_staging = new File(quizDir + "/answer-key/staging");
 		File[] files = quiz_staging.listFiles(new NameFilter("gnuplot"));
 		for (int i = 0; i < files.length; i++) {
-			linkResources(files[i], staging, files[i].getName().split(".")[0]);
-		}
-
-		File previewFolder = new File(quizDir + "/preview");
-		int totalPages = previewFolder.list(new NameFilter("page")).length;
+			linkResources(files[i], staging, files[i].getName());
+		}		
+		//TODO - may need to change depending on what the final preview directory is
+		int totalPages = quiz_staging.list(new NameFilter("thumbnail")).length - 1;
 
 		PrintWriter composite = new PrintWriter(staging + "/assignment.tex");
 		PrintWriter individual = null;
@@ -121,8 +120,8 @@ public class Scribe {
 			int pageNumber = 1, questionNumber = 1;
 
 			String line = null, text = null;
-			BufferedReader reader = new BufferedReader(new FileReader(quizDir
-					+ "/staging/answer-key.tex"));
+			BufferedReader reader = new BufferedReader(new FileReader(quiz_staging
+					+ "/answer-key.tex"));
 			while ((line = reader.readLine()) != null) {
 
 				text = line.trim();
@@ -151,17 +150,21 @@ public class Scribe {
 				}
 
 				individual.println(line);
+				
+				
 				// docBegin and docEnd print only once for composite document
-				if (line.startsWith(beginDocument) && i != 0) {
+				if (text.startsWith(beginDocument) && i != 0) {
 					line = "";
 				}
-				if (line.startsWith(endDocument) && i != students.length - 1) {
+				if (text.startsWith(endDocument) && i != students.length - 1) {
 					line = "";
 				}
+				//TODO documentClass needs to be printed only once maybe?
+				if (text.startsWith(docClass) && i != 0) {
+					line = "";
+				}				
 				composite.println(line);
-
 			}
-
 			// We are not yet done with the composite document. So, do the
 			// following
 			resetPageNumbering(composite);
@@ -187,7 +190,7 @@ public class Scribe {
 	private final String printanswers = "\\printanswers",
 			docAuthor = "\\DocAuthor", newpage = "\\newpage",
 			question = "\\question", beginDocument = "\\begin{document}",
-			beginQuestions = "\\begin{questions}",
+			beginQuestions = "\\begin{questions}", docClass = "\\documentclass",
 			insertQR = "\\insertQR{QRC}", endQuestions = "\\end{questions}",
 			endDocument = "\\end{document}";
 	private Vault vault;
@@ -196,26 +199,26 @@ public class Scribe {
 	private String preparePage(PageType page, File staging) throws Exception {
 		StringBuilder contents = new StringBuilder();
 		EntryType[] questionIds = page.getQuestion();
-		String question = null;
+		String questionId = null, question = null;
 		File[] resources = null;
 		for (int i = 0; i < questionIds.length; i++) {
-			question = vault.getContent(questionIds[i].getId(), "question.tex")[0];
+			questionId = questionIds[i].getId();
+			question = vault.getContent(questionId, "question.tex")[0];
 			contents.append(insertQR).append('\n');
 			contents.append(question);
-			resources = vault
-					.getFiles(questionIds[i].getId(), "figure.gnuplot");
-			linkResources(resources[0], staging, questionIds[i].getId());
+			resources = vault.getFiles(questionId, "figure.gnuplot");			
+			linkResources(resources[0], staging, questionId + ".gnuplot");
 		}
 		return contents.toString();
 	}
 
-	private void linkResources(File resource, File targetDir, String id)
+	private void linkResources(File resource, File targetDir, String targetFile)
 			throws Exception {
-		File targetFile = new File(targetDir.getPath() + "/" + id + ".gnuplot");
-		if (!targetFile.exists())
-			Files.createSymbolicLink(targetFile.toPath(), resource.toPath());
+		File target = new File(targetDir.getPath() + "/" + targetFile);
+		if (!target.exists())
+			Files.createSymbolicLink(target.toPath(), resource.toPath());
 	}
-
+	
 	private void writePreamble(PrintWriter writer, String school, String author)
 			throws Exception {
 		writer.println("\\documentclass[justified]{tufte-exam}");
