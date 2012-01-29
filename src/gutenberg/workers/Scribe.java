@@ -187,13 +187,14 @@ public class Scribe {
 			contents.append(question);
 			resources = vault
 					.getFiles(questionIds[i].getId(), "figure.gnuplot");
-			linkResources(resources[0]);
+			linkResources(resources[0], String.valueOf(page.getNumber()) + "_" + 
+					String.valueOf(i));
 		}
 		return contents.toString();
 	}
 
-	private void linkResources(File resource) throws Exception {
-		File target = new File(staging.getPath() + "/" + resource.getName());
+	private void linkResources(File resource, String plotId) throws Exception {
+		File target = new File(staging.getPath() + "/" + plotId + ".gnuplot");
 		Files.createSymbolicLink(target.toPath(), resource.toPath());
 	}
 
