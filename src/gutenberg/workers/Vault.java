@@ -17,6 +17,7 @@ public class Vault {
 	 * @throws Exception 
 	 */
 	public String[] getContent(String id, String filter) throws Exception {
+		System.out.println("[vault] : Looking inside " + VAULT + "/" + id) ;
 		File directory = new File(VAULT + "/" + id);
 		File[] files = directory.listFiles(new NameFilter(filter));
 		String[] contents = new String[files.length];
