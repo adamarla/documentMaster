@@ -6,10 +6,10 @@
  */
 package gutenberg.blocs;
 
-import gutenberg.workers.Config;
-import gutenberg.workers.Resource;
+// import gutenberg.workers.Config;
+// import gutenberg.workers.Resource;
 import gutenberg.workers.Scribe;
-import gutenberg.workers.Vault;
+// import gutenberg.workers.Vault;
 
 /**
  * DocumentMasterSkeleton java skeleton for the axisService
@@ -52,17 +52,12 @@ public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
 	 */
 
 	public gutenberg.blocs.BuildQuizResponse buildQuiz(
-			gutenberg.blocs.BuildQuiz buildQuiz) {
-		Config config = null;
-		Vault vault = null;
-		Scribe scribe = null;
+			gutenberg.blocs.BuildQuiz buildQuiz) 
+	{
 		ResponseType response = new ResponseType();
 		try {
-			config = new Config();
-			vault = new Vault(config.getPath(Resource.vault));
-			scribe = new Scribe(config.getPath(Resource.mint),
-					config.getPath(Resource.webroot));
-			scribe.setVault(vault);
+			Scribe scribe = new Scribe() ;
+			
 			scribe.generate(buildQuiz.getBuildQuiz());
 			response.setManifest(scribe.getManifest());
 		} catch (Exception e) {
@@ -81,17 +76,11 @@ public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
 	 */
 
 	public gutenberg.blocs.AssignQuizResponse assignQuiz(
-			gutenberg.blocs.AssignQuiz assignQuiz) {
-		Config config = null;
-		Vault vault = null;
-		Scribe scribe = null;
+			gutenberg.blocs.AssignQuiz assignQuiz)
+	{
 		ResponseType response = new ResponseType();
 		try {
-			config = new Config();
-			vault = new Vault(config.getPath(Resource.vault));
-			scribe = new Scribe(config.getPath(Resource.mint),
-					config.getPath(Resource.webroot));
-			scribe.setVault(vault);
+			Scribe scribe = new Scribe() ;
 			scribe.generate(assignQuiz.getAssignQuiz());
 			response.setManifest(scribe.getManifest());
 		} catch (Exception e) {
