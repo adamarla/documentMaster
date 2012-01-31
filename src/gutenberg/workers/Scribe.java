@@ -303,7 +303,7 @@ public class Scribe {
     EntryType[] students = assignment.getStudents();
     EntryType[] documents = new EntryType[students.length + 1];
     
-    String assignmentPdf = "/assignment-" + quizId + "-" + instanceId ;
+    String assignmentPdf = "/assignment-" + quizId + "-" + instanceId + ".pdf";
     String downloadsDir = this.mint + quizId + "/" + instanceId + "/downloads";
 
     for (int i = 0; i < students.length; i++) {
