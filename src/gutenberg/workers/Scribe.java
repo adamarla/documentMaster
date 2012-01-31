@@ -9,7 +9,10 @@ import java.io.FilenameFilter;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
+
 
 import gutenberg.blocs.AssignmentType;
 import gutenberg.blocs.EntryType;
@@ -114,6 +117,7 @@ public class Scribe {
     BufferedReader   blueprint = new BufferedReader(new FileReader(blueprintPath)) ;
     PrintWriter      composite = new PrintWriter(staging + "/assignment-" + quizId + "-" + testpaperId + ".tex") ;
     EntryType[]      students = assignment.getStudents() ;
+    String[]         lines = this.buffToString(blueprint) ;
 
     for (int i = 0 ; i < students.length ; i++) {
       String         name = students[i].getName() ;
@@ -121,9 +125,9 @@ public class Scribe {
       int            currQues = 1, currPage = 1 ;
       PrintWriter    single = new PrintWriter(staging + baseQR + ".tex") ;
       boolean        firstPass = (i == 0) ? true : false ; 
-      String         line = null ;
 
-      while (( line = blueprint.readLine()) != null) {
+      for (int j = 0 ; j < lines.length ; j++) {
+    	String   line = lines[j] ;
         String   trimmed = line.trim() ;
 
         if (trimmed.startsWith(printanswers)) {
@@ -136,21 +140,26 @@ public class Scribe {
           currQues += 1 ;
         } else if (trimmed.startsWith(docAuthor)) {
           line = "\\DocAuthor{" + name + "}" ; // change the name
-        } else if (trimmed.startsWith("% num_pages")) { // A TeX comment
+        } else if (totalPages == 0 && trimmed.startsWith("% num_pages")) { // A TeX comment
           String[]  tokens = trimmed.split(" ") ; 
           totalPages = Integer.parseInt(tokens[tokens.length - 1]) ;
-        } 
+        }
         
         // This is the only chance the per-student TeX has to 
         // get content. So, grab it ... 
         single.println(line) ;
 
-        if (trimmed.startsWith(beginDocument) || 
-            trimmed.startsWith(beginQuestions)) {
+        if (trimmed.startsWith(beginDocument)  || 
+            trimmed.startsWith(beginQuestions) ||
+            trimmed.startsWith(docClass)       ||
+            trimmed.startsWith("\\fancyfoot")  ||
+            trimmed.startsWith("\\School")) 
+        {
           if (firstPass) composite.println(line) ;
         } else if ( trimmed.startsWith(endDocument) || 
-                    trimmed.startsWith(endQuestions) ) {
-          continue ;
+                    trimmed.startsWith(endQuestions) ) 
+        {
+          continue ; // will be printed once, later
         } else { 
           composite.println(line) ;
         }
@@ -170,6 +179,18 @@ public class Scribe {
   public ManifestType getManifest() {
     return manifest;
   }
+  
+  private String[] buffToString(BufferedReader stream) throws Exception {
+	  List<String> lines = new ArrayList<String>() ;
+	  String       line = null ; 
+	  
+	  while(( line = stream.readLine()) != null) {
+		  lines.add(line) ;
+	  }
+	  stream.close() ;
+	  return lines.toArray(new String[lines.size()]) ;
+  }
+  
   private String preparePage(PageType page, File staging) throws Exception {
     StringBuilder contents = new StringBuilder();
     EntryType[] questionIds = page.getQuestion();
