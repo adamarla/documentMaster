@@ -103,14 +103,7 @@ public class Scribe {
     if (failed) { 
       throw new Exception("[scribe:testpaper] : Sandbox creation failed ... ( quiz = " + quizId + " )") ;
     } 
-    /*
-    File     quizDir = new File(this.mint + quizId);
-    File     answerKey = new File(this.mint + quizId + "/answer-key") ;
-    //File     blueprint = new File(answerKey + "/staging/blueprint.tex.skip") ;
-    File     target = new File(quizDir + "/" + testpaperId);
-    File     staging = new File(target + "/staging");
-    */
-    
+       
     int              totalPages = 0 ;
     String           staging = this.mint + quizId + "/" + testpaperId + "/staging/" ;
     String           blueprintPath = this.mint + quizId + "/answer-key/staging/answer-key.tex" ;
