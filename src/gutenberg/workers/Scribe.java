@@ -118,7 +118,7 @@ public class Scribe {
       boolean        firstPass = (i == 0) ? true : false ; 
 
       for (int j = 0 ; j < lines.length ; j++) {
-    	String   line = lines[j] ;
+      String   line = lines[j] ;
         String   trimmed = line.trim() ;
 
         if (trimmed.startsWith(printanswers)) {
@@ -172,14 +172,14 @@ public class Scribe {
   }
   
   private String[] buffToString(BufferedReader stream) throws Exception {
-	  List<String> lines = new ArrayList<String>() ;
-	  String       line = null ; 
-	  
-	  while(( line = stream.readLine()) != null) {
-		  lines.add(line) ;
-	  }
-	  stream.close() ;
-	  return lines.toArray(new String[lines.size()]) ;
+    List<String> lines = new ArrayList<String>() ;
+    String       line = null ; 
+    
+    while(( line = stream.readLine()) != null) {
+      lines.add(line) ;
+    }
+    stream.close() ;
+    return lines.toArray(new String[lines.size()]) ;
   }
   
   private String preparePage(PageType page, File staging) throws Exception {
@@ -264,8 +264,10 @@ public class Scribe {
   private void prepareManifest(QuizType quiz) throws Exception {
 
     manifest = new ManifestType();
-    String quizId = quiz.getQuiz().getId();
-    manifest.setRoot(webRoot + "/" + quizId);
+    String    quizId = quiz.getQuiz().getId();
+    String    atmKey = this.getAtmKey(quizId) ;
+    
+    manifest.setRoot(webRoot + "/" + atmKey);
     String previewDir = this.mint + quizId + "/answer-key/preview";
 
     int pages = quiz.getPage().length;
@@ -307,10 +309,11 @@ public class Scribe {
   private void prepareManifest(AssignmentType assignment) throws Exception {
 
     manifest = new ManifestType();
-    String quizId = assignment.getQuiz().getId();
-    String instanceId = assignment.getInstance().getId();
+    String    quizId = assignment.getQuiz().getId();
+    String    atmKey = this.getAtmKey(quizId) ;
+    String    instanceId = assignment.getInstance().getId();
     
-    manifest.setRoot(webRoot + "/" + quizId + "/" + instanceId);
+    manifest.setRoot(webRoot + "/" + atmKey + "/" + instanceId);
 
     EntryType[] students = assignment.getStudents();
     EntryType[] documents = new EntryType[students.length + 1];
@@ -334,6 +337,21 @@ public class Scribe {
     documents[students.length] = new EntryType();
     documents[students.length].setId(assignmentPdf);
     manifest.setDocument(documents);
+  }
+  
+  private String getAtmKey(String quizId) throws Exception {
+    // Each quiz folder has within it a single-line file called 'atm-key'
+    // which in turn has within it a 9-digit random number. A link with 
+    // this name(number?) - pointing to the parent quiz folder - is created 
+    // within the atm/ folder
+    BufferedReader   r = new BufferedReader(new FileReader(this.mint + quizId + "/atm-key")) ;
+    String           key = r.readLine() ; // 'atm-key' has only one line
+    
+    if (key != null) {
+      return key ; 
+    } else { 
+    throw new Exception("No ATM-key for quiz = " + quizId) ;  
+    }
   }
 
   private String       bankRoot, mint, webRoot ;
