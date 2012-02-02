@@ -6,10 +6,11 @@
  */
 package gutenberg.blocs;
 
-// import gutenberg.workers.Config;
-// import gutenberg.workers.Resource;
+import java.io.FileInputStream;
+import java.util.Properties;
+
 import gutenberg.workers.Scribe;
-// import gutenberg.workers.Vault;
+import gutenberg.workers.Vault;
 
 /**
  * DocumentMasterSkeleton java skeleton for the axisService
@@ -47,17 +48,36 @@ public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
 	/**
 	 * Auto generated method signature
 	 * 
-	 * @param buildQuiz4
-	 * @return buildQuizResponse5
+	 * @param createQuestion4
+	 * @return createQuestionResponse5
+	 */
+
+	public gutenberg.blocs.CreateQuestionResponse createQuestion(
+			gutenberg.blocs.CreateQuestion createQuestion) {
+		ResponseType response = new ResponseType();
+		try {
+			Vault vault = new Vault();
+			response.setManifest(vault.createQuestion());
+		} catch (Exception e) {
+			response.setError(e.getMessage());
+		}
+		CreateQuestionResponse createQuestionResponse = new CreateQuestionResponse();
+		createQuestionResponse.setCreateQuestionResponse(response);
+		return createQuestionResponse;
+	}
+
+	/**
+	 * Auto generated method signature
+	 * 
+	 * @param buildQuiz6
+	 * @return buildQuizResponse7
 	 */
 
 	public gutenberg.blocs.BuildQuizResponse buildQuiz(
-			gutenberg.blocs.BuildQuiz buildQuiz) 
-	{
+			gutenberg.blocs.BuildQuiz buildQuiz) {
 		ResponseType response = new ResponseType();
 		try {
-			Scribe scribe = new Scribe() ;
-			
+			Scribe scribe = new Scribe();
 			scribe.generate(buildQuiz.getBuildQuiz());
 			response.setManifest(scribe.getManifest());
 		} catch (Exception e) {
@@ -71,16 +91,15 @@ public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
 	/**
 	 * Auto generated method signature
 	 * 
-	 * @param assignQuiz6
-	 * @return assignQuizResponse7
+	 * @param assignQuiz8
+	 * @return assignQuizResponse9
 	 */
 
 	public gutenberg.blocs.AssignQuizResponse assignQuiz(
-			gutenberg.blocs.AssignQuiz assignQuiz)
-	{
+			gutenberg.blocs.AssignQuiz assignQuiz) {
 		ResponseType response = new ResponseType();
 		try {
-			Scribe scribe = new Scribe() ;
+			Scribe scribe = new Scribe();
 			scribe.generate(assignQuiz.getAssignQuiz());
 			response.setManifest(scribe.getManifest());
 		} catch (Exception e) {

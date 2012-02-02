@@ -80,6 +80,11 @@
 			<xsd:element name="viewScansResponse" type="tns:responseType">
 			</xsd:element>
 
+			<xsd:element name="createQuestion" type="xsd:string"></xsd:element>
+
+			<xsd:element name="createQuestionResponse" type="tns:responseType">
+			</xsd:element>
+
 			<xsd:complexType name="entryType">
 				<xsd:sequence>
 					<xsd:element name="id" type="xsd:string"></xsd:element>
@@ -121,6 +126,12 @@
 	<wsdl:message name="viewScansResponse">
 		<wsdl:part name="parameters" element="tns:viewScansResponse"></wsdl:part>
 	</wsdl:message>
+	<wsdl:message name="createQuestion">
+		<wsdl:part name="parameters" element="tns:createQuestion"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="createQuestionResponse">
+		<wsdl:part name="parameters" element="tns:createQuestionResponse"></wsdl:part>
+	</wsdl:message>
 	<wsdl:portType name="documentMaster">
 		<wsdl:operation name="buildQuiz">
 			<wsdl:input message="tns:buildQuiz" />
@@ -137,6 +148,10 @@
 		<wsdl:operation name="viewScans">
 			<wsdl:input message="tns:viewScans"></wsdl:input>
 			<wsdl:output message="tns:viewScansResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="createQuestion">
+			<wsdl:input message="tns:createQuestion"></wsdl:input>
+			<wsdl:output message="tns:createQuestionResponse"></wsdl:output>
 		</wsdl:operation>
 	</wsdl:portType>
 	<wsdl:binding name="documentMasterSOAP" type="tns:documentMaster">
@@ -171,6 +186,15 @@
 		</wsdl:operation>
 		<wsdl:operation name="viewScans">
 			<soap:operation soapAction="http://gutenberg/blocs/viewScansQuiz" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="createQuestion">
+			<soap:operation soapAction="http://gutenberg/blocs/createQuestion" />
 			<wsdl:input>
 				<soap:body use="literal" />
 			</wsdl:input>

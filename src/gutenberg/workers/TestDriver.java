@@ -4,10 +4,13 @@ import gutenberg.blocs.AssignQuiz;
 import gutenberg.blocs.AssignmentType;
 import gutenberg.blocs.BuildQuiz;
 import gutenberg.blocs.BuildQuizResponse;
+import gutenberg.blocs.CreateQuestion;
+import gutenberg.blocs.CreateQuestionResponse;
 import gutenberg.blocs.DocumentMasterSkeleton;
 import gutenberg.blocs.EntryType;
 import gutenberg.blocs.PageType;
 import gutenberg.blocs.QuizType;
+import gutenberg.blocs.ResponseType;
 
 public class TestDriver {
 
@@ -20,6 +23,7 @@ public class TestDriver {
 		BuildQuiz request = null;
 		BuildQuizResponse response = null;
 		DocumentMasterSkeleton service = null;
+		ResponseType resp = null;
 		try {
 			request = new BuildQuiz();
 			AssignmentType assignment = new AssignmentType();			
@@ -68,12 +72,20 @@ public class TestDriver {
 			
 			AssignQuiz assignQuizReq = new AssignQuiz();
 			assignQuizReq.setAssignQuiz(assignment);
-			service.assignQuiz(assignQuizReq);					
-			//service.buildQuiz(request);			
+			//service.assignQuiz(assignQuizReq);					
+			//service.buildQuiz(request);
+			CreateQuestion createQuestionReq = new CreateQuestion();
+			createQuestionReq.setCreateQuestion("asdf");
+			CreateQuestionResponse createQResp = service.createQuestion(createQuestionReq);
+			resp = createQResp.getCreateQuestionResponse();
 		} catch (Exception e) {
 			
 		}
-
+		if (resp.isErrorSpecified())
+			System.out.println(resp.getError());
+		else
+			System.out.println(resp.getManifest().getRoot());
+		
 	}
 
 }

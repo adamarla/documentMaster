@@ -43,6 +43,20 @@
         /**
          * Auto generated method signature
          * 
+                                    * @param createQuestion
+         */
+
+        
+                public gutenberg.blocs.CreateQuestionResponse createQuestion
+                (
+                  gutenberg.blocs.CreateQuestion createQuestion
+                 )
+            ;
+        
+         
+        /**
+         * Auto generated method signature
+         * 
                                     * @param buildQuiz
          */
 
