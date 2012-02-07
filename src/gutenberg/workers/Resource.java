@@ -5,6 +5,8 @@ public enum Resource {
 	vault,
 	locker,
 	mint,
+	atm,
 	shared,
+	staging,
 	webroot
 }

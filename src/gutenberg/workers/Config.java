@@ -24,6 +24,9 @@ public class Config {
 		case locker:
 			path += "/locker";
 			break;
+		case atm:
+			path+= "/atm";
+			break;
 		case vault:
 			path += "/vault";
 			break;

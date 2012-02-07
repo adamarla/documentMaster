@@ -2,15 +2,12 @@ package gutenberg.workers;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
-
 
 import gutenberg.blocs.AssignmentType;
 import gutenberg.blocs.EntryType;
@@ -20,14 +17,11 @@ import gutenberg.blocs.QuizType;
 
 public class Scribe {
 
-  public Scribe() throws Exception {
-  Properties config = new Properties();
-
-  config.loadFromXML(new FileInputStream("/opt/gutenberg/config.xml"));
-    this.bankRoot = config.getProperty("BANK_ROOT") ;
-    this.webRoot = config.getProperty("WEB_ROOT") ; 
-    this.mint = this.bankRoot + "/mint/" ;
-    this.vault = new Vault(this.bankRoot + "/vault/") ;
+  public Scribe(Config config) throws Exception {
+	this.bankRoot = config.getPath(Resource.bank);		
+	this.webRoot = config.getPath(Resource.webroot);
+	this.mint = config.getPath(Resource.mint);
+	this.vault = new Vault(config);
   } 
 
   /**
@@ -36,7 +30,7 @@ public class Scribe {
    * @param quiz
    * @throws Exception
    */
-  public void generate(QuizType quiz) throws Exception {
+  public ManifestType generate(QuizType quiz) throws Exception {
 
     String quizId = quiz.getQuiz().getId();
     //File quizDir = new File(this.mint + quizId);
@@ -82,7 +76,7 @@ public class Scribe {
 
     // make command : make Compile QUIZ=<quizId>
     System.out.println("Return Code: " + make("Compile", quizId,null));
-    prepareManifest(quiz);
+    return prepareManifest(quiz);
   }
 
   /**
@@ -91,7 +85,7 @@ public class Scribe {
    * @param assignment
    * @throws Exception
    */
-  public void generate(AssignmentType assignment) throws Exception {
+  public ManifestType generate(AssignmentType assignment) throws Exception {
 
     String   quizId = assignment.getQuiz().getId();
     String   testpaperId = assignment.getInstance().getId();
@@ -164,12 +158,9 @@ public class Scribe {
 
     // make command : make Compile QUIZ=<quizId> TEST=<testpaperId>
     System.out.println("Return Code: " + make("Compile", quizId, testpaperId)) ;
-    prepareManifest(assignment);
+    return prepareManifest(assignment);
   }
 
-  public ManifestType getManifest() {
-    return manifest;
-  }
   
   private String[] buffToString(BufferedReader stream) throws Exception {
     List<String> lines = new ArrayList<String>() ;
@@ -261,7 +252,7 @@ public class Scribe {
     return (id + "-" + name.toLowerCase().replace(' ','-') + "-" + quiz + "-" + testpaper) ;
   }
 
-  private void prepareManifest(QuizType quiz) throws Exception {
+  private ManifestType prepareManifest(QuizType quiz) throws Exception {
 
     manifest = new ManifestType();
     String    quizId = quiz.getQuiz().getId();
@@ -304,9 +295,11 @@ public class Scribe {
     documents[0] = new EntryType();
     documents[0].setId("answer-key.pdf");
     manifest.setDocument(documents);
+    
+    return manifest;
   }
 
-  private void prepareManifest(AssignmentType assignment) throws Exception {
+  private ManifestType prepareManifest(AssignmentType assignment) throws Exception {
 
     manifest = new ManifestType();
     String    quizId = assignment.getQuiz().getId();
@@ -337,6 +330,7 @@ public class Scribe {
     documents[students.length] = new EntryType();
     documents[students.length].setId(assignmentPdf);
     manifest.setDocument(documents);
+    return manifest;
   }
   
   private String getAtmKey(String quizId) throws Exception {

@@ -6,9 +6,11 @@
  */
 package gutenberg.blocs;
 
-import java.io.FileInputStream;
-import java.util.Properties;
-
+import java.io.File;
+import gutenberg.workers.ATM;
+import gutenberg.workers.Config;
+import gutenberg.workers.Locker;
+import gutenberg.workers.Resource;
 import gutenberg.workers.Scribe;
 import gutenberg.workers.Vault;
 
@@ -20,43 +22,109 @@ public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
 	/**
 	 * Auto generated method signature
 	 * 
-	 * @param viewScans0
-	 * @return viewScansResponse1
+	 * @param recieveScans
+	 * @return recieveScansResponse
 	 */
 
-	public gutenberg.blocs.ViewScansResponse viewScans(
-			gutenberg.blocs.ViewScans viewScans) {
-		// TODO : fill this with the necessary business logic
-		throw new java.lang.UnsupportedOperationException("Please implement "
-				+ this.getClass().getName() + "#viewScans");
-	}
-
-	/**
-	 * Auto generated method signature
-	 * 
-	 * @param viewQuestions2
-	 * @return viewQuestionsResponse3
-	 */
-
-	public gutenberg.blocs.ViewQuestionsResponse viewQuestions(
-			gutenberg.blocs.ViewQuestions viewQuestions) {
-		// TODO : fill this with the necessary business logic
-		throw new java.lang.UnsupportedOperationException("Please implement "
-				+ this.getClass().getName() + "#viewQuestions");
-	}
-
-	/**
-	 * Auto generated method signature
-	 * 
-	 * @param createQuestion4
-	 * @return createQuestionResponse5
-	 */
-
-	public gutenberg.blocs.CreateQuestionResponse createQuestion(
-			gutenberg.blocs.CreateQuestion createQuestion) {
+	public gutenberg.blocs.RecieveScansResponse recieveScans(
+			gutenberg.blocs.RecieveScans recieveScans) {		
+		Locker locker = null;
+		Config config = null;
 		ResponseType response = new ResponseType();
 		try {
-			Vault vault = new Vault();
+			config = new Config();
+			locker = new Locker(config);
+			File staging = new File(config.getPath(Resource.staging));
+			File[] listFiles = staging.listFiles();
+			response.setManifest(locker.save(listFiles));			
+		} catch (Exception e) {
+			response.setError(e.getMessage());
+		}
+		RecieveScansResponse recieveScansResponse = new RecieveScansResponse();
+		recieveScansResponse.setRecieveScansResponse(response);
+		return recieveScansResponse;
+	}
+
+	/**
+	 * Auto generated method signature
+	 * 
+	 * @param viewScans
+	 * @return viewScansResponse
+	 */
+	public gutenberg.blocs.ViewScansResponse viewScans(
+			gutenberg.blocs.ViewScans viewScans) {
+		ATM atm = null;
+		Locker locker = null;
+		Config config = null;
+		ResponseType response = new ResponseType();
+		try {			
+			EntryType[] scans = viewScans.getViewScans().getEntry();
+			String[] scanIds = new String[scans.length];
+			for (int i = 0; i < scans.length; i++) {
+				scanIds[i] = scans[i].getId();
+			}
+			
+			config = new Config();
+			atm = new ATM(config);
+			locker = new Locker(config);
+			File[] scanFiles = locker.fetch(scanIds);
+			response.setManifest(atm.deposit(scanFiles));
+			
+		} catch (Exception e) {
+			response.setError(e.getMessage());
+		}
+		ViewScansResponse viewScansResponse = new ViewScansResponse();
+		viewScansResponse.setViewScansResponse(response);
+		return viewScansResponse;
+	}
+
+	/**
+	 * Auto generated method signature
+	 * 
+	 * @param viewQuestions
+	 * @return viewQuestionsResponse
+	 */
+	public gutenberg.blocs.ViewQuestionsResponse viewQuestions(
+			gutenberg.blocs.ViewQuestions viewQuestions) {
+		ATM atm = null;
+		Vault vault = null;
+		Config config = null;
+		ResponseType response = new ResponseType();
+		try {
+			EntryType[] questions = viewQuestions.getViewQuestions().getEntry();
+			String[] questionIds = new String[questions.length];
+			for (int i = 0; i < questionIds.length; i++) {
+				questionIds[i] = questions[i].getId();
+			}
+			
+			config = new Config();
+			atm = new ATM(config);
+			vault = new Vault(config);
+			File[] questionFiles = vault.getFiles(questionIds, ".jpg");
+			response.setManifest(atm.deposit(questionFiles));
+			
+		} catch (Exception e) {
+			response.setError(e.getMessage());
+		}
+		ViewQuestionsResponse viewQuestionsResponse = new ViewQuestionsResponse();
+		viewQuestionsResponse.setViewQuestionsResponse(response);
+		return viewQuestionsResponse;
+	}
+
+	
+	/**
+	 * Auto generated method signature
+	 * 
+	 * @param createQuestion
+	 * @return createQuestionResponse
+	 */
+	public gutenberg.blocs.CreateQuestionResponse createQuestion(
+			gutenberg.blocs.CreateQuestion createQuestion) {
+		Config config = null;
+		ResponseType response = new ResponseType();
+		try {
+			config = new Config();
+			Vault vault = new Vault(config);
 			response.setManifest(vault.createQuestion());
 		} catch (Exception e) {
 			response.setError(e.getMessage());
@@ -72,14 +140,16 @@ public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
 	 * @param buildQuiz6
 	 * @return buildQuizResponse7
 	 */
-
 	public gutenberg.blocs.BuildQuizResponse buildQuiz(
 			gutenberg.blocs.BuildQuiz buildQuiz) {
+		Config config = null;
+		Scribe scribe = null;
 		ResponseType response = new ResponseType();
 		try {
-			Scribe scribe = new Scribe();
-			scribe.generate(buildQuiz.getBuildQuiz());
-			response.setManifest(scribe.getManifest());
+			config = new Config();
+			scribe = new Scribe(config);
+			QuizType quiz = buildQuiz.getBuildQuiz();
+			response.setManifest(scribe.generate(quiz));
 		} catch (Exception e) {
 			response.setError(e.getMessage());
 		}
@@ -94,14 +164,15 @@ public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
 	 * @param assignQuiz8
 	 * @return assignQuizResponse9
 	 */
-
 	public gutenberg.blocs.AssignQuizResponse assignQuiz(
 			gutenberg.blocs.AssignQuiz assignQuiz) {
+		Config config = null;
 		ResponseType response = new ResponseType();
 		try {
-			Scribe scribe = new Scribe();
-			scribe.generate(assignQuiz.getAssignQuiz());
-			response.setManifest(scribe.getManifest());
+			config = new Config();
+			Scribe scribe = new Scribe(config);
+			AssignmentType assignment = assignQuiz.getAssignQuiz();
+			response.setManifest(scribe.generate(assignment));
 		} catch (Exception e) {
 			response.setError(e.getMessage());
 		}

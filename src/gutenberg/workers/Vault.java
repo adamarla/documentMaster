@@ -5,32 +5,26 @@ import gutenberg.blocs.ManifestType;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Properties;
+import java.util.ArrayList;
 
 public class Vault {
 
-	public Vault(String vault) {
-		VAULT = vault;
+	public Vault(Config config) {
+		VAULT = config.getPath(Resource.vault);
+		SHARED = config.getPath(Resource.shared);
 	}
-
 	public Vault() throws Exception {
-		Properties properties = new Properties();
-		properties
-				.loadFromXML(new FileInputStream("/opt/gutenberg/config.xml"));
-		VAULT = properties.getProperty("BANK_ROOT") + "/vault";
-		SHARED = properties.getProperty("BANK_ROOT") + "/shared";
+		Config config = new Config();
+		VAULT = config.getPath(Resource.vault);
+		SHARED = config.getPath(Resource.shared);
 	}
 
 	/**
-	 * @param id
-	 *            - question id
-	 * @param filter
-	 *            - type of content e.g. "tex", "gnuplot" etc.
+	 * @param id - question id
+	 * @param filter - type of content e.g. "tex", "gnuplot" etc.
 	 * @return returns file contents for given id
 	 * @throws Exception
 	 */
@@ -48,22 +42,32 @@ public class Vault {
 	}
 
 	/**
-	 * @param id
-	 *            - question id
-	 * @param filter
-	 *            - type of content e.g. "tex", "gnuplot" etc.
-	 * @return TODO
+	 * @param id - question id
+	 * @param filter - type of content e.g. "tex", "gnuplot" etc.
+	 * @return Files
 	 * @throws Exception
 	 */
 	public File[] getFiles(String id, String filter) throws Exception {
 		File directory = new File(VAULT + "/" + id);
 		return directory.listFiles(new NameFilter(filter));
-	}
-
+	}	
+	
+	public File[] getFiles(String[] id, String filter) throws Exception {
+		ArrayList<File> fileSet = new ArrayList<File>();
+		File[] files = null;
+		for (int i = 0; i < id.length; i++) {
+			files = getFiles(id[i], filter);
+			for (int j = 0; j < files.length; j++) {
+				fileSet.add(files[j]);
+			}
+		}
+		return fileSet.toArray(new File[0]);
+	}	
+	
 	/**
 	 * Creates a question in the Vault
 	 * 
-	 * @return
+	 * @return Manifest
 	 * @throws Exception
 	 */
 	public ManifestType createQuestion() throws Exception {

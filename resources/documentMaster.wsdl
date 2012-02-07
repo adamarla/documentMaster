@@ -2,11 +2,6 @@
 <wsdl:definitions targetNamespace="http://gutenberg/blocs" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://gutenberg/blocs" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
   <wsdl:types>
     <xsd:schema elementFormDefault="qualified" targetNamespace="http://gutenberg/blocs">
-			<xsd:element name="buildQuiz" type="tns:quizType">
-			</xsd:element>
-			<xsd:element name="buildQuizResponse" type="tns:responseType">
-			</xsd:element>
-
 			<xsd:complexType name="quizType">
 				<xsd:sequence>
 					<xsd:element name="quiz" type="tns:entryType"/>
@@ -45,11 +40,6 @@
 				</xsd:choice>
 			</xsd:complexType>
 
-			<xsd:element name="assignQuiz" type="tns:assignmentType"/>
-
-			<xsd:element name="assignQuizResponse" type="tns:responseType">
-			</xsd:element>
-
 			<xsd:complexType name="assignmentType">
 				<xsd:sequence>
 					<xsd:element name="quiz" type="tns:entryType"/>
@@ -58,18 +48,36 @@
 					</xsd:element>
 				</xsd:sequence>
 			</xsd:complexType>
+			
+			<xsd:element name="buildQuiz" type="tns:quizType">
+			</xsd:element>
+			<xsd:element name="buildQuizResponse" type="tns:responseType">
+			</xsd:element>
+			
+			<xsd:element name="assignQuiz" type="tns:assignmentType"/>
+
+			<xsd:element name="assignQuizResponse" type="tns:responseType">
+			</xsd:element>
 
 			<xsd:element name="viewQuestions" type="tns:entryListType">
 			</xsd:element>
 
-
-
 			<xsd:element name="viewQuestionsResponse" type="tns:responseType">
+			</xsd:element>
+
+			<xsd:element name="recieveScans" type="xsd:string"/>
+
+			<xsd:element name="recieveScansResponse" type="tns:responseType">
 			</xsd:element>
 
 			<xsd:element name="viewScans" type="tns:entryListType"/>
 
 			<xsd:element name="viewScansResponse" type="tns:responseType">
+			</xsd:element>
+
+			<xsd:element name="createQuestion" type="xsd:string"/>
+
+			<xsd:element name="createQuestionResponse" type="tns:responseType">
 			</xsd:element>
 
 			<xsd:complexType name="entryType">
@@ -103,12 +111,28 @@
     <wsdl:part name="parameters" element="tns:viewQuestionsResponse">
     </wsdl:part>
   </wsdl:message>
+  <wsdl:message name="createQuestion">
+    <wsdl:part name="parameters" element="tns:createQuestion">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="createQuestionResponse">
+    <wsdl:part name="parameters" element="tns:createQuestionResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="recieveScans">
+    <wsdl:part name="parameters" element="tns:recieveScans">
+    </wsdl:part>
+  </wsdl:message>
   <wsdl:message name="viewScansResponse">
     <wsdl:part name="parameters" element="tns:viewScansResponse">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="assignQuizResponse">
     <wsdl:part name="parameters" element="tns:assignQuizResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="recieveScansResponse">
+    <wsdl:part name="parameters" element="tns:recieveScansResponse">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="viewQuestions">
@@ -144,6 +168,18 @@
       <wsdl:output message="tns:viewScansResponse">
     </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="recieveScans">
+      <wsdl:input message="tns:recieveScans">
+    </wsdl:input>
+      <wsdl:output message="tns:recieveScansResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="createQuestion">
+      <wsdl:input message="tns:createQuestion">
+    </wsdl:input>
+      <wsdl:output message="tns:createQuestionResponse">
+    </wsdl:output>
+    </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="documentMasterSOAP" type="tns:documentMaster">
     <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
@@ -175,7 +211,25 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="viewScans">
-      <soap:operation soapAction="http://gutenberg/blocs/viewScansQuiz"/>
+      <soap:operation soapAction="http://gutenberg/blocs/viewScans"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="recieveScans">
+      <soap:operation soapAction="http://gutenberg/blocs/recieveScans"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="createQuestion">
+      <soap:operation soapAction="http://gutenberg/blocs/createQuestion"/>
       <wsdl:input>
         <soap:body use="literal"/>
       </wsdl:input>

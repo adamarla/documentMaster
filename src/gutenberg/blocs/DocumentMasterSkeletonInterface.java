@@ -15,6 +15,20 @@
         /**
          * Auto generated method signature
          * 
+                                    * @param recieveScans
+         */
+
+        
+                public gutenberg.blocs.RecieveScansResponse recieveScans
+                (
+                  gutenberg.blocs.RecieveScans recieveScans
+                 )
+            ;
+        
+         
+        /**
+         * Auto generated method signature
+         * 
                                     * @param viewScans
          */
 
