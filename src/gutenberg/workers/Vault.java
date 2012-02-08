@@ -85,7 +85,7 @@ public class Vault {
 		Files.copy(shared.resolve(texFile), questionDir.resolve(texFile));
 		Files.copy(shared.resolve(plotFile), questionDir.resolve(plotFile));
 
-		gitIt(questionDir);
+//		gitIt(questionDir);
 
 		ManifestType manifest = new ManifestType();
 		manifest.setRoot(questionDir.toString());

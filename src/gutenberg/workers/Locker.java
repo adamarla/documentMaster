@@ -44,7 +44,7 @@ public class Locker {
 				manifest.addImage(image);
 				EntryType thumbnail = new EntryType();
 				thumbnail.setId("thumb-" + scanId + ".jpg");
-				manifest.addImage(image);
+				manifest.addImage(thumbnail);
 			}
 		}
 		return manifest;
