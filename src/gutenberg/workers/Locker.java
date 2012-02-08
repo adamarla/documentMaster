@@ -53,8 +53,8 @@ public class Locker {
 	private String LOCKER;
 
 	private void generateThumbnail(File scan) throws Exception {
-		File thumbnail = new File(scan.getParent() + "/thumb-" + scan.getName());
-		thumbnail.createNewFile();
+		Path thumbnail = scan.getParentFile().toPath().resolve("thumb-" + scan.getName());
+		Files.copy(scan.toPath(), thumbnail);
 	}
 
 	private String getScanId(File scan) {

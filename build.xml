@@ -40,8 +40,8 @@
         <echo message="Axis2 Availability= ${axis2.available}"/>
     </target>
     <target depends="pre.compile.test" name="compile.src" if="jars.ok">
-        <javac debug="on" memoryMaximumSize="256m" memoryInitialSize="256m" fork="true" destdir="${classes}" srcdir="${src}">
-            <classpath refid="axis2.class.path"/>
+        <javac debug="on" memoryMaximumSize="256m" memoryInitialSize="256m" fork="true" destdir="${classes}" srcdir="${src}" >
+        	<classpath refid="axis2.class.path"/>
         </javac>
     </target>
     <target depends="compile.src" name="compile.test" if="jars.ok">
