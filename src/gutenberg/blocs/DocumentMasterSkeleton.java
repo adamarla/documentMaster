@@ -123,9 +123,10 @@ public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
 		Config config = null;
 		ResponseType response = new ResponseType();
 		try {
+			String quizMasterId = createQuestion.getCreateQuestion();
 			config = new Config();
 			Vault vault = new Vault(config);
-			response.setManifest(vault.createQuestion());
+			response.setManifest(vault.createQuestion(quizMasterId));
 		} catch (Exception e) {
 			response.setError(e.getMessage());
 		}

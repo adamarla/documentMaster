@@ -1,4 +1,4 @@
-package gutenberg.workers;
+package gutenberg.tests;
 
 import gutenberg.blocs.AssignQuiz;
 import gutenberg.blocs.AssignmentType;
@@ -75,7 +75,7 @@ public class TestDriver {
 			//service.assignQuiz(assignQuizReq);					
 			//service.buildQuiz(request);
 			CreateQuestion createQuestionReq = new CreateQuestion();
-			createQuestionReq.setCreateQuestion("asdf");
+			createQuestionReq.setCreateQuestion("1008");
 			CreateQuestionResponse createQResp = service.createQuestion(createQuestionReq);
 			resp = createQResp.getCreateQuestionResponse();
 		} catch (Exception e) {

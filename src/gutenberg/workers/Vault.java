@@ -67,13 +67,17 @@ public class Vault {
 	/**
 	 * Creates a question in the Vault
 	 * 
+	 * @param quizMasterId - id of person creating question
 	 * @return Manifest
 	 * @throws Exception
 	 */
-	public ManifestType createQuestion() throws Exception {
+	public ManifestType createQuestion(String quizMasterId) throws Exception {
 
-		String dirName = Long.toString(System.currentTimeMillis(),
-				Character.MAX_RADIX);
+		String hexTimestamp = Long.toString(System.currentTimeMillis(), 
+				Character.MAX_RADIX); 
+		String dirName = quizMasterId + "-" 
+				+ hexTimestamp.substring(0, 3) + "-"
+				+ hexTimestamp.substring(3);
 		Path questionDir = new File(VAULT).toPath().resolve(dirName);
 		Files.createDirectory(questionDir);
 

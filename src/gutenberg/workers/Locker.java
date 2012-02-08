@@ -37,7 +37,7 @@ public class Locker {
 			target = locker.resolve(scans[i].getName()).toFile();
 			if (!target.exists()) {
 				Files.move(scans[i].toPath(), target.toPath());
-				generateThumbnail(target.getName());
+				generateThumbnail(target);
 
 				EntryType image = new EntryType();
 				image.setId(scanId + ".jpg");
@@ -52,8 +52,9 @@ public class Locker {
 
 	private String LOCKER;
 
-	private void generateThumbnail(String scanId) {
-
+	private void generateThumbnail(File scan) throws Exception {
+		File thumbnail = new File(scan.getParent() + "/thumb-" + scan.getName());
+		thumbnail.createNewFile();
 	}
 
 	private String getScanId(File scan) {

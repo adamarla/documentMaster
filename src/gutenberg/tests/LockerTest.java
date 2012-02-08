@@ -1,6 +1,4 @@
-package tests;
-
-import static org.junit.Assert.*;
+package gutenberg.tests;
 
 import java.io.File;
 
@@ -22,12 +20,13 @@ public class LockerTest {
 		config = new Config();
 		locker = new Locker(config);
 		scan = new File(config.getPath(Resource.locker) + 
-				"123-23-2-32.jpg");
+				"/123-23-2-32.jpg");
 		scan.createNewFile();
 		thumb = new File(config.getPath(Resource.locker) + 
-				"thumb-123-23-2-32.jpg");
+				"/thumb-123-23-2-32.jpg");
 		thumb.createNewFile();
-		inScan = new File(config.getPath(Resource.staging) + "123-33-32-23.jpg");
+		
+		inScan = new File(config.getPath(Resource.staging) + "/123-33-32-23.jpg");
 		inScan.createNewFile();
 		
 	}
@@ -50,7 +49,7 @@ public class LockerTest {
 			Assert.assertNotNull(f);
 			f[0].delete();
 		} catch (Exception e) {
-			
+			Assert.fail(e.getMessage());
 		}
 	}
 
@@ -63,15 +62,15 @@ public class LockerTest {
 			scans[0] = inScan;
 			locker.save(scans);
 			File savedScan = new File(config.getPath(Resource.locker) + 
-					"123-33-32-23.jpg");
+					"/123-33-32-23.jpg");
 			File savedThumb = new File(config.getPath(Resource.locker) + 
-					"thumb-123-33-32-23.jpg");
+					"/thumb-123-33-32-23.jpg");
 			Assert.assertTrue(savedScan.exists());
 			Assert.assertTrue(savedThumb.exists());
 			savedScan.delete();
 			savedThumb.delete();
 		} catch (Exception e) {
-			
+			Assert.fail(e.getMessage());
 		}
 		
 	}

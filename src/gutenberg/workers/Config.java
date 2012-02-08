@@ -7,8 +7,8 @@ public class Config {
 
 	public Config() throws Exception {
 		Properties properties = new Properties();
-		properties
-				.loadFromXML(new FileInputStream("/opt/gutenberg/config.xml"));
+		properties.loadFromXML(
+				new FileInputStream("/opt/gutenberg/config.xml"));
 		bankRoot = properties.getProperty("BANK_ROOT");
 		webRoot = properties.getProperty("WEB_ROOT");
 	}
@@ -32,6 +32,9 @@ public class Config {
 			break;
 		case shared:
 			path += "/shared";
+			break;
+		case staging:
+			path += "/staging";
 			break;
 		case webroot:
 			path = webRoot;
