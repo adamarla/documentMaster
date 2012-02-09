@@ -38,6 +38,7 @@ public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
 			File[] listFiles = staging.listFiles();
 			response.setManifest(locker.save(listFiles));			
 		} catch (Exception e) {
+			e.printStackTrace();			
 			response.setError(e.getMessage());
 		}
 		RecieveScansResponse recieveScansResponse = new RecieveScansResponse();
@@ -71,6 +72,7 @@ public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
 			response.setManifest(atm.deposit(scanFiles));
 			
 		} catch (Exception e) {
+			e.printStackTrace();
 			response.setError(e.getMessage());
 		}
 		ViewScansResponse viewScansResponse = new ViewScansResponse();
@@ -104,6 +106,7 @@ public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
 			response.setManifest(atm.deposit(questionFiles));
 			
 		} catch (Exception e) {
+			e.printStackTrace();
 			response.setError(e.getMessage());
 		}
 		ViewQuestionsResponse viewQuestionsResponse = new ViewQuestionsResponse();
@@ -128,6 +131,7 @@ public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
 			Vault vault = new Vault(config);
 			response.setManifest(vault.createQuestion(quizMasterId));
 		} catch (Exception e) {
+			e.printStackTrace();
 			response.setError(e.getMessage());
 		}
 		CreateQuestionResponse createQuestionResponse = new CreateQuestionResponse();
@@ -152,6 +156,7 @@ public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
 			QuizType quiz = buildQuiz.getBuildQuiz();
 			response.setManifest(scribe.generate(quiz));
 		} catch (Exception e) {
+			e.printStackTrace();
 			response.setError(e.getMessage());
 		}
 		BuildQuizResponse buildQuizResponse = new BuildQuizResponse();
@@ -175,6 +180,7 @@ public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
 			AssignmentType assignment = assignQuiz.getAssignQuiz();
 			response.setManifest(scribe.generate(assignment));
 		} catch (Exception e) {
+			e.printStackTrace();
 			response.setError(e.getMessage());
 		}
 		AssignQuizResponse assignQuizResponse = new AssignQuizResponse();
