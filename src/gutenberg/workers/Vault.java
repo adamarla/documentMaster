@@ -2,10 +2,8 @@ package gutenberg.workers;
 
 import gutenberg.blocs.ManifestType;
 
-import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -85,28 +83,9 @@ public class Vault {
 		Files.copy(shared.resolve(texFile), questionDir.resolve(texFile));
 		Files.copy(shared.resolve(plotFile), questionDir.resolve(plotFile));
 
-//		gitIt(questionDir);
-
 		ManifestType manifest = new ManifestType();
 		manifest.setRoot(questionDir.toString());
 		return manifest;
-	}
-
-	private int gitIt(Path questionDir) throws Exception {
-		File bank = new File(VAULT).getParentFile();
-		ProcessBuilder pb = new ProcessBuilder("shared/gitQuestion.sh", bank.toPath()
-				.relativize(questionDir).toString());
-		pb.directory(bank);
-		pb.redirectErrorStream(true);
-
-		Process git = pb.start();
-		BufferedReader messages = new BufferedReader(new InputStreamReader(
-				git.getInputStream()));
-		String line = null;
-		while ((line = messages.readLine()) != null) {
-			System.out.println(line);
-		}
-		return git.waitFor();
 	}
 
 	public String getPath() throws Exception {
