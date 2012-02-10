@@ -82,6 +82,7 @@ public class Vault {
 		Path shared = new File(SHARED).toPath();
 		Files.copy(shared.resolve(texFile), questionDir.resolve(texFile));
 		Files.copy(shared.resolve(plotFile), questionDir.resolve(plotFile));
+		Files.createSymbolicLink(shared.resolve(makeFile), questionDir.resolve(makeFile));
 
 		ManifestType manifest = new ManifestType();
 		manifest.setRoot(questionDir.toString());
@@ -93,5 +94,5 @@ public class Vault {
 	}
 
 	private String VAULT, SHARED;
-	private final String texFile = "question.tex", plotFile = "figure.gnuplot";
+	private final String texFile = "question.tex", plotFile = "figure.gnuplot", makeFile = "individual.mk";
 }
