@@ -20,8 +20,8 @@ public class Locker {
 		File[] scans = new File[scanIds.length * 2];
 		Path locker = new File(LOCKER).toPath();
 		for (int i = 0; i < scanIds.length; i++) {
-			scan = locker.resolve(scanIds[i] + ".jpg");
-			thumb = locker.resolve("thumb-" + scanIds[i] + ".jpg");
+			scan = locker.resolve(scanIds[i] + IMG_FORMAT);
+			thumb = locker.resolve("thumb-" + scanIds[i] + IMG_FORMAT);
 			scans[i] = scan.toFile();
 			scans[i + 1] = thumb.toFile();
 		}
@@ -32,27 +32,30 @@ public class Locker {
 		ManifestType manifest = new ManifestType();
 		manifest.setRoot(LOCKER);
 		Path locker = new File(LOCKER).toPath();
-		Path target = null, thumbnail = null;
-		int retScan = 0, retThumb = 0;
-		for (int i = 0; i < scans.length; i++) {
-			target = locker.resolve(scans[i].getName());
-			thumbnail = locker.resolve("thumb-" + scans[i].getName());
-			if (target.toFile().exists()) {
+		String scanFile = null, thumbFile = null;
+		for (int i = 0; i < scans.length; i++) {			
+			scanFile = scans[i].getName().split("\\.")[0] + IMG_FORMAT;
+			thumbFile = "thumb-" + scanFile;			
+			if (locker.resolve(scanFile).toFile().exists()) {
 				continue;
-			}			
-			retScan = convert(scans[i].getPath(), target.toString(), SCAN_SIZE);
-			retThumb = convert(scans[i].getPath(), thumbnail.toString(), THUMB_SIZE);
-			if (retScan == 0 && retThumb == 0) {
+			}
+			
+			if (convert(scans[i].getPath(),
+					locker.resolve(scanFile).toString(), SCAN_SIZE) == 0 &&
+				convert(scans[i].getPath(), 
+					locker.resolve(thumbFile).toString(), THUMB_SIZE) == 0) {
+				
 				Files.delete(scans[i].toPath());
+				
 			} else {
-				throw new Exception("Image conversion failed, see cataline.out");
+				throw new Exception("Error resizing scan and thumbnail");
 			}
 			
 			EntryType image = new EntryType();
-			image.setId(scans[i].getName() + ".jpg");
+			image.setId(scanFile);
 			manifest.addImage(image);
 			EntryType thumb = new EntryType();
-			thumb.setId("thumb-" + scans[i].getName() + ".jpg");
+			thumb.setId(thumbFile);
 			manifest.addImage(thumb);			
 		}
 		return manifest;
@@ -84,5 +87,5 @@ public class Locker {
 
 	private final String SCAN_SIZE = "800x600";
 	private final String THUMB_SIZE = "200x200";
-	
+	private final String IMG_FORMAT = ".jpg";
 }
