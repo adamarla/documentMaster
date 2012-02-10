@@ -82,7 +82,7 @@ public class Vault {
 		Path shared = new File(SHARED).toPath();
 		Files.copy(shared.resolve(texFile), questionDir.resolve(texFile));
 		Files.copy(shared.resolve(plotFile), questionDir.resolve(plotFile));
-		Files.createSymbolicLink(shared.resolve(makeFile), questionDir.resolve(makeFile));
+		Files.createSymbolicLink(questionDir.resolve(makeFile), shared.resolve(makeFile));
 
 		ManifestType manifest = new ManifestType();
 		manifest.setRoot(questionDir.toString());
