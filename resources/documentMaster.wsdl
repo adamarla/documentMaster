@@ -65,9 +65,9 @@
 			<xsd:element name="viewQuestionsResponse" type="tns:responseType">
 			</xsd:element>
 
-			<xsd:element name="recieveScans" type="xsd:string"/>
+			<xsd:element name="receiveScans" type="xsd:string"/>
 
-			<xsd:element name="recieveScansResponse" type="tns:responseType">
+			<xsd:element name="receiveScansResponse" type="tns:responseType">
 			</xsd:element>
 
 			<xsd:element name="viewScans" type="tns:entryListType"/>
@@ -99,6 +99,10 @@
     <wsdl:part name="parameters" element="tns:buildQuiz">
     </wsdl:part>
   </wsdl:message>
+  <wsdl:message name="receiveScansResponse">
+    <wsdl:part name="parameters" element="tns:receiveScansResponse">
+    </wsdl:part>
+  </wsdl:message>
   <wsdl:message name="buildQuizResponse">
     <wsdl:part name="parameters" element="tns:buildQuizResponse">
     </wsdl:part>
@@ -119,8 +123,8 @@
     <wsdl:part name="parameters" element="tns:createQuestionResponse">
     </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="recieveScans">
-    <wsdl:part name="parameters" element="tns:recieveScans">
+  <wsdl:message name="receiveScans">
+    <wsdl:part name="parameters" element="tns:receiveScans">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="viewScansResponse">
@@ -129,10 +133,6 @@
   </wsdl:message>
   <wsdl:message name="assignQuizResponse">
     <wsdl:part name="parameters" element="tns:assignQuizResponse">
-    </wsdl:part>
-  </wsdl:message>
-  <wsdl:message name="recieveScansResponse">
-    <wsdl:part name="parameters" element="tns:recieveScansResponse">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="viewQuestions">
@@ -168,10 +168,10 @@
       <wsdl:output message="tns:viewScansResponse">
     </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="recieveScans">
-      <wsdl:input message="tns:recieveScans">
+    <wsdl:operation name="receiveScans">
+      <wsdl:input message="tns:receiveScans">
     </wsdl:input>
-      <wsdl:output message="tns:recieveScansResponse">
+      <wsdl:output message="tns:receiveScansResponse">
     </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="createQuestion">
@@ -219,8 +219,8 @@
         <soap:body use="literal"/>
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="recieveScans">
-      <soap:operation soapAction="http://gutenberg/blocs/recieveScans"/>
+    <wsdl:operation name="receiveScans">
+      <soap:operation soapAction="http://gutenberg/blocs/receiveScans"/>
       <wsdl:input>
         <soap:body use="literal"/>
       </wsdl:input>

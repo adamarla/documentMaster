@@ -9,10 +9,6 @@
         <parameter name="ServiceClass">gutenberg.blocs.DocumentMasterSkeleton</parameter>
         <parameter name="useOriginalwsdl">true</parameter>
         <parameter name="modifyUserWSDLPortAddress">true</parameter>
-        <operation name="recieveScans" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://gutenberg/blocs">
-            <actionMapping>http://gutenberg/blocs/recieveScans</actionMapping>
-            <outputActionMapping>http://gutenberg/blocs/documentMaster/recieveScansResponse</outputActionMapping>
-        </operation>
         <operation name="viewScans" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://gutenberg/blocs">
             <actionMapping>http://gutenberg/blocs/viewScans</actionMapping>
             <outputActionMapping>http://gutenberg/blocs/documentMaster/viewScansResponse</outputActionMapping>
@@ -28,6 +24,10 @@
         <operation name="buildQuiz" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://gutenberg/blocs">
             <actionMapping>http://gutenberg/blocs/buildQuiz</actionMapping>
             <outputActionMapping>http://gutenberg/blocs/documentMaster/buildQuizResponse</outputActionMapping>
+        </operation>
+        <operation name="receiveScans" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://gutenberg/blocs">
+            <actionMapping>http://gutenberg/blocs/receiveScans</actionMapping>
+            <outputActionMapping>http://gutenberg/blocs/documentMaster/receiveScansResponse</outputActionMapping>
         </operation>
         <operation name="assignQuiz" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://gutenberg/blocs">
             <actionMapping>http://gutenberg/blocs/assignQuiz</actionMapping>
