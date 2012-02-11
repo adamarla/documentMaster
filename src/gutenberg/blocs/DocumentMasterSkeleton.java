@@ -26,8 +26,8 @@ public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
 	 * @return recieveScansResponse
 	 */
 
-	public gutenberg.blocs.RecieveScansResponse recieveScans(
-			gutenberg.blocs.RecieveScans recieveScans) {		
+	public gutenberg.blocs.ReceiveScansResponse receiveScans(
+			gutenberg.blocs.ReceiveScans receiveScans) {		
 		Locker locker = null;
 		Config config = null;
 		ResponseType response = new ResponseType();
@@ -41,9 +41,9 @@ public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
 			e.printStackTrace();			
 			response.setError(e.getMessage());
 		}
-		RecieveScansResponse recieveScansResponse = new RecieveScansResponse();
-		recieveScansResponse.setRecieveScansResponse(response);
-		return recieveScansResponse;
+		ReceiveScansResponse receiveScansResponse = new ReceiveScansResponse();
+		receiveScansResponse.setReceiveScansResponse(response);
+		return receiveScansResponse;
 	}
 
 	/**

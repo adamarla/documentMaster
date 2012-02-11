@@ -37,23 +37,23 @@
 
         
 
-            if("recieveScans".equals(methodName)){
+            if("receiveScans".equals(methodName)){
                 
-                gutenberg.blocs.RecieveScansResponse recieveScansResponse13 = null;
-	                        gutenberg.blocs.RecieveScans wrappedParam =
-                                                             (gutenberg.blocs.RecieveScans)fromOM(
+                ReceiveScansResponse receiveScansResponse13 = null;
+	                        ReceiveScans wrappedParam =
+                                                             (ReceiveScans)fromOM(
                                     msgContext.getEnvelope().getBody().getFirstElement(),
                                     gutenberg.blocs.RecieveScans.class,
                                     getEnvelopeNamespaces(msgContext.getEnvelope()));
                                                 
-                                               recieveScansResponse13 =
+                                               receiveScansResponse13 =
                                                    
                                                    
-                                                         skel.recieveScans(wrappedParam)
+                                                         skel.receiveScans(wrappedParam)
                                                     ;
                                             
-                                        envelope = toEnvelope(getSOAPFactory(msgContext), recieveScansResponse13, false, new javax.xml.namespace.QName("http://gutenberg/blocs",
-                                                    "recieveScans"));
+                                        envelope = toEnvelope(getSOAPFactory(msgContext), receiveScansResponse13, false, new javax.xml.namespace.QName("http://gutenberg/blocs",
+                                                    "receiveScans"));
                                     } else 
 
             if("viewScans".equals(methodName)){
@@ -332,12 +332,12 @@
 
             }
         
-                    private  org.apache.axiom.soap.SOAPEnvelope toEnvelope(org.apache.axiom.soap.SOAPFactory factory, gutenberg.blocs.RecieveScansResponse param, boolean optimizeContent, javax.xml.namespace.QName methodQName)
+                    private  org.apache.axiom.soap.SOAPEnvelope toEnvelope(org.apache.axiom.soap.SOAPFactory factory, ReceiveScansResponse receiveScansResponse13, boolean optimizeContent, javax.xml.namespace.QName methodQName)
                         throws org.apache.axis2.AxisFault{
                       try{
                           org.apache.axiom.soap.SOAPEnvelope emptyEnvelope = factory.getDefaultEnvelope();
                            
-                                    emptyEnvelope.getBody().addChild(param.getOMElement(gutenberg.blocs.RecieveScansResponse.MY_QNAME,factory));
+                                    emptyEnvelope.getBody().addChild(receiveScansResponse13.getOMElement(gutenberg.blocs.RecieveScansResponse.MY_QNAME,factory));
                                 
 
                          return emptyEnvelope;

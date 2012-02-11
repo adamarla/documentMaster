@@ -15,13 +15,13 @@
         /**
          * Auto generated method signature
          * 
-                                    * @param recieveScans
+                                    * @param receiveScans
          */
 
         
-                public gutenberg.blocs.RecieveScansResponse recieveScans
+                public gutenberg.blocs.ReceiveScansResponse receiveScans
                 (
-                  gutenberg.blocs.RecieveScans recieveScans
+                  gutenberg.blocs.ReceiveScans receiveScans
                  )
             ;
         
