@@ -15,20 +15,6 @@
         /**
          * Auto generated method signature
          * 
-                                    * @param receiveScans
-         */
-
-        
-                public gutenberg.blocs.ReceiveScansResponse receiveScans
-                (
-                  gutenberg.blocs.ReceiveScans receiveScans
-                 )
-            ;
-        
-         
-        /**
-         * Auto generated method signature
-         * 
                                     * @param viewScans
          */
 
@@ -78,6 +64,20 @@
                 public gutenberg.blocs.BuildQuizResponse buildQuiz
                 (
                   gutenberg.blocs.BuildQuiz buildQuiz
+                 )
+            ;
+        
+         
+        /**
+         * Auto generated method signature
+         * 
+                                    * @param receiveScans
+         */
+
+        
+                public gutenberg.blocs.ReceiveScansResponse receiveScans
+                (
+                  gutenberg.blocs.ReceiveScans receiveScans
                  )
             ;
         

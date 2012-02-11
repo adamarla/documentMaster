@@ -6,7 +6,6 @@
  */
 package gutenberg.blocs;
 
-import java.io.File;
 import gutenberg.workers.ATM;
 import gutenberg.workers.Config;
 import gutenberg.workers.Locker;
@@ -14,37 +13,12 @@ import gutenberg.workers.Resource;
 import gutenberg.workers.Scribe;
 import gutenberg.workers.Vault;
 
+import java.io.File;
+
 /**
  * DocumentMasterSkeleton java skeleton for the axisService
  */
 public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
-
-	/**
-	 * Auto generated method signature
-	 * 
-	 * @param recieveScans
-	 * @return recieveScansResponse
-	 */
-
-	public gutenberg.blocs.ReceiveScansResponse receiveScans(
-			gutenberg.blocs.ReceiveScans receiveScans) {		
-		Locker locker = null;
-		Config config = null;
-		ResponseType response = new ResponseType();
-		try {
-			config = new Config();
-			locker = new Locker(config);
-			File staging = new File(config.getPath(Resource.staging));
-			File[] listFiles = staging.listFiles();
-			response.setManifest(locker.save(listFiles));			
-		} catch (Exception e) {
-			e.printStackTrace();			
-			response.setError(e.getMessage());
-		}
-		ReceiveScansResponse receiveScansResponse = new ReceiveScansResponse();
-		receiveScansResponse.setReceiveScansResponse(response);
-		return receiveScansResponse;
-	}
 
 	/**
 	 * Auto generated method signature
@@ -186,6 +160,34 @@ public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
 		AssignQuizResponse assignQuizResponse = new AssignQuizResponse();
 		assignQuizResponse.setAssignQuizResponse(response);
 		return assignQuizResponse;
+	}
+
+
+	/**
+	 * Auto generated method signature
+	 * 
+	 * @param receiveScans8
+	 * @return receiveScansResponse9
+	 */
+
+	public gutenberg.blocs.ReceiveScansResponse receiveScans(
+			gutenberg.blocs.ReceiveScans receiveScans) {
+		Locker locker = null;
+		Config config = null;
+		ResponseType response = new ResponseType();
+		try {
+			config = new Config();
+			locker = new Locker(config);
+			File staging = new File(config.getPath(Resource.staging));
+			File[] listFiles = staging.listFiles();
+			response.setManifest(locker.save(listFiles));			
+		} catch (Exception e) {
+			e.printStackTrace();			
+			response.setError(e.getMessage());
+		}
+		ReceiveScansResponse receiveScansResponse = new ReceiveScansResponse();
+		receiveScansResponse.setReceiveScansResponse(response);
+		return receiveScansResponse;
 	}
 
 }

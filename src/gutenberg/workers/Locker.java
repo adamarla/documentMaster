@@ -37,6 +37,7 @@ public class Locker {
 			scanFile = scans[i].getName().split("\\.")[0] + IMG_FORMAT;
 			thumbFile = "thumb-" + scanFile;			
 			if (locker.resolve(scanFile).toFile().exists()) {
+				Files.delete(scans[i].toPath());
 				continue;
 			}
 			
