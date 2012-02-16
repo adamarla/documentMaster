@@ -19,22 +19,22 @@ public class Config {
 		case bank:
 			break;
 		case mint:
-			path += "/mint";
+			path += "/mint/";
 			break;
 		case locker:
-			path += "/locker";
+			path += "/locker/";
 			break;
 		case atm:
-			path+= "/atm";
+			path+= "/atm/";
 			break;
 		case vault:
 			path += "/vault";
 			break;
 		case shared:
-			path += "/shared";
+			path += "/shared/";
 			break;
 		case staging:
-			path += "/staging";
+			path += "/staging/";
 			break;
 		case webroot:
 			path = webRoot;
