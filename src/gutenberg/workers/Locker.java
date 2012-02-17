@@ -55,6 +55,12 @@ public class Locker {
 			EntryType image = new EntryType();
 			image.setId(scanFile);
 			manifest.addImage(image);
+<<<<<<< HEAD
+=======
+			/*EntryType thumb = new EntryType();
+			thumb.setId(thumbFile);
+			manifest.addImage(thumb);*/			
+>>>>>>> 917ed2ea6a5f04f16cb6b508599c374494794b9b
 		}
 		return manifest;
 	}
