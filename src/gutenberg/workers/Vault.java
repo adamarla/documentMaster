@@ -82,13 +82,7 @@ public class Vault {
 		Path shared = new File(SHARED).toPath();
 		Files.copy(shared.resolve(texFile), questionDir.resolve(texFile));
 		Files.copy(shared.resolve(plotFile), questionDir.resolve(plotFile));
-<<<<<<< HEAD
-		Files.createSymbolicLink(questionDir.resolve("MakeFile"), shared.resolve(makeFile));
-=======
-		
-		// [Abhinav]: individual.mk should be linked as Makefile in individual question folders
 		Files.createSymbolicLink(questionDir.resolve("Makefile"), shared.resolve(makeFile));
->>>>>>> 917ed2ea6a5f04f16cb6b508599c374494794b9b
 
 		ManifestType manifest = new ManifestType();
 		manifest.setRoot(questionDir.toString());
