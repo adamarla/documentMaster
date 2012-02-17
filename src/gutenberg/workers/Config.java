@@ -10,7 +10,6 @@ public class Config {
 		properties.loadFromXML(
 				new FileInputStream("/opt/gutenberg/config.xml"));
 		bankRoot = properties.getProperty("BANK_ROOT");
-		webRoot = properties.getProperty("WEB_ROOT");
 	}
 
 	public String getPath(Resource id) {
@@ -36,12 +35,10 @@ public class Config {
 		case staging:
 			path += "/staging";
 			break;
-		case webroot:
-			path = webRoot;
 		default:
 		}
 		return path;
 	}
 
-	private String bankRoot, webRoot;
+	private String bankRoot;
 }

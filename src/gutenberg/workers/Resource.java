@@ -7,6 +7,5 @@ public enum Resource {
 	mint,
 	atm,
 	shared,
-	staging,
-	webroot
+	staging
 }
