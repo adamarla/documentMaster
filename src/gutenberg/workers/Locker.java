@@ -55,9 +55,6 @@ public class Locker {
 			EntryType image = new EntryType();
 			image.setId(scanFile);
 			manifest.addImage(image);
-			EntryType thumb = new EntryType();
-			thumb.setId(thumbFile);
-			manifest.addImage(thumb);			
 		}
 		return manifest;
 	}

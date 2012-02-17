@@ -34,7 +34,8 @@ public class Scribe {
 
 		String quizId = quiz.getQuiz().getId();
 		Path quizDir = this.mint.resolve(quizId);
-		File staging = quizDir.resolve("answer-key/staging").toFile();
+		Path staging = quizDir.resolve("answer-key/staging");
+		// File staging = quizDir.resolve("answer-key/staging").toFile();
 
 		boolean failed = (this.make("Prepare", quizId, null) == 0) ? false
 				: true;
@@ -44,7 +45,8 @@ public class Scribe {
 							+ quizId + " )");
 		}
 
-		PrintWriter answerKey = new PrintWriter(staging + "/answer-key.tex");
+		PrintWriter answerKey = new PrintWriter(staging.resolve(
+				"answer-key.tex").toFile());
 		PageType[] pages = quiz.getPage();
 
 		// Write any information that might be pertinent during testpaper
@@ -59,8 +61,8 @@ public class Scribe {
 		answerKey.println(printanswers);
 
 		for (int i = 0; i < pages.length; i++) {
-			PrintWriter preview = new PrintWriter(staging + "/page-" + i
-					+ ".tex");
+			PrintWriter preview = new PrintWriter(staging.resolve(
+					"/page-" + i + ".tex").toFile());
 			String page = preparePage(pages[i], staging);
 
 			writePreamble(preview, quiz.getSchool().getName(), quiz
@@ -186,7 +188,7 @@ public class Scribe {
 		return lines.toArray(new String[lines.size()]);
 	}
 
-	private String preparePage(PageType page, File staging) throws Exception {
+	private String preparePage(PageType page, Path staging) throws Exception {
 		StringBuilder contents = new StringBuilder();
 		EntryType[] questionIds = page.getQuestion();
 		String questionId = null, question = null;
@@ -202,11 +204,11 @@ public class Scribe {
 		return contents.toString();
 	}
 
-	private void linkResources(File resource, File targetDir, String targetFile)
+	private void linkResources(File resource, Path targetDir, String targetFile)
 			throws Exception {
-		File target = new File(targetDir.getPath() + "/" + targetFile);
-		if (!target.exists())
-			Files.createSymbolicLink(target.toPath(), resource.toPath());
+		Path target = targetDir.resolve(targetFile);
+		if (!target.toFile().exists())
+			Files.createSymbolicLink(target, resource.toPath());
 	}
 
 	private void writePreamble(PrintWriter writer, String school, String author)
