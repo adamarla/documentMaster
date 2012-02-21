@@ -62,7 +62,7 @@ public class Scribe {
 
 		for (int i = 0; i < pages.length; i++) {
 			PrintWriter preview = new PrintWriter(staging.resolve(
-					"/page-" + i + ".tex").toFile());
+					"page-" + i + ".tex").toFile());
 			String page = preparePage(pages[i], staging);
 
 			writePreamble(preview, quiz.getSchool().getName(), quiz
@@ -213,11 +213,25 @@ public class Scribe {
 
 	private void writePreamble(PrintWriter writer, String school, String author)
 			throws Exception {
-		writer.println("\\documentclass[justified]{tufte-exam}");
-		writer.println("\\School{" + school + "}");
-		if (author != null)
-			writer.println("\\DocAuthor{" + author + "}");
-		writer.println("\\fancyfoot[C]{\\copyright\\, Gutenberg}");
+		Path           preamble = this.bankRoot.resolve("shared/preamble.tex") ;
+		BufferedReader reader = new BufferedReader(new FileReader(preamble.toFile()));
+		String[]       lines = this.buffToString(reader) ;
+		
+		for (int j = 0 ; j < lines.length ; j++) {
+			String    line = lines[j] ;
+			String    trimmed = line.trim() ;
+			
+			if (trimmed.startsWith("\\School")) {
+		       writer.println("\\School{" + school + "}") ;
+			} else if (trimmed.startsWith("\\DocAuthor")) {
+			   if (author != null) 
+				 writer.println("\\DocAuthor{" + author + "}") ;
+			   else
+				 writer.println("\\DocAuthor{Gutenberg}") ;
+			} else { // write whatever else is in preamble.tex
+			  writer.println(line) ;
+			}
+		}
 	}
 
 	private void beginDoc(PrintWriter writer) throws Exception {
