@@ -83,7 +83,7 @@ public class Locker {
 		return process.waitFor();
 	}
 
-	private final String SCAN_SIZE = "800x600";
-	private final String THUMB_SIZE = "200x200";
+	private final String SCAN_SIZE = "600x800";
+	private final String THUMB_SIZE = "120x120";
 	private final String IMG_FORMAT = ".jpg";
 }
