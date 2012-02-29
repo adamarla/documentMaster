@@ -85,5 +85,5 @@ public class Locker {
 
 	private final String SCAN_SIZE = "600x800";
 	private final String THUMB_SIZE = "120x120";
-	private final String IMG_FORMAT = ".jpg";
+	private final String IMG_FORMAT = ".jpeg";
 }
