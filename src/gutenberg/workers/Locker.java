@@ -6,7 +6,6 @@ import gutenberg.blocs.ManifestType;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
-import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class Locker {
@@ -20,8 +19,8 @@ public class Locker {
 		File[] scans = new File[scanIds.length * 2];
 		Path locker = new File(LOCKER).toPath();
 		for (int i = 0; i < scanIds.length; i++) {
-			scan = locker.resolve(scanIds[i] + IMG_FORMAT);
-			thumb = locker.resolve("thumb-" + scanIds[i] + IMG_FORMAT);
+			scan = locker.resolve(scanIds[i]);
+			thumb = locker.resolve("thumb-" + scanIds[i]);
 			scans[i] = scan.toFile();
 			scans[i + 1] = thumb.toFile();
 		}
@@ -32,28 +31,31 @@ public class Locker {
 		ManifestType manifest = new ManifestType();
 		manifest.setRoot(LOCKER);
 		Path locker = new File(LOCKER).toPath();
-		String scanFile = null, thumbFile = null;
-		for (int i = 0; i < scans.length; i++) {			
-			scanFile = scans[i].getName().split("\\.")[0] + IMG_FORMAT;
-			thumbFile = "thumb-" + scanFile;			
-			if (locker.resolve(scanFile).toFile().exists()) {
-				Files.delete(scans[i].toPath());
+		for (File scan:scans) {
+			if (locker.resolve(scan.getName()).toFile().exists()) {
+				if (!scan.delete()) {
+					throw new Exception("Received scan " 
+							+ scan.getName() + " could not be deleted");
+				}
 				continue;
 			}
-			
-			if (convert(scans[i].getPath(),
-					locker.resolve(scanFile).toString(), SCAN_SIZE) == 0 &&
-				convert(scans[i].getPath(), 
-					locker.resolve(thumbFile).toString(), THUMB_SIZE) == 0) {
-				
-				Files.delete(scans[i].toPath());
+						
+			if (convert(scan.getPath(),
+					locker.resolve(scan.getName()).toString(), SCAN_SIZE) == 0 &&
+				convert(scan.getPath(), 
+					locker.resolve("thumb-" + scan.getName()).toString(), THUMB_SIZE) == 0) {
+				if (!scan.delete()) {
+					throw new Exception("Received scan " 
+							+ scan.getName() + " could not be deleted");
+				}
 				
 			} else {
-				throw new Exception("Error resizing scan and thumbnail");
+				throw new Exception("Error resizing scan "
+						+ scan.getName());
 			}
 			
 			EntryType image = new EntryType();
-			image.setId(scanFile);
+			image.setId(scan.getName());
 			manifest.addImage(image);
 		}
 		return manifest;
@@ -65,7 +67,7 @@ public class Locker {
 			throws Exception {
 		ProcessBuilder pb = 
 				new ProcessBuilder("convert", src, "-resize", size, target);
-		System.out.println("[recieveScan]: convert " + src + " -resize " + size +
+		System.out.println("[receiveScan]: convert " + src + " -resize " + size +
 				" " + target);
 
 		pb.directory(new File(LOCKER));
@@ -85,5 +87,4 @@ public class Locker {
 
 	private final String SCAN_SIZE = "600x800";
 	private final String THUMB_SIZE = "120x120";
-	private final String IMG_FORMAT = ".jpeg";
 }
