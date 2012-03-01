@@ -139,7 +139,7 @@ public class Scribe {
 				} else if (trimmed.startsWith(question)) {
 					currQues += 1;
 				} else if (trimmed.startsWith(docAuthor)) {
-					line = "\\DocAuthor{" + name + "}"; // change the name
+					line = docAuthor + "{" + name + "}"; // change the name
 				} else if (totalPages == 0 && trimmed.startsWith("% num_pages")) { // A
 																					// TeX
 																					// comment
@@ -154,8 +154,10 @@ public class Scribe {
 				if (trimmed.startsWith(beginDocument)
 						|| trimmed.startsWith(beginQuestions)
 						|| trimmed.startsWith(docClass)
-						|| trimmed.startsWith("\\fancyfoot")
-						|| trimmed.startsWith("\\School")) {
+						|| trimmed.startsWith(fancyfoot)
+						|| trimmed.startsWith(school)
+						|| trimmed.startsWith(docAuthor)
+						|| trimmed.startsWith(usepackage)) {
 					if (firstPass)
 						composite.println(line);
 				} else if (trimmed.startsWith(endDocument)
@@ -213,23 +215,23 @@ public class Scribe {
 
 	private void writePreamble(PrintWriter writer, String school, String author)
 			throws Exception {
-		Path           preamble = this.bankRoot.resolve("shared/preamble.tex") ;
-		BufferedReader reader = new BufferedReader(new FileReader(preamble.toFile()));
-		String[]       lines = this.buffToString(reader) ;
-		
-		for (int j = 0 ; j < lines.length ; j++) {
-			String    line = lines[j] ;
-			String    trimmed = line.trim() ;
-			
-			if (trimmed.startsWith("\\School")) {
-		       writer.println("\\School{" + school + "}") ;
-			} else if (trimmed.startsWith("\\DocAuthor")) {
-			   if (author != null) 
-				 writer.println("\\DocAuthor{" + author + "}") ;
-			   else
-				 writer.println("\\DocAuthor{Gutenberg}") ;
+		Path preamble = this.bankRoot.resolve("shared/preamble.tex");
+		BufferedReader reader = new BufferedReader(new FileReader(
+				preamble.toFile()));
+		String[] lines = this.buffToString(reader);
+
+		for (int j = 0; j < lines.length; j++) {
+			String line = lines[j];
+			String trimmed = line.trim();
+
+			if (trimmed.startsWith(school)) {
+				writer.println(school + "{" + school + "}");
+			} else if (trimmed.startsWith(docAuthor)) {
+				if (author == null)
+					author = "Gutenberg";
+				writer.println(docAuthor + "{" + author + "}");
 			} else { // write whatever else is in preamble.tex
-			  writer.println(line) ;
+				writer.println(line);
 			}
 		}
 	}
@@ -393,8 +395,9 @@ public class Scribe {
 	private ManifestType manifest;
 	private final String printanswers = "\\printanswers",
 			docAuthor = "\\DocAuthor", newpage = "\\newpage",
+			usepackage = "\\usepackage", fancyfoot = "\\fancyfoot",
 			question = "\\question", beginDocument = "\\begin{document}",
-			beginQuestions = "\\begin{questions}",
+			beginQuestions = "\\begin{questions}", school = "\\School",
 			docClass = "\\documentclass", insertQR = "\\insertQR{QRC}",
 			endQuestions = "\\end{questions}", endDocument = "\\end{document}";
 
