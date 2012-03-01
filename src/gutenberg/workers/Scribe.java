@@ -156,7 +156,6 @@ public class Scribe {
 						|| trimmed.startsWith(docClass)
 						|| trimmed.startsWith(fancyfoot)
 						|| trimmed.startsWith(school)
-						|| trimmed.startsWith(docAuthor)
 						|| trimmed.startsWith(usepackage)) {
 					if (firstPass)
 						composite.println(line);
@@ -224,8 +223,8 @@ public class Scribe {
 			String line = lines[j];
 			String trimmed = line.trim();
 
-			if (trimmed.startsWith(school)) {
-				writer.println(school + "{" + school + "}");
+			if (trimmed.startsWith(this.school)) {
+				writer.println(this.school + "{" + school + "}");
 			} else if (trimmed.startsWith(docAuthor)) {
 				if (author == null)
 					author = "Gutenberg";
