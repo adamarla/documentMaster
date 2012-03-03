@@ -35,17 +35,17 @@ public class Locker {
 		
 		Path locker = new File(LOCKER).toPath();		
 		String scanId = null; 
-		boolean flip = false; 
+		boolean rotate = false; 
 		String[] tokens = null;
 		
 		for (File scan:scans) {
 			
 			tokens = scan.getName().split("\\.");
 			scanId = tokens[0];
-			flip = tokens[1].equals("1") ? true:false;
+			rotate = tokens[1].equals("1") ? true:false;
 			if (!Files.exists(locker.resolve(scanId))) {						
-				if (convert(scan.toPath(), locker.resolve(scanId), SCAN_SIZE, flip) != 0 ||
-					convert(scan.toPath(), locker.resolve("thumb-" + scanId), THUMB_SIZE, flip) != 0) {
+				if (convert(scan.toPath(), locker.resolve(scanId), SCAN_SIZE, rotate) != 0 ||
+					convert(scan.toPath(), locker.resolve("thumb-" + scanId), THUMB_SIZE, rotate) != 0) {
 					throw new Exception("Error running convert utility on "
 							+ scan.getName());
 				}
@@ -65,11 +65,11 @@ public class Locker {
 
 	private String LOCKER;
 	
-	private int convert(Path src, Path target, String size, boolean flip)
+	private int convert(Path src, Path target, String size, boolean rotate)
 			throws Exception {
 		ProcessBuilder pb = new ProcessBuilder();
-		if (flip) {
-			pb.command("convert", src.toString(), "-flip", "-resize", size, target.toString());
+		if (rotate) {
+			pb.command("convert", src.toString(), "-rotate", "180", "-resize", size, target.toString());
 		} else {
 			pb.command("convert", src.toString(), "-resize", size, target.toString());
 		}
