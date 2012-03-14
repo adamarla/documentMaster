@@ -167,6 +167,8 @@ public class Scribe {
 				}
 			}
 			single.close();
+			if (totalPages%2 != 0)
+				composite.println(newpage);
 			resetQuestionNumbering(composite);
 			resetPageNumbering(composite);
 		}

@@ -68,11 +68,12 @@ public class Locker {
 	private int convert(Path src, Path target, String size, boolean rotate)
 			throws Exception {
 		ProcessBuilder pb = new ProcessBuilder();
+		pb.command("convert", src.toString(), "-resize", size, "-type", "TrueColor");
 		if (rotate) {
-			pb.command("convert", src.toString(), "-rotate", "180", "-resize", size, target.toString());
-		} else {
-			pb.command("convert", src.toString(), "-resize", size, target.toString());
+			pb.command().add("-rotate");
+			pb.command().add("180");
 		}
+		pb.command().add(target.toString());
 		
 		pb.directory(new File(LOCKER));
 		pb.redirectErrorStream(true);
