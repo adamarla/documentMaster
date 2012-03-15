@@ -71,7 +71,7 @@ public class Locker {
 	}
 
 	/**
-	 * 
+	 * Expects pairs of diagonally opposite points 
 	 * @param scanId
 	 * @throws Exception 
 	 */
@@ -87,18 +87,37 @@ public class Locker {
 		graphics.setStroke(new BasicStroke(2.0f));
 		graphics.setColor(Color.RED);
 
-		PointType topLeft = null;
+		PointType topLeft = new PointType();
+		PointType firstPoint = null;
 		for (PointType point:points) {
-			if (topLeft != null) {
+			if (firstPoint != null) {
+				//the pairs of points are diagonally opposite,
+				//all we need to figure out is which one is which
+				if (firstPoint.getX() < point.getX()) {
+					if (firstPoint.getY() < point.getY()) {
+						//firstPoint is topLeft,						
+						topLeft = firstPoint;						
+					} else {
+						//firstPoint is bottomLeft,
+						topLeft.setX(firstPoint.getX());
+						topLeft.setY(point.getY());
+					}					
+				} else {
+					if (firstPoint.getY() < point.getY()) {
+						//firstPoint is topRight
+						topLeft.setX(point.getX());
+						topLeft.setY(firstPoint.getY());
+					} else {
+						//firstPoint is bottomRight
+						topLeft = point;
+					}										
+				}
 				graphics.drawRoundRect(topLeft.getX(), topLeft.getY(),
-						point.getX() - topLeft.getX(), 
-						point.getY() - topLeft.getY(), ARC_SIZE, ARC_SIZE);
-				System.out.println("draw " + topLeft.getX() + "," + topLeft.getY() + "," +
-						(point.getX() - topLeft.getX()) + "," +
-						(point.getY() - topLeft.getY()));
-				topLeft = null;
+						Math.abs(firstPoint.getX() - point.getX()),
+						Math.abs(firstPoint.getY() - point.getY()), ARC_SIZE, ARC_SIZE);				
+				firstPoint = null;
 			} else {
-				topLeft = point;
+				firstPoint = point;
 			}			
 		}
 		
