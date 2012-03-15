@@ -93,8 +93,13 @@ public class Locker {
 				graphics.drawRoundRect(topLeft.getX(), topLeft.getY(),
 						point.getX() - topLeft.getX(), 
 						point.getY() - topLeft.getY(), ARC_SIZE, ARC_SIZE);
-			}
-			topLeft = point;
+				System.out.println("draw " + topLeft.getX() + "," + topLeft.getY() + "," +
+						(point.getX() - topLeft.getX()) + "," +
+						(point.getY() - topLeft.getY()));
+				topLeft = null;
+			} else {
+				topLeft = point;
+			}			
 		}
 		
 		ImageIO.write(image, FORMAT, imageFile);
