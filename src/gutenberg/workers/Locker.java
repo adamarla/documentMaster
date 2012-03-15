@@ -2,12 +2,19 @@ package gutenberg.workers;
 
 import gutenberg.blocs.EntryType;
 import gutenberg.blocs.ManifestType;
+import gutenberg.blocs.PointType;
 
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
+
+import javax.imageio.ImageIO;
 
 public class Locker {
 
@@ -63,6 +70,37 @@ public class Locker {
 		return manifest;
 	}
 
+	/**
+	 * 
+	 * @param scanId
+	 * @throws Exception 
+	 */
+	public ManifestType annotate(String scanId, PointType[] points) throws Exception {
+		
+		ManifestType manifest = new ManifestType();
+		manifest.setRoot(scanId);
+		
+		Path locker = new File(LOCKER).toPath();
+		File imageFile = locker.resolve(scanId).toFile();
+		BufferedImage image = ImageIO.read(imageFile);
+		Graphics2D graphics = (Graphics2D) image.getGraphics();
+		graphics.setStroke(new BasicStroke(2.0f));
+		graphics.setColor(Color.RED);
+
+		PointType topLeft = null;
+		for (PointType point:points) {
+			if (topLeft != null) {
+				graphics.drawRoundRect(topLeft.getX(), topLeft.getY(),
+						point.getX() - topLeft.getX(), 
+						point.getY() - topLeft.getY(), ARC_SIZE, ARC_SIZE);
+			}
+			topLeft = point;
+		}
+		
+		ImageIO.write(image, FORMAT, imageFile);
+		return manifest;
+	}
+	
 	private String LOCKER;
 	
 	private int convert(Path src, Path target, String size, boolean rotate)
@@ -92,4 +130,6 @@ public class Locker {
 
 	private final String SCAN_SIZE = "600x800";
 	private final String THUMB_SIZE = "120x120";
+	private final int ARC_SIZE = 10;
+	private final String FORMAT = "JPG";
 }

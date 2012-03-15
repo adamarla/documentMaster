@@ -23,28 +23,57 @@ public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
 	/**
 	 * Auto generated method signature
 	 * 
-	 * @param viewScans
-	 * @return viewScansResponse
+	 * @param annotateScan6
+	 * @return annotateScanResponse7
 	 */
+
+	public gutenberg.blocs.AnnotateScanResponse annotateScan(
+			gutenberg.blocs.AnnotateScan annotateScan) {
+		Locker locker = null;
+		Config config = null;
+		ResponseType response = new ResponseType();
+		try {
+			config = new Config();
+			locker = new Locker(config);
+			String scanId = annotateScan.getAnnotateScan().getScanId();
+			PointType[] points = annotateScan.getAnnotateScan().getCoordinates();
+			response.setManifest(locker.annotate(scanId, points));
+		} catch (Exception e) {
+			e.printStackTrace();
+			response.setError(e.getMessage());
+		}
+		AnnotateScanResponse annotateScanResponse = new AnnotateScanResponse();
+		annotateScanResponse.setAnnotateScanResponse(response);
+		return annotateScanResponse;
+
+	}
+
+	/**
+	 * Auto generated method signature
+	 * 
+	 * @param viewScans0
+	 * @return viewScansResponse1
+	 */
+
 	public gutenberg.blocs.ViewScansResponse viewScans(
 			gutenberg.blocs.ViewScans viewScans) {
 		ATM atm = null;
 		Locker locker = null;
 		Config config = null;
 		ResponseType response = new ResponseType();
-		try {			
+		try {
 			EntryType[] scans = viewScans.getViewScans().getEntry();
 			String[] scanIds = new String[scans.length];
 			for (int i = 0; i < scans.length; i++) {
 				scanIds[i] = scans[i].getId();
 			}
-			
+
 			config = new Config();
 			atm = new ATM(config);
 			locker = new Locker(config);
 			File[] scanFiles = locker.fetch(scanIds);
 			response.setManifest(atm.deposit(scanFiles));
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			response.setError(e.getMessage());
@@ -72,13 +101,13 @@ public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
 			for (int i = 0; i < questionIds.length; i++) {
 				questionIds[i] = questions[i].getId();
 			}
-			
+
 			config = new Config();
 			atm = new ATM(config);
 			vault = new Vault(config);
 			File[] questionFiles = vault.getFiles(questionIds, ".jpg");
 			response.setManifest(atm.deposit(questionFiles));
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			response.setError(e.getMessage());
@@ -88,7 +117,6 @@ public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
 		return viewQuestionsResponse;
 	}
 
-	
 	/**
 	 * Auto generated method signature
 	 * 
@@ -162,7 +190,6 @@ public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
 		return assignQuizResponse;
 	}
 
-
 	/**
 	 * Auto generated method signature
 	 * 
@@ -180,14 +207,13 @@ public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
 			locker = new Locker(config);
 			File staging = new File(config.getPath(Resource.staging));
 			File[] listFiles = staging.listFiles();
-			response.setManifest(locker.save(listFiles));			
+			response.setManifest(locker.save(listFiles));
 		} catch (Exception e) {
-			e.printStackTrace();			
+			e.printStackTrace();
 			response.setError(e.getMessage());
 		}
 		ReceiveScansResponse receiveScansResponse = new ReceiveScansResponse();
 		receiveScansResponse.setReceiveScansResponse(response);
 		return receiveScansResponse;
 	}
-
 }

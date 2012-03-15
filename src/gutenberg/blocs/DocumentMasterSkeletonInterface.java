@@ -57,6 +57,20 @@
         /**
          * Auto generated method signature
          * 
+                                    * @param annotateScan
+         */
+
+        
+                public gutenberg.blocs.AnnotateScanResponse annotateScan
+                (
+                  gutenberg.blocs.AnnotateScan annotateScan
+                 )
+            ;
+        
+         
+        /**
+         * Auto generated method signature
+         * 
                                     * @param buildQuiz
          */
 

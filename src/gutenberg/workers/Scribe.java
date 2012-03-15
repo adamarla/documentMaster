@@ -167,8 +167,9 @@ public class Scribe {
 				}
 			}
 			single.close();
-			if (totalPages%2 != 0)
-				composite.println(newpage);
+			if (totalPages%2 != 0) {
+				insertBlankPage(composite);
+			}
 			resetQuestionNumbering(composite);
 			resetPageNumbering(composite);
 		}
@@ -253,6 +254,11 @@ public class Scribe {
 
 	private void resetQuestionNumbering(PrintWriter writer) throws Exception {
 		writer.println("\\setcounter{question}{0}");
+	}
+	
+	private void insertBlankPage(PrintWriter writer) { 
+		writer.println("\\centering This page is intentionally left blank. Use as needed.");
+		writer.println(newpage);
 	}
 
 	private int make(String operation, String quizId, String testpaperId)

@@ -4,7 +4,23 @@
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://gutenberg/blocs">
 	<wsdl:types>
 		<xsd:schema targetNamespace="http://gutenberg/blocs"
-			elementFormDefault="qualified">
+			elementFormDefault="qualified">			
+			<xsd:complexType name="entryType">
+				<xsd:sequence>
+					<xsd:element name="id" type="xsd:string"></xsd:element>
+					<xsd:element name="name" type="xsd:string" maxOccurs="1"
+						minOccurs="0">
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+
+			<xsd:complexType name="entryListType">
+				<xsd:sequence>
+					<xsd:element name="entry" type="tns:entryType"
+						maxOccurs="unbounded" minOccurs="1"></xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>			
+			
 			<xsd:complexType name="quizType">
 				<xsd:sequence>
 					<xsd:element name="quiz" type="tns:entryType"></xsd:element>
@@ -38,7 +54,6 @@
 				</xsd:sequence>
 			</xsd:complexType>
 
-
 			<xsd:complexType name="responseType">
 				<xsd:choice>
 					<xsd:element name="manifest" type="tns:manifestType">
@@ -55,6 +70,21 @@
 						maxOccurs="unbounded" minOccurs="1">
 					</xsd:element>
 				</xsd:sequence>
+			</xsd:complexType>
+			
+			<xsd:complexType name="annotationType">
+				<xsd:sequence>
+					<xsd:element name="scanId" type="xsd:string"/>
+					<xsd:element name="coordinates" type="tns:pointType" maxOccurs="unbounded" 
+					minOccurs="0"/>
+				</xsd:sequence>
+			</xsd:complexType>
+						
+			<xsd:complexType name="pointType">
+				<xsd:sequence>
+					<xsd:element name="x" type="xsd:int"/>
+					<xsd:element name="y" type="xsd:int"/>
+				</xsd:sequence>			
 			</xsd:complexType>
 			
 			<xsd:element name="buildQuiz" type="tns:quizType">
@@ -88,21 +118,11 @@
 			<xsd:element name="createQuestionResponse" type="tns:responseType">
 			</xsd:element>
 
-			<xsd:complexType name="entryType">
-				<xsd:sequence>
-					<xsd:element name="id" type="xsd:string"></xsd:element>
-					<xsd:element name="name" type="xsd:string" maxOccurs="1"
-						minOccurs="0">
-					</xsd:element>
-				</xsd:sequence>
-			</xsd:complexType>
+			<xsd:element name="annotateScan" type="tns:annotationType"></xsd:element>
 
-			<xsd:complexType name="entryListType">
-				<xsd:sequence>
-					<xsd:element name="entry" type="tns:entryType"
-						maxOccurs="unbounded" minOccurs="1"></xsd:element>
-				</xsd:sequence>
-			</xsd:complexType>
+			<xsd:element name="annotateScanResponse" type="tns:responseType">
+			</xsd:element>
+			
 		</xsd:schema>
 	</wsdl:types>
 	<wsdl:message name="buildQuiz">
@@ -141,6 +161,12 @@
 	<wsdl:message name="createQuestionResponse">
 		<wsdl:part name="parameters" element="tns:createQuestionResponse"></wsdl:part>
 	</wsdl:message>
+	<wsdl:message name="annotateScan">
+		<wsdl:part name="parameters" element="tns:annotateScan"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="annotateScanResponse">
+		<wsdl:part name="parameters" element="tns:annotateScanResponse"></wsdl:part>
+	</wsdl:message>
 	<wsdl:portType name="documentMaster">
 		<wsdl:operation name="buildQuiz">
 			<wsdl:input message="tns:buildQuiz" />
@@ -165,6 +191,10 @@
 		<wsdl:operation name="createQuestion">
 			<wsdl:input message="tns:createQuestion"></wsdl:input>
 			<wsdl:output message="tns:createQuestionResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="annotateScan">
+			<wsdl:input message="tns:annotateScan"></wsdl:input>
+			<wsdl:output message="tns:annotateScanResponse"></wsdl:output>
 		</wsdl:operation>
 	</wsdl:portType>
 	<wsdl:binding name="documentMasterSOAP" type="tns:documentMaster">
@@ -217,6 +247,15 @@
 		</wsdl:operation>
 		<wsdl:operation name="createQuestion">
 			<soap:operation soapAction="http://gutenberg/blocs/createQuestion" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="annotateScan">
+			<soap:operation soapAction="http://gutenberg/blocs/annotateScan" />
 			<wsdl:input>
 				<soap:body use="literal" />
 			</wsdl:input>
