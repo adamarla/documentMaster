@@ -21,6 +21,10 @@
             <actionMapping>http://gutenberg/blocs/createQuestion</actionMapping>
             <outputActionMapping>http://gutenberg/blocs/documentMaster/createQuestionResponse</outputActionMapping>
         </operation>
+        <operation name="annotateScan" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://gutenberg/blocs">
+            <actionMapping>http://gutenberg/blocs/annotateScan</actionMapping>
+            <outputActionMapping>http://gutenberg/blocs/documentMaster/annotateScanResponse</outputActionMapping>
+        </operation>
         <operation name="buildQuiz" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://gutenberg/blocs">
             <actionMapping>http://gutenberg/blocs/buildQuiz</actionMapping>
             <outputActionMapping>http://gutenberg/blocs/documentMaster/buildQuizResponse</outputActionMapping>

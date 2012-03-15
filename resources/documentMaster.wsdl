@@ -1,7 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <wsdl:definitions targetNamespace="http://gutenberg/blocs" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://gutenberg/blocs" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
   <wsdl:types>
-    <xsd:schema elementFormDefault="qualified" targetNamespace="http://gutenberg/blocs">
+    <xsd:schema elementFormDefault="qualified" targetNamespace="http://gutenberg/blocs">			
+			<xsd:complexType name="entryType">
+				<xsd:sequence>
+					<xsd:element name="id" type="xsd:string"/>
+					<xsd:element maxOccurs="1" minOccurs="0" name="name" type="xsd:string">
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+
+			<xsd:complexType name="entryListType">
+				<xsd:sequence>
+					<xsd:element maxOccurs="unbounded" minOccurs="1" name="entry" type="tns:entryType"/>
+				</xsd:sequence>
+			</xsd:complexType>			
+			
 			<xsd:complexType name="quizType">
 				<xsd:sequence>
 					<xsd:element name="quiz" type="tns:entryType"/>
@@ -31,7 +45,6 @@
 				</xsd:sequence>
 			</xsd:complexType>
 
-
 			<xsd:complexType name="responseType">
 				<xsd:choice>
 					<xsd:element name="manifest" type="tns:manifestType">
@@ -47,6 +60,20 @@
 					<xsd:element maxOccurs="unbounded" minOccurs="1" name="students" type="tns:entryType">
 					</xsd:element>
 				</xsd:sequence>
+			</xsd:complexType>
+			
+			<xsd:complexType name="annotationType">
+				<xsd:sequence>
+					<xsd:element name="scanId" type="xsd:string"/>
+					<xsd:element maxOccurs="unbounded" minOccurs="0" name="coordinates" type="tns:pointType"/>
+				</xsd:sequence>
+			</xsd:complexType>
+						
+			<xsd:complexType name="pointType">
+				<xsd:sequence>
+					<xsd:element name="x" type="xsd:int"/>
+					<xsd:element name="y" type="xsd:int"/>
+				</xsd:sequence>			
 			</xsd:complexType>
 			
 			<xsd:element name="buildQuiz" type="tns:quizType">
@@ -80,59 +107,59 @@
 			<xsd:element name="createQuestionResponse" type="tns:responseType">
 			</xsd:element>
 
-			<xsd:complexType name="entryType">
-				<xsd:sequence>
-					<xsd:element name="id" type="xsd:string"/>
-					<xsd:element maxOccurs="1" minOccurs="0" name="name" type="xsd:string">
-					</xsd:element>
-				</xsd:sequence>
-			</xsd:complexType>
+			<xsd:element name="annotateScan" type="tns:annotationType"/>
 
-			<xsd:complexType name="entryListType">
-				<xsd:sequence>
-					<xsd:element maxOccurs="unbounded" minOccurs="1" name="entry" type="tns:entryType"/>
-				</xsd:sequence>
-			</xsd:complexType>
+			<xsd:element name="annotateScanResponse" type="tns:responseType">
+			</xsd:element>
+			
 		</xsd:schema>
   </wsdl:types>
   <wsdl:message name="buildQuiz">
     <wsdl:part name="parameters" element="tns:buildQuiz">
     </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="receiveScansResponse">
-    <wsdl:part name="parameters" element="tns:receiveScansResponse">
-    </wsdl:part>
-  </wsdl:message>
   <wsdl:message name="buildQuizResponse">
     <wsdl:part name="parameters" element="tns:buildQuizResponse">
-    </wsdl:part>
-  </wsdl:message>
-  <wsdl:message name="viewScans">
-    <wsdl:part name="parameters" element="tns:viewScans">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="viewQuestionsResponse">
     <wsdl:part name="parameters" element="tns:viewQuestionsResponse">
     </wsdl:part>
   </wsdl:message>
+  <wsdl:message name="viewScans">
+    <wsdl:part name="parameters" element="tns:viewScans">
+    </wsdl:part>
+  </wsdl:message>
   <wsdl:message name="createQuestion">
     <wsdl:part name="parameters" element="tns:createQuestion">
     </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="createQuestionResponse">
-    <wsdl:part name="parameters" element="tns:createQuestionResponse">
-    </wsdl:part>
-  </wsdl:message>
-  <wsdl:message name="receiveScans">
-    <wsdl:part name="parameters" element="tns:receiveScans">
+  <wsdl:message name="assignQuizResponse">
+    <wsdl:part name="parameters" element="tns:assignQuizResponse">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="viewScansResponse">
     <wsdl:part name="parameters" element="tns:viewScansResponse">
     </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="assignQuizResponse">
-    <wsdl:part name="parameters" element="tns:assignQuizResponse">
+  <wsdl:message name="receiveScans">
+    <wsdl:part name="parameters" element="tns:receiveScans">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="receiveScansResponse">
+    <wsdl:part name="parameters" element="tns:receiveScansResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="annotateScan">
+    <wsdl:part name="parameters" element="tns:annotateScan">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="createQuestionResponse">
+    <wsdl:part name="parameters" element="tns:createQuestionResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="annotateScanResponse">
+    <wsdl:part name="parameters" element="tns:annotateScanResponse">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="viewQuestions">
@@ -178,6 +205,12 @@
       <wsdl:input message="tns:createQuestion">
     </wsdl:input>
       <wsdl:output message="tns:createQuestionResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="annotateScan">
+      <wsdl:input message="tns:annotateScan">
+    </wsdl:input>
+      <wsdl:output message="tns:annotateScanResponse">
     </wsdl:output>
     </wsdl:operation>
   </wsdl:portType>
@@ -230,6 +263,15 @@
     </wsdl:operation>
     <wsdl:operation name="createQuestion">
       <soap:operation soapAction="http://gutenberg/blocs/createQuestion"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="annotateScan">
+      <soap:operation soapAction="http://gutenberg/blocs/annotateScan"/>
       <wsdl:input>
         <soap:body use="literal"/>
       </wsdl:input>
