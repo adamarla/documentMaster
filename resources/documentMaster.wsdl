@@ -76,6 +76,21 @@
 				</xsd:sequence>			
 			</xsd:complexType>
 			
+			<xsd:complexType name="questionTagsType">
+				<xsd:sequence>
+					<xsd:element name="id" type="xsd:string"/>
+					<xsd:element name="marks" type="xsd:int"/>
+					<xsd:element name="length" type="tns:lengthType"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			
+			<xsd:simpleType name="lengthType">
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="fullpage"/>
+					<xsd:enumeration value="halfpage"/>
+				</xsd:restriction>
+			</xsd:simpleType>
+			
 			<xsd:element name="buildQuiz" type="tns:quizType">
 			</xsd:element>
 			<xsd:element name="buildQuizResponse" type="tns:responseType">
@@ -110,6 +125,11 @@
 			<xsd:element name="annotateScan" type="tns:annotationType"/>
 
 			<xsd:element name="annotateScanResponse" type="tns:responseType">
+			</xsd:element>
+
+			<xsd:element name="tagQuestion" type="tns:questionTagsType"/>
+
+			<xsd:element name="tagQuestionResponse" type="tns:responseType">
 			</xsd:element>
 			
 		</xsd:schema>
@@ -156,6 +176,14 @@
   </wsdl:message>
   <wsdl:message name="createQuestionResponse">
     <wsdl:part name="parameters" element="tns:createQuestionResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="tagQuestionResponse">
+    <wsdl:part name="parameters" element="tns:tagQuestionResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="tagQuestion">
+    <wsdl:part name="parameters" element="tns:tagQuestion">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="annotateScanResponse">
@@ -211,6 +239,12 @@
       <wsdl:input message="tns:annotateScan">
     </wsdl:input>
       <wsdl:output message="tns:annotateScanResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="tagQuestion">
+      <wsdl:input message="tns:tagQuestion">
+    </wsdl:input>
+      <wsdl:output message="tns:tagQuestionResponse">
     </wsdl:output>
     </wsdl:operation>
   </wsdl:portType>
@@ -272,6 +306,15 @@
     </wsdl:operation>
     <wsdl:operation name="annotateScan">
       <soap:operation soapAction="http://gutenberg/blocs/annotateScan"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="tagQuestion">
+      <soap:operation soapAction="http://gutenberg/blocs/tagQuestion"/>
       <wsdl:input>
         <soap:body use="literal"/>
       </wsdl:input>

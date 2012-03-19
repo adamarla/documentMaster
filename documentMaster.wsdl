@@ -90,16 +90,15 @@
 			<xsd:complexType name="questionTagsType">
 				<xsd:sequence>
 					<xsd:element name="id" type="xsd:string"/>
-					<xsd:element name="points" type="xsd:int"/>
+					<xsd:element name="marks" type="xsd:int"/>
 					<xsd:element name="length" type="tns:lengthType"/>
 				</xsd:sequence>
 			</xsd:complexType>
 			
 			<xsd:simpleType name="lengthType">
 				<xsd:restriction base="xsd:string">
-					<xsd:enumeration value="full-page"/>
-					<xsd:enumeration value="half-page"/>
-					<xsd:enumeration value="mcq"/>
+					<xsd:enumeration value="fullpage"/>
+					<xsd:enumeration value="halfpage"/>
 				</xsd:restriction>
 			</xsd:simpleType>
 			

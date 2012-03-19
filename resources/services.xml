@@ -13,6 +13,10 @@
             <actionMapping>http://gutenberg/blocs/viewScans</actionMapping>
             <outputActionMapping>http://gutenberg/blocs/documentMaster/viewScansResponse</outputActionMapping>
         </operation>
+        <operation name="tagQuestion" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://gutenberg/blocs">
+            <actionMapping>http://gutenberg/blocs/tagQuestion</actionMapping>
+            <outputActionMapping>http://gutenberg/blocs/documentMaster/tagQuestionResponse</outputActionMapping>
+        </operation>
         <operation name="viewQuestions" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://gutenberg/blocs">
             <actionMapping>http://gutenberg/blocs/viewQuestions</actionMapping>
             <outputActionMapping>http://gutenberg/blocs/documentMaster/viewQuestionsResponse</outputActionMapping>
