@@ -1,11 +1,17 @@
 package gutenberg.workers;
 
 import gutenberg.blocs.ManifestType;
+import gutenberg.blocs.QuestionTagsType;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 
 public class Vault {
@@ -27,7 +33,6 @@ public class Vault {
 	 * @throws Exception
 	 */
 	public String[] getContent(String id, String filter) throws Exception {
-		System.out.println("[vault] : Looking inside " + VAULT + "/" + id);
 		File directory = new File(VAULT + "/" + id);
 		File[] files = directory.listFiles(new NameFilter(filter));
 		String[] contents = new String[files.length];
@@ -88,6 +93,45 @@ public class Vault {
 		manifest.setRoot(questionDir.toString());
 		return manifest;
 	}
+	
+	/**
+	 * 
+	 * @param tags - properties to be encoded in question.tex file
+	 * @return Manifest
+	 * @throws Exception 
+	 */
+	public ManifestType tagQuestion(QuestionTagsType tags) throws Exception {
+		
+		String id = tags.getId();
+		String marks = String.format(tagFormat, tags.getMarks());
+		String length = String.format(tagFormat, tags.getLength());
+		
+		Path questionTex = new File(VAULT).toPath().resolve(id).resolve(texFile);
+		BufferedReader reader = new BufferedReader(new FileReader(questionTex.toFile()));
+		
+		Path questionTexTmp = questionTex.resolveSibling(texFile + ".tmp");
+		PrintWriter writer = new PrintWriter(new FileWriter(questionTexTmp.toFile()));
+		
+		String line = null;
+		while ((line = reader.readLine()) != null) {
+			if (line.trim().startsWith(questionTag)) {
+				if (!line.contains(" ")) {
+					throw new Exception("Cannot tag an blank question");
+				}				
+				line = questionTag + marks + line.substring(line.indexOf(' '));
+			} else if (line.trim().startsWith(solutionTag)) {
+				line = solutionTag + length;
+			}
+			writer.println(line);
+		}
+		writer.flush();
+		writer.close();
+		Files.move(questionTexTmp, questionTex, StandardCopyOption.REPLACE_EXISTING);
+		
+		ManifestType manifest = new ManifestType();
+		manifest.setRoot(questionTex.getParent().getFileName().toString());
+		return manifest;
+	}
 
 	public String getPath() throws Exception {
 		return this.VAULT;
@@ -95,4 +139,5 @@ public class Vault {
 
 	private String VAULT, SHARED;
 	private final String texFile = "question.tex", plotFile = "figure.gnuplot", makeFile = "individual.mk";
+	private final String questionTag = "\\question", solutionTag = "\\begin{solution}", tagFormat = "[\\%s]";
 }

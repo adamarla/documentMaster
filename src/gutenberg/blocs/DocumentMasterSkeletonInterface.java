@@ -29,6 +29,20 @@
         /**
          * Auto generated method signature
          * 
+                                    * @param tagQuestion
+         */
+
+        
+                public gutenberg.blocs.TagQuestionResponse tagQuestion
+                (
+                  gutenberg.blocs.TagQuestion tagQuestion
+                 )
+            ;
+        
+         
+        /**
+         * Auto generated method signature
+         * 
                                     * @param viewQuestions
          */
 
