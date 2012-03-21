@@ -99,6 +99,7 @@
 				<xsd:restriction base="xsd:string">
 					<xsd:enumeration value="fullpage"/>
 					<xsd:enumeration value="halfpage"/>
+					<xsd:enumeration value="mcq"/>
 				</xsd:restriction>
 			</xsd:simpleType>
 			

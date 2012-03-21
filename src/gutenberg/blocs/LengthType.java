@@ -52,11 +52,17 @@
                                     public static final java.lang.String _halfpage =
                                         org.apache.axis2.databinding.utils.ConverterUtil.convertToString("halfpage");
                                 
+                                    public static final java.lang.String _mcq =
+                                        org.apache.axis2.databinding.utils.ConverterUtil.convertToString("mcq");
+                                
                                 public static final LengthType fullpage =
                                     new LengthType(_fullpage,true);
                             
                                 public static final LengthType halfpage =
                                     new LengthType(_halfpage,true);
+                            
+                                public static final LengthType mcq =
+                                    new LengthType(_mcq,true);
                             
 
                                 public java.lang.String getValue() { return localLengthType;}
