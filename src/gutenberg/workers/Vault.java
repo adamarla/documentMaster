@@ -103,8 +103,8 @@ public class Vault {
 	public ManifestType tagQuestion(QuestionTagsType tags) throws Exception {
 		
 		String id = tags.getId();
-		String marks = String.format(tagFormat, tags.getMarks());
-		String length = String.format(tagFormat, tags.getLength());
+		String marks = String.format(marksFormat, tags.getMarks());
+		String length = String.format(lengthFormat, tags.getLength());
 		
 		Path questionTex = new File(VAULT).toPath().resolve(id).resolve(texFile);
 		BufferedReader reader = new BufferedReader(new FileReader(questionTex.toFile()));
@@ -116,7 +116,7 @@ public class Vault {
 		while ((line = reader.readLine()) != null) {
 			if (line.trim().startsWith(questionTag)) {
 				if (!line.contains(" ")) {
-					throw new Exception("Cannot tag an blank question");
+					throw new Exception("[tagQuestion]: Cannot tag a blank question");
 				}				
 				line = questionTag + marks + line.substring(line.indexOf(' '));
 			} else if (line.trim().startsWith(solutionTag)) {
@@ -139,5 +139,8 @@ public class Vault {
 
 	private String VAULT, SHARED;
 	private final String texFile = "question.tex", plotFile = "figure.gnuplot", makeFile = "individual.mk";
-	private final String questionTag = "\\question", solutionTag = "\\begin{solution}", tagFormat = "[\\%s]";
+	private final String questionTag = "\\question", 
+                       solutionTag = "\\begin{solution}", 
+                       lengthFormat = "[\\%s]",
+                       marksFormat = "[%s]" ;
 }
