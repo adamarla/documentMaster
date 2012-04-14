@@ -57,6 +57,20 @@
         /**
          * Auto generated method signature
          * 
+                                    * @param writeQuestion
+         */
+
+        
+                public gutenberg.blocs.WriteQuestionResponse writeQuestion
+                (
+                  gutenberg.blocs.WriteQuestion writeQuestion
+                 )
+            ;
+        
+         
+        /**
+         * Auto generated method signature
+         * 
                                     * @param createQuestion
          */
 

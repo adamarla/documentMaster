@@ -2,12 +2,14 @@ package gutenberg.workers;
 
 import gutenberg.blocs.ManifestType;
 import gutenberg.blocs.QuestionTagsType;
+import gutenberg.blocs.QuestionType;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -131,6 +133,58 @@ public class Vault {
 		ManifestType manifest = new ManifestType();
 		manifest.setRoot(questionTex.getParent().getFileName().toString());
 		return manifest;
+	}
+	
+	public ManifestType writeQuestion(QuestionType question) throws Exception {
+		
+		QuestionTagsType tags = question.getTags();
+		String questionTex = question.getQuestion();
+		String marginnoteTex = question.getMarginnotes();
+		String solutionTex = question.getSolution();
+		
+		StringBuilder sb = new StringBuilder();		
+		
+		sb.append(questionTag).append(String.format(marksFormat, tags.getMarks()));
+		sb.append(" ").append(questionTex).append("\n");
+		sb.append("\\ifprintanswers\n");
+		if (marginnoteTex.length() != 0) {
+			sb.append("  \\marginnote {").append(marginnoteTex).append("}\n");
+		}
+		sb.append("\\fi\n");		
+
+		sb.append(solutionTag).append(String.format(lengthFormat, tags.getLength())).append("\n");
+		sb.append(solutionTex).append("\n");
+		sb.append("\\end{solution}");
+		
+		File questionTexFile = new File(VAULT + "/preview/question.tex");
+		PrintWriter writer = new PrintWriter(new FileWriter(questionTexFile));
+		
+		writer.write(sb.toString());
+		writer.close();
+		
+		ProcessBuilder pb = new ProcessBuilder("make");
+		pb.directory(questionTexFile.getParentFile());
+		pb.redirectErrorStream(true);
+		
+		Process process = pb.start();
+		BufferedReader messages = new BufferedReader(new InputStreamReader(
+				process.getInputStream()));
+		
+		String line = null;
+		while ((line = messages.readLine()) != null) {
+			System.out.println(line);
+		}
+		
+		int returnCode = process.waitFor();
+		System.out.println("[writeQuestion]: Return Code: " + returnCode);
+		
+		if (returnCode != 0) {
+			throw new Exception("[writeQuestion]: make failed with code " + returnCode);
+		}
+		
+		ManifestType manifest = new ManifestType();		
+		manifest.setRoot(questionTexFile.getName());
+		return manifest;		
 	}
 
 	public String getPath() throws Exception {

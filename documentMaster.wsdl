@@ -103,6 +103,15 @@
 				</xsd:restriction>
 			</xsd:simpleType>
 			
+			<xsd:complexType name="questionType">
+				<xsd:sequence>
+					<xsd:element name="question" type="xsd:string"/>
+					<xsd:element name="marginnotes" type="xsd:string"/>
+					<xsd:element name="solution" type="xsd:string"/>
+					<xsd:element name="tags" type="tns:questionTagsType"/>
+				</xsd:sequence>
+			</xsd:complexType>			
+			
 			<xsd:element name="buildQuiz" type="tns:quizType">
 			</xsd:element>
 			<xsd:element name="buildQuizResponse" type="tns:responseType">
@@ -142,6 +151,11 @@
 			<xsd:element name="tagQuestion" type="tns:questionTagsType"></xsd:element>
 
 			<xsd:element name="tagQuestionResponse" type="tns:responseType">
+			</xsd:element>
+			
+			<xsd:element name="writeQuestion" type="tns:questionType"></xsd:element>
+
+			<xsd:element name="writeQuestionResponse" type="tns:responseType">
 			</xsd:element>
 			
 		</xsd:schema>
@@ -194,6 +208,12 @@
 	<wsdl:message name="tagQuestionResponse">
 		<wsdl:part name="parameters" element="tns:tagQuestionResponse"></wsdl:part>
 	</wsdl:message>
+	<wsdl:message name="writeQuestion">
+		<wsdl:part name="parameters" element="tns:writeQuestion"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="writeQuestionResponse">
+		<wsdl:part name="parameters" element="tns:writeQuestionResponse"></wsdl:part>
+	</wsdl:message>
 	<wsdl:portType name="documentMaster">
 		<wsdl:operation name="buildQuiz">
 			<wsdl:input message="tns:buildQuiz" />
@@ -226,6 +246,10 @@
 		<wsdl:operation name="tagQuestion">
 			<wsdl:input message="tns:tagQuestion"></wsdl:input>
 			<wsdl:output message="tns:tagQuestionResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="writeQuestion">
+			<wsdl:input message="tns:writeQuestion"></wsdl:input>
+			<wsdl:output message="tns:writeQuestionResponse"></wsdl:output>
 		</wsdl:operation>
 	</wsdl:portType>
 	<wsdl:binding name="documentMasterSOAP" type="tns:documentMaster">
@@ -296,6 +320,15 @@
 		</wsdl:operation>
 		<wsdl:operation name="tagQuestion">
 			<soap:operation soapAction="http://gutenberg/blocs/tagQuestion" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="writeQuestion">
+			<soap:operation soapAction="http://gutenberg/blocs/writeQuestion" />
 			<wsdl:input>
 				<soap:body use="literal" />
 			</wsdl:input>

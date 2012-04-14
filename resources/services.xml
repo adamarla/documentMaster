@@ -21,6 +21,10 @@
             <actionMapping>http://gutenberg/blocs/viewQuestions</actionMapping>
             <outputActionMapping>http://gutenberg/blocs/documentMaster/viewQuestionsResponse</outputActionMapping>
         </operation>
+        <operation name="writeQuestion" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://gutenberg/blocs">
+            <actionMapping>http://gutenberg/blocs/writeQuestion</actionMapping>
+            <outputActionMapping>http://gutenberg/blocs/documentMaster/writeQuestionResponse</outputActionMapping>
+        </operation>
         <operation name="createQuestion" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://gutenberg/blocs">
             <actionMapping>http://gutenberg/blocs/createQuestion</actionMapping>
             <outputActionMapping>http://gutenberg/blocs/documentMaster/createQuestionResponse</outputActionMapping>
