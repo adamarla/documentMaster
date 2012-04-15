@@ -79,8 +79,8 @@
 			<xsd:complexType name="questionTagsType">
 				<xsd:sequence>
 					<xsd:element name="id" type="xsd:string"/>
-					<xsd:element name="marks" type="xsd:int"/>
-					<xsd:element name="length" type="tns:lengthType"/>
+					<xsd:element maxOccurs="unbounded" name="marks" type="xsd:int"/>
+					<xsd:element maxOccurs="unbounded" name="length" type="tns:lengthType"/>
 				</xsd:sequence>
 			</xsd:complexType>
 			

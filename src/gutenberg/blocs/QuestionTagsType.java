@@ -56,63 +56,121 @@
 
                         /**
                         * field for Marks
+                        * This was an Array!
                         */
 
                         
-                                    protected int localMarks ;
+                                    protected int[] localMarks ;
                                 
 
                            /**
                            * Auto generated getter method
-                           * @return int
+                           * @return int[]
                            */
-                           public  int getMarks(){
+                           public  int[] getMarks(){
                                return localMarks;
                            }
 
                            
                         
-                            /**
-                               * Auto generated setter method
-                               * @param param Marks
-                               */
-                               public void setMarks(int param){
-                            
-                                            this.localMarks=param;
-                                    
 
-                               }
-                            
+
+                               
+                              /**
+                               * validate the array for Marks
+                               */
+                              protected void validateMarks(int[] param){
+                             
+                              if ((param != null) && (param.length < 1)){
+                                throw new java.lang.RuntimeException();
+                              }
+                              
+                              }
+
+
+                             /**
+                              * Auto generated setter method
+                              * @param param Marks
+                              */
+                              public void setMarks(int[] param){
+                              
+                                   validateMarks(param);
+
+                               
+                                      this.localMarks=param;
+                              }
+
+                               
+                             
 
                         /**
                         * field for Length
+                        * This was an Array!
                         */
 
                         
-                                    protected gutenberg.blocs.LengthType localLength ;
+                                    protected gutenberg.blocs.LengthType[] localLength ;
                                 
 
                            /**
                            * Auto generated getter method
-                           * @return gutenberg.blocs.LengthType
+                           * @return gutenberg.blocs.LengthType[]
                            */
-                           public  gutenberg.blocs.LengthType getLength(){
+                           public  gutenberg.blocs.LengthType[] getLength(){
                                return localLength;
                            }
 
                            
                         
-                            /**
-                               * Auto generated setter method
-                               * @param param Length
-                               */
-                               public void setLength(gutenberg.blocs.LengthType param){
-                            
-                                            this.localLength=param;
-                                    
 
-                               }
+
+                               
+                              /**
+                               * validate the array for Length
+                               */
+                              protected void validateLength(gutenberg.blocs.LengthType[] param){
+                             
+                              if ((param != null) && (param.length < 1)){
+                                throw new java.lang.RuntimeException();
+                              }
+                              
+                              }
+
+
+                             /**
+                              * Auto generated setter method
+                              * @param param Length
+                              */
+                              public void setLength(gutenberg.blocs.LengthType[] param){
+                              
+                                   validateLength(param);
+
+                               
+                                      this.localLength=param;
+                              }
+
+                               
+                             
+                             /**
+                             * Auto generated add method for the array for convenience
+                             * @param param gutenberg.blocs.LengthType
+                             */
+                             public void addLength(gutenberg.blocs.LengthType param){
+                                   if (localLength == null){
+                                   localLength = new gutenberg.blocs.LengthType[]{};
+                                   }
+
                             
+
+                               java.util.List list =
+                            org.apache.axis2.databinding.utils.ConverterUtil.toList(localLength);
+                               list.add(param);
+                               this.localLength =
+                             (gutenberg.blocs.LengthType[])list.toArray(
+                            new gutenberg.blocs.LengthType[list.size()]);
+
+                             }
+                             
 
      
      
@@ -191,25 +249,50 @@
                                     
                                    xmlWriter.writeEndElement();
                              
-                                    namespace = "http://gutenberg/blocs";
-                                    writeStartElement(null, namespace, "marks", xmlWriter);
-                             
-                                               if (localMarks==java.lang.Integer.MIN_VALUE) {
-                                           
-                                                         throw new org.apache.axis2.databinding.ADBException("marks cannot be null!!");
-                                                      
-                                               } else {
-                                                    xmlWriter.writeCharacters(org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localMarks));
-                                               }
-                                    
-                                   xmlWriter.writeEndElement();
-                             
-                                            if (localLength==null){
-                                                 throw new org.apache.axis2.databinding.ADBException("length cannot be null!!");
-                                            }
-                                           localLength.serialize(new javax.xml.namespace.QName("http://gutenberg/blocs","length"),
-                                               xmlWriter);
+                             if (localMarks!=null) {
+                                   namespace = "http://gutenberg/blocs";
+                                   for (int i = 0;i < localMarks.length;i++){
                                         
+                                                   if (localMarks[i]!=java.lang.Integer.MIN_VALUE) {
+                                               
+                                                writeStartElement(null, namespace, "marks", xmlWriter);
+
+                                            
+                                                xmlWriter.writeCharacters(org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localMarks[i]));
+                                                xmlWriter.writeEndElement();
+                                            
+                                                } else {
+                                                   
+                                                           throw new org.apache.axis2.databinding.ADBException("marks cannot be null!!");
+                                                       
+                                                }
+
+                                   }
+                             } else {
+                                 
+                                         throw new org.apache.axis2.databinding.ADBException("marks cannot be null!!");
+                                    
+                             }
+
+                        
+                                       if (localLength!=null){
+                                            for (int i = 0;i < localLength.length;i++){
+                                                if (localLength[i] != null){
+                                                 localLength[i].serialize(new javax.xml.namespace.QName("http://gutenberg/blocs","length"),
+                                                           xmlWriter);
+                                                } else {
+                                                   
+                                                           throw new org.apache.axis2.databinding.ADBException("length cannot be null!!");
+                                                    
+                                                }
+
+                                            }
+                                     } else {
+                                        
+                                               throw new org.apache.axis2.databinding.ADBException("length cannot be null!!");
+                                        
+                                    }
+                                 
                     xmlWriter.writeEndElement();
                
 
@@ -404,21 +487,45 @@
                                            throw new org.apache.axis2.databinding.ADBException("id cannot be null!!");
                                         }
                                     
-                                      elementList.add(new javax.xml.namespace.QName("http://gutenberg/blocs",
-                                                                      "marks"));
-                                 
-                                elementList.add(
-                                   org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localMarks));
-                            
-                            elementList.add(new javax.xml.namespace.QName("http://gutenberg/blocs",
-                                                                      "length"));
-                            
-                            
-                                    if (localLength==null){
-                                         throw new org.apache.axis2.databinding.ADBException("length cannot be null!!");
-                                    }
-                                    elementList.add(localLength);
+                            if (localMarks!=null){
+                                  for (int i = 0;i < localMarks.length;i++){
+                                      
+                                          elementList.add(new javax.xml.namespace.QName("http://gutenberg/blocs",
+                                                                                                                       "marks"));
+                                          elementList.add(
+                                          org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localMarks[i]));
+
+                                      
+
+                                  }
+                            } else {
+                              
+                                    throw new org.apache.axis2.databinding.ADBException("marks cannot be null!!");
                                 
+                            }
+
+                        
+                             if (localLength!=null) {
+                                 for (int i = 0;i < localLength.length;i++){
+
+                                    if (localLength[i] != null){
+                                         elementList.add(new javax.xml.namespace.QName("http://gutenberg/blocs",
+                                                                          "length"));
+                                         elementList.add(localLength[i]);
+                                    } else {
+                                        
+                                               throw new org.apache.axis2.databinding.ADBException("length cannot be null !!");
+                                            
+                                    }
+
+                                 }
+                             } else {
+                                 
+                                        throw new org.apache.axis2.databinding.ADBException("length cannot be null!!");
+                                    
+                             }
+
+                        
 
                 return new org.apache.axis2.databinding.utils.reader.ADBXMLStreamReaderImpl(qName, elementList.toArray(), attribList.toArray());
             
@@ -494,6 +601,10 @@
                     
                     reader.next();
                 
+                        java.util.ArrayList list2 = new java.util.ArrayList();
+                    
+                        java.util.ArrayList list3 = new java.util.ArrayList();
+                    
                                     
                                     while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
                                 
@@ -518,13 +629,41 @@
                                 
                                     if (reader.isStartElement() && new javax.xml.namespace.QName("http://gutenberg/blocs","marks").equals(reader.getName())){
                                 
-                                    java.lang.String content = reader.getElementText();
                                     
-                                              object.setMarks(
-                                                    org.apache.axis2.databinding.utils.ConverterUtil.convertToInt(content));
-                                              
-                                        reader.next();
                                     
+                                    // Process the array and step past its final element's end.
+                                    list2.add(reader.getElementText());
+                                            
+                                            //loop until we find a start element that is not part of this array
+                                            boolean loopDone2 = false;
+                                            while(!loopDone2){
+                                                // Ensure we are at the EndElement
+                                                while (!reader.isEndElement()){
+                                                    reader.next();
+                                                }
+                                                // Step out of this element
+                                                reader.next();
+                                                // Step to next element event.
+                                                while (!reader.isStartElement() && !reader.isEndElement())
+                                                    reader.next();
+                                                if (reader.isEndElement()){
+                                                    //two continuous end elements means we are exiting the xml structure
+                                                    loopDone2 = true;
+                                                } else {
+                                                    if (new javax.xml.namespace.QName("http://gutenberg/blocs","marks").equals(reader.getName())){
+                                                         list2.add(reader.getElementText());
+                                                        
+                                                    }else{
+                                                        loopDone2 = true;
+                                                    }
+                                                }
+                                            }
+                                            // call the converter utility  to convert and set the array
+                                            
+                                            object.setMarks((int[])
+                                                org.apache.axis2.databinding.utils.ConverterUtil.convertToArray(
+                                                            int.class,list2));
+                                                
                               }  // End of if for expected property start element
                                 
                                 else{
@@ -537,10 +676,41 @@
                                 
                                     if (reader.isStartElement() && new javax.xml.namespace.QName("http://gutenberg/blocs","length").equals(reader.getName())){
                                 
-                                                object.setLength(gutenberg.blocs.LengthType.Factory.parse(reader));
-                                              
-                                        reader.next();
                                     
+                                    
+                                    // Process the array and step past its final element's end.
+                                    list3.add(gutenberg.blocs.LengthType.Factory.parse(reader));
+                                                                
+                                                        //loop until we find a start element that is not part of this array
+                                                        boolean loopDone3 = false;
+                                                        while(!loopDone3){
+                                                            // We should be at the end element, but make sure
+                                                            while (!reader.isEndElement())
+                                                                reader.next();
+                                                            // Step out of this element
+                                                            reader.next();
+                                                            // Step to next element event.
+                                                            while (!reader.isStartElement() && !reader.isEndElement())
+                                                                reader.next();
+                                                            if (reader.isEndElement()){
+                                                                //two continuous end elements means we are exiting the xml structure
+                                                                loopDone3 = true;
+                                                            } else {
+                                                                if (new javax.xml.namespace.QName("http://gutenberg/blocs","length").equals(reader.getName())){
+                                                                    list3.add(gutenberg.blocs.LengthType.Factory.parse(reader));
+                                                                        
+                                                                }else{
+                                                                    loopDone3 = true;
+                                                                }
+                                                            }
+                                                        }
+                                                        // call the converter utility  to convert and set the array
+                                                        
+                                                        object.setLength((gutenberg.blocs.LengthType[])
+                                                            org.apache.axis2.databinding.utils.ConverterUtil.convertToArray(
+                                                                gutenberg.blocs.LengthType.class,
+                                                                list3));
+                                                            
                               }  // End of if for expected property start element
                                 
                                 else{

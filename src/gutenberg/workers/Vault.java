@@ -105,8 +105,8 @@ public class Vault {
 	public ManifestType tagQuestion(QuestionTagsType tags) throws Exception {
 		
 		String id = tags.getId();
-		String marks = String.format(marksFormat, tags.getMarks());
-		String length = String.format(lengthFormat, tags.getLength());
+		String marks = String.format(marksFormat, tags.getMarks()[0]);
+		String length = String.format(lengthFormat, tags.getLength()[0]);
 		
 		Path questionTex = new File(VAULT).toPath().resolve(id).resolve(texFile);
 		BufferedReader reader = new BufferedReader(new FileReader(questionTex.toFile()));
@@ -152,7 +152,7 @@ public class Vault {
 		}
 		sb.append("\\fi\n");		
 
-		sb.append(solutionTag).append(String.format(lengthFormat, tags.getLength())).append("\n");
+		sb.append(solutionTag).append(String.format(lengthFormat, tags.getLength()[0])).append("\n");
 		sb.append(solutionTex).append("\n");
 		sb.append("\\end{solution}");
 		
