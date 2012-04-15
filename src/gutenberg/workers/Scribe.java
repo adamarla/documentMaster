@@ -35,28 +35,22 @@ public class Scribe {
 		String quizId = quiz.getQuiz().getId();
 		Path quizDir = this.mint.resolve(quizId);
 		Path staging = quizDir.resolve("answer-key/staging");
-		// File staging = quizDir.resolve("answer-key/staging").toFile();
 
-		boolean failed = (this.make("Prepare", quizId, null) == 0) ? false
-				: true;
+		boolean failed = (this.make("Prepare", quizId, null) == 0)? false:true;
 		if (failed) {
-			throw new Exception(
-					"[scribe:quiz] : Sandbox creation failed ... ( quiz = "
-							+ quizId + " )");
+			throw new Exception("[scribe:quiz] : Sandbox creation failed ... (quiz = " + quizId + " )");
 		}
 
-		PrintWriter answerKey = new PrintWriter(staging.resolve(
-				"answer-key.tex").toFile());
+		PrintWriter answerKey = new PrintWriter(staging.resolve("answer-key.tex").toFile());
 		PageType[] pages = quiz.getPage();
 
 		// Write any information that might be pertinent during testpaper
 		// generation
 		// - like # of pages - as a comment right at the beginning
-		answerKey.println("% num_pages = " + pages.length);
+		answerKey.println("% num_pages = " + pages[pages.length-1].getNumber());
 
 		// Write the preamble & initial stuff into the answerKey
-		writePreamble(answerKey, quiz.getSchool().getName(), quiz.getTeacher()
-				.getName());
+		writePreamble(answerKey, quiz.getSchool().getName(), quiz.getTeacher().getName());
 		beginDoc(answerKey);
 		answerKey.println(printanswers);
 
@@ -94,14 +88,10 @@ public class Scribe {
 
 		String quizId = assignment.getQuiz().getId();
 		String testpaperId = assignment.getInstance().getId();
-		// String school = assignment.getQuiz().getName() ;
 
-		boolean failed = (this.make("Prepare", quizId, testpaperId) == 0) ? false
-				: true;
+		boolean failed = (this.make("Prepare", quizId, testpaperId) == 0)? false: true;
 		if (failed) {
-			throw new Exception(
-					"[scribe:testpaper] : Sandbox creation failed ... ( quiz = "
-							+ quizId + " )");
+			throw new Exception("[scribe:testpaper] : Sandbox creation failed ... ( quiz = " + quizId + " )");
 		}
 
 		int totalPages = 0;
@@ -120,7 +110,7 @@ public class Scribe {
 		for (int i = 0; i < students.length; i++) {
 			String name = students[i].getName();
 			String baseQR = QRCode(students[i], assignment);
-			int currQues = 1, currPage = 1;
+			int currQues = 1;
 			PrintWriter single = new PrintWriter(staging.resolve(
 					baseQR + ".tex").toFile());
 			boolean firstPass = (i == 0) ? true : false;
@@ -132,19 +122,14 @@ public class Scribe {
 				if (trimmed.startsWith(printanswers)) {
 					continue;
 				} else if (trimmed.startsWith(insertQR)) {
-					line = line.replace("QRC", baseQR + "-" + currQues + "-"
-							+ currPage + "-" + totalPages);
-				} else if (trimmed.startsWith(newpage)) {
-					currPage += 1;
+					line = line.replace("QRC", baseQR + "-" + currQues + "-" + pageNumber + "-" + totalPages);
 				} else if (trimmed.startsWith(question)) {
 					currQues += 1;
 				} else if (trimmed.startsWith(docAuthor)) {
 					line = docAuthor + "{" + name + "}"; // change the name
-				} else if (totalPages == 0 && trimmed.startsWith("% num_pages")) { // A
-																					// TeX
-																					// comment
+				} else if (totalPages == 0 && trimmed.startsWith("% num_pages")) {
 					String[] tokens = trimmed.split(" ");
-					totalPages = Integer.parseInt(tokens[tokens.length - 1]);
+					totalPages = Integer.parseInt(tokens[1]);
 				}
 
 				// This is the only chance the per-student TeX has to
@@ -176,8 +161,7 @@ public class Scribe {
 		endDoc(composite);
 		composite.close();
 
-		System.out.println("Return Code: "
-				+ make("Compile", quizId, testpaperId));
+		System.out.println("Return Code: " + make("Compile", quizId, testpaperId));
 		return prepareManifest(assignment);
 	}
 
@@ -200,7 +184,6 @@ public class Scribe {
 		for (int i = 0; i < questionIds.length; i++) {
 			questionId = questionIds[i].getId();
 			question = this.vault.getContent(questionId, "question.tex")[0];
-			contents.append(insertQR).append('\n');
 			contents.append(question);
 			resources = this.vault.getFiles(questionId, "figure.gnuplot");
 			linkResources(resources[0], staging, questionId + ".gnuplot");
@@ -257,7 +240,7 @@ public class Scribe {
 	}
 	
 	private void insertBlankPage(PrintWriter writer) { 
-		writer.println("\\centering This page is intentionally left blank. Use as needed.");
+		writer.println("\\centering For rough work. Will NOT be graded.");
 		writer.println(newpage);
 	}
 
@@ -290,11 +273,10 @@ public class Scribe {
 			throws Exception {
 		String quiz = assignment.getQuiz().getId();
 		String testpaper = assignment.getInstance().getId();
-		String name = student.getName();
+		String name = student.getName().toLowerCase().replace(' ', '-');
 		String id = student.getId();
-
-		return (id + "-" + name.toLowerCase().replace(' ', '-') + "-" + quiz
-				+ "-" + testpaper);
+		return String.format("%s-%s-%s-%s", 
+				id, name, quiz, testpaper);
 	}
 
 	private ManifestType prepareManifest(QuizType quiz) throws Exception {
@@ -389,7 +371,6 @@ public class Scribe {
 		Path atmkey = this.mint.resolve(quizId).resolve("atm-key");
 		BufferedReader r = new BufferedReader(new FileReader(atmkey.toFile()));
 		String key = r.readLine(); // 'atm-key' has only one line
-
 		if (key != null) {
 			return key;
 		} else {
@@ -400,7 +381,7 @@ public class Scribe {
 	private Path bankRoot, mint;
 	private Vault vault;
 	private ManifestType manifest;
-	private final String printanswers = "\\printanswers",
+	private final String printanswers = "\\printanswers", pageNumber = "\\thepage",
 			docAuthor = "\\DocAuthor", newpage = "\\newpage",
 			usepackage = "\\usepackage", fancyfoot = "\\fancyfoot",
 			question = "\\question", beginDocument = "\\begin{document}",

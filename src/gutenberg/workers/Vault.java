@@ -105,8 +105,18 @@ public class Vault {
 	public ManifestType tagQuestion(QuestionTagsType tags) throws Exception {
 		
 		String id = tags.getId();
-		String marks = String.format(marksFormat, tags.getMarks()[0]);
-		String length = String.format(lengthFormat, tags.getLength()[0]);
+		String marks = "";
+		String length = "";
+		if (tags.getMarks().length == 1) {//single part question
+			marks = String.format(marksFormat, tags.getMarks()[0]);
+			length = String.format(lengthFormat, tags.getLength()[0]);
+		} else {//multi part question
+			int totalMarks = 0;
+			for (int m: tags.getMarks()) {
+				totalMarks += m;
+			}
+			marks = String.format(marksFormat, totalMarks);
+		}
 		
 		Path questionTex = new File(VAULT).toPath().resolve(id).resolve(texFile);
 		BufferedReader reader = new BufferedReader(new FileReader(questionTex.toFile()));
@@ -114,15 +124,23 @@ public class Vault {
 		Path questionTexTmp = questionTex.resolveSibling(texFile + ".tmp");
 		PrintWriter writer = new PrintWriter(new FileWriter(questionTexTmp.toFile()));
 		
+		int part = 0;
 		String line = null;
 		while ((line = reader.readLine()) != null) {
 			if (line.trim().startsWith(questionTag)) {
 				if (!line.contains(" ")) {
 					throw new Exception("[tagQuestion]: Cannot tag a blank question");
-				}				
+				}
 				line = questionTag + marks + line.substring(line.indexOf(' '));
 			} else if (line.trim().startsWith(solutionTag)) {
+				length = String.format(lengthFormat, tags.getLength()[part++]);
 				line = solutionTag + length;
+			} else if (line.trim().startsWith(partTag)) {
+				if (!line.contains(" ")) {
+					throw new Exception("[tagQuestion]: Cannot tag a blank question (part)");
+				}
+				marks = String.format(marksFormat, tags.getMarks()[part]);
+				line = partTag + marks + line.substring(line.indexOf(' '));
 			}
 			writer.println(line);
 		}
@@ -194,7 +212,8 @@ public class Vault {
 	private String VAULT, SHARED;
 	private final String texFile = "question.tex", plotFile = "figure.gnuplot", makeFile = "individual.mk";
 	private final String questionTag = "\\question", 
-                       solutionTag = "\\begin{solution}", 
+                       solutionTag = "\\begin{solution}",
+                       partTag = "\\part",
                        lengthFormat = "[\\%s]",
                        marksFormat = "[%s]" ;
 }
