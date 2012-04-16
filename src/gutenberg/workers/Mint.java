@@ -44,8 +44,7 @@ public class Mint {
 		PrintWriter answerKey = new PrintWriter(staging.resolve("answer-key.tex").toFile());
 		PageType[] pages = quiz.getPage();
 
-		// Write any information that might be pertinent during testpaper
-		// generation
+		// Write any information that might be pertinent during testpaper generation
 		// - like # of pages - as a comment right at the beginning
 		answerKey.println("% num_pages = " + pages[pages.length-1].getNumber());
 
@@ -53,22 +52,8 @@ public class Mint {
 		writePreamble(answerKey, quiz.getSchool().getName(), quiz.getTeacher().getName());
 		beginDoc(answerKey);
 		answerKey.println(printanswers);
-
 		for (int i = 0; i < pages.length; i++) {
-			PrintWriter preview = new PrintWriter(staging.resolve(
-					"page-" + i + ".tex").toFile());
-			String page = preparePage(pages[i], staging);
-
-			writePreamble(preview, quiz.getSchool().getName(), quiz
-					.getTeacher().getName());
-			beginDoc(preview);
-			preview.println(printanswers);
-
-			preview.println(page);
-			answerKey.println(page);
-
-			endDoc(preview);
-			preview.close();
+			answerKey.println(preparePage(pages[i], staging));
 			answerKey.println(newpage);
 		}
 		endDoc(answerKey);
