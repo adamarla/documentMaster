@@ -272,31 +272,20 @@ public class Mint {
 
 		manifest.setRoot(atmKey);
 		Path preview = this.mint.resolve(quizId + "/answer-key/preview");
-
-		int pages = quiz.getPage().length;
-		EntryType[] images = new EntryType[pages * 2];
-		String filename = null;
-		for (int i = 0; i < pages; i++) {
-
-			filename = "page-" + i + "-preview.jpeg";
-			if (preview.resolve(filename).toFile().exists()) {
-				images[2 * i] = new EntryType();
-				images[2 * i].setId(filename);
-			} else {
-				throw new Exception(filename
-						+ " missing! All preview files not prepared.");
-			}
-
-			filename = "page-" + i + "-thumbnail.jpeg";
-			filename = "page-" + i + "-preview.jpeg";
-			if (preview.resolve(filename).toFile().exists()) {
-				images[2 * i + 1] = new EntryType();
-				images[2 * i + 1].setId(filename);
-			} else {
-				throw new Exception(filename
-						+ " missing! All preview thumbnail files not prepared.");
-			}
-
+		
+		String[] filenames = preview.toFile().list(); 
+		int pages = filenames.length;						
+		EntryType[] images = new EntryType[pages];
+				
+		if (pages == 0) {
+			throw new Exception("All preview thumbnail files not prepared.");			
+		}
+		
+		int i = 0;
+		for (String filename: filenames) {
+			images[i] = new EntryType();
+			images[i].setId(filename);
+			i++;
 		}
 		manifest.setImage(images);
 
