@@ -10,7 +10,7 @@ import gutenberg.workers.ATM;
 import gutenberg.workers.Config;
 import gutenberg.workers.Locker;
 import gutenberg.workers.Resource;
-import gutenberg.workers.Scribe;
+import gutenberg.workers.Mint;
 import gutenberg.workers.Vault;
 
 import java.io.File;
@@ -177,13 +177,13 @@ public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
 	public gutenberg.blocs.BuildQuizResponse buildQuiz(
 			gutenberg.blocs.BuildQuiz buildQuiz) {
 		Config config = null;
-		Scribe scribe = null;
+		Mint mint = null;
 		ResponseType response = new ResponseType();
 		try {
 			config = new Config();
-			scribe = new Scribe(config);
+			mint = new Mint(config);
 			QuizType quiz = buildQuiz.getBuildQuiz();
-			response.setManifest(scribe.generate(quiz));
+			response.setManifest(mint.generate(quiz));
 		} catch (Exception e) {
 			e.printStackTrace();
 			response.setError(e.getMessage());
@@ -205,9 +205,9 @@ public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
 		ResponseType response = new ResponseType();
 		try {
 			config = new Config();
-			Scribe scribe = new Scribe(config);
+			Mint mint = new Mint(config);
 			AssignmentType assignment = assignQuiz.getAssignQuiz();
-			response.setManifest(scribe.generate(assignment));
+			response.setManifest(mint.generate(assignment));
 		} catch (Exception e) {
 			e.printStackTrace();
 			response.setError(e.getMessage());

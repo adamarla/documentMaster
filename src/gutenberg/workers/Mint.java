@@ -16,9 +16,9 @@ import gutenberg.blocs.ManifestType;
 import gutenberg.blocs.PageType;
 import gutenberg.blocs.QuizType;
 
-public class Scribe {
+public class Mint {
 
-	public Scribe(Config config) throws Exception {
+	public Mint(Config config) throws Exception {
 		this.bankRoot = new File(config.getPath(Resource.bank)).toPath();
 		this.mint = new File(config.getPath(Resource.mint)).toPath();
 		this.vault = new Vault(config);
