@@ -110,12 +110,6 @@ public class Vault {
 		if (tags.getMarks().length == 1) {//single part question
 			marks = String.format(marksFormat, tags.getMarks()[0]);
 			length = String.format(lengthFormat, tags.getLength()[0]);
-		} else {//multi part question
-			int totalMarks = 0;
-			for (int m: tags.getMarks()) {
-				totalMarks += m;
-			}
-			marks = String.format(marksFormat, totalMarks);
 		}
 		
 		Path questionTex = new File(VAULT).toPath().resolve(id).resolve(texFile);
@@ -131,7 +125,7 @@ public class Vault {
 				if (!line.contains(" ")) {
 					throw new Exception("[tagQuestion]: Cannot tag a blank question");
 				}
-				line = questionTag + marks + line.substring(line.indexOf(' '));
+				line = questionTag + marks + line.trim().substring(line.indexOf(' '));
 			} else if (line.trim().startsWith(solutionTag)) {
 				length = String.format(lengthFormat, tags.getLength()[part++]);
 				line = solutionTag + length;
@@ -140,7 +134,7 @@ public class Vault {
 					throw new Exception("[tagQuestion]: Cannot tag a blank question (part)");
 				}
 				marks = String.format(marksFormat, tags.getMarks()[part]);
-				line = partTag + marks + line.substring(line.indexOf(' '));
+				line = partTag + marks + line.trim().substring(line.indexOf(' '));
 			}
 			writer.println(line);
 		}
