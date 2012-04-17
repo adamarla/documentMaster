@@ -81,6 +81,7 @@
 					<xsd:element name="id" type="xsd:string"/>
 					<xsd:element maxOccurs="unbounded" name="marks" type="xsd:int"/>
 					<xsd:element maxOccurs="unbounded" name="length" type="tns:lengthType"/>
+					<xsd:element maxOccurs="unbounded" minOccurs="0" name="breaks" type="xsd:int"/>
 				</xsd:sequence>
 			</xsd:complexType>
 			

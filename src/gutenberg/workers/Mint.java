@@ -114,7 +114,7 @@ public class Mint {
 					line = docAuthor + "{" + name + "}"; // change the name
 				} else if (totalPages == 0 && trimmed.startsWith("% num_pages")) {
 					String[] tokens = trimmed.split(" ");
-					totalPages = Integer.parseInt(tokens[1]);
+					totalPages = Integer.parseInt(tokens[tokens.length - 1]);
 				}
 
 				// This is the only chance the per-student TeX has to
