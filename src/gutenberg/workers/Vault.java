@@ -153,7 +153,9 @@ public class Vault {
 					}
 				}
 				line = line + "\n" + insertQR;
-			} else if (line.trim().equals(newpage)) {
+			} else if (trimmed.equals(newpage)) {
+				continue;
+			} else if (trimmed.equals(insertQR)) {
 				continue;
 			}
 			writer.println(line);
