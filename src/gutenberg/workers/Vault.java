@@ -124,30 +124,35 @@ public class Vault {
 		PrintWriter writer = new PrintWriter(new FileWriter(questionTexTmp.toFile()));
 
 		int partIdx = 0; int pageIdx = 0;
-		String line = null;
+		String line = null, trimmed = null;
 		while ((line = reader.readLine()) != null) {
-			if (line.trim().startsWith(questionTag)) {
-				if (!line.contains(" ")) {
+			trimmed = line.trim();
+			if (trimmed.startsWith(questionTag)) {
+				if (!trimmed.contains(" ")) {
 					throw new Exception("[tagQuestion]: Cannot tag a blank question");
 				}
-				line = questionTag + marks + " " + line.trim().substring(line.indexOf(' '));
-			} else if (line.trim().startsWith(solutionTag)) {
-				length = String.format(lengthFormat, tags.getLength()[partIdx]);
+				line = questionTag + marks + " " + trimmed.substring(trimmed.indexOf(' '));				
+				if (marks.length() != 0) {//non-multipart question 
+					line = line + "\n" + insertQR;
+				}
+			} else if (trimmed.startsWith(solutionTag)) {
+				length = String.format(lengthFormat, tags.getLength()[partIdx]);				
 				line = solutionTag + length;
 				partIdx++;
-			} else if (line.trim().startsWith(partTag)) {
-				if (!line.contains(" ")) {
+			} else if (trimmed.startsWith(partTag)) {
+				if (!trimmed.contains(" ")) {
 					throw new Exception("[tagQuestion]: Cannot tag a blank question (part)");
 				}
-				marks = String.format(marksFormat, tags.getMarks()[partIdx]);				
-				line = partTag + marks + " " + line.trim().substring(line.indexOf(' '));
-				//insert a newpage before beginning of next part
+				marks = String.format(marksFormat, tags.getMarks()[partIdx]);
+				line = partTag + marks + " " + trimmed.substring(trimmed.indexOf(' '));
+				//tricky bit, insert a new page before beginning of next part
 				if (breaks.length > pageIdx) {
 					if (partIdx == breaks[pageIdx] + 1) {
 						writer.println(newpage);
 						pageIdx++;
 					}
-				}				
+				}
+				line = line + "\n" + insertQR;
 			} else if (line.trim().equals(newpage)) {
 				continue;
 			}
@@ -225,5 +230,6 @@ public class Vault {
                        partTag = "\\part",
                        lengthFormat = "[\\%s]",
                        marksFormat = "[%s]",
-                       newpage = "\\newpage";
+                       newpage = "\\newpage",
+                       insertQR = "\\insertQR{QRC}";
 }
