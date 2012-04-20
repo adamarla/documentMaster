@@ -1,5 +1,6 @@
 package gutenberg.workers;
 
+import gutenberg.blocs.EntryType;
 import gutenberg.blocs.ManifestType;
 import gutenberg.blocs.QuestionTagsType;
 import gutenberg.blocs.QuestionType;
@@ -166,6 +167,19 @@ public class Vault {
 		
 		ManifestType manifest = new ManifestType();
 		manifest.setRoot(questionTex.getParent().getFileName().toString());
+		
+		String[] pages = questionTex.getParent().toFile().list();
+		EntryType image = null;
+		ArrayList<EntryType> images = new ArrayList<EntryType>();
+		for (String filename: pages) {
+			if (filename.endsWith(".jpeg")) {
+				image = new EntryType();
+				image.setId(filename);
+				images.add(image);
+			}
+		}
+		EntryType[] imagarray = new EntryType[images.size()];
+		manifest.setImage(images.toArray(imagarray));
 		return manifest;
 	}
 	
