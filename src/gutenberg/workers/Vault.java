@@ -96,6 +96,7 @@ public class Vault {
 		Path shared = new File(SHARED).toPath();
 		Files.copy(shared.resolve(texFile), questionDir.resolve(texFile));
 		Files.copy(shared.resolve(plotFile), questionDir.resolve(plotFile));
+		Files.copy(shared.resolve(bc2FigFile), questionDir.resolve(bc2FigFile));
 		Files.createSymbolicLink(questionDir.resolve("Makefile"),
 				shared.resolve(makeFile));
 
@@ -264,8 +265,11 @@ public class Vault {
 	}
 
 	private String VAULT, SHARED;
-	private final String texFile = "question.tex", plotFile = "figure.gnuplot",
-			makeFile = "individual.mk";
+	private final String texFile = "question.tex", 
+                       plotFile = "figure.gnuplot",
+                       bc2FigFile = "figure.bc",
+			                 makeFile = "individual.mk" ;
+
 	private final String questionTag = "\\question",
 			solutionTag = "\\begin{solution}", partTag = "\\part",
 			lengthFormat = "[\\%s]", marksFormat = "[%s]",
