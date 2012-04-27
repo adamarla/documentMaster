@@ -130,22 +130,12 @@ public class Vault {
 		PrintWriter writer = new PrintWriter(new FileWriter(
 				questionTexTmp.toFile()));
 
-		boolean insertQRCBeforeNextCommand = false;
+		boolean insertQRC = false;
 		int partIdx = 0;
 		int pageIdx = 0;
 		String line = null, trimmed = null;
 		while ((line = reader.readLine()) != null) {
-
 			trimmed = line.trim();
-
-			// this block must appear before anything else in the loop
-			if (insertQRCBeforeNextCommand) {
-				if (trimmed.startsWith(latexCommand)) {
-					writer.println(insertQR);
-					insertQRCBeforeNextCommand = false;
-				}
-			}
-
 			if (trimmed.startsWith(questionTag)) {
 				if (tags.getMarks().length == 1) {// no parts to the question
 					marks = String
@@ -153,29 +143,36 @@ public class Vault {
 					line = line.replaceFirst(
 							Matcher.quoteReplacement(questionTag) + marksRegex,
 							Matcher.quoteReplacement(questionTag) + marks);
-					insertQRCBeforeNextCommand = true;
+					insertQRC = true;
 				}
 			} else if (trimmed.startsWith(solutionTag)) {
 				length = String.format(lengthFormat, tags.getLength()[partIdx]);
 				line = solutionTag + length;
 				partIdx++;
 			} else if (trimmed.startsWith(partTag)) {
-				marks = String.format(marksFormat, tags.getMarks()[partIdx]);
-				line = line
-						.replaceFirst(Matcher.quoteReplacement(partTag)
-								+ marksRegex, Matcher.quoteReplacement(partTag)
-								+ marks);
-				insertQRCBeforeNextCommand = true;
-				// tricky bit, insert a new page before beginning of next part
-				if (breaks.length > pageIdx) {
-					if (partIdx == breaks[pageIdx] + 1) {
-						writer.println(newpage);
-						pageIdx++;
+				if (tags.getMarks().length > 1) {// multiple part question
+					marks = String
+							.format(marksFormat, tags.getMarks()[partIdx]);
+					line = line.replaceFirst(Matcher.quoteReplacement(partTag)
+							+ marksRegex, Matcher.quoteReplacement(partTag)
+							+ marks);
+					insertQRC = true;
+					// tricky bit, insert a new page before next part starts
+					if (breaks.length > pageIdx) {
+						if (partIdx == breaks[pageIdx] + 1) {
+							writer.println(newpage);
+							pageIdx++;
+						}
 					}
 				}
+			} else if (trimmed.startsWith(insertQRTag)) {
+				if (insertQRC) {
+					line = line.replace("{}", "{QRC}");
+					insertQRC = false;
+				} else {
+					continue;
+				}
 			} else if (trimmed.equals(newpage)) {
-				continue;
-			} else if (trimmed.equals(insertQR)) {
 				continue;
 			}
 			writer.println(line);
@@ -270,5 +267,5 @@ public class Vault {
 			solutionTag = "\\begin{solution}", partTag = "\\part",
 			lengthFormat = "[\\%s]", marksFormat = "[%s]",
 			marksRegex = "\\[?[1-9]?\\]?", newpage = "\\newpage",
-			insertQR = "\\insertQR{QRC}", latexCommand = "\\";
+			insertQRTag = "\\insertQR";
 }
