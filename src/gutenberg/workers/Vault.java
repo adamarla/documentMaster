@@ -190,7 +190,7 @@ public class Vault {
 		EntryType image = null;
 		ArrayList<EntryType> images = new ArrayList<EntryType>();
 		for (String filename : pages) {
-			if (filename.endsWith(".jpeg")) {
+			if (filename.matches("page-[\\d]+.jpeg")){
 				image = new EntryType();
 				image.setId(filename);
 				images.add(image);
