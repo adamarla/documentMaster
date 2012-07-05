@@ -49,7 +49,7 @@
 				<xsd:sequence>
 					<xsd:element name="number" type="xsd:int"></xsd:element>
 					<xsd:element name="question" type="tns:entryType"
-						maxOccurs="unbounded" minOccurs="1">
+						maxOccurs="unbounded" minOccurs="0">
 					</xsd:element>
 				</xsd:sequence>
 			</xsd:complexType>

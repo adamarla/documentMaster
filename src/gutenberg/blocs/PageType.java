@@ -62,6 +62,17 @@
                         
                                     protected gutenberg.blocs.EntryType[] localQuestion ;
                                 
+                           /*  This tracker boolean wil be used to detect whether the user called the set method
+                          *   for this attribute. It will be used to determine whether to include this field
+                           *   in the serialized XML
+                           */
+                           protected boolean localQuestionTracker = false ;
+
+                           public boolean isQuestionSpecified(){
+                               return localQuestionTracker;
+                           }
+
+                           
 
                            /**
                            * Auto generated getter method
@@ -81,10 +92,6 @@
                                */
                               protected void validateQuestion(gutenberg.blocs.EntryType[] param){
                              
-                              if ((param != null) && (param.length < 1)){
-                                throw new java.lang.RuntimeException();
-                              }
-                              
                               }
 
 
@@ -96,7 +103,8 @@
                               
                                    validateQuestion(param);
 
-                               
+                               localQuestionTracker = param != null;
+                                      
                                       this.localQuestion=param;
                               }
 
@@ -111,6 +119,9 @@
                                    localQuestion = new gutenberg.blocs.EntryType[]{};
                                    }
 
+                            
+                                 //update the setting tracker
+                                localQuestionTracker = true;
                             
 
                                java.util.List list =
@@ -194,7 +205,7 @@
                                                }
                                     
                                    xmlWriter.writeEndElement();
-                             
+                              if (localQuestionTracker){
                                        if (localQuestion!=null){
                                             for (int i = 0;i < localQuestion.length;i++){
                                                 if (localQuestion[i] != null){
@@ -202,7 +213,7 @@
                                                            xmlWriter);
                                                 } else {
                                                    
-                                                           throw new org.apache.axis2.databinding.ADBException("question cannot be null!!");
+                                                        // we don't have to do any thing since minOccures is zero
                                                     
                                                 }
 
@@ -212,7 +223,7 @@
                                                throw new org.apache.axis2.databinding.ADBException("question cannot be null!!");
                                         
                                     }
-                                 
+                                 }
                     xmlWriter.writeEndElement();
                
 
@@ -403,7 +414,7 @@
                                  
                                 elementList.add(
                                    org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localNumber));
-                            
+                             if (localQuestionTracker){
                              if (localQuestion!=null) {
                                  for (int i = 0;i < localQuestion.length;i++){
 
@@ -413,7 +424,7 @@
                                          elementList.add(localQuestion[i]);
                                     } else {
                                         
-                                               throw new org.apache.axis2.databinding.ADBException("question cannot be null !!");
+                                                // nothing to do
                                             
                                     }
 
@@ -424,7 +435,7 @@
                                     
                              }
 
-                        
+                        }
 
                 return new org.apache.axis2.databinding.utils.reader.ADBXMLStreamReaderImpl(qName, elementList.toArray(), attribList.toArray());
             
@@ -563,11 +574,10 @@
                                                             
                               }  // End of if for expected property start element
                                 
-                                else{
-                                    // A start element we are not expecting indicates an invalid parameter was passed
-                                    throw new org.apache.axis2.databinding.ADBException("Unexpected subelement " + reader.getName());
-                                }
-                              
+                                    else {
+                                        
+                                    }
+                                  
                             while (!reader.isStartElement() && !reader.isEndElement())
                                 reader.next();
                             

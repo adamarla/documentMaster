@@ -166,12 +166,14 @@ public class Mint {
 		EntryType[] questionIds = page.getQuestion();
 		String questionId = null, question = null;
 		File[] resources = null;
-		for (int i = 0; i < questionIds.length; i++) {
-			questionId = questionIds[i].getId();
-			question = this.vault.getContent(questionId, "question.tex")[0];
-			contents.append(question);
-			resources = this.vault.getFiles(questionId, "figure.gnuplot");
-			linkResources(resources[0], staging, questionId + ".gnuplot");
+		if (questionIds != null) {
+			for (int i = 0; i < questionIds.length; i++) {
+				questionId = questionIds[i].getId();
+				question = this.vault.getContent(questionId, "question.tex")[0];
+				contents.append(question);
+				resources = this.vault.getFiles(questionId, "figure.gnuplot");
+				linkResources(resources[0], staging, questionId + ".gnuplot");
+			}
 		}
 		return contents.toString();
 	}
