@@ -362,7 +362,7 @@ public class Mint {
 			usepackage = "\\usepackage", fancyfoot = "\\fancyfoot",
 			question = "\\question", beginDocument = "\\begin{document}",
 			beginQuestions = "\\begin{questions}", school = "\\School",
-			docClass = "\\documentclass", insertQR = "\\insertQR{QRC}",
+			docClass = "\\documentclass", insertQR = "\\insertQR",
 			endQuestions = "\\end{questions}", endDocument = "\\end{document}";
 
 }
