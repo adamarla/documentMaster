@@ -8,6 +8,7 @@ package gutenberg.blocs;
 
 import gutenberg.workers.ATM;
 import gutenberg.workers.Config;
+import gutenberg.workers.FrontDesk;
 import gutenberg.workers.Locker;
 import gutenberg.workers.Resource;
 import gutenberg.workers.Mint;
@@ -20,14 +21,13 @@ import java.io.File;
  */
 public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
 
-    
 	/**
 	 * Auto generated method signature
 	 * 
 	 * @param tagQuestion2
 	 * @return tagQuestionResponse3
 	 */
-	
+
 	public gutenberg.blocs.TagQuestionResponse tagQuestion(
 			gutenberg.blocs.TagQuestion tagQuestion) {
 		Vault vault = null;
@@ -63,7 +63,8 @@ public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
 			config = new Config();
 			locker = new Locker(config);
 			String scanId = annotateScan.getAnnotateScan().getScanId();
-			PointType[] points = annotateScan.getAnnotateScan().getCoordinates();
+			PointType[] points = annotateScan.getAnnotateScan()
+					.getCoordinates();
 			response.setManifest(locker.annotate(scanId, points));
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -270,5 +271,32 @@ public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
 		return writeQuestionResponse;
 
 	}
-	
+
+	/**
+	 * Auto generated method signature
+	 * 
+	 * @param generateSuggestionForm14
+	 * @return generateSuggestionFormResponse15
+	 */
+
+	public gutenberg.blocs.GenerateSuggestionFormResponse generateSuggestionForm(
+			gutenberg.blocs.GenerateSuggestionForm generateSuggestionForm) {
+		Config config = null;
+		FrontDesk frontdesk = null;
+		ResponseType response = new ResponseType();
+		try {
+			config = new Config();
+			frontdesk = new FrontDesk(config);
+			TeacherType teacherInfo = generateSuggestionForm.getGenerateSuggestionForm();
+			response.setManifest(frontdesk.generateSuggestionForm(teacherInfo));
+		} catch (Exception e) {
+			e.printStackTrace();
+			response.setError(e.getMessage());
+		}		
+		GenerateSuggestionFormResponse 
+			generateSuggestionFormResponse = new GenerateSuggestionFormResponse();
+		generateSuggestionFormResponse.setGenerateSuggestionFormResponse(response);
+		return generateSuggestionFormResponse;
+	}
+
 }

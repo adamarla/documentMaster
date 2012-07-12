@@ -111,7 +111,14 @@
 					<xsd:element name="solution" type="xsd:string"/>
 					<xsd:element name="tags" type="tns:questionTagsType"/>
 				</xsd:sequence>
-			</xsd:complexType>			
+			</xsd:complexType>
+			
+			<xsd:complexType name="teacherType">
+			  <xsd:sequence>
+			    <xsd:element name="teacher" type="tns:entryType"/>
+			    <xsd:element name="school" type="tns:entryType"/>
+			  </xsd:sequence>
+			</xsd:complexType>
 			
 			<xsd:element name="buildQuiz" type="tns:quizType">
 			</xsd:element>
@@ -157,6 +164,11 @@
 			<xsd:element name="writeQuestion" type="tns:questionType"></xsd:element>
 
 			<xsd:element name="writeQuestionResponse" type="tns:responseType">
+			</xsd:element>
+			
+			<xsd:element name="generateSuggestionForm" type="tns:teacherType"></xsd:element>
+
+			<xsd:element name="generateSuggestionFormResponse" type="tns:responseType">
 			</xsd:element>
 			
 		</xsd:schema>
@@ -215,6 +227,12 @@
 	<wsdl:message name="writeQuestionResponse">
 		<wsdl:part name="parameters" element="tns:writeQuestionResponse"></wsdl:part>
 	</wsdl:message>
+	<wsdl:message name="generateSuggestionForm">
+		<wsdl:part name="parameters" element="tns:generateSuggestionForm"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="generateSuggestionFormResponse">
+		<wsdl:part name="parameters" element="tns:generateSuggestionFormResponse"></wsdl:part>
+	</wsdl:message>
 	<wsdl:portType name="documentMaster">
 		<wsdl:operation name="buildQuiz">
 			<wsdl:input message="tns:buildQuiz" />
@@ -252,6 +270,10 @@
 			<wsdl:input message="tns:writeQuestion"></wsdl:input>
 			<wsdl:output message="tns:writeQuestionResponse"></wsdl:output>
 		</wsdl:operation>
+		<wsdl:operation name="generateSuggestionForm">
+			<wsdl:input message="tns:generateSuggestionForm"></wsdl:input>
+			<wsdl:output message="tns:generateSuggestionFormResponse"></wsdl:output>
+		</wsdl:operation>		
 	</wsdl:portType>
 	<wsdl:binding name="documentMasterSOAP" type="tns:documentMaster">
 		<soap:binding style="document"
@@ -330,6 +352,15 @@
 		</wsdl:operation>
 		<wsdl:operation name="writeQuestion">
 			<soap:operation soapAction="http://gutenberg/blocs/writeQuestion" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="generateSuggestionForm">
+			<soap:operation soapAction="http://gutenberg/blocs/generateSuggestionForm" />
 			<wsdl:input>
 				<soap:body use="literal" />
 			</wsdl:input>

@@ -113,6 +113,20 @@
         /**
          * Auto generated method signature
          * 
+                                    * @param generateSuggestionForm
+         */
+
+        
+                public gutenberg.blocs.GenerateSuggestionFormResponse generateSuggestionForm
+                (
+                  gutenberg.blocs.GenerateSuggestionForm generateSuggestionForm
+                 )
+            ;
+        
+         
+        /**
+         * Auto generated method signature
+         * 
                                     * @param receiveScans
          */
 

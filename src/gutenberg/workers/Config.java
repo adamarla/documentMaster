@@ -35,6 +35,9 @@ public class Config {
 		case staging:
 			path += "/staging";
 			break;
+		case frontdesk:
+			path += "/front-desk";
+			break;
 		default:
 		}
 		return path;

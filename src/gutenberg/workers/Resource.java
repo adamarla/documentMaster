@@ -7,5 +7,6 @@ public enum Resource {
 	mint,
 	atm,
 	shared,
-	staging
+	staging,
+	frontdesk
 }
