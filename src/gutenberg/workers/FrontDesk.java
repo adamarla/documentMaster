@@ -27,9 +27,42 @@ public class FrontDesk {
 		EntryType teacher = teacherInfo.getTeacher();
 		EntryType school = teacherInfo.getSchool();
 
+		copyTemplate(teacher, school);
+
+		generatePdf();
+
+		cleanUp(teacher);
+
+		ManifestType manifest = new ManifestType();
+		manifest.setRoot(FRONTDESK + "/suggestion-forms/");
+		EntryType document = new EntryType();
+		document.setId(teacher.getId());
+		manifest.addDocument(document);
+		return manifest;
+	}
+
+	private void cleanUp(EntryType teacher) throws Exception {
+
+		Path dir = new File(FRONTDESK + "/suggestion-forms").toPath();
+		Path sourcePdf = dir.resolve("suggestion.pdf");
+		Path targetPdf = dir.resolve(teacher.getId() + ".pdf");
+		Files.move(sourcePdf, targetPdf);
+
+		File[] files = dir.toFile().listFiles();
+		for (File file : files) {
+			if (file.getName().startsWith("suggestion")) {
+				file.delete();
+			}
+		}
+
+	}
+
+	private void copyTemplate(EntryType teacher, EntryType school)
+			throws Exception {
+
 		File template = new File(SHARED + "/suggestion.tex");
 		File target = new File(FRONTDESK + "/suggestion-forms/suggestion.tex");
-		
+
 		String line = null;
 		PrintWriter writer = new PrintWriter(new FileWriter(target));
 		BufferedReader reader = new BufferedReader(new FileReader(template));
@@ -37,45 +70,24 @@ public class FrontDesk {
 			if (line.trim().startsWith(school_tag)) {
 				line = line.replace("school", school.getName());
 			} else if (line.trim().startsWith(author_tag)) {
-				line = line.replace("name", teacher.getName());
+				line = line
+						.replace("name", teacher.getName().replace('-', ' '));
 			} else if (line.trim().startsWith(insertQRC_tag)) {
-				line = line.replace("qrc",
-						teacher.getId() + "-" + teacher.getName()
-								+ "-0-0-0-1-1");
+				line = line.replace("qrc", String.format("%s-%s-0-0-0-1-1",
+						teacher.getId(), teacher.getName()));
 			}
 			writer.println(line);
 		}
 		writer.close();
-		
-		generate();
-		
-		Path dir = new File(FRONTDESK + "/suggestion-forms").toPath();
-		Path sourcePdf = dir.resolve("suggestion.pdf");
-		Path targetPdf = dir.resolve(teacher.getId() + ".pdf");
-		Files.move(sourcePdf, targetPdf);
-		
-		File[] files = dir.toFile().listFiles();
-		for (File file: files) {
-			if (file.getName().startsWith("suggestion")) {
-				file.delete();
-			}
-		}		
 
-		ManifestType manifest = new ManifestType();
-		manifest.setRoot(target.getParent().toString());
-		EntryType document = new EntryType();
-		document.setId(teacher.getId());
-		document.setName(target.getName());
-		manifest.addDocument(document);
-		return manifest;
 	}
 
 	private String FRONTDESK, SHARED;
 	private final String school_tag = "\\School", author_tag = "\\DocAuthor",
 			insertQRC_tag = "\\insertQR";
-	
-	private int generate() throws Exception {
-		
+
+	private int generatePdf() throws Exception {
+
 		ProcessBuilder pb = new ProcessBuilder("make");
 
 		pb.directory(new File(FRONTDESK + "/suggestion-forms"));
@@ -84,12 +96,12 @@ public class FrontDesk {
 		Process process = pb.start();
 		BufferedReader messages = new BufferedReader(new InputStreamReader(
 				process.getInputStream()));
-		
+
 		String line = null;
 		while ((line = messages.readLine()) != null) {
 			System.out.println(line);
 		}
-		
+
 		return process.waitFor();
 	}
 }
