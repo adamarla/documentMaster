@@ -28,10 +28,8 @@ public class FrontDesk {
 		EntryType school = teacherInfo.getSchool();
 
 		copyTemplate(teacher, school);
-
-		generatePdf();
-
-		cleanUp(teacher);
+		generatePdf(teacher);
+		// cleanUp(teacher);
 
 		ManifestType manifest = new ManifestType();
 		manifest.setRoot(FRONTDESK + "/suggestion-forms/");
@@ -41,6 +39,7 @@ public class FrontDesk {
 		return manifest;
 	}
 
+	/*
 	private void cleanUp(EntryType teacher) throws Exception {
 
 		Path dir = new File(FRONTDESK + "/suggestion-forms").toPath();
@@ -54,12 +53,15 @@ public class FrontDesk {
 				file.delete();
 			}
 		}
-
 	}
+	*/
 
 	private void copyTemplate(EntryType teacher, EntryType school)
 			throws Exception {
 
+		String  id = teacher.getId() ;
+		String  name = teacher.getName() ;
+				
 		File template = new File(SHARED + "/suggestion.tex");
 		File target = new File(FRONTDESK + "/suggestion-forms/suggestion.tex");
 
@@ -70,11 +72,9 @@ public class FrontDesk {
 			if (line.trim().startsWith(school_tag)) {
 				line = line.replace("school", school.getName());
 			} else if (line.trim().startsWith(author_tag)) {
-				line = line
-						.replace("name", teacher.getName().replace('-', ' '));
+				line = line.replace("name", name.replace('-', ' '));
 			} else if (line.trim().startsWith(insertQRC_tag)) {
-				line = line.replace("qrc", String.format("%s-%s-0-0-0-1-1",
-						teacher.getId(), teacher.getName()));
+				line = line.replace("qrc", String.format("%s-%s-0-0-0-1-1",id, name));
 			}
 			writer.println(line);
 		}
@@ -86,22 +86,37 @@ public class FrontDesk {
 	private final String school_tag = "\\School", author_tag = "\\DocAuthor",
 			insertQRC_tag = "\\insertQR";
 
-	private int generatePdf() throws Exception {
-
+	private int generatePdf(EntryType teacher) throws Exception {
 		ProcessBuilder pb = new ProcessBuilder("make");
+		File   frontDesk = new File(FRONTDESK + "/suggestion-forms") ;
 
-		pb.directory(new File(FRONTDESK + "/suggestion-forms"));
+		pb.directory(frontDesk);
 		pb.redirectErrorStream(true);
 
-		Process process = pb.start();
+		Process build = pb.start();
 		BufferedReader messages = new BufferedReader(new InputStreamReader(
-				process.getInputStream()));
+			build.getInputStream()));
 
 		String line = null;
 		while ((line = messages.readLine()) != null) {
 			System.out.println(line);
 		}
-
-		return process.waitFor();
+		
+		if (build.waitFor() == 0) {
+			ProcessBuilder pClean = new ProcessBuilder("make", "clean") ;
+			String name = teacher.getName().split("-")[0] ;
+			String id = teacher.getId() ;
+			Path   dir = frontDesk.toPath() ;
+			Path   src = dir.resolve("suggestion.pdf") ;
+			Path   target = dir.resolve(String.format("%s-%s.pdf", id, name)) ;
+			
+			Files.move(src, target) ;
+			
+			pClean.directory(frontDesk) ;
+			Process clean = pClean.start() ;
+			return clean.waitFor() ;
+		}
+		
+		return 0 ;
 	}
 }
