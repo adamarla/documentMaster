@@ -227,7 +227,7 @@ public class Mint {
 	}
 	
 	private void insertBlankPage(PrintWriter writer) { 
-		writer.println("\\centering For rough work. Will NOT be graded.");
+		writer.println("\\begingroup\\centering For rough work. Will NOT be graded \\\\ \\endgroup");
 		writer.println(newpage);
 	}
 
