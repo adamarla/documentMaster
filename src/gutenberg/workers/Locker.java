@@ -50,7 +50,8 @@ public class Locker {
 			tokens = scan.getName().split("\\.");
 			scanId = tokens[0];
 			rotate = tokens[1].equals("1") ? true:false;
-			if (!Files.exists(locker.resolve(scanId))) {						
+			if (!Files.exists(locker.resolve(scanId))) {
+				
 				if (convert(scan.toPath(), locker.resolve(scanId), SCAN_SIZE, rotate) != 0 ||
 					convert(scan.toPath(), locker.resolve("thumb-" + scanId), THUMB_SIZE, rotate) != 0) {
 					throw new Exception("Error running convert utility on "
@@ -60,6 +61,14 @@ public class Locker {
 				EntryType image = new EntryType();
 				image.setId(scanId);
 				manifest.addImage(image);
+				
+				//workaround for deserialization bug in savon
+				//https://github.com/rubiii/savon/issues/11 (supposedly fixed!)
+				if (manifest.getImage().length == 1) {
+					EntryType dummyEntry = new EntryType();
+					dummyEntry.setId("SAVON_BUG_SKIP");
+					manifest.addImage(dummyEntry);
+				}
 			}
 			
 			if (!scan.delete()) {
