@@ -52,6 +52,9 @@
                                     public static final java.lang.String _halfpage =
                                         org.apache.axis2.databinding.utils.ConverterUtil.convertToString("halfpage");
                                 
+                                    public static final java.lang.String _fewlines =
+                                        org.apache.axis2.databinding.utils.ConverterUtil.convertToString("fewlines");
+                                
                                     public static final java.lang.String _mcq =
                                         org.apache.axis2.databinding.utils.ConverterUtil.convertToString("mcq");
                                 
@@ -60,6 +63,9 @@
                             
                                 public static final LengthType halfpage =
                                     new LengthType(_halfpage,true);
+                            
+                                public static final LengthType fewlines =
+                                    new LengthType(_fewlines,true);
                             
                                 public static final LengthType mcq =
                                     new LengthType(_mcq,true);
