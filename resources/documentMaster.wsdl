@@ -110,6 +110,16 @@
 			  </xsd:sequence>
 			</xsd:complexType>
 			
+			<xsd:complexType name="studentGroupType">
+			  <xsd:sequence>
+			    <xsd:element name="school" type="tns:entryType"/>
+			    <xsd:element name="group" type="tns:entryType"/>
+			    <xsd:element name="teacher" type="tns:entryType"/>
+			    <xsd:element name="defaultPasswd" type="xsd:string"/>
+			    <xsd:element maxOccurs="unbounded" name="members" type="tns:entryType"/>
+			  </xsd:sequence>
+			</xsd:complexType>
+			
 			<xsd:element name="buildQuiz" type="tns:quizType">
 			</xsd:element>
 			<xsd:element name="buildQuizResponse" type="tns:responseType">
@@ -161,6 +171,11 @@
 			<xsd:element name="generateSuggestionFormResponse" type="tns:responseType">
 			</xsd:element>
 			
+			<xsd:element name="generateStudentRoster" type="tns:studentGroupType"/>
+
+			<xsd:element name="generateStudentRosterResponse" type="tns:responseType">
+			</xsd:element>
+			
 		</xsd:schema>
   </wsdl:types>
   <wsdl:message name="buildQuiz">
@@ -207,6 +222,10 @@
     <wsdl:part name="parameters" element="tns:receiveScans">
     </wsdl:part>
   </wsdl:message>
+  <wsdl:message name="generateStudentRosterResponse">
+    <wsdl:part name="parameters" element="tns:generateStudentRosterResponse">
+    </wsdl:part>
+  </wsdl:message>
   <wsdl:message name="receiveScansResponse">
     <wsdl:part name="parameters" element="tns:receiveScansResponse">
     </wsdl:part>
@@ -229,6 +248,10 @@
   </wsdl:message>
   <wsdl:message name="tagQuestion">
     <wsdl:part name="parameters" element="tns:tagQuestion">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="generateStudentRoster">
+    <wsdl:part name="parameters" element="tns:generateStudentRoster">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="annotateScanResponse">
@@ -302,6 +325,12 @@
       <wsdl:input message="tns:generateSuggestionForm">
     </wsdl:input>
       <wsdl:output message="tns:generateSuggestionFormResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="generateStudentRoster">
+      <wsdl:input message="tns:generateStudentRoster">
+    </wsdl:input>
+      <wsdl:output message="tns:generateStudentRosterResponse">
     </wsdl:output>
     </wsdl:operation>
   </wsdl:portType>
@@ -390,6 +419,15 @@
     </wsdl:operation>
     <wsdl:operation name="generateSuggestionForm">
       <soap:operation soapAction="http://gutenberg/blocs/generateSuggestionForm"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="generateStudentRoster">
+      <soap:operation soapAction="http://gutenberg/blocs/generateStudentRoster"/>
       <wsdl:input>
         <soap:body use="literal"/>
       </wsdl:input>

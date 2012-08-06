@@ -113,6 +113,20 @@
         /**
          * Auto generated method signature
          * 
+                                    * @param generateStudentRoster
+         */
+
+        
+                public gutenberg.blocs.GenerateStudentRosterResponse generateStudentRoster
+                (
+                  gutenberg.blocs.GenerateStudentRoster generateStudentRoster
+                 )
+            ;
+        
+         
+        /**
+         * Auto generated method signature
+         * 
                                     * @param generateSuggestionForm
          */
 

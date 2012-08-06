@@ -299,4 +299,25 @@ public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
 		return generateSuggestionFormResponse;
 	}
 
+	@Override
+	public GenerateStudentRosterResponse generateStudentRoster(
+			GenerateStudentRoster generateStudentRoster) {
+		Config config = null;
+		FrontDesk frontdesk = null;
+		ResponseType response = new ResponseType();
+		try {
+			config = new Config();
+			frontdesk = new FrontDesk(config);
+			StudentGroupType studentGroup = generateStudentRoster.getGenerateStudentRoster();
+			response.setManifest(frontdesk.generateStudentRoster(studentGroup));
+		} catch (Exception e) {
+			e.printStackTrace();
+			response.setError(e.getMessage());
+		}
+		GenerateStudentRosterResponse
+			generateStudentRosterResponse = new GenerateStudentRosterResponse();
+		generateStudentRosterResponse.setGenerateStudentRosterResponse(response);
+		return generateStudentRosterResponse;
+	}
+
 }

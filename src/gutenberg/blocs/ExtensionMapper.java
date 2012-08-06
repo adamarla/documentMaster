@@ -63,6 +63,16 @@
               
                   if (
                   "http://gutenberg/blocs".equals(namespaceURI) &&
+                  "studentGroupType".equals(typeName)){
+                   
+                            return  gutenberg.blocs.StudentGroupType.Factory.parse(reader);
+                        
+
+                  }
+
+              
+                  if (
+                  "http://gutenberg/blocs".equals(namespaceURI) &&
                   "manifestType".equals(typeName)){
                    
                             return  gutenberg.blocs.ManifestType.Factory.parse(reader);
