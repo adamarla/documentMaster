@@ -14,6 +14,7 @@ import java.io.PrintWriter;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 
 public class FrontDesk {
 
@@ -149,7 +150,7 @@ public class FrontDesk {
 
 		if (build.waitFor() == 0) {
 			Path src = workingDir.listFiles(new NameFilter(".pdf"))[0].toPath();
-			Files.move(src, outputFile.toPath());
+			Files.move(src, outputFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
 
 			ProcessBuilder pClean = new ProcessBuilder("make", "clean");
 			pClean.directory(workingDir);
