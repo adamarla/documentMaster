@@ -29,14 +29,17 @@ public class FrontDesk {
 		EntryType school = teacherInfo.getSchool();
 
 		File templateDir = new File(SHARED);
-		File templateFile = templateDir.toPath().resolve("suggestion.tex").toFile();
-		File targetDir = new File(String.format("%s/teachers/%s-%s/petty-cash", 
+		File templateFile = templateDir.toPath().resolve("suggestion.tex")
+				.toFile();
+		File outputDir = new File(String.format("%s/teachers/%s-%s/petty-cash",
 				FRONTDESK, school.getId(), teacher.getId()));
-		if (!targetDir.exists()) targetDir.mkdirs();
-		File targetFile = targetDir.toPath().resolve("teacher.tex").toFile();
-
+		if (!outputDir.exists()) outputDir.mkdirs();
+		File workingDir = outputDir.toPath().resolve("working").toFile();
+		workingDir.mkdir();
+		File tex = workingDir.toPath().resolve("suggestion.tex").toFile();
+		
 		String line = null;
-		PrintWriter writer = new PrintWriter(new FileWriter(targetFile));
+		PrintWriter writer = new PrintWriter(new FileWriter(tex));
 		BufferedReader reader = new BufferedReader(new FileReader(templateFile));
 		while ((line = reader.readLine()) != null) {
 			if (line.trim().startsWith(school_tag)) {
@@ -52,15 +55,15 @@ public class FrontDesk {
 		}
 		writer.close();
 
-		Files.createSymbolicLink(targetDir.toPath().resolve("Makefile"),
-				templateDir.toPath().resolve("teacher.mk"));
-		
-		String outputFile = String.format("%s-%s.pdf", teacher.getId(),
-				teacher.getName().split("-")[0]);
-		generatePdf(targetDir, targetDir.toPath().resolve(outputFile).toFile());
+		Files.createSymbolicLink(workingDir.toPath().resolve("Makefile"),
+				templateDir.toPath().resolve("suggestion.mk"));
+
+		String outputFile = String.format("%s-%s.pdf", teacher.getId(), teacher
+				.getName().split("-")[0]);
+		generatePdf(workingDir, outputDir.toPath().resolve(outputFile).toFile());
 
 		ManifestType manifest = new ManifestType();
-		manifest.setRoot(targetDir.getPath());
+		manifest.setRoot(outputDir.getPath());
 		EntryType document = new EntryType();
 		document.setId(outputFile);
 		manifest.addDocument(document);
@@ -72,18 +75,20 @@ public class FrontDesk {
 
 		EntryType group = studentGroup.getGroup();
 		EntryType school = studentGroup.getSchool();
-		EntryType teacher = studentGroup.getTeacher();
 		String defaultPasswd = studentGroup.getDefaultPasswd();
 		EntryType[] members = studentGroup.getMembers();
 
 		File templateDir = new File(SHARED);
 		File templateFile = templateDir.toPath().resolve("roster.tex").toFile();
-		File targetDir = new File(String.format("%s/teachers/%s-%s/petty-cash", 
-				FRONTDESK, school.getId(), teacher.getId()));
-		File targetFile = targetDir.toPath().resolve("teacher.tex").toFile();
+		File outputDir = new File(String.format("%s/schools/%s", FRONTDESK,
+				school.getId()));
+		if (!outputDir.exists()) outputDir.mkdir();
+		File workingDir = outputDir.toPath().resolve(group.getId()).toFile();
+		workingDir.mkdir();
+		File tex = workingDir.toPath().resolve("roster.tex").toFile();
 
 		String line = null;
-		PrintWriter writer = new PrintWriter(new FileWriter(targetFile));
+		PrintWriter writer = new PrintWriter(new FileWriter(tex));
 		BufferedReader reader = new BufferedReader(new FileReader(templateFile));
 		while ((line = reader.readLine()) != null) {
 			if (line.trim().startsWith(school_tag)) {
@@ -108,12 +113,15 @@ public class FrontDesk {
 		}
 		writer.close();
 
-		String outputFile = String.format("%s-%s.pdf", group.getId(),
-				group.getName().replace(' ', '_'));
-		generatePdf(targetDir, targetDir.toPath().resolve(outputFile).toFile());
+		Files.createSymbolicLink(workingDir.toPath().resolve("Makefile"),
+				templateDir.toPath().resolve("roster.mk"));
+
+		String outputFile = String.format("%s-%s.pdf", group.getId(), group
+				.getName().replace(' ', '_'));
+		generatePdf(workingDir, outputDir.toPath().resolve(outputFile).toFile());
 
 		ManifestType manifest = new ManifestType();
-		manifest.setRoot(targetDir.getPath());
+		manifest.setRoot(outputDir.getPath());
 		EntryType document = new EntryType();
 		document.setId(outputFile);
 		manifest.addDocument(document);
@@ -123,12 +131,11 @@ public class FrontDesk {
 	private String FRONTDESK, SHARED;
 	private final String school_tag = "\\School", author_tag = "\\DocAuthor",
 			insertQRC_tag = "\\insertQR", table_end = "\\end{tabular}";
-	
 
-	private int generatePdf(File outputDir, File outputFile) throws Exception {
+	private int generatePdf(File workingDir, File outputFile) throws Exception {
 		ProcessBuilder pb = new ProcessBuilder("make");
 
-		pb.directory(outputDir);
+		pb.directory(workingDir);
 		pb.redirectErrorStream(true);
 
 		Process build = pb.start();
@@ -141,13 +148,16 @@ public class FrontDesk {
 		}
 
 		if (build.waitFor() == 0) {
-			Path src = outputDir.listFiles(new NameFilter("teacher.pdf"))[0].toPath();
+			Path src = workingDir.listFiles(new NameFilter(".pdf"))[0].toPath();
 			Files.move(src, outputFile.toPath());
 
 			ProcessBuilder pClean = new ProcessBuilder("make", "clean");
-			pClean.directory(outputDir);
+			pClean.directory(workingDir);
 			Process clean = pClean.start();
-			return clean.waitFor();
+			if (clean.waitFor() == 0) {
+				Files.delete(workingDir.toPath().resolve("Makefile"));
+				Files.delete(workingDir.toPath());
+			}
 		}
 
 		return 0;

@@ -85,36 +85,6 @@
                             
 
                         /**
-                        * field for Teacher
-                        */
-
-                        
-                                    protected gutenberg.blocs.EntryType localTeacher ;
-                                
-
-                           /**
-                           * Auto generated getter method
-                           * @return gutenberg.blocs.EntryType
-                           */
-                           public  gutenberg.blocs.EntryType getTeacher(){
-                               return localTeacher;
-                           }
-
-                           
-                        
-                            /**
-                               * Auto generated setter method
-                               * @param param Teacher
-                               */
-                               public void setTeacher(gutenberg.blocs.EntryType param){
-                            
-                                            this.localTeacher=param;
-                                    
-
-                               }
-                            
-
-                        /**
                         * field for DefaultPasswd
                         */
 
@@ -282,12 +252,6 @@
                                                  throw new org.apache.axis2.databinding.ADBException("group cannot be null!!");
                                             }
                                            localGroup.serialize(new javax.xml.namespace.QName("http://gutenberg/blocs","group"),
-                                               xmlWriter);
-                                        
-                                            if (localTeacher==null){
-                                                 throw new org.apache.axis2.databinding.ADBException("teacher cannot be null!!");
-                                            }
-                                           localTeacher.serialize(new javax.xml.namespace.QName("http://gutenberg/blocs","teacher"),
                                                xmlWriter);
                                         
                                     namespace = "http://gutenberg/blocs";
@@ -529,15 +493,6 @@
                                     }
                                     elementList.add(localGroup);
                                 
-                            elementList.add(new javax.xml.namespace.QName("http://gutenberg/blocs",
-                                                                      "teacher"));
-                            
-                            
-                                    if (localTeacher==null){
-                                         throw new org.apache.axis2.databinding.ADBException("teacher cannot be null!!");
-                                    }
-                                    elementList.add(localTeacher);
-                                
                                       elementList.add(new javax.xml.namespace.QName("http://gutenberg/blocs",
                                                                       "defaultPasswd"));
                                  
@@ -643,7 +598,7 @@
                     
                     reader.next();
                 
-                        java.util.ArrayList list5 = new java.util.ArrayList();
+                        java.util.ArrayList list4 = new java.util.ArrayList();
                     
                                     
                                     while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
@@ -667,22 +622,6 @@
                                     if (reader.isStartElement() && new javax.xml.namespace.QName("http://gutenberg/blocs","group").equals(reader.getName())){
                                 
                                                 object.setGroup(gutenberg.blocs.EntryType.Factory.parse(reader));
-                                              
-                                        reader.next();
-                                    
-                              }  // End of if for expected property start element
-                                
-                                else{
-                                    // A start element we are not expecting indicates an invalid parameter was passed
-                                    throw new org.apache.axis2.databinding.ADBException("Unexpected subelement " + reader.getName());
-                                }
-                            
-                                    
-                                    while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
-                                
-                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://gutenberg/blocs","teacher").equals(reader.getName())){
-                                
-                                                object.setTeacher(gutenberg.blocs.EntryType.Factory.parse(reader));
                                               
                                         reader.next();
                                     
@@ -720,11 +659,11 @@
                                     
                                     
                                     // Process the array and step past its final element's end.
-                                    list5.add(gutenberg.blocs.EntryType.Factory.parse(reader));
+                                    list4.add(gutenberg.blocs.EntryType.Factory.parse(reader));
                                                                 
                                                         //loop until we find a start element that is not part of this array
-                                                        boolean loopDone5 = false;
-                                                        while(!loopDone5){
+                                                        boolean loopDone4 = false;
+                                                        while(!loopDone4){
                                                             // We should be at the end element, but make sure
                                                             while (!reader.isEndElement())
                                                                 reader.next();
@@ -735,13 +674,13 @@
                                                                 reader.next();
                                                             if (reader.isEndElement()){
                                                                 //two continuous end elements means we are exiting the xml structure
-                                                                loopDone5 = true;
+                                                                loopDone4 = true;
                                                             } else {
                                                                 if (new javax.xml.namespace.QName("http://gutenberg/blocs","members").equals(reader.getName())){
-                                                                    list5.add(gutenberg.blocs.EntryType.Factory.parse(reader));
+                                                                    list4.add(gutenberg.blocs.EntryType.Factory.parse(reader));
                                                                         
                                                                 }else{
-                                                                    loopDone5 = true;
+                                                                    loopDone4 = true;
                                                                 }
                                                             }
                                                         }
@@ -750,7 +689,7 @@
                                                         object.setMembers((gutenberg.blocs.EntryType[])
                                                             org.apache.axis2.databinding.utils.ConverterUtil.convertToArray(
                                                                 gutenberg.blocs.EntryType.class,
-                                                                list5));
+                                                                list4));
                                                             
                               }  // End of if for expected property start element
                                 

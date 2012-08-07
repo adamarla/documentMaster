@@ -125,7 +125,6 @@
 			  <xsd:sequence>
 			    <xsd:element name="school" type="tns:entryType"/>
 			    <xsd:element name="group" type="tns:entryType"/>
-			    <xsd:element name="teacher" type="tns:entryType"/>
 			    <xsd:element name="defaultPasswd" type="xsd:string"/>
 			    <xsd:element name="members" type="tns:entryType" maxOccurs="unbounded"/>
 			  </xsd:sequence>
