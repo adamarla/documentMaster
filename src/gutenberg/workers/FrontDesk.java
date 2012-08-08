@@ -81,6 +81,8 @@ public class FrontDesk {
         EntryType school = studentGroup.getSchool();
         EntryType[] members = studentGroup.getMembers();
         
+        if (members == null) members = new EntryType[0];
+        
         if (members.length % 2 != 0) {
             throw new Exception(
                     "Doh! Come on, send an even number of elements I say!");
