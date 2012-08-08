@@ -122,6 +122,17 @@
                         
                                     protected gutenberg.blocs.EntryType[] localMembers ;
                                 
+                           /*  This tracker boolean wil be used to detect whether the user called the set method
+                          *   for this attribute. It will be used to determine whether to include this field
+                           *   in the serialized XML
+                           */
+                           protected boolean localMembersTracker = false ;
+
+                           public boolean isMembersSpecified(){
+                               return localMembersTracker;
+                           }
+
+                           
 
                            /**
                            * Auto generated getter method
@@ -141,10 +152,6 @@
                                */
                               protected void validateMembers(gutenberg.blocs.EntryType[] param){
                              
-                              if ((param != null) && (param.length < 1)){
-                                throw new java.lang.RuntimeException();
-                              }
-                              
                               }
 
 
@@ -156,7 +163,8 @@
                               
                                    validateMembers(param);
 
-                               
+                               localMembersTracker = param != null;
+                                      
                                       this.localMembers=param;
                               }
 
@@ -171,6 +179,9 @@
                                    localMembers = new gutenberg.blocs.EntryType[]{};
                                    }
 
+                            
+                                 //update the setting tracker
+                                localMembersTracker = true;
                             
 
                                java.util.List list =
@@ -271,7 +282,7 @@
                                           }
                                     
                                    xmlWriter.writeEndElement();
-                             
+                              if (localMembersTracker){
                                        if (localMembers!=null){
                                             for (int i = 0;i < localMembers.length;i++){
                                                 if (localMembers[i] != null){
@@ -279,7 +290,7 @@
                                                            xmlWriter);
                                                 } else {
                                                    
-                                                           throw new org.apache.axis2.databinding.ADBException("members cannot be null!!");
+                                                        // we don't have to do any thing since minOccures is zero
                                                     
                                                 }
 
@@ -289,7 +300,7 @@
                                                throw new org.apache.axis2.databinding.ADBException("members cannot be null!!");
                                         
                                     }
-                                 
+                                 }
                     xmlWriter.writeEndElement();
                
 
@@ -501,7 +512,7 @@
                                         } else {
                                            throw new org.apache.axis2.databinding.ADBException("defaultPasswd cannot be null!!");
                                         }
-                                    
+                                     if (localMembersTracker){
                              if (localMembers!=null) {
                                  for (int i = 0;i < localMembers.length;i++){
 
@@ -511,7 +522,7 @@
                                          elementList.add(localMembers[i]);
                                     } else {
                                         
-                                               throw new org.apache.axis2.databinding.ADBException("members cannot be null !!");
+                                                // nothing to do
                                             
                                     }
 
@@ -522,7 +533,7 @@
                                     
                              }
 
-                        
+                        }
 
                 return new org.apache.axis2.databinding.utils.reader.ADBXMLStreamReaderImpl(qName, elementList.toArray(), attribList.toArray());
             
@@ -693,11 +704,10 @@
                                                             
                               }  // End of if for expected property start element
                                 
-                                else{
-                                    // A start element we are not expecting indicates an invalid parameter was passed
-                                    throw new org.apache.axis2.databinding.ADBException("Unexpected subelement " + reader.getName());
-                                }
-                              
+                                    else {
+                                        
+                                    }
+                                  
                             while (!reader.isStartElement() && !reader.isEndElement())
                                 reader.next();
                             
