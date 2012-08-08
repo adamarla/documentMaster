@@ -18,149 +18,162 @@ import java.nio.file.StandardCopyOption;
 
 public class FrontDesk {
 
-	public FrontDesk(Config config) {
-		FRONTDESK = config.getPath(Resource.frontdesk);
-		SHARED = config.getPath(Resource.shared);
-	}
+  public FrontDesk(Config config) {
+    FRONTDESK = config.getPath(Resource.frontdesk);
+    SHARED = config.getPath(Resource.shared);
+  }
 
-	public ManifestType generateSuggestionForm(TeacherType teacherInfo)
-			throws Exception {
+  public ManifestType generateSuggestionForm(TeacherType teacherInfo)
+      throws Exception {
 
-		EntryType teacher = teacherInfo.getTeacher();
-		EntryType school = teacherInfo.getSchool();
+    EntryType teacher = teacherInfo.getTeacher();
+    EntryType school = teacherInfo.getSchool();
 
-		File templateDir = new File(SHARED);
-		File templateFile = templateDir.toPath().resolve("suggestion.tex")
-				.toFile();
-		File outputDir = new File(String.format("%s/teachers/%s-%s/petty-cash",
-				FRONTDESK, school.getId(), teacher.getId()));
-		if (!outputDir.exists()) outputDir.mkdirs();
-		File workingDir = outputDir.toPath().resolve("working").toFile();
-		workingDir.mkdir();
-		File tex = workingDir.toPath().resolve("suggestion.tex").toFile();
-		
-		String line = null;
-		PrintWriter writer = new PrintWriter(new FileWriter(tex));
-		BufferedReader reader = new BufferedReader(new FileReader(templateFile));
-		while ((line = reader.readLine()) != null) {
-			if (line.trim().startsWith(school_tag)) {
-				line = line.replace("school", school.getName());
-			} else if (line.trim().startsWith(author_tag)) {
-				line = line
-						.replace("name", teacher.getName().replace('-', ' '));
-			} else if (line.trim().startsWith(insertQRC_tag)) {
-				line = line.replace("qrc", String.format("%s-%s-0-0-0-1-1",
-						teacher.getId(), teacher.getName()));
-			}
-			writer.println(line);
-		}
-		writer.close();
+    File templateDir = new File(SHARED);
+    File templateFile = templateDir.toPath().resolve("suggestion.tex")
+        .toFile();
+    File outputDir = new File(String.format("%s/teachers/%s-%s/petty-cash",
+        FRONTDESK, school.getId(), teacher.getId()));
+    if (!outputDir.exists())
+      outputDir.mkdirs();
+    File workingDir = outputDir.toPath().resolve("working").toFile();
+    workingDir.mkdir();
+    File tex = workingDir.toPath().resolve("suggestion.tex").toFile();
 
-		Files.createSymbolicLink(workingDir.toPath().resolve("Makefile"),
-				templateDir.toPath().resolve("suggestion.mk"));
+    String line = null;
+    PrintWriter writer = new PrintWriter(new FileWriter(tex));
+    BufferedReader reader = new BufferedReader(new FileReader(templateFile));
 
-		String outputFile = String.format("%s-%s.pdf", teacher.getId(), teacher
-				.getName().split("-")[0]);
-		generatePdf(workingDir, outputDir.toPath().resolve(outputFile).toFile());
+    while ((line = reader.readLine()) != null) {
+      if (line.trim().startsWith(school_tag)) {
+        line = line.replace("school", school.getName());
+      } else if (line.trim().startsWith(author_tag)) {
+        line = line
+            .replace("name", teacher.getName().replace('-', ' '));
+      } else if (line.trim().startsWith(insertQRC_tag)) {
+        line = line.replace("qrc", String.format("%s-%s-0-0-0-1-1",
+            teacher.getId(), teacher.getName()));
+      }
+      writer.println(line);
+    }
+    writer.close();
 
-		ManifestType manifest = new ManifestType();
-		manifest.setRoot(outputDir.getPath());
-		EntryType document = new EntryType();
-		document.setId(outputFile);
-		manifest.addDocument(document);
-		return manifest;
-	}
+    Files.createSymbolicLink(workingDir.toPath().resolve("Makefile"),
+        templateDir.toPath().resolve("suggestion.mk"));
 
-	public ManifestType generateStudentRoster(StudentGroupType studentGroup)
-			throws Exception {
+    String outputFile = String.format("%s-%s.pdf", teacher.getId(), teacher
+        .getName().split("-")[0]);
+    generatePdf(workingDir, outputDir.toPath().resolve(outputFile).toFile());
 
-		EntryType group = studentGroup.getGroup();
-		EntryType school = studentGroup.getSchool();
-		String defaultPasswd = studentGroup.getDefaultPasswd();
-		EntryType[] members = studentGroup.getMembers();
+    ManifestType manifest = new ManifestType();
+    manifest.setRoot(outputDir.getPath());
+    EntryType document = new EntryType();
+    document.setId(outputFile);
+    manifest.addDocument(document);
+    return manifest;
+  }
 
-		File templateDir = new File(SHARED);
-		File templateFile = templateDir.toPath().resolve("roster.tex").toFile();
-		File outputDir = new File(String.format("%s/schools/%s", FRONTDESK,
-				school.getId()));
-		if (!outputDir.exists()) outputDir.mkdir();
-		File workingDir = outputDir.toPath().resolve(group.getId()).toFile();
-		workingDir.mkdir();
-		File tex = workingDir.toPath().resolve("roster.tex").toFile();
+  public ManifestType generateStudentRoster(StudentGroupType studentGroup)
+      throws Exception {
 
-		String line = null;
-		PrintWriter writer = new PrintWriter(new FileWriter(tex));
-		BufferedReader reader = new BufferedReader(new FileReader(templateFile));
-		while ((line = reader.readLine()) != null) {
-			if (line.trim().startsWith(school_tag)) {
-				line = line.replace("school", school.getName());
-			} else if (line.trim().startsWith(author_tag)) {
-				line = line.replace("group", group.getName());
-			} else if (line.contains("passwd")) {
-				line = line.replace("passwd", defaultPasswd);
-			} else if (line.trim().startsWith(table_end)) {
-				if (members.length % 2 != 0) {
-					throw new Exception(
-							"Doh! Come on, send an even number of elements I say!");
-				}
-				String row = "    %s & %s & %s & %s\\\\";
-				for (int i = 0; i < members.length; i += 2) {
-					writer.println(String.format(row, members[i].getName(),
-							members[i].getId(), members[i + 1].getName(),
-							members[i + 1].getId()));
-				}
-			}
-			writer.println(line);
-		}
-		writer.close();
+    EntryType group = studentGroup.getGroup();
+    EntryType school = studentGroup.getSchool();
+    String defaultPasswd = studentGroup.getDefaultPasswd();
+    EntryType[] members = studentGroup.getMembers();
 
-		Files.createSymbolicLink(workingDir.toPath().resolve("Makefile"),
-				templateDir.toPath().resolve("roster.mk"));
+    File templateDir = new File(SHARED);
+    File templateFile = templateDir.toPath().resolve("roster.tex").toFile();
+    File outputDir = new File(String.format("%s/schools/%s", FRONTDESK,
+        school.getId()));
+    if (!outputDir.exists())
+      outputDir.mkdir();
+    File workingDir = outputDir.toPath().resolve(group.getId()).toFile();
+    workingDir.mkdir();
+    File tex = workingDir.toPath().resolve("roster.tex").toFile();
 
-		String outputFile = String.format("%s-%s.pdf", group.getId(), group
-				.getName().replace(' ', '_'));
-		generatePdf(workingDir, outputDir.toPath().resolve(outputFile).toFile());
+    String line = null;
+    PrintWriter writer = new PrintWriter(new FileWriter(tex));
+    BufferedReader reader = new BufferedReader(new FileReader(templateFile)) ;
+    int     tableIndex = 0 ;
 
-		ManifestType manifest = new ManifestType();
-		manifest.setRoot(outputDir.getPath());
-		EntryType document = new EntryType();
-		document.setId(outputFile);
-		manifest.addDocument(document);
-		return manifest;
-	}
+    while ((line = reader.readLine()) != null) {
+      line = line.trim();
+      
+      if (line.startsWith("school-sektion-password")) {
+        line = String.format("{\\huge \\textsc{gradians.com}} & & {\\LARGE \\textbf{%s @ %s}}", 
+        		group.getName(), school.getName()) ;
+      } else if (line.startsWith("\\end{tabular}")) {
+        tableIndex += 1 ;
+        if (tableIndex != 2) {
+          writer.println(line) ;
+          continue ; // 2nd table is what we want
+        }
+        
+        // But if it is the 2nd table, then start writing BEFORE the \end{tabular}
+        if (members.length % 2 != 0) {
+          throw new Exception(
+              "Doh! Come on, send an even number of elements I say!");
+        }
+        
+        int      nLines = members.length / 2 ;
+        String   row = "%s & %s & & %s & %s \\\\" ;
+        
+        for (int i = 0 ; i < nLines ; i++) {
+          writer.println(String.format(row, members[i].getName(),
+              members[i].getId(), members[i + 1].getName(), members[i + 1].getId()));
+        }
+      }
+      writer.println(line) ;
+    }
+    writer.close();
 
-	private String FRONTDESK, SHARED;
-	private final String school_tag = "\\School", author_tag = "\\DocAuthor",
-			insertQRC_tag = "\\insertQR", table_end = "\\end{tabular}";
+    Files.createSymbolicLink(workingDir.toPath().resolve("Makefile"),
+        templateDir.toPath().resolve("roster.mk"));
 
-	private int generatePdf(File workingDir, File outputFile) throws Exception {
-		ProcessBuilder pb = new ProcessBuilder("make");
+    String outputFile = String.format("%s-%s.pdf", group.getId(), group.getName().replace(' ', '_'));
+    generatePdf(workingDir, outputDir.toPath().resolve(outputFile).toFile());
 
-		pb.directory(workingDir);
-		pb.redirectErrorStream(true);
+    ManifestType manifest = new ManifestType();
+    manifest.setRoot(outputDir.getPath());
+    EntryType document = new EntryType();
+    document.setId(outputFile);
+    manifest.addDocument(document);
+    return manifest;
+  }
 
-		Process build = pb.start();
-		BufferedReader messages = new BufferedReader(new InputStreamReader(
-				build.getInputStream()));
+  private String FRONTDESK, SHARED;
+  private final String school_tag = "\\School", author_tag = "\\DocAuthor",
+      insertQRC_tag = "\\insertQR", table_end = "\\end{tabular}";
 
-		String line = null;
-		while ((line = messages.readLine()) != null) {
-			System.out.println(line);
-		}
+  private int generatePdf(File workingDir, File outputFile) throws Exception {
+    ProcessBuilder pb = new ProcessBuilder("make");
 
-		if (build.waitFor() == 0) {
-			Path src = workingDir.listFiles(new NameFilter(".pdf"))[0].toPath();
-			Files.move(src, outputFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+    pb.directory(workingDir);
+    pb.redirectErrorStream(true);
 
-			ProcessBuilder pClean = new ProcessBuilder("make", "clean");
-			pClean.directory(workingDir);
-			Process clean = pClean.start();
-			if (clean.waitFor() == 0) {
-				Files.delete(workingDir.toPath().resolve("Makefile"));
-				Files.delete(workingDir.toPath());
-			}
-		}
+    Process build = pb.start();
+    BufferedReader messages = new BufferedReader(new InputStreamReader(
+        build.getInputStream()));
 
-		return 0;
-	}
+    String line = null;
+    while ((line = messages.readLine()) != null) {
+      System.out.println(line);
+    }
+
+    if (build.waitFor() == 0) {
+      Path src = workingDir.listFiles(new NameFilter(".pdf"))[0].toPath();
+      Files.move(src, outputFile.toPath(),
+          StandardCopyOption.REPLACE_EXISTING);
+
+      ProcessBuilder pClean = new ProcessBuilder("make", "clean");
+      pClean.directory(workingDir);
+      Process clean = pClean.start();
+      if (clean.waitFor() == 0) {
+        Files.delete(workingDir.toPath().resolve("Makefile"));
+        Files.delete(workingDir.toPath());
+      }
+    }
+
+    return 0;
+  }
 }
