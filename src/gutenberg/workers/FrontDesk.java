@@ -104,13 +104,14 @@ public class FrontDesk {
 
         while ((line = reader.readLine()) != null) {
             trim = line.trim();
-            if (trim.endsWith("{school, sektion}")) {
+            if (trim.contains("{school}")) {
                 line = line.replace("school", school.getName());
+            } else if (trim.contains("{sektion}")) {
                 line = line.replace("sektion", group.getName());
             } else if (trim.startsWith(table_end)) {
-                int nLines = members.length / 2;
+                // number of lines = members.length / 2
                 String row = "%s & %s & & %s & %s \\\\";
-                for (int i = 0; i < nLines; i++) {
+                for (int i = 0; i < members.length; i+=2) {
                     writer.println(String.format(row, members[i].getName(),
                             members[i].getId(), members[i + 1].getName(),
                             members[i + 1].getId()));
