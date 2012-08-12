@@ -93,8 +93,8 @@ public class Locker {
 		File imageFile = locker.resolve(scanId).toFile();
 		BufferedImage image = ImageIO.read(imageFile);
 		Graphics2D graphics = (Graphics2D) image.getGraphics();
-		graphics.setStroke(new BasicStroke(1.5f));
-		graphics.setColor(new Color(0xfd9105));
+		graphics.setStroke(new BasicStroke(1.0f));
+		graphics.setColor(new Color(0xffa500));
 
 		PointType topLeft = new PointType();
 		PointType firstPoint = null;
