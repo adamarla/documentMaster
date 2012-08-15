@@ -96,6 +96,48 @@
                                }
                             
 
+                        /**
+                        * field for Value
+                        */
+
+                        
+                                    protected java.lang.String localValue ;
+                                
+                           /*  This tracker boolean wil be used to detect whether the user called the set method
+                          *   for this attribute. It will be used to determine whether to include this field
+                           *   in the serialized XML
+                           */
+                           protected boolean localValueTracker = false ;
+
+                           public boolean isValueSpecified(){
+                               return localValueTracker;
+                           }
+
+                           
+
+                           /**
+                           * Auto generated getter method
+                           * @return java.lang.String
+                           */
+                           public  java.lang.String getValue(){
+                               return localValue;
+                           }
+
+                           
+                        
+                            /**
+                               * Auto generated setter method
+                               * @param param Value
+                               */
+                               public void setValue(java.lang.String param){
+                            localValueTracker = param != null;
+                                   
+                                            this.localValue=param;
+                                    
+
+                               }
+                            
+
      
      
         /**
@@ -186,6 +228,24 @@
 
                                         
                                                    xmlWriter.writeCharacters(localName);
+                                            
+                                          }
+                                    
+                                   xmlWriter.writeEndElement();
+                             } if (localValueTracker){
+                                    namespace = "http://gutenberg/blocs";
+                                    writeStartElement(null, namespace, "value", xmlWriter);
+                             
+
+                                          if (localValue==null){
+                                              // write the nil attribute
+                                              
+                                                     throw new org.apache.axis2.databinding.ADBException("value cannot be null!!");
+                                                  
+                                          }else{
+
+                                        
+                                                   xmlWriter.writeCharacters(localValue);
                                             
                                           }
                                     
@@ -393,6 +453,15 @@
                                         } else {
                                            throw new org.apache.axis2.databinding.ADBException("name cannot be null!!");
                                         }
+                                    } if (localValueTracker){
+                                      elementList.add(new javax.xml.namespace.QName("http://gutenberg/blocs",
+                                                                      "value"));
+                                 
+                                        if (localValue != null){
+                                            elementList.add(org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localValue));
+                                        } else {
+                                           throw new org.apache.axis2.databinding.ADBException("value cannot be null!!");
+                                        }
                                     }
 
                 return new org.apache.axis2.databinding.utils.reader.ADBXMLStreamReaderImpl(qName, elementList.toArray(), attribList.toArray());
@@ -496,6 +565,24 @@
                                     java.lang.String content = reader.getElementText();
                                     
                                               object.setName(
+                                                    org.apache.axis2.databinding.utils.ConverterUtil.convertToString(content));
+                                              
+                                        reader.next();
+                                    
+                              }  // End of if for expected property start element
+                                
+                                    else {
+                                        
+                                    }
+                                
+                                    
+                                    while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
+                                
+                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://gutenberg/blocs","value").equals(reader.getName())){
+                                
+                                    java.lang.String content = reader.getElementText();
+                                    
+                                              object.setValue(
                                                     org.apache.axis2.databinding.utils.ConverterUtil.convertToString(content));
                                               
                                         reader.next();

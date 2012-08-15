@@ -85,30 +85,42 @@
                             
 
                         /**
-                        * field for DefaultPasswd
+                        * field for Testpaper
                         */
 
                         
-                                    protected java.lang.String localDefaultPasswd ;
+                                    protected gutenberg.blocs.EntryType localTestpaper ;
                                 
+                           /*  This tracker boolean wil be used to detect whether the user called the set method
+                          *   for this attribute. It will be used to determine whether to include this field
+                           *   in the serialized XML
+                           */
+                           protected boolean localTestpaperTracker = false ;
+
+                           public boolean isTestpaperSpecified(){
+                               return localTestpaperTracker;
+                           }
+
+                           
 
                            /**
                            * Auto generated getter method
-                           * @return java.lang.String
+                           * @return gutenberg.blocs.EntryType
                            */
-                           public  java.lang.String getDefaultPasswd(){
-                               return localDefaultPasswd;
+                           public  gutenberg.blocs.EntryType getTestpaper(){
+                               return localTestpaper;
                            }
 
                            
                         
                             /**
                                * Auto generated setter method
-                               * @param param DefaultPasswd
+                               * @param param Testpaper
                                */
-                               public void setDefaultPasswd(java.lang.String param){
-                            
-                                            this.localDefaultPasswd=param;
+                               public void setTestpaper(gutenberg.blocs.EntryType param){
+                            localTestpaperTracker = param != null;
+                                   
+                                            this.localTestpaper=param;
                                     
 
                                }
@@ -264,25 +276,13 @@
                                             }
                                            localGroup.serialize(new javax.xml.namespace.QName("http://gutenberg/blocs","group"),
                                                xmlWriter);
-                                        
-                                    namespace = "http://gutenberg/blocs";
-                                    writeStartElement(null, namespace, "defaultPasswd", xmlWriter);
-                             
-
-                                          if (localDefaultPasswd==null){
-                                              // write the nil attribute
-                                              
-                                                     throw new org.apache.axis2.databinding.ADBException("defaultPasswd cannot be null!!");
-                                                  
-                                          }else{
-
-                                        
-                                                   xmlWriter.writeCharacters(localDefaultPasswd);
-                                            
-                                          }
-                                    
-                                   xmlWriter.writeEndElement();
-                              if (localMembersTracker){
+                                         if (localTestpaperTracker){
+                                            if (localTestpaper==null){
+                                                 throw new org.apache.axis2.databinding.ADBException("testpaper cannot be null!!");
+                                            }
+                                           localTestpaper.serialize(new javax.xml.namespace.QName("http://gutenberg/blocs","testpaper"),
+                                               xmlWriter);
+                                        } if (localMembersTracker){
                                        if (localMembers!=null){
                                             for (int i = 0;i < localMembers.length;i++){
                                                 if (localMembers[i] != null){
@@ -503,16 +503,16 @@
                                          throw new org.apache.axis2.databinding.ADBException("group cannot be null!!");
                                     }
                                     elementList.add(localGroup);
-                                
-                                      elementList.add(new javax.xml.namespace.QName("http://gutenberg/blocs",
-                                                                      "defaultPasswd"));
-                                 
-                                        if (localDefaultPasswd != null){
-                                            elementList.add(org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localDefaultPasswd));
-                                        } else {
-                                           throw new org.apache.axis2.databinding.ADBException("defaultPasswd cannot be null!!");
-                                        }
-                                     if (localMembersTracker){
+                                 if (localTestpaperTracker){
+                            elementList.add(new javax.xml.namespace.QName("http://gutenberg/blocs",
+                                                                      "testpaper"));
+                            
+                            
+                                    if (localTestpaper==null){
+                                         throw new org.apache.axis2.databinding.ADBException("testpaper cannot be null!!");
+                                    }
+                                    elementList.add(localTestpaper);
+                                } if (localMembersTracker){
                              if (localMembers!=null) {
                                  for (int i = 0;i < localMembers.length;i++){
 
@@ -646,22 +646,18 @@
                                     
                                     while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
                                 
-                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://gutenberg/blocs","defaultPasswd").equals(reader.getName())){
+                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://gutenberg/blocs","testpaper").equals(reader.getName())){
                                 
-                                    java.lang.String content = reader.getElementText();
-                                    
-                                              object.setDefaultPasswd(
-                                                    org.apache.axis2.databinding.utils.ConverterUtil.convertToString(content));
+                                                object.setTestpaper(gutenberg.blocs.EntryType.Factory.parse(reader));
                                               
                                         reader.next();
                                     
                               }  // End of if for expected property start element
                                 
-                                else{
-                                    // A start element we are not expecting indicates an invalid parameter was passed
-                                    throw new org.apache.axis2.databinding.ADBException("Unexpected subelement " + reader.getName());
-                                }
-                            
+                                    else {
+                                        
+                                    }
+                                
                                     
                                     while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
                                 

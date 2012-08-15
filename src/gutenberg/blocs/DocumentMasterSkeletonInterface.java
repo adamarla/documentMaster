@@ -113,6 +113,20 @@
         /**
          * Auto generated method signature
          * 
+                                    * @param generateQuizReport
+         */
+
+        
+                public gutenberg.blocs.GenerateQuizReportResponse generateQuizReport
+                (
+                  gutenberg.blocs.GenerateQuizReport generateQuizReport
+                 )
+            ;
+        
+         
+        /**
+         * Auto generated method signature
+         * 
                                     * @param generateStudentRoster
          */
 

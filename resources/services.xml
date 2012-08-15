@@ -37,6 +37,10 @@
             <actionMapping>http://gutenberg/blocs/buildQuiz</actionMapping>
             <outputActionMapping>http://gutenberg/blocs/documentMaster/buildQuizResponse</outputActionMapping>
         </operation>
+        <operation name="generateQuizReport" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://gutenberg/blocs">
+            <actionMapping>http://gutenberg/blocs/generateQuizReport</actionMapping>
+            <outputActionMapping>http://gutenberg/blocs/documentMaster/generateQuizReportResponse</outputActionMapping>
+        </operation>
         <operation name="generateStudentRoster" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://gutenberg/blocs">
             <actionMapping>http://gutenberg/blocs/generateStudentRoster</actionMapping>
             <outputActionMapping>http://gutenberg/blocs/documentMaster/generateStudentRosterResponse</outputActionMapping>

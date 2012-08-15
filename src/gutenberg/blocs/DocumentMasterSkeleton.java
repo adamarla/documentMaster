@@ -299,6 +299,10 @@ public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
 		return generateSuggestionFormResponse;
 	}
 
+    /**
+     * Auto generated method signature
+     * 
+     */
 	@Override
 	public GenerateStudentRosterResponse generateStudentRoster(
 			GenerateStudentRoster generateStudentRoster) {
@@ -319,5 +323,33 @@ public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
 		generateStudentRosterResponse.setGenerateStudentRosterResponse(response);
 		return generateStudentRosterResponse;
 	}
+
+    /**
+     * Auto generated method signature
+     * 
+     * @param generateQuizReport14
+     * @return generateQuizReportResponse15
+     */
+
+    public gutenberg.blocs.GenerateQuizReportResponse generateQuizReport(
+            gutenberg.blocs.GenerateQuizReport generateQuizReport) {
+        Config config = null;
+        FrontDesk frontdesk = null;
+        ResponseType response = new ResponseType();
+        try {
+            config = new Config();
+            frontdesk = new FrontDesk(config);
+            StudentGroupType studentGroup = generateQuizReport.getGenerateQuizReport();
+            response.setManifest(frontdesk.generateQuizReport(studentGroup));
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.setError(e.getMessage());
+        }
+        GenerateQuizReportResponse
+            generateQuizReportResponse = new GenerateQuizReportResponse();
+        generateQuizReportResponse.setGenerateQuizReportResponse(response);
+        return generateQuizReportResponse;
+
+    }
 
 }

@@ -80,22 +80,23 @@ public class FrontDesk {
         EntryType group = studentGroup.getGroup();
         EntryType school = studentGroup.getSchool();
         EntryType[] members = studentGroup.getMembers();
-        
-        if (members == null) members = new EntryType[0];
-        
+
+        if (members == null)
+            members = new EntryType[0];
         if (members.length % 2 != 0) {
             throw new Exception(
                     "Doh! Come on, send an even number of elements I say!");
-        }        
+        }
 
         File templateDir = new File(SHARED);
         File templateFile = templateDir.toPath().resolve("roster.tex").toFile();
-        File outputDir = new File(String.format("%s/schools/%s", FRONTDESK,
+        File outputDir = new File(String.format("%s/schools/%s/rosters", FRONTDESK,
                 school.getId()));
         if (!outputDir.exists())
-            outputDir.mkdir();
+            outputDir.mkdirs();
         File workingDir = outputDir.toPath().resolve(group.getId()).toFile();
-        workingDir.mkdir();
+        if (!workingDir.exists())
+            workingDir.mkdir();
         File tex = workingDir.toPath().resolve("roster.tex").toFile();
 
         String line = null, trim = null;
@@ -124,8 +125,8 @@ public class FrontDesk {
         Files.createSymbolicLink(workingDir.toPath().resolve("Makefile"),
                 templateDir.toPath().resolve("roster.mk"));
 
-        String outputFile = String.format("%s-%s.pdf", group.getId(), group
-                .getName().replace(' ', '_'));
+        String outputFile = String.format("%s-%s.pdf", group.getId(),
+                group.getName().replace(' ', '_'));
         generatePdf(workingDir, outputDir.toPath().resolve(outputFile).toFile());
 
         ManifestType manifest = new ManifestType();
@@ -136,6 +137,69 @@ public class FrontDesk {
         return manifest;
     }
 
+    public ManifestType generateQuizReport(StudentGroupType studentGroup)
+            throws Exception {
+
+        EntryType testpaper = studentGroup.getGroup();
+        EntryType school = studentGroup.getSchool();
+        EntryType[] members = studentGroup.getMembers();
+
+        if (members == null)
+            members = new EntryType[0];
+        if (members.length % 2 != 0) {
+            throw new Exception(
+                    "Doh! Come on, send an even number of elements I say!");
+        }
+
+        File templateDir = new File(SHARED);
+        File templateFile = templateDir.toPath().resolve("groupreport.tex").toFile();
+        File outputDir = new File(String.format("%s/schools/%s/reports", FRONTDESK,
+                school.getId()));
+        if (!outputDir.exists())
+            outputDir.mkdirs();
+        File workingDir = outputDir.toPath().resolve(testpaper.getId()).toFile();
+        if (!workingDir.exists())
+            workingDir.mkdir();
+        File tex = workingDir.toPath().resolve("groupreport.tex").toFile();
+
+        String line = null, trim = null;
+        PrintWriter writer = new PrintWriter(new FileWriter(tex));
+        BufferedReader reader = new BufferedReader(new FileReader(templateFile));
+
+        while ((line = reader.readLine()) != null) {
+            trim = line.trim();
+            if (trim.contains("{school}")) {
+                line = line.replace("school", school.getName());
+            } else if (trim.contains("{sektion-testpaper}")) {
+                line = line.replace("sektion-testpaper", testpaper.getName());
+            } else if (trim.startsWith(table_end)) {
+                // number of lines = members.length / 2
+                String row = "%s & %s & & %s & %s \\\\";
+                for (int i = 0; i < members.length; i+=2) {
+                    writer.println(String.format(row, members[i].getName(),
+                            members[i].getValue(), members[i + 1].getName(),
+                            members[i + 1].getValue()));
+                }
+            }
+            writer.println(line);
+        }
+        writer.close();
+
+        Files.createSymbolicLink(workingDir.toPath().resolve("Makefile"),
+                templateDir.toPath().resolve("groupreport.mk"));
+
+        String outputFile = String.format("%s-%s.pdf", testpaper.getId(),
+                testpaper.getName().replace(' ', '_'));
+        generatePdf(workingDir, outputDir.toPath().resolve(outputFile).toFile());
+
+        ManifestType manifest = new ManifestType();
+        manifest.setRoot(outputDir.getPath());
+        EntryType document = new EntryType();
+        document.setId(outputFile);
+        manifest.addDocument(document);
+        return manifest;
+    }
+    
     private String FRONTDESK, SHARED;
     private final String school_tag = "\\School", author_tag = "\\DocAuthor",
             insertQRC_tag = "\\insertQR", table_end = "\\end{tabular}";
