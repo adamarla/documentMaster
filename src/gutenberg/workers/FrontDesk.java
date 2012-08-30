@@ -7,20 +7,22 @@ import gutenberg.blocs.TeacherType;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.nio.file.StandardOpenOption;
+import java.util.List;
 
 public class FrontDesk {
 
-    public FrontDesk(Config config) {
-        FRONTDESK = config.getPath(Resource.frontdesk);
-        SHARED = config.getPath(Resource.shared);
+    public FrontDesk(Config config) throws Exception {
+        frontdeskPath = new File(config.getPath(Resource.frontdesk)).toPath();
+        sharedPath = new File(config.getPath(Resource.shared)).toPath();
+        atm = ATM.instance(config);
     }
 
     public ManifestType generateSuggestionForm(TeacherType teacherInfo)
@@ -29,22 +31,37 @@ public class FrontDesk {
         EntryType teacher = teacherInfo.getTeacher();
         EntryType school = teacherInfo.getSchool();
 
-        File templateDir = new File(SHARED);
-        File templateFile = templateDir.toPath().resolve("suggestion.tex")
-                .toFile();
-        File outputDir = new File(String.format("%s/teachers/%s-%s/petty-cash",
-                FRONTDESK, school.getId(), teacher.getId()));
-        if (!outputDir.exists())
-            outputDir.mkdirs();
-        File workingDir = outputDir.toPath().resolve("working").toFile();
-        workingDir.mkdir();
-        File tex = workingDir.toPath().resolve("suggestion.tex").toFile();
+        String templateName = "suggestion.tex";
 
-        String line = null, trimmed = null;
-        PrintWriter writer = new PrintWriter(new FileWriter(tex));
-        BufferedReader reader = new BufferedReader(new FileReader(templateFile));
+        Path outputDirPath = frontdeskPath.resolve(String.format(
+                "teachers/%s-%s/petty-cash", school.getId(), teacher.getId()));
+        if (!Files.exists(outputDirPath))
+            Files.createDirectories(outputDirPath);
+        // generate symbolic link to test paper in ATM
+        ManifestType manifest = atm.deposit(outputDirPath);
+        
+        // Randomized manifest root is needed for key file
+        String atmKey = new File(manifest.getRoot()).toPath().getFileName()
+                .toString();
+        Path keyFile = outputDirPath.resolve("keyFile");
+        PrintWriter keyFileWriter = new PrintWriter(Files.newBufferedWriter(
+                keyFile, StandardCharsets.UTF_8, StandardOpenOption.CREATE));        
 
-        while ((line = reader.readLine()) != null) {
+        Path workingDirPath = outputDirPath.resolve("working");
+        Files.createDirectory(workingDirPath);
+        Path texPath = workingDirPath.resolve(templateName);
+
+        PrintWriter writer = new PrintWriter(Files.newBufferedWriter(texPath,
+                StandardCharsets.UTF_8, StandardOpenOption.CREATE));
+        List<String> template = Files.readAllLines(
+                sharedPath.resolve(templateName), StandardCharsets.UTF_8);
+
+        String baseQR = String.format("%s-%s-0-0", teacher.getId(), teacher.getName());
+        String QRKey = String.format("%s00", atmKey);
+        String QRKeyVal = String.format("%s1:%s-0-1-1", QRKey, baseQR);
+        String trimmed = null;
+        for (String line : template) {
+            
             trimmed = line.trim();
             if (trimmed.startsWith(school_tag)) {
                 line = line.replace("school", school.getName());
@@ -52,22 +69,22 @@ public class FrontDesk {
                 line = line
                         .replace("name", teacher.getName().replace('-', ' '));
             } else if (trimmed.startsWith(insertQRC_tag)) {
-                line = line.replace("qrc", String.format("%s-%s-0-0-0-1-1",
-                        teacher.getId(), teacher.getName()));
+                line = line.replace("qrc", QRKey + "1");
             }
             writer.println(line);
         }
         writer.close();
 
-        Files.createSymbolicLink(workingDir.toPath().resolve("Makefile"),
-                templateDir.toPath().resolve("suggestion.mk"));
+        Files.createSymbolicLink(workingDirPath.resolve("Makefile"),
+                sharedPath.resolve("suggestion.mk"));
 
         String outputFile = String.format("%s-%s.pdf", teacher.getId(), teacher
                 .getName().split("-")[0]);
-        generatePdf(workingDir, outputDir.toPath().resolve(outputFile).toFile());
+        generatePdf(workingDirPath, outputDirPath.resolve(outputFile));
+        
+        keyFileWriter.println(QRKeyVal);
+        keyFileWriter.close();
 
-        ManifestType manifest = new ManifestType();
-        manifest.setRoot(outputDir.getPath());
         EntryType document = new EntryType();
         document.setId(outputFile);
         manifest.addDocument(document);
@@ -88,22 +105,25 @@ public class FrontDesk {
                     "Doh! Come on, send an even number of elements I say!");
         }
 
-        File templateDir = new File(SHARED);
-        File templateFile = templateDir.toPath().resolve("roster.tex").toFile();
-        File outputDir = new File(String.format("%s/schools/%s/rosters", FRONTDESK,
-                school.getId()));
-        if (!outputDir.exists())
-            outputDir.mkdirs();
-        File workingDir = outputDir.toPath().resolve(group.getId()).toFile();
-        if (!workingDir.exists())
-            workingDir.mkdir();
-        File tex = workingDir.toPath().resolve("roster.tex").toFile();
+        String templateName = "roster.tex";
+        Path outputDirPath = frontdeskPath.resolve(String.format(
+                "schools/%s/rosters", school.getId()));
+        if (!Files.exists(outputDirPath))
+            Files.createDirectories(outputDirPath);
 
-        String line = null, trim = null;
-        PrintWriter writer = new PrintWriter(new FileWriter(tex));
-        BufferedReader reader = new BufferedReader(new FileReader(templateFile));
+        Path workingDirPath = outputDirPath.resolve(group.getId());
+        if (!Files.exists(workingDirPath))
+            Files.createDirectory(workingDirPath);
 
-        while ((line = reader.readLine()) != null) {
+        Path texPath = workingDirPath.resolve(templateName);
+
+        PrintWriter writer = new PrintWriter(Files.newBufferedWriter(texPath,
+                StandardCharsets.UTF_8, StandardOpenOption.CREATE));
+        List<String> template = Files.readAllLines(
+                sharedPath.resolve(templateName), StandardCharsets.UTF_8);
+
+        String trim = null;
+        for (String line : template) {
             trim = line.trim();
             if (trim.contains("{school}")) {
                 line = line.replace("school", school.getName());
@@ -112,7 +132,7 @@ public class FrontDesk {
             } else if (trim.startsWith(table_end)) {
                 // number of lines = members.length / 2
                 String row = "%s & %s & & %s & %s \\\\";
-                for (int i = 0; i < members.length; i+=2) {
+                for (int i = 0; i < members.length; i += 2) {
                     writer.println(String.format(row, members[i].getName(),
                             members[i].getId(), members[i + 1].getName(),
                             members[i + 1].getId()));
@@ -122,15 +142,15 @@ public class FrontDesk {
         }
         writer.close();
 
-        Files.createSymbolicLink(workingDir.toPath().resolve("Makefile"),
-                templateDir.toPath().resolve("roster.mk"));
+        Files.createSymbolicLink(workingDirPath.resolve("Makefile"),
+                sharedPath.resolve("roster.mk"));
 
-        String outputFile = String.format("%s-%s.pdf", group.getId(),
-                group.getName().replace(' ', '_'));
-        generatePdf(workingDir, outputDir.toPath().resolve(outputFile).toFile());
+        String outputFile = String.format("%s-%s.pdf", group.getId(), group
+                .getName().replace(' ', '_'));
+        generatePdf(workingDirPath, outputDirPath.resolve(outputFile));
 
         ManifestType manifest = new ManifestType();
-        manifest.setRoot(outputDir.getPath());
+        manifest.setRoot(outputDirPath.toString());
         EntryType document = new EntryType();
         document.setId(outputFile);
         manifest.addDocument(document);
@@ -151,22 +171,32 @@ public class FrontDesk {
                     "Doh! Come on, send an even number of elements I say!");
         }
 
-        File templateDir = new File(SHARED);
-        File templateFile = templateDir.toPath().resolve("groupreport.tex").toFile();
-        File outputDir = new File(String.format("%s/schools/%s/reports", FRONTDESK,
-                school.getId()));
-        if (!outputDir.exists())
-            outputDir.mkdirs();
-        File workingDir = outputDir.toPath().resolve(testpaper.getId()).toFile();
-        if (!workingDir.exists())
-            workingDir.mkdir();
-        File tex = workingDir.toPath().resolve("groupreport.tex").toFile();
+        String templateName = "groupreport.tex";
+        Path outputDirPath = frontdeskPath.resolve(String.format(
+                "schools/%s/reports", school.getId()));
+        if (!Files.exists(outputDirPath))
+            Files.createDirectories(outputDirPath);
 
-        String line = null, trim = null;
-        PrintWriter writer = new PrintWriter(new FileWriter(tex));
-        BufferedReader reader = new BufferedReader(new FileReader(templateFile));
+        Path workingDirPath = outputDirPath.resolve(testpaper.getId());
+        if (!Files.exists(workingDirPath))
+            Files.createDirectory(workingDirPath);
 
-        while ((line = reader.readLine()) != null) {
+        Path texPath = workingDirPath.resolve(templateName);
+        PrintWriter writer = new PrintWriter(Files.newBufferedWriter(texPath,
+                StandardCharsets.UTF_8, StandardOpenOption.CREATE));
+        
+        String outputCSV = String.format("%s-%s.csv", testpaper.getId(),
+                testpaper.getName().replace(' ', '_'));
+        Path csvPath = outputDirPath.resolve(outputCSV);
+        PrintWriter csvWriter = new PrintWriter(Files.newBufferedWriter(csvPath,
+                StandardCharsets.UTF_8, StandardOpenOption.CREATE));
+        csvWriter.println("name,marks");
+        
+        List<String> template = Files.readAllLines(
+                sharedPath.resolve(templateName), StandardCharsets.UTF_8);
+
+        String trim = null;
+        for (String line : template) {
             trim = line.trim();
             if (trim.contains("{school}")) {
                 line = line.replace("school", school.getName());
@@ -175,39 +205,49 @@ public class FrontDesk {
             } else if (trim.startsWith(table_end)) {
                 // number of lines = members.length / 2
                 String row = "%s & %s & & %s & %s \\\\";
-                for (int i = 0; i < members.length; i+=2) {
+                for (int i = 0; i < members.length; i += 2) {
                     writer.println(String.format(row, members[i].getName(),
                             members[i].getValue(), members[i + 1].getName(),
                             members[i + 1].getValue()));
+                    csvWriter.println(members[i].getName() + ","
+                            + members[i].getValue());
+                    csvWriter.println(members[i + 1].getName() + ","
+                            + members[i + 1].getValue());
                 }
             }
             writer.println(line);
         }
         writer.close();
+        csvWriter.close();
 
-        Files.createSymbolicLink(workingDir.toPath().resolve("Makefile"),
-                templateDir.toPath().resolve("groupreport.mk"));
+        Files.createSymbolicLink(workingDirPath.resolve("Makefile"),
+                sharedPath.resolve("groupreport.mk"));
 
         String outputFile = String.format("%s-%s.pdf", testpaper.getId(),
                 testpaper.getName().replace(' ', '_'));
-        generatePdf(workingDir, outputDir.toPath().resolve(outputFile).toFile());
+        generatePdf(workingDirPath, outputDirPath.resolve(outputFile));
 
         ManifestType manifest = new ManifestType();
-        manifest.setRoot(outputDir.getPath());
+        manifest.setRoot(outputDirPath.toString());
         EntryType document = new EntryType();
         document.setId(outputFile);
         manifest.addDocument(document);
+        document = new EntryType();
+        document.setId(outputCSV);
+        manifest.addDocument(document);
         return manifest;
     }
-    
-    private String FRONTDESK, SHARED;
+
+    private Path frontdeskPath, sharedPath;
+    private ATM atm;
     private final String school_tag = "\\School", author_tag = "\\DocAuthor",
             insertQRC_tag = "\\insertQR", table_end = "\\end{tabular}";
 
-    private int generatePdf(File workingDir, File outputFile) throws Exception {
+    private int generatePdf(Path workingDirPath, Path outputFilePath)
+            throws Exception {
         ProcessBuilder pb = new ProcessBuilder("make");
 
-        pb.directory(workingDir);
+        pb.directory(workingDirPath.toFile());
         pb.redirectErrorStream(true);
 
         Process build = pb.start();
@@ -220,16 +260,16 @@ public class FrontDesk {
         }
 
         if (build.waitFor() == 0) {
-            Path src = workingDir.listFiles(new NameFilter(".pdf"))[0].toPath();
-            Files.move(src, outputFile.toPath(),
-                    StandardCopyOption.REPLACE_EXISTING);
+            Path src = workingDirPath.toFile()
+                    .listFiles(new NameFilter(".pdf"))[0].toPath();
+            Files.move(src, outputFilePath, StandardCopyOption.REPLACE_EXISTING);
 
             ProcessBuilder pClean = new ProcessBuilder("make", "clean");
-            pClean.directory(workingDir);
+            pClean.directory(workingDirPath.toFile());
             Process clean = pClean.start();
             if (clean.waitFor() == 0) {
-                Files.delete(workingDir.toPath().resolve("Makefile"));
-                Files.delete(workingDir.toPath());
+                Files.delete(workingDirPath.resolve("Makefile"));
+                Files.delete(workingDirPath);
             }
         }
 

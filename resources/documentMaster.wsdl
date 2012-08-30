@@ -11,12 +11,6 @@
                     </xsd:element>
 				</xsd:sequence>
 			</xsd:complexType>
-
-			<xsd:complexType name="entryListType">
-				<xsd:sequence>
-					<xsd:element maxOccurs="unbounded" minOccurs="1" name="entry" type="tns:entryType"/>
-				</xsd:sequence>
-			</xsd:complexType>			
 			
 			<xsd:complexType name="quizType">
 				<xsd:sequence>
@@ -37,7 +31,6 @@
 					</xsd:element>
 				</xsd:sequence>
 			</xsd:complexType>
-
 
 			<xsd:complexType name="pageType">
 				<xsd:sequence>
@@ -95,16 +88,7 @@
 					<xsd:enumeration value="mcq"/>
 				</xsd:restriction>
 			</xsd:simpleType>
-			
-			<xsd:complexType name="questionType">
-				<xsd:sequence>
-					<xsd:element name="question" type="xsd:string"/>
-					<xsd:element name="marginnotes" type="xsd:string"/>
-					<xsd:element name="solution" type="xsd:string"/>
-					<xsd:element name="tags" type="tns:questionTagsType"/>
-				</xsd:sequence>
-			</xsd:complexType>
-			
+						
 			<xsd:complexType name="teacherType">
 			  <xsd:sequence>
 			    <xsd:element name="teacher" type="tns:entryType"/>
@@ -116,7 +100,6 @@
 			  <xsd:sequence>
 			    <xsd:element name="school" type="tns:entryType"/>
 			    <xsd:element name="group" type="tns:entryType"/>
-			    <xsd:element minOccurs="0" name="testpaper" type="tns:entryType"/>
 			    <xsd:element maxOccurs="unbounded" minOccurs="0" name="members" type="tns:entryType"/>
 			  </xsd:sequence>
 			</xsd:complexType>
@@ -131,20 +114,9 @@
 			<xsd:element name="assignQuizResponse" type="tns:responseType">
 			</xsd:element>
 
-			<xsd:element name="viewQuestions" type="tns:entryListType">
-			</xsd:element>
-
-			<xsd:element name="viewQuestionsResponse" type="tns:responseType">
-			</xsd:element>
-
 			<xsd:element name="receiveScans" type="xsd:string"/>
 
 			<xsd:element name="receiveScansResponse" type="tns:responseType">
-			</xsd:element>
-
-			<xsd:element name="viewScans" type="tns:entryListType"/>
-
-			<xsd:element name="viewScansResponse" type="tns:responseType">
 			</xsd:element>
 
 			<xsd:element name="createQuestion" type="xsd:string"/>
@@ -161,12 +133,7 @@
 
 			<xsd:element name="tagQuestionResponse" type="tns:responseType">
 			</xsd:element>
-			
-			<xsd:element name="writeQuestion" type="tns:questionType"/>
-
-			<xsd:element name="writeQuestionResponse" type="tns:responseType">
-			</xsd:element>
-			
+						
 			<xsd:element name="generateSuggestionForm" type="tns:teacherType"/>
 
 			<xsd:element name="generateSuggestionFormResponse" type="tns:responseType">
@@ -192,20 +159,8 @@
     <wsdl:part name="parameters" element="tns:generateQuizReportResponse">
     </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="viewQuestionsResponse">
-    <wsdl:part name="parameters" element="tns:viewQuestionsResponse">
-    </wsdl:part>
-  </wsdl:message>
   <wsdl:message name="generateQuizReportRequest">
     <wsdl:part name="parameters" element="tns:generateQuizReport">
-    </wsdl:part>
-  </wsdl:message>
-  <wsdl:message name="viewQuestionsRequest">
-    <wsdl:part name="parameters" element="tns:viewQuestions">
-    </wsdl:part>
-  </wsdl:message>
-  <wsdl:message name="writeQuestionResponse">
-    <wsdl:part name="parameters" element="tns:writeQuestionResponse">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="generateSuggestionFormRequest">
@@ -220,16 +175,8 @@
     <wsdl:part name="parameters" element="tns:assignQuizResponse">
     </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="viewScansResponse">
-    <wsdl:part name="parameters" element="tns:viewScansResponse">
-    </wsdl:part>
-  </wsdl:message>
   <wsdl:message name="generateStudentRosterResponse">
     <wsdl:part name="parameters" element="tns:generateStudentRosterResponse">
-    </wsdl:part>
-  </wsdl:message>
-  <wsdl:message name="writeQuestionRequest">
-    <wsdl:part name="parameters" element="tns:writeQuestion">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="createQuestionRequest">
@@ -240,20 +187,16 @@
     <wsdl:part name="parameters" element="tns:receiveScansResponse">
     </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="viewScansRequest">
-    <wsdl:part name="parameters" element="tns:viewScans">
-    </wsdl:part>
-  </wsdl:message>
   <wsdl:message name="createQuestionResponse">
     <wsdl:part name="parameters" element="tns:createQuestionResponse">
     </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="tagQuestionResponse">
-    <wsdl:part name="parameters" element="tns:tagQuestionResponse">
-    </wsdl:part>
-  </wsdl:message>
   <wsdl:message name="assignQuizRequest">
     <wsdl:part name="parameters" element="tns:assignQuiz">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="tagQuestionResponse">
+    <wsdl:part name="parameters" element="tns:tagQuestionResponse">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="generateSuggestionFormResponse">
@@ -264,16 +207,16 @@
     <wsdl:part name="parameters" element="tns:generateStudentRoster">
     </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="tagQuestionRequest">
-    <wsdl:part name="parameters" element="tns:tagQuestion">
+  <wsdl:message name="annotateScanRequest">
+    <wsdl:part name="parameters" element="tns:annotateScan">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="annotateScanResponse">
     <wsdl:part name="parameters" element="tns:annotateScanResponse">
     </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="annotateScanRequest">
-    <wsdl:part name="parameters" element="tns:annotateScan">
+  <wsdl:message name="tagQuestionRequest">
+    <wsdl:part name="parameters" element="tns:tagQuestion">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="receiveScansRequest">
@@ -291,18 +234,6 @@
       <wsdl:input message="tns:assignQuizRequest">
     </wsdl:input>
       <wsdl:output message="tns:assignQuizResponse">
-    </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="viewQuestions">
-      <wsdl:input message="tns:viewQuestionsRequest">
-    </wsdl:input>
-      <wsdl:output message="tns:viewQuestionsResponse">
-    </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="viewScans">
-      <wsdl:input message="tns:viewScansRequest">
-    </wsdl:input>
-      <wsdl:output message="tns:viewScansResponse">
     </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="receiveScans">
@@ -327,12 +258,6 @@
       <wsdl:input message="tns:tagQuestionRequest">
     </wsdl:input>
       <wsdl:output message="tns:tagQuestionResponse">
-    </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="writeQuestion">
-      <wsdl:input message="tns:writeQuestionRequest">
-    </wsdl:input>
-      <wsdl:output message="tns:writeQuestionResponse">
     </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="generateSuggestionForm">
@@ -374,24 +299,6 @@
         <soap:body use="literal"/>
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="viewQuestions">
-      <soap:operation soapAction="http://gutenberg/blocs/viewQuestions"/>
-      <wsdl:input>
-        <soap:body use="literal"/>
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal"/>
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="viewScans">
-      <soap:operation soapAction="http://gutenberg/blocs/viewScans"/>
-      <wsdl:input>
-        <soap:body use="literal"/>
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal"/>
-      </wsdl:output>
-    </wsdl:operation>
     <wsdl:operation name="receiveScans">
       <soap:operation soapAction="http://gutenberg/blocs/receiveScans"/>
       <wsdl:input>
@@ -421,15 +328,6 @@
     </wsdl:operation>
     <wsdl:operation name="tagQuestion">
       <soap:operation soapAction="http://gutenberg/blocs/tagQuestion"/>
-      <wsdl:input>
-        <soap:body use="literal"/>
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal"/>
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="writeQuestion">
-      <soap:operation soapAction="http://gutenberg/blocs/writeQuestion"/>
       <wsdl:input>
         <soap:body use="literal"/>
       </wsdl:input>

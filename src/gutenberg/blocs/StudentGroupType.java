@@ -85,48 +85,6 @@
                             
 
                         /**
-                        * field for Testpaper
-                        */
-
-                        
-                                    protected gutenberg.blocs.EntryType localTestpaper ;
-                                
-                           /*  This tracker boolean wil be used to detect whether the user called the set method
-                          *   for this attribute. It will be used to determine whether to include this field
-                           *   in the serialized XML
-                           */
-                           protected boolean localTestpaperTracker = false ;
-
-                           public boolean isTestpaperSpecified(){
-                               return localTestpaperTracker;
-                           }
-
-                           
-
-                           /**
-                           * Auto generated getter method
-                           * @return gutenberg.blocs.EntryType
-                           */
-                           public  gutenberg.blocs.EntryType getTestpaper(){
-                               return localTestpaper;
-                           }
-
-                           
-                        
-                            /**
-                               * Auto generated setter method
-                               * @param param Testpaper
-                               */
-                               public void setTestpaper(gutenberg.blocs.EntryType param){
-                            localTestpaperTracker = param != null;
-                                   
-                                            this.localTestpaper=param;
-                                    
-
-                               }
-                            
-
-                        /**
                         * field for Members
                         * This was an Array!
                         */
@@ -276,13 +234,7 @@
                                             }
                                            localGroup.serialize(new javax.xml.namespace.QName("http://gutenberg/blocs","group"),
                                                xmlWriter);
-                                         if (localTestpaperTracker){
-                                            if (localTestpaper==null){
-                                                 throw new org.apache.axis2.databinding.ADBException("testpaper cannot be null!!");
-                                            }
-                                           localTestpaper.serialize(new javax.xml.namespace.QName("http://gutenberg/blocs","testpaper"),
-                                               xmlWriter);
-                                        } if (localMembersTracker){
+                                         if (localMembersTracker){
                                        if (localMembers!=null){
                                             for (int i = 0;i < localMembers.length;i++){
                                                 if (localMembers[i] != null){
@@ -503,16 +455,7 @@
                                          throw new org.apache.axis2.databinding.ADBException("group cannot be null!!");
                                     }
                                     elementList.add(localGroup);
-                                 if (localTestpaperTracker){
-                            elementList.add(new javax.xml.namespace.QName("http://gutenberg/blocs",
-                                                                      "testpaper"));
-                            
-                            
-                                    if (localTestpaper==null){
-                                         throw new org.apache.axis2.databinding.ADBException("testpaper cannot be null!!");
-                                    }
-                                    elementList.add(localTestpaper);
-                                } if (localMembersTracker){
+                                 if (localMembersTracker){
                              if (localMembers!=null) {
                                  for (int i = 0;i < localMembers.length;i++){
 
@@ -609,7 +552,7 @@
                     
                     reader.next();
                 
-                        java.util.ArrayList list4 = new java.util.ArrayList();
+                        java.util.ArrayList list3 = new java.util.ArrayList();
                     
                                     
                                     while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
@@ -646,31 +589,16 @@
                                     
                                     while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
                                 
-                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://gutenberg/blocs","testpaper").equals(reader.getName())){
-                                
-                                                object.setTestpaper(gutenberg.blocs.EntryType.Factory.parse(reader));
-                                              
-                                        reader.next();
-                                    
-                              }  // End of if for expected property start element
-                                
-                                    else {
-                                        
-                                    }
-                                
-                                    
-                                    while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
-                                
                                     if (reader.isStartElement() && new javax.xml.namespace.QName("http://gutenberg/blocs","members").equals(reader.getName())){
                                 
                                     
                                     
                                     // Process the array and step past its final element's end.
-                                    list4.add(gutenberg.blocs.EntryType.Factory.parse(reader));
+                                    list3.add(gutenberg.blocs.EntryType.Factory.parse(reader));
                                                                 
                                                         //loop until we find a start element that is not part of this array
-                                                        boolean loopDone4 = false;
-                                                        while(!loopDone4){
+                                                        boolean loopDone3 = false;
+                                                        while(!loopDone3){
                                                             // We should be at the end element, but make sure
                                                             while (!reader.isEndElement())
                                                                 reader.next();
@@ -681,13 +609,13 @@
                                                                 reader.next();
                                                             if (reader.isEndElement()){
                                                                 //two continuous end elements means we are exiting the xml structure
-                                                                loopDone4 = true;
+                                                                loopDone3 = true;
                                                             } else {
                                                                 if (new javax.xml.namespace.QName("http://gutenberg/blocs","members").equals(reader.getName())){
-                                                                    list4.add(gutenberg.blocs.EntryType.Factory.parse(reader));
+                                                                    list3.add(gutenberg.blocs.EntryType.Factory.parse(reader));
                                                                         
                                                                 }else{
-                                                                    loopDone4 = true;
+                                                                    loopDone3 = true;
                                                                 }
                                                             }
                                                         }
@@ -696,7 +624,7 @@
                                                         object.setMembers((gutenberg.blocs.EntryType[])
                                                             org.apache.axis2.databinding.utils.ConverterUtil.convertToArray(
                                                                 gutenberg.blocs.EntryType.class,
-                                                                list4));
+                                                                list3));
                                                             
                               }  // End of if for expected property start element
                                 

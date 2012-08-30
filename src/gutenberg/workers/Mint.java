@@ -2,13 +2,14 @@ package gutenberg.workers;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
+import java.nio.file.StandardOpenOption;
 import java.util.List;
+import java.util.Random;
 
 import gutenberg.blocs.AssignmentType;
 import gutenberg.blocs.EntryType;
@@ -18,351 +19,377 @@ import gutenberg.blocs.QuizType;
 
 public class Mint {
 
-	public Mint(Config config) throws Exception {
-		this.bankRoot = new File(config.getPath(Resource.bank)).toPath();
-		this.mint = new File(config.getPath(Resource.mint)).toPath();
-		this.vault = new Vault(config);
-	}
+    public Mint(Config config) throws Exception {
+        bankrootPath = new File(config.getPath(Resource.bank)).toPath();
+        sharedPath = new File(config.getPath(Resource.shared)).toPath();
+        mintPath = new File(config.getPath(Resource.mint)).toPath();
+        vault = new Vault(config);
+        atm = ATM.instance(config);
+        locker = new Locker(config);
+    }
 
-	/**
-	 * creates an answer key pdf for a quiz and preview jpegs
-	 * 
-	 * @param quiz
-	 * @throws Exception
-	 */
-	public ManifestType generate(QuizType quiz) throws Exception {
+    /**
+     * Creates PDFs and preview jpegs for a quiz. Steps are: 0. Set up
+     * directories 1. Write latex 2. Link Makefiles 3. Make (the PDFs) 4.
+     * Populate and return manifest
+     * 
+     * @param quiz
+     * @return manifest containing generated files
+     * @throws Exception
+     * 
+     */
+    public ManifestType generate(QuizType quiz) throws Exception {
 
-		String quizId = quiz.getQuiz().getId();
-		Path quizDir = this.mint.resolve(quizId);
-		Path staging = quizDir.resolve("answer-key/staging");
+        // 0. Set up directories
+        String quizId = quiz.getQuiz().getId();
+        Path quizDir = Files.createDirectories(mintPath.resolve(quizId)
+                .resolve("answer-key"));
+        Path staging = Files.createDirectory(quizDir.resolve("staging"));
+        Path downloads = Files.createDirectory(quizDir.resolve("downloads"));
+        Path preview = Files.createDirectory(quizDir.resolve("preview"));
+        // generate symbolic link to quiz in ATM
+        ManifestType manifest = atm.deposit(quizDir.getParent());
 
-		boolean failed = (this.make("Prepare", quizId, null) == 0)? false:true;
-		if (failed) {
-			throw new Exception("[scribe:quiz] : Sandbox creation failed ... (quiz = " + quizId + " )");
-		}
+        // 1. write latex
+        PrintWriter answerKeyTex = new PrintWriter(Files.newBufferedWriter(
+                staging.resolve("answer-key.tex"), StandardCharsets.UTF_8,
+                StandardOpenOption.CREATE));
 
-		PrintWriter answerKey = new PrintWriter(staging.resolve("answer-key.tex").toFile());
-		PageType[] pages = quiz.getPage();
+        PageType[] pages = quiz.getPage();
+        // Write any information that might be pertinent during
+        // test paper generation - like # of pages at the beginning
+        answerKeyTex.println(String.format("%% num_pages=%s",
+                pages[pages.length - 1].getNumber()));
 
-		// Write any information that might be pertinent during testpaper generation
-		// - like # of pages - as a comment right at the beginning
-		answerKey.println("% num_pages = " + pages[pages.length-1].getNumber());
+        writePreamble(answerKeyTex, quiz.getSchool().getName(), quiz
+                .getTeacher().getName());
+        beginDoc(answerKeyTex);
+        answerKeyTex.println(printanswers);
+        for (int i = 0; i < pages.length; i++) {
 
-		// Write the preamble & initial stuff into the answerKey
-		writePreamble(answerKey, quiz.getSchool().getName(), quiz.getTeacher().getName());
-		beginDoc(answerKey);
-		answerKey.println(printanswers);
-		for (int i = 0; i < pages.length; i++) {
-			answerKey.println(preparePage(pages[i], staging));
-			answerKey.println(newpage);
-		}
-		endDoc(answerKey);
-		answerKey.close();
+            EntryType[] questions = pages[i].getQuestion();
+            if (questions == null)
+                continue;
 
-		System.out.println("Return Code: " + make("Compile", quizId, null));
-		return prepareManifest(quiz);
-	}
+            for (EntryType question : questions) {
+                setQuestion(question.getId(), answerKeyTex, staging);
+            }
+            answerKeyTex.println(newpage);
+        }
+        endDoc(answerKeyTex);
+        answerKeyTex.close();
 
-	/**
-	 * create an assignment
-	 * 
-	 * @param assignment
-	 * @throws Exception
-	 */
-	public ManifestType generate(AssignmentType assignment) throws Exception {
+        // 2. Link Makefiles and "Make" PDFs
+        Path rel = staging.relativize(sharedPath);
+        Files.createSymbolicLink(staging.resolve("Makefile"),
+                rel.resolve("answer-key.mk"));
+        Files.createSymbolicLink(staging.resolve("test-paper.mk"),
+                rel.resolve("test-paper.mk"));
 
-		String quizId = assignment.getQuiz().getId();
-		String testpaperId = assignment.getInstance().getId();
+        if (make("Compile", quizId, null) != 0) {
+            throw new Exception("Problem! Non-zero return code from make");
+        }
 
-		boolean failed = (this.make("Prepare", quizId, testpaperId) == 0)? false: true;
-		if (failed) {
-			throw new Exception("[scribe:testpaper] : Sandbox creation failed ... ( quiz = " + quizId + " )");
-		}
+        // 3. Populate manifest
+        String[] filenames = preview.toFile().list();
+        if (filenames.length == 0) {
+            throw new Exception("All preview files not prepared.");
+        }
+        EntryType[] images = new EntryType[filenames.length];
+        for (int i = 0; i < images.length; i++) {
+            images[i] = new EntryType();
+            images[i].setId(filenames[i]);
+        }
+        manifest.setImage(images);
 
-		int totalPages = 0;
-		Path quizDir = this.mint.resolve(quizId);
-		Path assignmentDir = quizDir.resolve(testpaperId);
-		Path staging = assignmentDir.resolve("staging");
-		Path blueprintPath = quizDir
-				.resolve("answer-key/staging/answer-key.tex");
-		BufferedReader blueprint = new BufferedReader(new FileReader(
-				blueprintPath.toFile()));
-		PrintWriter composite = new PrintWriter(staging + "/assignment-"
-				+ quizId + "-" + testpaperId + ".tex");
-		EntryType[] students = assignment.getStudents();
-		String[] lines = this.buffToString(blueprint);
+        EntryType[] documents = new EntryType[1];
+        if (!Files.exists(downloads.resolve("answer-key.pdf"))) {
+            throw new Exception("answer-key.pdf is missing!");
+        }
+        documents[0] = new EntryType();
+        documents[0].setId("answer-key.pdf");
+        manifest.setDocument(documents);
+        
+        return manifest;
+    }
 
-		for (int i = 0; i < students.length; i++) {
-			String name = students[i].getName();
-			String baseQR = QRCode(students[i], assignment);
-			int currQues = 1;
-			PrintWriter single = new PrintWriter(staging.resolve(
-					baseQR + ".tex").toFile());
-			boolean firstPass = (i == 0) ? true : false;
+    /**
+     * Create an assignment (test paper). Steps: 0. Set up directories 1. Copy
+     * blueprint from answer-key.tex 2. Write composite and per student latex
+     * and QRCode key files 3. Make (the PDFs) 4. Populate and return manifest
+     * 
+     * @param assignment
+     * @return manifest
+     * @throws Exception
+     */
+    public ManifestType generate(AssignmentType assignment) throws Exception {
 
-			for (int j = 0; j < lines.length; j++) {
-				String line = lines[j];
-				String trimmed = line.trim();
+        // 0. Set up directories
+        String quizId = assignment.getQuiz().getId();
+        String testpaperId = assignment.getInstance().getId();
+        Path quizDir = mintPath.resolve(quizId);
+        Path blueprintDir = quizDir.resolve("answer-key/staging");
+        Path assignmentDir = Files
+                .createDirectory(quizDir.resolve(testpaperId));
+        Path staging = Files.createDirectory(assignmentDir.resolve("staging"));
+        Path downloads = Files.createDirectory(assignmentDir
+                .resolve("downloads"));
+        // generate symbolic link to test paper in ATM
+        ManifestType manifest = atm.deposit(assignmentDir);
 
-				if (trimmed.startsWith(printanswers)) {
-					continue;
-				} else if (trimmed.startsWith(insertQR)) {
-					line = line.replace("QRC", baseQR + "-" + currQues + "-" + pageNumber + "-" + totalPages);
-				} else if (trimmed.startsWith(question)) {
-					currQues += 1;
-				} else if (trimmed.startsWith(docAuthor)) {
-					line = docAuthor + "{" + name + "}"; // change the name
-				} else if (totalPages == 0 && trimmed.startsWith("% num_pages")) {
-					String[] tokens = trimmed.split(" ");
-					totalPages = Integer.parseInt(tokens[tokens.length - 1]);
-				}
+        // 1. Copy blueprint answer-key.tex
+        List<String> lines = Files.readAllLines(
+                blueprintDir.resolve("answer-key.tex"), StandardCharsets.UTF_8);
+        int totalPages = Integer.parseInt(lines.get(0).split("=")[1]);
 
-				// This is the only chance the per-student TeX has to
-				// get content. So, grab it ...
-				single.println(line);
+        // 2. Write latex files for each student's test paper
+        String compositeNameFormat = "assignment-%s-%s.%s";
+        Path compositeTex = staging.resolve(String.format(compositeNameFormat,
+                quizId, testpaperId, "tex"));
+        PrintWriter composite = new PrintWriter(
+                Files.newBufferedWriter(compositeTex, StandardCharsets.UTF_8,
+                        StandardOpenOption.CREATE));
 
-				if (trimmed.startsWith(beginDocument)
-						|| trimmed.startsWith(beginQuestions)
-						|| trimmed.startsWith(docClass)
-						|| trimmed.startsWith(fancyfoot)
-						|| trimmed.startsWith(school)
-						|| trimmed.startsWith(usepackage)) {
-					if (firstPass)
-						composite.println(line);
-				} else if (trimmed.startsWith(endDocument)
-						|| trimmed.startsWith(endQuestions)) {
-					continue; // will be printed once, later
-				} else {
-					composite.println(line);
-				}
-			}
-			single.close();
-			if (totalPages%2 != 0) {
-				insertBlankPage(composite);
-			}
-			resetQuestionNumbering(composite);
-			resetPageNumbering(composite);
-		}
-		endDoc(composite);
-		composite.close();
+        // Randomized manifest root is needed for key file
+        String atmKey = new File(manifest.getRoot()).toPath().getFileName()
+                .toString();
 
-		System.out.println("Return Code: " + make("Compile", quizId, testpaperId));
-		return prepareManifest(assignment);
-	}
+        Path keyFile = assignmentDir.resolve("keyFile");
+        PrintWriter keyFileWriter = new PrintWriter(Files.newBufferedWriter(
+                keyFile, StandardCharsets.UTF_8, StandardOpenOption.CREATE));
 
-	private String[] buffToString(BufferedReader stream) throws Exception {
-		List<String> lines = new ArrayList<String>();
-		String line = null;
+        int MAX_2_DIG_BASE36_NUM = 1296;
+        Random random = new Random();
+        String singleNameFormat = "%s-%s-%s.%s", pseudoStudentId = null;
+        EntryType[] students = assignment.getStudents();
+        for (int i = 0; i < students.length; i++) {
 
-		while ((line = stream.readLine()) != null) {
-			lines.add(line);
-		}
-		stream.close();
-		return lines.toArray(new String[lines.size()]);
-	}
+            Path singleTex = staging.resolve(String.format(singleNameFormat,
+                    quizId, testpaperId, students[i].getId(), "tex"));
+            PrintWriter single = new PrintWriter(Files.newBufferedWriter(
+                    singleTex, StandardCharsets.UTF_8,
+                    StandardOpenOption.CREATE));
 
-	private String preparePage(PageType page, Path staging) throws Exception {
-		StringBuilder contents = new StringBuilder();
-		EntryType[] questionIds = page.getQuestion();
-		String questionId = null, question = null;
-		File[] resources = null;
-		if (questionIds != null) {
-			for (int i = 0; i < questionIds.length; i++) {
-				questionId = questionIds[i].getId();
-				question = this.vault.getContent(questionId, "question.tex")[0];
-				contents.append(question);
-				resources = this.vault.getFiles(questionId, "figure.gnuplot");
-				linkResources(resources[0], staging, questionId + ".gnuplot");
-			}
-		}
-		return contents.toString();
-	}
+            // QRKey = [TestPaperId(6)][studentIdx(2)][pageNum(1/2)]
+            pseudoStudentId = Integer.toString(
+                    random.nextInt(MAX_2_DIG_BASE36_NUM), Character.MAX_RADIX);
+            String QRKey = String.format("%s%2s", atmKey, pseudoStudentId)
+                    .replace(' ', '0');
+            lines.toArray(new String[lines.size()]);
+            replicateBlueprint(lines.toArray(new String[lines.size()]),
+                    composite, single, QRKey, students[i].getName(), (i == 0));
 
-	private void linkResources(File resource, Path targetDir, String targetFile)
-			throws Exception {
-		Path target = targetDir.resolve(targetFile);
-		if (!target.toFile().exists())
-			Files.createSymbolicLink(target, resource.toPath());
-	}
+            String baseQR = baseQR(students[i], assignment);
+            String QRKeyVal = null;
+            int pageNumber = 0;
+            for (int j = 0; j < totalPages; j++) {
 
-	private void writePreamble(PrintWriter writer, String school, String author)
-			throws Exception {
-		Path preamble = this.bankRoot.resolve("shared/preamble.tex");
-		BufferedReader reader = new BufferedReader(new FileReader(
-				preamble.toFile()));
-		String[] lines = this.buffToString(reader);
+                pageNumber = j + 1;
+                QRKeyVal = String.format("%s%s:%s-0-%s-%s", QRKey, pageNumber,
+                        baseQR, pageNumber, totalPages);
+                keyFileWriter.println(QRKeyVal);
 
-		for (int j = 0; j < lines.length; j++) {
-			String line = lines[j];
-			String trimmed = line.trim();
+            }
 
-			if (trimmed.startsWith(this.school)) {
-				writer.println(this.school + "{" + school + "}");
-			} else if (trimmed.startsWith(docAuthor)) {
-				if (author == null)
-					author = "Gutenberg";
-				writer.println(docAuthor + "{" + author + "}");
-			} else { // write whatever else is in preamble.tex
-				writer.println(line);
-			}
-		}
-	}
+            if (totalPages % 2 != 0) {
+                insertBlankPage(composite);
+            }
 
-	private void beginDoc(PrintWriter writer) throws Exception {
-		writer.println(beginDocument);
-		writer.println(beginQuestions);
-	}
+            resetQuestionNumbering(composite);
+            resetPageNumbering(composite);
+        }
+        endDoc(composite);
+        composite.close();
+        keyFileWriter.close();
 
-	private void endDoc(PrintWriter writer) throws Exception {
-		writer.println(endQuestions);
-		writer.println(endDocument);
-	}
+        // copy plot files from blueprint folder
+        File[] plotfiles = quizDir.resolve("answer-key").resolve("staging")
+                .toFile().listFiles(new NameFilter(".gnuplot"));
+        for (int i = 0; i < plotfiles.length; i++) {
+            Files.copy(plotfiles[i].toPath(),
+                    staging.resolve(plotfiles[i].getName()));
+        }
 
-	private void resetPageNumbering(PrintWriter writer) throws Exception {
-		writer.println("\\setcounter{page}{1}");
-	}
+        // 3. Make the PDFs
+        Path rel = staging.relativize(sharedPath);
+        Files.createSymbolicLink(staging.resolve("Makefile"),
+                rel.resolve("test-paper.mk"));
+        if (make("Compile", quizId, testpaperId) != 0)
+            throw new Exception("Problem! Non-zero return code from make");
 
-	private void resetQuestionNumbering(PrintWriter writer) throws Exception {
-		writer.println("\\setcounter{question}{0}");
-	}
-	
-	private void insertBlankPage(PrintWriter writer) { 
-		writer.println("\\begingroup\\centering For rough work. Will NOT be graded \\\\ \\endgroup");
-		writer.println(newpage);
-	}
+        // 4. Prepare manifest
+        EntryType[] documents = new EntryType[students.length + 1];
+        for (int i = 0; i < students.length; i++) {
 
-	private int make(String operation, String quizId, String testpaperId)
-			throws Exception {
-		testpaperId = (testpaperId == null || testpaperId.length() == 0) ? ""
-				: testpaperId;
-		ProcessBuilder pb = new ProcessBuilder("make", operation, "QUIZ="
-				+ quizId, "PRINTING_PRESS=" + this.bankRoot, "TEST="
-				+ testpaperId);
+            String filename = String.format(singleNameFormat, quizId,
+                    testpaperId, students[i].getId(), "pdf");
 
-		System.out.println("[make] : make " + operation + " QUIZ=" + quizId
-				+ " TEST=" + testpaperId);
+            if (Files.exists(downloads.resolve(filename))) {
+                documents[i] = new EntryType();
+                documents[i].setId(filename);
+            } else {
+                throw new Exception(String.format("Individual %s missing!",
+                        filename));
+            }
+        }
 
-		pb.directory(this.mint.toFile());
-		pb.redirectErrorStream(true);
+        String compositePDF = String.format(compositeNameFormat, quizId,
+                testpaperId, ".pdf");
+        if (Files.exists(downloads.resolve(compositePDF))) {
+            throw new Exception(String.format("Composite %s + missing!",
+                    compositePDF));
+        }
+        documents[students.length] = new EntryType();
+        documents[students.length].setId(compositePDF);
+        manifest.setDocument(documents);
+        
+        //make room in the locker for receiving scans
+        locker.makeRoom(quizId, testpaperId);
+        
+        return manifest;
+    }
+    
+    private Path  bankrootPath, sharedPath, mintPath;
+    private Locker locker;
+    private ATM   atm;
+    private Vault vault;
 
-		Process process = pb.start();
-		BufferedReader messages = new BufferedReader(new InputStreamReader(
-				process.getInputStream()));
-		String line = null;
+    private void setQuestion(String questionId, PrintWriter answerKeyTex,
+            Path staging) throws Exception {
+        String content = vault.getContent(questionId, "question.tex")[0];
+        answerKeyTex.print(content);
 
-		while ((line = messages.readLine()) != null) {
-			System.out.println(line);
-		}
-		return process.waitFor();
-	}
+        Path plotfile = vault.getFiles(questionId, "figure.gnuplot")[0]
+                .toPath();
+        Files.copy(plotfile, staging.resolve(questionId + ".gnuplot"));
 
-	private String QRCode(EntryType student, AssignmentType assignment)
-			throws Exception {
-		String quiz = assignment.getQuiz().getId();
-		String testpaper = assignment.getInstance().getId();
-		String name = student.getName().toLowerCase().replace(' ', '-');
-		String id = student.getId();
-		return String.format("%s-%s-%s-%s", 
-				id, name, quiz, testpaper);
-	}
+    }
 
-	private ManifestType prepareManifest(QuizType quiz) throws Exception {
+    private void replicateBlueprint(String[] lines, PrintWriter composite,
+            PrintWriter single, String baseQRKey, String author,
+            boolean firstPass) {
+        for (int j = 0; j < lines.length; j++) {
 
-		manifest = new ManifestType();
-		String quizId = quiz.getQuiz().getId();
-		String atmKey = this.getAtmKey(quizId);
+            String line = lines[j];
+            String trimmed = line.trim();
 
-		manifest.setRoot(atmKey);
-		Path preview = this.mint.resolve(quizId + "/answer-key/preview");
-		
-		String[] filenames = preview.toFile().list(); 
-		int pages = filenames.length;						
-		EntryType[] images = new EntryType[pages];
-				
-		if (pages == 0) {
-			throw new Exception("All preview thumbnail files not prepared.");			
-		}
-		
-		int i = 0;
-		for (String filename: filenames) {
-			images[i] = new EntryType();
-			images[i].setId(filename);
-			i++;
-		}
-		manifest.setImage(images);
+            if (trimmed.startsWith(printanswers)) {
+                continue;
+            } else if (trimmed.startsWith(insertQR)) {
+                line = line.replace("QRC", baseQRKey + pageNumber);
+            } else if (trimmed.startsWith(docAuthor)) {
+                line = docAuthor + "{" + author + "}"; // change the name
+            }
 
-		Path downloads = this.mint.resolve("answer-key/downloads");
-		EntryType[] documents = new EntryType[1];
-		if (downloads.resolve("answer-key.pdf").toFile().exists()) {
-			throw new Exception("answer-key.pdf is missing!");
-		}
-		documents[0] = new EntryType();
-		documents[0].setId("answer-key.pdf");
-		manifest.setDocument(documents);
+            // This is the only chance the per-student TeX has to
+            // get content. So, grab it ...
+            single.println(line);
 
-		return manifest;
-	}
+            if (trimmed.startsWith(beginDocument)
+                    || trimmed.startsWith(beginQuestions)
+                    || trimmed.startsWith(docClass)
+                    || trimmed.startsWith(fancyfoot)
+                    || trimmed.startsWith(school)
+                    || trimmed.startsWith(usepackage)) {
+                if (firstPass)
+                    composite.println(line);
+            } else if (trimmed.startsWith(endDocument)
+                    || trimmed.startsWith(endQuestions)) {
+                continue; // will be printed once, later
+            } else {
+                composite.println(line);
+            }
+        }
+        single.close();
+        composite.flush();
+    }
 
-	private ManifestType prepareManifest(AssignmentType assignment)
-			throws Exception {
+    private void writePreamble(PrintWriter writer, String school, String author)
+            throws Exception {
+        List<String> file = Files.readAllLines(
+                sharedPath.resolve("preamble.tex"), StandardCharsets.UTF_8);
+        String[] lines = new String[file.size()];
+        lines = file.toArray(lines);
 
-		manifest = new ManifestType();
-		String quizId = assignment.getQuiz().getId();
-		String atmKey = this.getAtmKey(quizId);
-		String instanceId = assignment.getInstance().getId();
+        for (int j = 0; j < lines.length; j++) {
+            String line = lines[j];
+            String trimmed = line.trim();
 
-		manifest.setRoot(atmKey + "/" + instanceId);
+            if (trimmed.startsWith(this.school)) {
+                writer.println(this.school + "{" + school + "}");
+            } else if (trimmed.startsWith(docAuthor)) {
+                if (author == null)
+                    author = "Gutenberg";
+                writer.println(docAuthor + "{" + author + "}");
+            } else { // write whatever else is in preamble.tex
+                writer.println(line);
+            }
+        }
+    }
 
-		EntryType[] students = assignment.getStudents();
-		EntryType[] documents = new EntryType[students.length + 1];
+    private void beginDoc(PrintWriter writer) throws Exception {
+        writer.println(beginDocument);
+        writer.println(beginQuestions);
+    }
 
-		Path downloads = this.mint.resolve(quizId).resolve(instanceId)
-				.resolve("downloads");
-		for (int i = 0; i < students.length; i++) {
-			String filename = QRCode(students[i], assignment) + ".pdf";
-			if (downloads.resolve(filename).toFile().exists()) {
-				documents[i] = new EntryType();
-				documents[i].setId(filename);
-			} else {
-				throw new Exception(filename
-						+ " missing! All assignment files not prepared.");
-			}
-		}
-		String assignmentPdf = "assignment-" + quizId + "-" + instanceId
-				+ ".pdf";
-		if (!downloads.resolve(assignmentPdf).toFile().exists()) {
-			throw new Exception(assignmentPdf + " missing!");
-		}
-		documents[students.length] = new EntryType();
-		documents[students.length].setId(assignmentPdf);
-		manifest.setDocument(documents);
-		return manifest;
-	}
+    private void endDoc(PrintWriter writer) throws Exception {
+        writer.println(endQuestions);
+        writer.println(endDocument);
+    }
 
-	private String getAtmKey(String quizId) throws Exception {
-		// Each quiz folder has within it a single-line file called 'atm-key'
-		// which in turn has within it a 9-digit random number. A link with
-		// this name(number?) - pointing to the parent quiz folder - is created
-		// within the atm/ folder
-		Path atmkey = this.mint.resolve(quizId).resolve("atm-key");
-		BufferedReader r = new BufferedReader(new FileReader(atmkey.toFile()));
-		String key = r.readLine(); // 'atm-key' has only one line
-		if (key != null) {
-			return key;
-		} else {
-			throw new Exception("No ATM-key for quiz = " + quizId);
-		}
-	}
+    private void resetPageNumbering(PrintWriter writer) throws Exception {
+        writer.println("\\setcounter{page}{1}");
+    }
 
-	private Path bankRoot, mint;
-	private Vault vault;
-	private ManifestType manifest;
-	private final String printanswers = "\\printanswers", pageNumber = "\\thepage",
-			docAuthor = "\\DocAuthor", newpage = "\\newpage",
-			usepackage = "\\usepackage", fancyfoot = "\\fancyfoot",
-			question = "\\question", beginDocument = "\\begin{document}",
-			beginQuestions = "\\begin{questions}", school = "\\School",
-			docClass = "\\documentclass", insertQR = "\\insertQR",
-			endQuestions = "\\end{questions}", endDocument = "\\end{document}";
+    private void resetQuestionNumbering(PrintWriter writer) throws Exception {
+        writer.println("\\setcounter{question}{0}");
+    }
+
+    private void insertBlankPage(PrintWriter writer) {
+        writer.println("\\begingroup\\centering For rough work. Will NOT be graded \\\\ \\endgroup");
+        writer.println(newpage);
+    }
+
+    private int make(String operation, String quizId, String testpaperId)
+            throws Exception {
+        testpaperId = (testpaperId == null || testpaperId.length() == 0) ? ""
+                : testpaperId;
+        ProcessBuilder pb = new ProcessBuilder("make", operation, "QUIZ="
+                + quizId, "PRINTING_PRESS=" + this.bankrootPath, "TEST="
+                + testpaperId);
+
+        System.out.println("[make] : make " + operation + " QUIZ=" + quizId
+                + " TEST=" + testpaperId);
+
+        pb.directory(this.mintPath.toFile());
+        pb.redirectErrorStream(true);
+
+        Process process = pb.start();
+        BufferedReader messages = new BufferedReader(new InputStreamReader(
+                process.getInputStream()));
+
+        String line = null;
+        while ((line = messages.readLine()) != null) {
+            System.out.println(line);
+        }
+        return process.waitFor();
+    }
+
+    private String baseQR(EntryType student, AssignmentType assignment)
+            throws Exception {
+        String quiz = assignment.getQuiz().getId();
+        String testpaper = assignment.getInstance().getId();
+        String name = student.getName().toLowerCase().replace(' ', '-');
+        String id = student.getId();
+        return String.format("%s-%s-%s-%s", id, name, quiz, testpaper);
+    }
+
+    private final String printanswers = "\\printanswers",
+            pageNumber = "\\thepage", docAuthor = "\\DocAuthor",
+            newpage = "\\newpage", usepackage = "\\usepackage",
+            fancyfoot = "\\fancyfoot", beginDocument = "\\begin{document}",
+            beginQuestions = "\\begin{questions}", school = "\\School",
+            docClass = "\\documentclass", insertQR = "\\insertQR",
+            endQuestions = "\\end{questions}", endDocument = "\\end{document}";
 
 }

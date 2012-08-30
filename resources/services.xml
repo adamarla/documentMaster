@@ -9,21 +9,9 @@
         <parameter name="ServiceClass">gutenberg.blocs.DocumentMasterSkeleton</parameter>
         <parameter name="useOriginalwsdl">true</parameter>
         <parameter name="modifyUserWSDLPortAddress">true</parameter>
-        <operation name="viewScans" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://gutenberg/blocs">
-            <actionMapping>http://gutenberg/blocs/viewScans</actionMapping>
-            <outputActionMapping>http://gutenberg/blocs/documentMaster/viewScansResponse</outputActionMapping>
-        </operation>
         <operation name="tagQuestion" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://gutenberg/blocs">
             <actionMapping>http://gutenberg/blocs/tagQuestion</actionMapping>
             <outputActionMapping>http://gutenberg/blocs/documentMaster/tagQuestionResponse</outputActionMapping>
-        </operation>
-        <operation name="viewQuestions" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://gutenberg/blocs">
-            <actionMapping>http://gutenberg/blocs/viewQuestions</actionMapping>
-            <outputActionMapping>http://gutenberg/blocs/documentMaster/viewQuestionsResponse</outputActionMapping>
-        </operation>
-        <operation name="writeQuestion" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://gutenberg/blocs">
-            <actionMapping>http://gutenberg/blocs/writeQuestion</actionMapping>
-            <outputActionMapping>http://gutenberg/blocs/documentMaster/writeQuestionResponse</outputActionMapping>
         </operation>
         <operation name="createQuestion" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://gutenberg/blocs">
             <actionMapping>http://gutenberg/blocs/createQuestion</actionMapping>

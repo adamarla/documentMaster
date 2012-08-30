@@ -1,40 +1,56 @@
 package gutenberg.workers;
 
-import gutenberg.blocs.EntryType;
 import gutenberg.blocs.ManifestType;
 
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.UUID;
+import java.util.Random;
 
+/**
+ * This class has been designed as a Singleton because the seeding algorithm of
+ * the Random number generator is a much poorer way to randomize when compared
+ * with the call to get the next random number.
+ * 
+ * @author adamarla
+ * 
+ */
 public class ATM {
-	
-	public ATM(Config config) throws Exception {
-		ATMDir = config.getPath(Resource.atm);
-	}
-	
-	public ManifestType deposit(File[] files) throws Exception {
-		File key = new File(ATMDir + "/" + generateKey());
-		if (!key.mkdir()) {
-			throw new Exception("Could not create " + key);
-		}
-		ManifestType manifest = new ManifestType();
-		manifest.setRoot(key.getPath());
-		for (int i = 0; i < files.length; i++) {
-			Path link = key.toPath().resolve(files[i].getName());
-			Files.createSymbolicLink(link, files[i].toPath());
-			
-			EntryType image = new EntryType();
-			image.setId(files[i].getName());
-			manifest.addImage(image);
-		}
-		return manifest;
-	}
- 	
-	private String ATMDir;
-	
-	private String generateKey() {
-		return UUID.randomUUID().toString();
-	}
+
+    public static ATM instance(Config config) throws Exception {
+        if (ATM.atm == null) {
+            ATM.atm = new ATM(config);
+        }
+        return ATM.atm;
+    }
+
+    private ATM(Config config) throws Exception {
+        atmPath = new File(config.getPath(Resource.atm)).toPath();
+        random = new Random();
+    }
+
+    /**
+     * Creates a symlink in ATM pointing to the given directory
+     * @param directory to be linked
+     */
+    public ManifestType deposit(Path directory) throws Exception {
+        Path key = atmPath.resolve(generateKey());
+        Path rel = atmPath.relativize(directory);
+        Files.createSymbolicLink(key, rel);
+        ManifestType manifest = new ManifestType();
+        manifest.setRoot(key.toString());
+        return manifest;
+    }
+
+    private static ATM atm;
+    private Path       atmPath;
+    private Random     random;
+
+    private String generateKey() {
+        int name = Math.abs(random.nextInt());
+        return String
+                .format("%6s", Integer.toString(name, Character.MAX_RADIX))
+                .replace(' ', '0');
+    }
+
 }

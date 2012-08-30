@@ -15,20 +15,6 @@
         /**
          * Auto generated method signature
          * 
-                                    * @param viewScans
-         */
-
-        
-                public gutenberg.blocs.ViewScansResponse viewScans
-                (
-                  gutenberg.blocs.ViewScans viewScans
-                 )
-            ;
-        
-         
-        /**
-         * Auto generated method signature
-         * 
                                     * @param tagQuestion
          */
 
@@ -36,34 +22,6 @@
                 public gutenberg.blocs.TagQuestionResponse tagQuestion
                 (
                   gutenberg.blocs.TagQuestion tagQuestion
-                 )
-            ;
-        
-         
-        /**
-         * Auto generated method signature
-         * 
-                                    * @param viewQuestions
-         */
-
-        
-                public gutenberg.blocs.ViewQuestionsResponse viewQuestions
-                (
-                  gutenberg.blocs.ViewQuestions viewQuestions
-                 )
-            ;
-        
-         
-        /**
-         * Auto generated method signature
-         * 
-                                    * @param writeQuestion
-         */
-
-        
-                public gutenberg.blocs.WriteQuestionResponse writeQuestion
-                (
-                  gutenberg.blocs.WriteQuestion writeQuestion
                  )
             ;
         

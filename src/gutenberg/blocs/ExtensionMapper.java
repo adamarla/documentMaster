@@ -33,39 +33,9 @@
               
                   if (
                   "http://gutenberg/blocs".equals(namespaceURI) &&
-                  "entryListType".equals(typeName)){
+                  "pointType".equals(typeName)){
                    
-                            return  gutenberg.blocs.EntryListType.Factory.parse(reader);
-                        
-
-                  }
-
-              
-                  if (
-                  "http://gutenberg/blocs".equals(namespaceURI) &&
-                  "questionTagsType".equals(typeName)){
-                   
-                            return  gutenberg.blocs.QuestionTagsType.Factory.parse(reader);
-                        
-
-                  }
-
-              
-                  if (
-                  "http://gutenberg/blocs".equals(namespaceURI) &&
-                  "teacherType".equals(typeName)){
-                   
-                            return  gutenberg.blocs.TeacherType.Factory.parse(reader);
-                        
-
-                  }
-
-              
-                  if (
-                  "http://gutenberg/blocs".equals(namespaceURI) &&
-                  "studentGroupType".equals(typeName)){
-                   
-                            return  gutenberg.blocs.StudentGroupType.Factory.parse(reader);
+                            return  gutenberg.blocs.PointType.Factory.parse(reader);
                         
 
                   }
@@ -83,16 +53,6 @@
               
                   if (
                   "http://gutenberg/blocs".equals(namespaceURI) &&
-                  "pointType".equals(typeName)){
-                   
-                            return  gutenberg.blocs.PointType.Factory.parse(reader);
-                        
-
-                  }
-
-              
-                  if (
-                  "http://gutenberg/blocs".equals(namespaceURI) &&
                   "quizType".equals(typeName)){
                    
                             return  gutenberg.blocs.QuizType.Factory.parse(reader);
@@ -103,9 +63,9 @@
               
                   if (
                   "http://gutenberg/blocs".equals(namespaceURI) &&
-                  "questionType".equals(typeName)){
+                  "assignmentType".equals(typeName)){
                    
-                            return  gutenberg.blocs.QuestionType.Factory.parse(reader);
+                            return  gutenberg.blocs.AssignmentType.Factory.parse(reader);
                         
 
                   }
@@ -113,9 +73,9 @@
               
                   if (
                   "http://gutenberg/blocs".equals(namespaceURI) &&
-                  "assignmentType".equals(typeName)){
+                  "questionTagsType".equals(typeName)){
                    
-                            return  gutenberg.blocs.AssignmentType.Factory.parse(reader);
+                            return  gutenberg.blocs.QuestionTagsType.Factory.parse(reader);
                         
 
                   }
@@ -156,6 +116,26 @@
                   "pageType".equals(typeName)){
                    
                             return  gutenberg.blocs.PageType.Factory.parse(reader);
+                        
+
+                  }
+
+              
+                  if (
+                  "http://gutenberg/blocs".equals(namespaceURI) &&
+                  "teacherType".equals(typeName)){
+                   
+                            return  gutenberg.blocs.TeacherType.Factory.parse(reader);
+                        
+
+                  }
+
+              
+                  if (
+                  "http://gutenberg/blocs".equals(namespaceURI) &&
+                  "studentGroupType".equals(typeName)){
+                   
+                            return  gutenberg.blocs.StudentGroupType.Factory.parse(reader);
                         
 
                   }

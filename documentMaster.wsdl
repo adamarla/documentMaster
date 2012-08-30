@@ -16,13 +16,6 @@
                     </xsd:element>
 				</xsd:sequence>
 			</xsd:complexType>
-
-			<xsd:complexType name="entryListType">
-				<xsd:sequence>
-					<xsd:element name="entry" type="tns:entryType"
-						maxOccurs="unbounded" minOccurs="1"></xsd:element>
-				</xsd:sequence>
-			</xsd:complexType>			
 			
 			<xsd:complexType name="quizType">
 				<xsd:sequence>
@@ -46,7 +39,6 @@
 					</xsd:element>
 				</xsd:sequence>
 			</xsd:complexType>
-
 
 			<xsd:complexType name="pageType">
 				<xsd:sequence>
@@ -107,16 +99,7 @@
 					<xsd:enumeration value="mcq"/>
 				</xsd:restriction>
 			</xsd:simpleType>
-			
-			<xsd:complexType name="questionType">
-				<xsd:sequence>
-					<xsd:element name="question" type="xsd:string"/>
-					<xsd:element name="marginnotes" type="xsd:string"/>
-					<xsd:element name="solution" type="xsd:string"/>
-					<xsd:element name="tags" type="tns:questionTagsType"/>
-				</xsd:sequence>
-			</xsd:complexType>
-			
+						
 			<xsd:complexType name="teacherType">
 			  <xsd:sequence>
 			    <xsd:element name="teacher" type="tns:entryType"/>
@@ -143,20 +126,9 @@
 			<xsd:element name="assignQuizResponse" type="tns:responseType">
 			</xsd:element>
 
-			<xsd:element name="viewQuestions" type="tns:entryListType">
-			</xsd:element>
-
-			<xsd:element name="viewQuestionsResponse" type="tns:responseType">
-			</xsd:element>
-
 			<xsd:element name="receiveScans" type="xsd:string"></xsd:element>
 
 			<xsd:element name="receiveScansResponse" type="tns:responseType">
-			</xsd:element>
-
-			<xsd:element name="viewScans" type="tns:entryListType"></xsd:element>
-
-			<xsd:element name="viewScansResponse" type="tns:responseType">
 			</xsd:element>
 
 			<xsd:element name="createQuestion" type="xsd:string"></xsd:element>
@@ -173,12 +145,7 @@
 
 			<xsd:element name="tagQuestionResponse" type="tns:responseType">
 			</xsd:element>
-			
-			<xsd:element name="writeQuestion" type="tns:questionType"></xsd:element>
-
-			<xsd:element name="writeQuestionResponse" type="tns:responseType">
-			</xsd:element>
-			
+						
 			<xsd:element name="generateSuggestionForm" type="tns:teacherType"></xsd:element>
 
 			<xsd:element name="generateSuggestionFormResponse" type="tns:responseType">
@@ -208,18 +175,6 @@
 	<wsdl:message name="assignQuizResponse">
 		<wsdl:part name="parameters" element="tns:assignQuizResponse"></wsdl:part>
 	</wsdl:message>
-	<wsdl:message name="viewQuestionsRequest">
-		<wsdl:part name="parameters" element="tns:viewQuestions"></wsdl:part>
-	</wsdl:message>
-	<wsdl:message name="viewQuestionsResponse">
-		<wsdl:part name="parameters" element="tns:viewQuestionsResponse"></wsdl:part>
-	</wsdl:message>
-	<wsdl:message name="viewScansRequest">
-		<wsdl:part name="parameters" element="tns:viewScans"></wsdl:part>
-	</wsdl:message>
-	<wsdl:message name="viewScansResponse">
-		<wsdl:part name="parameters" element="tns:viewScansResponse"></wsdl:part>
-	</wsdl:message>
 	<wsdl:message name="receiveScansRequest">
 		<wsdl:part name="parameters" element="tns:receiveScans"></wsdl:part>
 	</wsdl:message>
@@ -243,12 +198,6 @@
 	</wsdl:message>
 	<wsdl:message name="tagQuestionResponse">
 		<wsdl:part name="parameters" element="tns:tagQuestionResponse"></wsdl:part>
-	</wsdl:message>
-	<wsdl:message name="writeQuestionRequest">
-		<wsdl:part name="parameters" element="tns:writeQuestion"></wsdl:part>
-	</wsdl:message>
-	<wsdl:message name="writeQuestionResponse">
-		<wsdl:part name="parameters" element="tns:writeQuestionResponse"></wsdl:part>
 	</wsdl:message>
 	<wsdl:message name="generateSuggestionFormRequest">
 		<wsdl:part name="parameters" element="tns:generateSuggestionForm"></wsdl:part>
@@ -277,14 +226,6 @@
 			<wsdl:input message="tns:assignQuizRequest"></wsdl:input>
 			<wsdl:output message="tns:assignQuizResponse"></wsdl:output>
 		</wsdl:operation>
-		<wsdl:operation name="viewQuestions">
-			<wsdl:input message="tns:viewQuestionsRequest"></wsdl:input>
-			<wsdl:output message="tns:viewQuestionsResponse"></wsdl:output>
-		</wsdl:operation>
-		<wsdl:operation name="viewScans">
-			<wsdl:input message="tns:viewScansRequest"></wsdl:input>
-			<wsdl:output message="tns:viewScansResponse"></wsdl:output>
-		</wsdl:operation>
 		<wsdl:operation name="receiveScans">
 			<wsdl:input message="tns:receiveScansRequest"></wsdl:input>
 			<wsdl:output message="tns:receiveScansResponse"></wsdl:output>
@@ -300,10 +241,6 @@
 		<wsdl:operation name="tagQuestion">
 			<wsdl:input message="tns:tagQuestionRequest"></wsdl:input>
 			<wsdl:output message="tns:tagQuestionResponse"></wsdl:output>
-		</wsdl:operation>
-		<wsdl:operation name="writeQuestion">
-			<wsdl:input message="tns:writeQuestionRequest"></wsdl:input>
-			<wsdl:output message="tns:writeQuestionResponse"></wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="generateSuggestionForm">
 			<wsdl:input message="tns:generateSuggestionFormRequest"></wsdl:input>
@@ -332,24 +269,6 @@
 		</wsdl:operation>
 		<wsdl:operation name="assignQuiz">
 			<soap:operation soapAction="http://gutenberg/blocs/assignQuiz" />
-			<wsdl:input>
-				<soap:body use="literal" />
-			</wsdl:input>
-			<wsdl:output>
-				<soap:body use="literal" />
-			</wsdl:output>
-		</wsdl:operation>
-		<wsdl:operation name="viewQuestions">
-			<soap:operation soapAction="http://gutenberg/blocs/viewQuestions" />
-			<wsdl:input>
-				<soap:body use="literal" />
-			</wsdl:input>
-			<wsdl:output>
-				<soap:body use="literal" />
-			</wsdl:output>
-		</wsdl:operation>
-		<wsdl:operation name="viewScans">
-			<soap:operation soapAction="http://gutenberg/blocs/viewScans" />
 			<wsdl:input>
 				<soap:body use="literal" />
 			</wsdl:input>
@@ -386,15 +305,6 @@
 		</wsdl:operation>
 		<wsdl:operation name="tagQuestion">
 			<soap:operation soapAction="http://gutenberg/blocs/tagQuestion" />
-			<wsdl:input>
-				<soap:body use="literal" />
-			</wsdl:input>
-			<wsdl:output>
-				<soap:body use="literal" />
-			</wsdl:output>
-		</wsdl:operation>
-		<wsdl:operation name="writeQuestion">
-			<soap:operation soapAction="http://gutenberg/blocs/writeQuestion" />
 			<wsdl:input>
 				<soap:body use="literal" />
 			</wsdl:input>
