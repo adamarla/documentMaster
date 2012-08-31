@@ -243,7 +243,7 @@ public class Mint {
         documents[students.length].setId(compositePDF);
         manifest.setDocument(documents);
         
-        //make room in the locker for receiving scans
+        // 5. Make room in the locker for receiving scans
         locker.makeRoom(quizId, testpaperId);
         
         return manifest;

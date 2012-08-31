@@ -22,6 +22,7 @@ public class FrontDesk {
     public FrontDesk(Config config) throws Exception {
         frontdeskPath = new File(config.getPath(Resource.frontdesk)).toPath();
         sharedPath = new File(config.getPath(Resource.shared)).toPath();
+        locker = new Locker(config);
     }
 
     public ManifestType generateSuggestionForm(TeacherType teacherInfo)
@@ -80,6 +81,10 @@ public class FrontDesk {
         EntryType document = new EntryType();
         document.setId(outputFile);
         manifest.addDocument(document);
+        
+        // Make room in the locker for receiving scans        
+        locker.makeRoom("0", teacher.getId());
+        
         return manifest;
     }
 
@@ -228,6 +233,7 @@ public class FrontDesk {
         return manifest;
     }
 
+    private Locker locker;
     private Path frontdeskPath, sharedPath;
     private final String school_tag = "\\School", author_tag = "\\DocAuthor",
             insertQRC_tag = "\\insertQR", table_end = "\\end{tabular}";
