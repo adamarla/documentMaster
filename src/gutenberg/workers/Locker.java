@@ -49,13 +49,21 @@ public class Locker {
             tokens = scan.getName().split("_");
             base36ScanId = tokens[0];
             scanId = tokens[1];
-            rotate = tokens[2].equals("1") ? true : false;
-            
+            rotate = tokens[2].equals("1") ? true : false;            
             //scanId(base10)=quizId-testpaperId-studentId-pageNo
+            //scanId(suggestion)=0-[signature]-teacherId-1
             String[] subTokens = scanId.split("-");
-            String subpath = String.format("%s-%s/%s", subTokens[0],
+            
+            String subpath = null;
+            if (subTokens[0].equals("0")) { //suggestion
+                subpath = String.format("0-%s/%s", subTokens[2],
+                        subTokens[1]);
+            } else {
+                subpath = String.format("%s-%s/%s", subTokens[0],
                     subTokens[1], base36ScanId);
-            Path stored = lockerPath.resolve(subpath);
+            }
+            
+            Path stored = lockerPath.resolve(subpath);            
             if (!Files.exists(stored)) {
                 if (convert(scan.toPath(), stored, SCAN_SIZE, rotate) != 0) {
                     throw new Exception("Error running convert utility on "
@@ -66,6 +74,7 @@ public class Locker {
                 image.setValue(subpath);
                 manifest.addImage(image);
             }
+            
             if (!scan.delete()) {
                 throw new Exception("SaveScan error: could not delete"
                         + scan.getName());

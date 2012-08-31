@@ -138,9 +138,10 @@ public class Mint {
         ManifestType manifest = atm.deposit(assignmentDir);
 
         // 1. Copy blueprint answer-key.tex
-        List<String> lines = Files.readAllLines(
+        List<String> linesList = Files.readAllLines(
                 blueprintDir.resolve("answer-key.tex"), StandardCharsets.UTF_8);
-        int totalPages = Integer.parseInt(lines.get(0).split("=")[1]);
+        String[] lines = linesList.toArray(new String[linesList.size()]);
+        int totalPages = Integer.parseInt(lines[0].split("=")[1]);
 
         // 2. Write latex files for each student's test paper
         String compositeNameFormat = "assignment-%s-%s.%s";
@@ -175,9 +176,8 @@ public class Mint {
                     random.nextInt(MAX_2_DIG_BASE36_NUM), Character.MAX_RADIX);
             String QRKey = String.format("%s%2s", atmKey, pseudoStudentId)
                     .replace(' ', '0');
-            lines.toArray(new String[lines.size()]);
-            replicateBlueprint(lines.toArray(new String[lines.size()]),
-                    composite, single, QRKey, students[i].getName(), (i == 0));
+            replicateBlueprint(lines, composite, single, QRKey, 
+                    students[i].getName(), (i == 0));
 
             String baseQR = baseQR(students[i], assignment);
             String QRKeyVal = null;

@@ -22,7 +22,6 @@ public class FrontDesk {
     public FrontDesk(Config config) throws Exception {
         frontdeskPath = new File(config.getPath(Resource.frontdesk)).toPath();
         sharedPath = new File(config.getPath(Resource.shared)).toPath();
-        atm = ATM.instance(config);
     }
 
     public ManifestType generateSuggestionForm(TeacherType teacherInfo)
@@ -31,34 +30,29 @@ public class FrontDesk {
         EntryType teacher = teacherInfo.getTeacher();
         EntryType school = teacherInfo.getSchool();
 
-        String templateName = "suggestion.tex";
-
         Path outputDirPath = frontdeskPath.resolve(String.format(
                 "teachers/%s-%s/petty-cash", school.getId(), teacher.getId()));
         if (!Files.exists(outputDirPath))
             Files.createDirectories(outputDirPath);
-        // generate symbolic link to test paper in ATM
-        ManifestType manifest = atm.deposit(outputDirPath);
-        
-        // Randomized manifest root is needed for key file
-        String atmKey = new File(manifest.getRoot()).toPath().getFileName()
-                .toString();
+                
         Path keyFile = outputDirPath.resolve("keyFile");
         PrintWriter keyFileWriter = new PrintWriter(Files.newBufferedWriter(
-                keyFile, StandardCharsets.UTF_8, StandardOpenOption.CREATE));        
+                keyFile, StandardCharsets.UTF_8, StandardOpenOption.CREATE));
+        String QRKey = String.format("%s-%s", school.getId(), teacher.getId());
+        String QRKeyVal = String.format("%s:%s-%s-0-0-0-1-1", 
+                QRKey, teacher.getId(), teacher.getName());        
+        keyFileWriter.println(QRKeyVal);
+        keyFileWriter.close();
 
         Path workingDirPath = outputDirPath.resolve("working");
         Files.createDirectory(workingDirPath);
+        String templateName = "suggestion.tex";
         Path texPath = workingDirPath.resolve(templateName);
-
         PrintWriter writer = new PrintWriter(Files.newBufferedWriter(texPath,
                 StandardCharsets.UTF_8, StandardOpenOption.CREATE));
+        
         List<String> template = Files.readAllLines(
-                sharedPath.resolve(templateName), StandardCharsets.UTF_8);
-
-        String baseQR = String.format("%s-%s-0-0", teacher.getId(), teacher.getName());
-        String QRKey = String.format("%s00", atmKey);
-        String QRKeyVal = String.format("%s1:%s-0-1-1", QRKey, baseQR);
+                sharedPath.resolve(templateName), StandardCharsets.UTF_8);        
         String trimmed = null;
         for (String line : template) {
             
@@ -66,10 +60,9 @@ public class FrontDesk {
             if (trimmed.startsWith(school_tag)) {
                 line = line.replace("school", school.getName());
             } else if (trimmed.startsWith(author_tag)) {
-                line = line
-                        .replace("name", teacher.getName().replace('-', ' '));
+                line = line.replace("name", teacher.getName().replace('-', ' '));
             } else if (trimmed.startsWith(insertQRC_tag)) {
-                line = line.replace("qrc", QRKey + "1");
+                line = line.replace("QRC", QRKey);
             }
             writer.println(line);
         }
@@ -82,9 +75,8 @@ public class FrontDesk {
                 .getName().split("-")[0]);
         generatePdf(workingDirPath, outputDirPath.resolve(outputFile));
         
-        keyFileWriter.println(QRKeyVal);
-        keyFileWriter.close();
-
+        ManifestType manifest = new ManifestType();
+        manifest.setRoot(outputDirPath.toString());        
         EntryType document = new EntryType();
         document.setId(outputFile);
         manifest.addDocument(document);
@@ -105,7 +97,6 @@ public class FrontDesk {
                     "Doh! Come on, send an even number of elements I say!");
         }
 
-        String templateName = "roster.tex";
         Path outputDirPath = frontdeskPath.resolve(String.format(
                 "schools/%s/rosters", school.getId()));
         if (!Files.exists(outputDirPath))
@@ -115,8 +106,8 @@ public class FrontDesk {
         if (!Files.exists(workingDirPath))
             Files.createDirectory(workingDirPath);
 
+        String templateName = "roster.tex";
         Path texPath = workingDirPath.resolve(templateName);
-
         PrintWriter writer = new PrintWriter(Files.newBufferedWriter(texPath,
                 StandardCharsets.UTF_8, StandardOpenOption.CREATE));
         List<String> template = Files.readAllLines(
@@ -171,7 +162,6 @@ public class FrontDesk {
                     "Doh! Come on, send an even number of elements I say!");
         }
 
-        String templateName = "groupreport.tex";
         Path outputDirPath = frontdeskPath.resolve(String.format(
                 "schools/%s/reports", school.getId()));
         if (!Files.exists(outputDirPath))
@@ -181,10 +171,6 @@ public class FrontDesk {
         if (!Files.exists(workingDirPath))
             Files.createDirectory(workingDirPath);
 
-        Path texPath = workingDirPath.resolve(templateName);
-        PrintWriter writer = new PrintWriter(Files.newBufferedWriter(texPath,
-                StandardCharsets.UTF_8, StandardOpenOption.CREATE));
-        
         String outputCSV = String.format("%s-%s.csv", testpaper.getId(),
                 testpaper.getName().replace(' ', '_'));
         Path csvPath = outputDirPath.resolve(outputCSV);
@@ -192,9 +178,13 @@ public class FrontDesk {
                 StandardCharsets.UTF_8, StandardOpenOption.CREATE));
         csvWriter.println("name,marks");
         
+        String templateName = "groupreport.tex";
+        Path texPath = workingDirPath.resolve(templateName);
+        PrintWriter writer = new PrintWriter(Files.newBufferedWriter(texPath,
+                StandardCharsets.UTF_8, StandardOpenOption.CREATE));
+        
         List<String> template = Files.readAllLines(
                 sharedPath.resolve(templateName), StandardCharsets.UTF_8);
-
         String trim = null;
         for (String line : template) {
             trim = line.trim();
@@ -239,7 +229,6 @@ public class FrontDesk {
     }
 
     private Path frontdeskPath, sharedPath;
-    private ATM atm;
     private final String school_tag = "\\School", author_tag = "\\DocAuthor",
             insertQRC_tag = "\\insertQR", table_end = "\\end{tabular}";
 
