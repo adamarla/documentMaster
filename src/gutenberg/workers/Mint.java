@@ -5,8 +5,10 @@ import java.io.File;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
 import java.util.List;
 import java.util.Random;
@@ -20,7 +22,6 @@ import gutenberg.blocs.QuizType;
 public class Mint {
 
     public Mint(Config config) throws Exception {
-        bankrootPath = new File(config.getPath(Resource.bank)).toPath();
         sharedPath = new File(config.getPath(Resource.shared)).toPath();
         mintPath = new File(config.getPath(Resource.mint)).toPath();
         vault = new Vault(config);
@@ -79,14 +80,14 @@ public class Mint {
         endDoc(answerKeyTex);
         answerKeyTex.close();
 
-        // 2. Link Makefiles and "Make" PDFs
+        // 2. Link Makefiles and make PDFs
         Path rel = staging.relativize(sharedPath);
         Files.createSymbolicLink(staging.resolve("Makefile"),
                 rel.resolve("answer-key.mk"));
         Files.createSymbolicLink(staging.resolve("test-paper.mk"),
                 rel.resolve("test-paper.mk"));
 
-        if (make("Compile", quizId, null) != 0) {
+        if (make(staging, downloads, preview) != 0) {
             throw new Exception("Problem! Non-zero return code from make");
         }
 
@@ -210,11 +211,12 @@ public class Mint {
                     staging.resolve(plotfiles[i].getName()));
         }
 
-        // 3. Make the PDFs
+        // 3. Link Makefiles and make the PDFs
         Path rel = staging.relativize(sharedPath);
         Files.createSymbolicLink(staging.resolve("Makefile"),
                 rel.resolve("test-paper.mk"));
-        if (make("Compile", quizId, testpaperId) != 0)
+        
+        if (make(staging, downloads, null) != 0)
             throw new Exception("Problem! Non-zero return code from make");
 
         // 4. Prepare manifest
@@ -249,7 +251,7 @@ public class Mint {
         return manifest;
     }
     
-    private Path  bankrootPath, sharedPath, mintPath;
+    private Path  sharedPath, mintPath;
     private Locker locker;
     private ATM   atm;
     private Vault vault;
@@ -350,18 +352,11 @@ public class Mint {
         writer.println(newpage);
     }
 
-    private int make(String operation, String quizId, String testpaperId)
+    private int make(Path workingDir, Path downloadsDir, Path previewsDir)
             throws Exception {
-        testpaperId = (testpaperId == null || testpaperId.length() == 0) ? ""
-                : testpaperId;
-        ProcessBuilder pb = new ProcessBuilder("make", operation, "QUIZ="
-                + quizId, "PRINTING_PRESS=" + this.bankrootPath, "TEST="
-                + testpaperId);
+        ProcessBuilder pb = new ProcessBuilder("make");
 
-        System.out.println("[make] : make " + operation + " QUIZ=" + quizId
-                + " TEST=" + testpaperId);
-
-        pb.directory(this.mintPath.toFile());
+        pb.directory(workingDir.toFile());
         pb.redirectErrorStream(true);
 
         Process process = pb.start();
@@ -372,7 +367,30 @@ public class Mint {
         while ((line = messages.readLine()) != null) {
             System.out.println(line);
         }
-        return process.waitFor();
+        
+        int retCode = 0;
+        if ((retCode = process.waitFor()) == 0) {
+            
+            Path target = null; 
+            DirectoryStream<Path> stream = Files.newDirectoryStream(workingDir, "*.pdf");
+            for (Path entry: stream) {
+                target = downloadsDir.resolve(entry.getFileName());
+                Files.move(entry, target, StandardCopyOption.REPLACE_EXISTING);
+            }
+            stream.close();
+            
+            if (previewsDir != null) {
+                stream = Files.newDirectoryStream(workingDir, "page-*.jpeg");
+                for (Path entry: stream) {
+                    target = previewsDir.resolve(entry.getFileName());
+                    Files.move(entry, target, StandardCopyOption.REPLACE_EXISTING);
+                }
+                stream.close();
+            }
+
+        }
+
+        return retCode;
     }
 
     private String baseQR(EntryType student, AssignmentType assignment)

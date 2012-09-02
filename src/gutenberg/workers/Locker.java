@@ -49,11 +49,11 @@ public class Locker {
             tokens = scan.getName().split("_");
             base36ScanId = tokens[0];
             scanId = tokens[1];
-            rotate = tokens[2].equals("1") ? true : false;            
+            rotate = tokens[2].equals("1") ? true : false;
+            
             //scanId(base10)=quizId-testpaperId-studentId-pageNo
             //scanId(suggestion)=0-[signature]-teacherId-1
-            String[] subTokens = scanId.split("-");
-            
+            String[] subTokens = scanId.split("-");            
             String subpath = null;
             if (subTokens[0].equals("0")) { //suggestion
                 subpath = String.format("0-%s/%s", subTokens[2],
