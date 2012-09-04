@@ -64,7 +64,7 @@ public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
 			String scanId = annotateScan.getAnnotateScan().getScanId();
 			PointType[] points = annotateScan.getAnnotateScan()
 					.getCoordinates();
-			response.setManifest(locker.annotate(scanId, points));
+			response.setManifest(locker.annotateLine(scanId, points));
 		} catch (Exception e) {
 			e.printStackTrace();
 			response.setError(e.getMessage());

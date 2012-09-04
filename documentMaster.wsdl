@@ -79,6 +79,7 @@
 				<xsd:sequence>
 					<xsd:element name="x" type="xsd:int"/>
 					<xsd:element name="y" type="xsd:int"/>
+					<xsd:element name="code" type="xsd:int" minOccurs="0"/>
 				</xsd:sequence>			
 			</xsd:complexType>
 			

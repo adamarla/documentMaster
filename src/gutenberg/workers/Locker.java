@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
@@ -98,7 +99,7 @@ public class Locker {
      * @param scanId
      * @throws Exception
      */
-    public ManifestType annotate(String scanId, PointType[] points)
+    public ManifestType annotateRect(String scanId, PointType[] points)
             throws Exception {
 
         ManifestType manifest = new ManifestType();
@@ -150,6 +151,55 @@ public class Locker {
         return manifest;
     }
 
+    /**
+     * Expects pairs of diagonally opposite points
+     * 
+     * @param scanId
+     * @throws Exception
+     */
+    public ManifestType annotateLine(String scanId, PointType[] points)
+            throws Exception {
+
+        ManifestType manifest = new ManifestType();
+        manifest.setRoot(scanId);
+
+        File imageFile = lockerPath.resolve(scanId).toFile();
+        BufferedImage image = ImageIO.read(imageFile);
+        Graphics2D graphics = (Graphics2D) image.getGraphics();
+        graphics.setStroke(new BasicStroke(STROKE_WIDTH));
+
+        ArrayList<PointType> curve = new ArrayList<PointType>();
+        for (PointType point : points) {
+            
+            curve.add(point);
+            if (point.isCodeSpecified()) {
+                switch(point.getCode()) {
+                    case 0:
+                        graphics.setColor(new Color(WRONG));
+                        break;
+                    case 1:
+                        graphics.setColor(new Color(RIGHT));
+                        break;
+                    default:
+                        graphics.setColor(new Color(WHAT));
+                }
+                
+                int nPoints = curve.size();
+                int[] xPoints = new int[nPoints], yPoints = new int[nPoints];
+                for (int i = 0; i < nPoints; i++) {
+                    xPoints[i] = curve.get(i).getX();
+                    yPoints[i] = curve.get(i).getY();
+                }
+                graphics.drawPolyline(xPoints, yPoints, nPoints);                
+                curve.clear();
+            }
+
+        }
+
+        ImageIO.write(image, FORMAT, imageFile);
+        return manifest;
+    }
+    
     private int convert(Path src, Path target, String size, boolean rotate)
             throws Exception {
         ProcessBuilder pb = new ProcessBuilder();
@@ -179,6 +229,8 @@ public class Locker {
     private Path lockerPath;
 
     private final String SCAN_SIZE = "600x800";
+    private final float  STROKE_WIDTH = 3f;
     private final int    ARC_SIZE  = 3;
     private final String FORMAT    = "JPG";
+    private final int    RIGHT = 0x4b9630, WRONG = 0xea5115, WHAT = 0xf6bd13;
 }
