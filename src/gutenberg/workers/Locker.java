@@ -166,7 +166,9 @@ public class Locker {
         File imageFile = lockerPath.resolve(scanId).toFile();
         BufferedImage image = ImageIO.read(imageFile);
         Graphics2D graphics = (Graphics2D) image.getGraphics();
-        graphics.setStroke(new BasicStroke(STROKE_WIDTH));
+        BasicStroke s = new BasicStroke(STROKE_WIDTH, BasicStroke.CAP_ROUND, 
+                BasicStroke.JOIN_ROUND);
+        graphics.setStroke(s);
 
         ArrayList<PointType> curve = new ArrayList<PointType>();
         for (PointType point : points) {
@@ -187,13 +189,13 @@ public class Locker {
                 int nPoints = curve.size();
                 int[] xPoints = new int[nPoints], yPoints = new int[nPoints];
                 for (int i = 0; i < nPoints; i++) {
+                    
                     xPoints[i] = curve.get(i).getX();
-                    yPoints[i] = curve.get(i).getY();
+                    yPoints[i] = curve.get(i).getY();                    
                 }
                 graphics.drawPolyline(xPoints, yPoints, nPoints);                
                 curve.clear();
             }
-
         }
 
         ImageIO.write(image, FORMAT, imageFile);
