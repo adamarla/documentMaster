@@ -55,8 +55,10 @@ public class Locker {
             //scanId(base10)=quizId-testpaperId-studentId-pageNo
             //scanId(suggestion)=0-[signature]-teacherId-1
             String[] subTokens = scanId.split("-");            
-            String subpath = null;
-            if (subTokens[0].equals("0")) { //suggestion
+            boolean  isSuggestion = subTokens[0].equals("0") ;
+            String   subpath = null ;
+
+            if (isSuggestion) {
                 subpath = String.format("0-%s/%s", subTokens[2],
                         subTokens[1]);
             } else {
@@ -70,9 +72,11 @@ public class Locker {
                     throw new Exception("Error running convert utility on "
                             + scan.getName());
                 }
-                EntryType image = new EntryType();
+                EntryType image = new EntryType() ;
+                String    value = isSuggestion ? subTokens[1] : base36ScanId ; 
+
                 image.setId(scanId);
-                image.setValue(subpath);
+                image.setValue(value) ; 
                 manifest.addImage(image);
             }
             
