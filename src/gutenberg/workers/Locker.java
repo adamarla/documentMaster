@@ -84,7 +84,7 @@ public class Locker {
 
         // workaround for de-serialization bug in Savon
         // https://github.com/rubiii/savon/issues/11 (supposedly fixed!)
-        if (manifest.getImage().length == 1) {
+        if (manifest.getImage() != null && manifest.getImage().length == 1) {
             EntryType dummyEntry = new EntryType();
             dummyEntry.setId("SAVON_BUG_SKIP");
             manifest.addImage(dummyEntry);
