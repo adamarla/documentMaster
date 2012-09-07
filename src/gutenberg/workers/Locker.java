@@ -25,14 +25,16 @@ public class Locker {
 
     /**
      * Creates folder for storing scans related with
-     * this test paper
-     * @return manifest containing folder path
+     * this test paper or for suggestion scans
+     * @return Path to the folder
      */
-    public ManifestType makeRoom(String quizId, String testpaperId) throws Exception {
-        ManifestType m = new ManifestType();
-        String dirname = String.format("%s-%s", quizId, testpaperId);
-        m.setRoot(Files.createDirectory(lockerPath.resolve(dirname)).toString());
-        return m;
+    public Path makeRoom(String quizId, String testpaperId) throws Exception {
+        Path dirPath = lockerPath.resolve(
+                String.format("%s-%s", quizId, testpaperId));
+        if (!Files.exists(dirPath)) {
+            Files.createDirectory(dirPath);
+        }
+        return dirPath;
     }
     
     
@@ -73,7 +75,7 @@ public class Locker {
                             + scan.getName());
                 }
                 EntryType image = new EntryType() ;
-                String    value = isSuggestion ? subTokens[1] : base36ScanId ; 
+                String value = stored.getFileName().toString(); 
 
                 image.setId(scanId);
                 image.setValue(value) ; 
