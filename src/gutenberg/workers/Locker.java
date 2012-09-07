@@ -26,7 +26,7 @@ public class Locker {
     /**
      * Creates folder for storing scans related with
      * this test paper or for suggestion scans
-     * @return Path to the folder
+     * @return TODO
      */
     public Path makeRoom(String quizId, String testpaperId) throws Exception {
         Path dirPath = lockerPath.resolve(
