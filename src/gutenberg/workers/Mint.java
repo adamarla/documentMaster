@@ -10,6 +10,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -162,7 +163,9 @@ public class Mint {
 
         int MAX_2_DIG_BASE36_NUM = 1296;
         Random random = new Random();
-        String singleNameFormat = "%s-%s-%s.%s", pseudoStudentId = null;
+        HashMap<String, String> keys = new HashMap<String, String>();
+        String pseudoStudentId = null; 
+        String singleNameFormat = "%s-%s-%s.%s";
         EntryType[] students = assignment.getStudents();
         for (int i = 0; i < students.length; i++) {
 
@@ -175,6 +178,11 @@ public class Mint {
             // QRKey = [TestPaperId(6)][studentIdx(2)][pageNum(1/2)]
             pseudoStudentId = Integer.toString(
                     random.nextInt(MAX_2_DIG_BASE36_NUM), Character.MAX_RADIX);
+            while (keys.containsKey(pseudoStudentId)) {
+                pseudoStudentId = Integer.toString(
+                        random.nextInt(MAX_2_DIG_BASE36_NUM), Character.MAX_RADIX);                
+            }
+            keys.put(pseudoStudentId, null);
             String QRKey = String.format("%s%2s", atmKey, pseudoStudentId)
                     .replace(' ', '0');
             replicateBlueprint(lines, composite, single, QRKey, 
@@ -236,8 +244,8 @@ public class Mint {
         }
 
         String compositePDF = String.format(compositeNameFormat, quizId,
-                testpaperId, ".pdf");
-        if (Files.exists(downloads.resolve(compositePDF))) {
+                testpaperId, "pdf");
+        if (!Files.exists(downloads.resolve(compositePDF))) {
             throw new Exception(String.format("Composite %s + missing!",
                     compositePDF));
         }
