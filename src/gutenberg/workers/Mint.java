@@ -67,7 +67,7 @@ public class Mint {
         beginDoc(answerKeyTex);
 
         answerKeyTex.println(printanswers);
-        answerKeyTex.println("\\setcounter{diceroll}{0}");
+        answerKeyTex.println("\\setcounter{rolldice}{0}");
 
         // when printing the answer-key, only the first variation is picked
         for (int i = 0; i < pages.length; i++) {
@@ -282,15 +282,15 @@ public class Mint {
             String trimmed = line.trim();
 
             if (trimmed.startsWith(printanswers)|| 
-              trimmed.startsWith("\\setcounter{diceroll}")) {
+              trimmed.startsWith("\\setcounter{rolldice}")) {
                 continue;
             } else if (trimmed.startsWith(insertQR)) {
                 line = line.replace("QRC", baseQRKey + pageNumber);
             } else if (trimmed.startsWith(docAuthor)) {
                 line = docAuthor + "{" + author + "}"; // change the name
             } else if (trimmed.startsWith("\\question")) {
-              int      diceRoll = random.nextInt(4) ;
-              String   dice = String.format("\\setcounter{diceroll}{%d}", diceRoll) ;
+              int      rollDice = random.nextInt(4) ;
+              String   dice = String.format("\\setcounter{rolldice}{%d}", rollDice) ;
               
               single.println(dice) ;
               composite.println(dice) ;
