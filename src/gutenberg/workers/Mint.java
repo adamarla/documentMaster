@@ -297,7 +297,7 @@ public class Mint {
             } else if (trimmed.startsWith(docAuthor)) {
                 line = docAuthor + "{" + author + "}"; // change the name
             } else if (trimmed.startsWith("\\question")) {
-                line = String.format("\\setcounter{rolldice}{%d}%n%s", 
+                line = String.format("\\setcounter{rolldice}{%d}\n%s", 
                         dice.nextInt(4), line);
             }
 
