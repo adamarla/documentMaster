@@ -283,7 +283,7 @@ public class Mint {
             PrintWriter single, String baseQRKey, String author,
             boolean firstPass) {
 
-        Random  random = new Random() ;
+        Random dice = new Random() ;
         for (int j = 0; j < lines.length; j++) {
 
             String line = lines[j];
@@ -297,11 +297,8 @@ public class Mint {
             } else if (trimmed.startsWith(docAuthor)) {
                 line = docAuthor + "{" + author + "}"; // change the name
             } else if (trimmed.startsWith("\\question")) {
-              int      rollDice = random.nextInt(4) ;
-              String   dice = String.format("\\setcounter{rolldice}{%d}", rollDice) ;
-              
-              single.println(dice) ;
-              composite.println(dice) ;
+                line = String.format("\\setcounter{rolldice}{%d}%n%s", 
+                        dice.nextInt(4), line);
             }
 
             // This is the only chance the per-student TeX has to
@@ -369,7 +366,10 @@ public class Mint {
     }
 
     private void insertBlankPage(PrintWriter writer) {
-        writer.println("\\begingroup\\centering For rough work. Will NOT be graded \\\\ \\endgroup");
+        writer.print("\\begingroup");
+        writer.print("\\centering For rough work only. Will NOT be graded \\\\ ");
+        writer.println("\\endgroup");
+        writer.println(insertQR + BLANK_PAGE_CODE);
         writer.println(newpage);
     }
 
@@ -429,6 +429,7 @@ public class Mint {
             fancyfoot = "\\fancyfoot", beginDocument = "\\begin{document}",
             beginQuestions = "\\begin{questions}", school = "\\School",
             docClass = "\\documentclass", insertQR = "\\insertQR",
-            endQuestions = "\\end{questions}", endDocument = "\\end{document}";
+            endQuestions = "\\end{questions}", endDocument = "\\end{document}",
+            BLANK_PAGE_CODE = "{0}";
 
 }
