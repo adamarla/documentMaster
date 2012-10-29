@@ -1,5 +1,11 @@
 package gutenberg.workers;
 
+import gutenberg.blocs.AssignmentType;
+import gutenberg.blocs.EntryType;
+import gutenberg.blocs.ManifestType;
+import gutenberg.blocs.PageType;
+import gutenberg.blocs.QuizType;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
@@ -10,15 +16,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
-
-import gutenberg.blocs.AssignmentType;
-import gutenberg.blocs.EntryType;
-import gutenberg.blocs.ManifestType;
-import gutenberg.blocs.PageType;
-import gutenberg.blocs.QuizType;
 
 public class Mint {
 
@@ -167,7 +167,7 @@ public class Mint {
 
         int MAX_2_DIG_BASE36_NUM = 1296;
         Random random = new Random();
-        HashMap<String, String> keys = new HashMap<String, String>();
+        HashSet<String> keys = new HashSet<String>();
         String pseudoStudentId = null; 
         String singleNameFormat = "%s-%s-%s.%s";
         EntryType[] students = assignment.getStudents();
@@ -182,11 +182,11 @@ public class Mint {
             // QRKey = [TestPaperId(6)][studentIdx(2)][pageNum(1/2)]
             pseudoStudentId = Integer.toString(
                     random.nextInt(MAX_2_DIG_BASE36_NUM), Character.MAX_RADIX);
-            while (keys.containsKey(pseudoStudentId)) {
+            while (keys.contains(pseudoStudentId)) {
                 pseudoStudentId = Integer.toString(
                         random.nextInt(MAX_2_DIG_BASE36_NUM), Character.MAX_RADIX);                
             }
-            keys.put(pseudoStudentId, null);
+            keys.add(pseudoStudentId);
             String QRKey = String.format("%s%2s", atmKey, pseudoStudentId)
                     .replace(' ', '0');
             replicateBlueprint(lines, composite, single, QRKey, 
