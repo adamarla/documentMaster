@@ -168,6 +168,7 @@ public class Mint {
         Random random = new Random();
         String singleNameFormat = "%s-%s-%s.%s", pseudoStudentId = null;
         EntryType[] students = assignment.getStudents();
+
         for (int i = 0; i < students.length; i++) {
 
             Path singleTex = staging.resolve(String.format(singleNameFormat,
@@ -182,7 +183,7 @@ public class Mint {
             String QRKey = String.format("%s%2s", atmKey, pseudoStudentId)
                     .replace(' ', '0');
             replicateBlueprint(lines, composite, single, QRKey, 
-                    students[i].getName(), (i == 0));
+                    students[i].getName(), (i == 0), random);
 
             String baseQR = baseQR(students[i], assignment);
             String QRKeyVal = null;
@@ -273,9 +274,10 @@ public class Mint {
 
     private void replicateBlueprint(String[] lines, PrintWriter composite,
             PrintWriter single, String baseQRKey, String author,
-            boolean firstPass) {
+            boolean firstPass, Random rnd) 
+   {
 
-        Random  random = new Random() ;
+        // Random  random = new Random() ;
         for (int j = 0; j < lines.length; j++) {
 
             String line = lines[j];
@@ -289,7 +291,7 @@ public class Mint {
             } else if (trimmed.startsWith(docAuthor)) {
                 line = docAuthor + "{" + author + "}"; // change the name
             } else if (trimmed.startsWith("\\question")) {
-              int      rollDice = random.nextInt(4) ;
+              int      rollDice = rnd.nextInt(4) ;
               String   dice = String.format("\\setcounter{rolldice}{%d}", rollDice) ;
               
               single.println(dice) ;
