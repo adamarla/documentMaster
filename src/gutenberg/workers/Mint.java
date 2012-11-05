@@ -167,10 +167,12 @@ public class Mint {
 
         int MAX_2_DIG_BASE36_NUM = 1296;
         Random random = new Random();
+        Random dice = new Random() ;
         HashSet<String> keys = new HashSet<String>();
         String pseudoStudentId = null; 
         String singleNameFormat = "%s-%s-%s.%s";
         EntryType[] students = assignment.getStudents();
+
         for (int i = 0; i < students.length; i++) {
 
             Path singleTex = staging.resolve(String.format(singleNameFormat,
@@ -190,7 +192,7 @@ public class Mint {
             String QRKey = String.format("%s%2s", atmKey, pseudoStudentId)
                     .replace(' ', '0');
             replicateBlueprint(lines, composite, single, QRKey, 
-                    students[i].getName(), (i == 0));
+                    students[i].getName(), (i == 0), dice);
 
             String baseQR = baseQR(students[i], assignment);
             String QRKeyVal = null;
@@ -281,9 +283,8 @@ public class Mint {
 
     private void replicateBlueprint(String[] lines, PrintWriter composite,
             PrintWriter single, String baseQRKey, String author,
-            boolean firstPass) {
-
-        Random dice = new Random() ;
+            boolean firstPass, Random dice) 
+   {
         for (int j = 0; j < lines.length; j++) {
 
             String line = lines[j];

@@ -50,6 +50,11 @@ public class Locker {
             
             //scanId(base36)_scanId(base10)_orientation
             tokens = scan.getName().split("_");
+            if (tokens.length != 3) {
+                scan.delete();
+                continue;
+            }
+
             base36ScanId = tokens[0];
             scanId = tokens[1];
             rotate = tokens[2].equals("1") ? true : false;
