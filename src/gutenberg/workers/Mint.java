@@ -291,9 +291,11 @@ public class Mint {
             String line = lines[j];
             String trimmed = line.trim();
 
-            if (trimmed.startsWith(printanswers)|| 
+            if (trimmed.startsWith("%")) { // => a comment
+              continue ;
+            } else if (trimmed.startsWith(printanswers)|| 
               trimmed.startsWith("\\setcounter{rolldice}")) {
-                continue;
+              continue;
             } else if (trimmed.startsWith(insertQR)) {
                 line = line.replace("QRC", baseQRKey + pageNumber);
             } else if (trimmed.startsWith(docAuthor)) {
@@ -301,7 +303,7 @@ public class Mint {
             } else if (trimmed.startsWith("\\question")) {
                 line = String.format("\\setcounter{rolldice}{%d}\n%s", 
                         dice.nextInt(4), line);
-            }
+            } 
 
             // This is the only chance the per-student TeX has to
             // get content. So, grab it ...
