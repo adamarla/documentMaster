@@ -1,5 +1,11 @@
 package gutenberg.workers;
 
+import gutenberg.blocs.AssignmentType;
+import gutenberg.blocs.EntryType;
+import gutenberg.blocs.ManifestType;
+import gutenberg.blocs.PageType;
+import gutenberg.blocs.QuizType;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
@@ -10,14 +16,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
-
-import gutenberg.blocs.AssignmentType;
-import gutenberg.blocs.EntryType;
-import gutenberg.blocs.ManifestType;
-import gutenberg.blocs.PageType;
-import gutenberg.blocs.QuizType;
 
 public class Mint {
 
@@ -166,7 +167,11 @@ public class Mint {
 
         int MAX_2_DIG_BASE36_NUM = 1296;
         Random random = new Random();
-        String singleNameFormat = "%s-%s-%s.%s", pseudoStudentId = null;
+        Random dice = new Random() ;
+        
+        HashSet<String> keys = new HashSet<String>();
+        String pseudoStudentId = null; 
+        String singleNameFormat = "%s-%s-%s.%s";
         EntryType[] students = assignment.getStudents();
 
         for (int i = 0; i < students.length; i++) {
@@ -180,10 +185,15 @@ public class Mint {
             // QRKey = [TestPaperId(6)][studentIdx(2)][pageNum(1/2)]
             pseudoStudentId = Integer.toString(
                     random.nextInt(MAX_2_DIG_BASE36_NUM), Character.MAX_RADIX);
+            while (keys.contains(pseudoStudentId)) {
+                pseudoStudentId = Integer.toString(
+                        random.nextInt(MAX_2_DIG_BASE36_NUM), Character.MAX_RADIX);                
+            }
+            keys.add(pseudoStudentId);
             String QRKey = String.format("%s%2s", atmKey, pseudoStudentId)
                     .replace(' ', '0');
             replicateBlueprint(lines, composite, single, QRKey, 
-                    students[i].getName(), (i == 0), random);
+                    students[i].getName(), (i == 0), dice) ;
 
             String baseQR = baseQR(students[i], assignment);
             String QRKeyVal = null;
@@ -241,8 +251,8 @@ public class Mint {
         }
 
         String compositePDF = String.format(compositeNameFormat, quizId,
-                testpaperId, ".pdf");
-        if (Files.exists(downloads.resolve(compositePDF))) {
+                testpaperId, "pdf");
+        if (!Files.exists(downloads.resolve(compositePDF))) {
             throw new Exception(String.format("Composite %s + missing!",
                     compositePDF));
         }
@@ -274,10 +284,8 @@ public class Mint {
 
     private void replicateBlueprint(String[] lines, PrintWriter composite,
             PrintWriter single, String baseQRKey, String author,
-            boolean firstPass, Random rnd) 
+            boolean firstPass, Random dice) 
    {
-
-        // Random  random = new Random() ;
         for (int j = 0; j < lines.length; j++) {
 
             String line = lines[j];
@@ -291,11 +299,8 @@ public class Mint {
             } else if (trimmed.startsWith(docAuthor)) {
                 line = docAuthor + "{" + author + "}"; // change the name
             } else if (trimmed.startsWith("\\question")) {
-              int      rollDice = rnd.nextInt(4) ;
-              String   dice = String.format("\\setcounter{rolldice}{%d}", rollDice) ;
-              
-              single.println(dice) ;
-              composite.println(dice) ;
+                line = String.format("\\setcounter{rolldice}{%d}\n%s", 
+                        dice.nextInt(4), line);
             }
 
             // This is the only chance the per-student TeX has to
@@ -363,7 +368,10 @@ public class Mint {
     }
 
     private void insertBlankPage(PrintWriter writer) {
-        writer.println("\\begingroup\\centering For rough work. Will NOT be graded \\\\ \\endgroup");
+        writer.print("\\begingroup");
+        writer.print("\\centering For rough work only. Will NOT be graded \\\\ ");
+        writer.println("\\endgroup");
+        writer.println(insertQR + BLANK_PAGE_CODE);
         writer.println(newpage);
     }
 
@@ -423,6 +431,7 @@ public class Mint {
             fancyfoot = "\\fancyfoot", beginDocument = "\\begin{document}",
             beginQuestions = "\\begin{questions}", school = "\\School",
             docClass = "\\documentclass", insertQR = "\\insertQR",
-            endQuestions = "\\end{questions}", endDocument = "\\end{document}";
+            endQuestions = "\\end{questions}", endDocument = "\\end{document}",
+            BLANK_PAGE_CODE = "{0}";
 
 }

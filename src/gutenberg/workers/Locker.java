@@ -50,6 +50,11 @@ public class Locker {
             
             //scanId(base36)_scanId(base10)_orientation
             tokens = scan.getName().split("_");
+            if (tokens.length != 3) {
+                scan.delete();
+                continue;
+            }
+
             base36ScanId = tokens[0];
             scanId = tokens[1];
             rotate = tokens[2].equals("1") ? true : false;
@@ -71,8 +76,7 @@ public class Locker {
             Path stored = lockerPath.resolve(subpath);            
             if (!Files.exists(stored)) {
                 if (convert(scan.toPath(), stored, SCAN_SIZE, rotate) != 0) {
-                    throw new Exception("Error running convert utility on "
-                            + scan.getName());
+                    Files.copy(scan.toPath(), stored);
                 }
                 EntryType image = new EntryType() ;
                 String value = stored.getFileName().toString(); 
@@ -82,10 +86,7 @@ public class Locker {
                 manifest.addImage(image);
             }
             
-            if (!scan.delete()) {
-                throw new Exception("SaveScan error: could not delete"
-                        + scan.getName());
-            }
+            scan.delete();
         }
 
         // workaround for de-serialization bug in Savon
