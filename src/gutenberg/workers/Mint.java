@@ -427,7 +427,7 @@ public class Mint {
 
     private final String printanswers = "\\printanswers",
             pageNumber = "\\thepage", docAuthor = "\\DocAuthor",
-            newpage = "\\newpage", usepackage = "\\usepackage",
+            newpage = "\\nextpg", usepackage = "\\usepackage",
             fancyfoot = "\\fancyfoot", beginDocument = "\\begin{document}",
             beginQuestions = "\\begin{questions}", school = "\\School",
             docClass = "\\documentclass", insertQR = "\\insertQR",

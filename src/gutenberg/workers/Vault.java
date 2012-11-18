@@ -192,6 +192,6 @@ public class Vault {
     private final String questionTag = "\\question",
             solutionTag = "\\begin{solution}", partTag = "\\part",
             lengthFormat = "[\\%s]", marksFormat = "[%s]",
-            marksRegex = "\\[?[1-9]?\\]?", newpage = "\\newpage",
+            marksRegex = "\\[?[1-9]?\\]?", newpage = "\\nextpg",
             insertQRTag = "\\insertQR";
 }
