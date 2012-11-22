@@ -113,6 +113,20 @@
         /**
          * Auto generated method signature
          * 
+                                    * @param rotateScan
+         */
+
+        
+                public gutenberg.blocs.RotateScanResponse rotateScan
+                (
+                  gutenberg.blocs.RotateScan rotateScan
+                 )
+            ;
+        
+         
+        /**
+         * Auto generated method signature
+         * 
                                     * @param receiveScans
          */
 

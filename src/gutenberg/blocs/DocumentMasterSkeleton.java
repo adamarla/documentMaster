@@ -72,9 +72,33 @@ public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
 		AnnotateScanResponse annotateScanResponse = new AnnotateScanResponse();
 		annotateScanResponse.setAnnotateScanResponse(response);
 		return annotateScanResponse;
-
 	}
 
+    /**
+     * Auto generated method signature
+     * 
+     * @param rotateScan
+     * @return rotateScanResponse
+     */
+	
+    public RotateScanResponse rotateScan(RotateScan rotateScan) {
+        Locker locker = null;
+        Config config = null;
+        ResponseType response = new ResponseType();
+        try {
+            config = new Config();
+            locker = new Locker(config);
+            String scanId = rotateScan.getRotateScan().getScanId();
+            response.setManifest(locker.rotate(scanId));
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.setError(e.getMessage());
+        }
+        RotateScanResponse rotateScanResponse = new RotateScanResponse();
+        rotateScanResponse.setRotateScanResponse(response);
+        return rotateScanResponse;
+    }
+    
 	/**
 	 * Auto generated method signature
 	 * 
@@ -254,5 +278,6 @@ public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
         return generateQuizReportResponse;
 
     }
+
 
 }

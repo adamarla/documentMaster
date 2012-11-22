@@ -75,6 +75,12 @@
 				</xsd:sequence>
 			</xsd:complexType>
 						
+            <xsd:complexType name="rotateScanRequestType">
+                <xsd:sequence>
+                    <xsd:element name="scanId" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+                        
 			<xsd:complexType name="pointType">
 				<xsd:sequence>
 					<xsd:element name="x" type="xsd:int"/>
@@ -142,6 +148,11 @@
 			<xsd:element name="annotateScanResponse" type="tns:responseType">
 			</xsd:element>
 
+            <xsd:element name="rotateScan" type="tns:rotateScanRequestType"></xsd:element>
+
+            <xsd:element name="rotateScanResponse" type="tns:responseType">
+            </xsd:element>
+            
 			<xsd:element name="tagQuestion" type="tns:questionTagsType"></xsd:element>
 
 			<xsd:element name="tagQuestionResponse" type="tns:responseType">
@@ -194,6 +205,12 @@
 	<wsdl:message name="annotateScanResponse">
 		<wsdl:part name="parameters" element="tns:annotateScanResponse"></wsdl:part>
 	</wsdl:message>
+    <wsdl:message name="rotateScanRequest">
+        <wsdl:part name="parameters" element="tns:rotateScan"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="rotateScanResponse">
+        <wsdl:part name="parameters" element="tns:rotateScanResponse"></wsdl:part>
+    </wsdl:message>
 	<wsdl:message name="tagQuestionRequest">
 		<wsdl:part name="parameters" element="tns:tagQuestion"></wsdl:part>
 	</wsdl:message>
@@ -239,6 +256,10 @@
 			<wsdl:input message="tns:annotateScanRequest"></wsdl:input>
 			<wsdl:output message="tns:annotateScanResponse"></wsdl:output>
 		</wsdl:operation>
+        <wsdl:operation name="rotateScan">
+            <wsdl:input message="tns:rotateScanRequest"></wsdl:input>
+            <wsdl:output message="tns:rotateScanResponse"></wsdl:output>
+        </wsdl:operation>
 		<wsdl:operation name="tagQuestion">
 			<wsdl:input message="tns:tagQuestionRequest"></wsdl:input>
 			<wsdl:output message="tns:tagQuestionResponse"></wsdl:output>
@@ -304,6 +325,15 @@
 				<soap:body use="literal" />
 			</wsdl:output>
 		</wsdl:operation>
+        <wsdl:operation name="rotateScan">
+            <soap:operation soapAction="http://gutenberg/blocs/rotateScan" />
+            <wsdl:input>
+                <soap:body use="literal" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal" />
+            </wsdl:output>
+        </wsdl:operation>
 		<wsdl:operation name="tagQuestion">
 			<soap:operation soapAction="http://gutenberg/blocs/tagQuestion" />
 			<wsdl:input>

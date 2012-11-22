@@ -209,6 +209,39 @@ public class Locker {
         return manifest;
     }
     
+    public ManifestType rotate(String scanId) throws Exception {
+
+        ManifestType manifest = new ManifestType();
+        manifest.setRoot(lockerPath.toString());
+
+        Path imageFile = lockerPath.resolve(scanId);
+        if (Files.exists(imageFile)) {
+            
+            convert(imageFile, imageFile, SCAN_SIZE, true);
+                        
+            EntryType image = new EntryType() ;
+            String value = imageFile.getFileName().toString(); 
+
+            image.setId(scanId);
+            image.setValue(value) ; 
+            manifest.addImage(image);
+        } else {
+            throw new Exception(String.format("%s not found", scanId));
+        }
+            
+        // workaround for de-serialization bug in Savon
+        // https://github.com/rubiii/savon/issues/11 (supposedly fixed!)
+        if (manifest.getImage() != null && manifest.getImage().length == 1) {
+            EntryType dummyEntry = new EntryType();
+            dummyEntry.setId("SAVON_BUG_SKIP");
+            manifest.addImage(dummyEntry);
+        }
+
+        return manifest;
+    }
+
+    
+    
     private int convert(Path src, Path target, String size, boolean rotate)
             throws Exception {
         ProcessBuilder pb = new ProcessBuilder();

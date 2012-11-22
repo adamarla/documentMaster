@@ -64,6 +64,12 @@
 				</xsd:sequence>
 			</xsd:complexType>
 						
+            <xsd:complexType name="rotateScanRequestType">
+                <xsd:sequence>
+                    <xsd:element name="scanId" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+                        
 			<xsd:complexType name="pointType">
 				<xsd:sequence>
 					<xsd:element name="x" type="xsd:int"/>
@@ -130,6 +136,11 @@
 			<xsd:element name="annotateScanResponse" type="tns:responseType">
 			</xsd:element>
 
+            <xsd:element name="rotateScan" type="tns:rotateScanRequestType"/>
+
+            <xsd:element name="rotateScanResponse" type="tns:responseType">
+            </xsd:element>
+            
 			<xsd:element name="tagQuestion" type="tns:questionTagsType"/>
 
 			<xsd:element name="tagQuestionResponse" type="tns:responseType">
@@ -164,12 +175,20 @@
     <wsdl:part name="parameters" element="tns:generateQuizReport">
     </wsdl:part>
   </wsdl:message>
+  <wsdl:message name="rotateScanRequest">
+    <wsdl:part name="parameters" element="tns:rotateScan">
+    </wsdl:part>
+  </wsdl:message>
   <wsdl:message name="generateSuggestionFormRequest">
     <wsdl:part name="parameters" element="tns:generateSuggestionForm">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="buildQuizRequest">
     <wsdl:part name="parameters" element="tns:buildQuiz">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="rotateScanResponse">
+    <wsdl:part name="parameters" element="tns:rotateScanResponse">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="assignQuizResponse">
@@ -192,12 +211,12 @@
     <wsdl:part name="parameters" element="tns:createQuestionResponse">
     </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="assignQuizRequest">
-    <wsdl:part name="parameters" element="tns:assignQuiz">
-    </wsdl:part>
-  </wsdl:message>
   <wsdl:message name="tagQuestionResponse">
     <wsdl:part name="parameters" element="tns:tagQuestionResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="assignQuizRequest">
+    <wsdl:part name="parameters" element="tns:assignQuiz">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="generateSuggestionFormResponse">
@@ -253,6 +272,12 @@
       <wsdl:input message="tns:annotateScanRequest">
     </wsdl:input>
       <wsdl:output message="tns:annotateScanResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="rotateScan">
+      <wsdl:input message="tns:rotateScanRequest">
+    </wsdl:input>
+      <wsdl:output message="tns:rotateScanResponse">
     </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="tagQuestion">
@@ -320,6 +345,15 @@
     </wsdl:operation>
     <wsdl:operation name="annotateScan">
       <soap:operation soapAction="http://gutenberg/blocs/annotateScan"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="rotateScan">
+      <soap:operation soapAction="http://gutenberg/blocs/rotateScan"/>
       <wsdl:input>
         <soap:body use="literal"/>
       </wsdl:input>
