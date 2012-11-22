@@ -422,7 +422,18 @@ public class Mint {
             throws Exception {
         String quiz = assignment.getQuiz().getId();
         String testpaper = assignment.getInstance().getId();
-        String name = student.getName().toLowerCase().replace(' ', '-');
+        String name = student.getName().trim().toLowerCase().
+                replaceAll("\\s+", "-");
+        String[] tokens = name.split("-");
+        switch (tokens.length) {
+        case 1:
+            name = String.format("%s-%s", tokens[0], tokens[0]);
+            break;
+        case 2:
+            break;
+        default:            
+            name = String.format("%s-%s", tokens[0], tokens[1]);
+        }
         String id = student.getId();
         return String.format("%s-%s-%s-%s", id, name, quiz, testpaper);
     }
