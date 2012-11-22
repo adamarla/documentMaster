@@ -168,6 +168,7 @@ public class Mint {
         int MAX_2_DIG_BASE36_NUM = 1296;
         Random random = new Random();
         Random dice = new Random() ;
+        
         HashSet<String> keys = new HashSet<String>();
         String pseudoStudentId = null; 
         String singleNameFormat = "%s-%s-%s.%s";
@@ -192,7 +193,7 @@ public class Mint {
             String QRKey = String.format("%s%2s", atmKey, pseudoStudentId)
                     .replace(' ', '0');
             replicateBlueprint(lines, composite, single, QRKey, 
-                    students[i].getName(), (i == 0), dice);
+                    students[i].getName(), (i == 0), dice) ;
 
             String baseQR = baseQR(students[i], assignment);
             String QRKeyVal = null;
@@ -290,9 +291,11 @@ public class Mint {
             String line = lines[j];
             String trimmed = line.trim();
 
-            if (trimmed.startsWith(printanswers)|| 
+            if (trimmed.startsWith("%")) { // => a comment
+              continue ;
+            } else if (trimmed.startsWith(printanswers)|| 
               trimmed.startsWith("\\setcounter{rolldice}")) {
-                continue;
+              continue;
             } else if (trimmed.startsWith(insertQR)) {
                 line = line.replace("QRC", baseQRKey + pageNumber);
             } else if (trimmed.startsWith(docAuthor)) {
@@ -300,7 +303,7 @@ public class Mint {
             } else if (trimmed.startsWith("\\question")) {
                 line = String.format("\\setcounter{rolldice}{%d}\n%s", 
                         dice.nextInt(4), line);
-            }
+            } 
 
             // This is the only chance the per-student TeX has to
             // get content. So, grab it ...
@@ -426,7 +429,7 @@ public class Mint {
 
     private final String printanswers = "\\printanswers",
             pageNumber = "\\thepage", docAuthor = "\\DocAuthor",
-            newpage = "\\newpage", usepackage = "\\usepackage",
+            newpage = "\\nextpg", usepackage = "\\usepackage",
             fancyfoot = "\\fancyfoot", beginDocument = "\\begin{document}",
             beginQuestions = "\\begin{questions}", school = "\\School",
             docClass = "\\documentclass", insertQR = "\\insertQR",
