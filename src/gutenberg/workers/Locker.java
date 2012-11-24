@@ -6,6 +6,7 @@ import gutenberg.blocs.PointType;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
@@ -101,70 +102,12 @@ public class Locker {
     }
 
     /**
-     * Expects pairs of diagonally opposite points
+     * Annotate various things, lines curves etc.
      * 
      * @param scanId
      * @throws Exception
      */
-    public ManifestType annotateRect(String scanId, PointType[] points)
-            throws Exception {
-
-        ManifestType manifest = new ManifestType();
-        manifest.setRoot(scanId);
-
-        File imageFile = lockerPath.resolve(scanId).toFile();
-        BufferedImage image = ImageIO.read(imageFile);
-        Graphics2D graphics = (Graphics2D) image.getGraphics();
-        graphics.setStroke(new BasicStroke(1.0f));
-        graphics.setColor(new Color(0xffa500));
-
-        PointType topLeft = new PointType();
-        PointType firstPoint = null;
-        for (PointType point : points) {
-
-            if (firstPoint != null) {
-                // the pairs of points are diagonally opposite,
-                // all we need to figure out is which one is which
-                if (firstPoint.getX() < point.getX()) {
-                    if (firstPoint.getY() < point.getY()) {
-                        // firstPoint is topLeft,
-                        topLeft = firstPoint;
-                    } else {
-                        // firstPoint is bottomLeft,
-                        topLeft.setX(firstPoint.getX());
-                        topLeft.setY(point.getY());
-                    }
-                } else {
-                    if (firstPoint.getY() < point.getY()) {
-                        // firstPoint is topRight
-                        topLeft.setX(point.getX());
-                        topLeft.setY(firstPoint.getY());
-                    } else {
-                        // firstPoint is bottomRight
-                        topLeft = point;
-                    }
-                }
-                graphics.drawRoundRect(topLeft.getX(), topLeft.getY(),
-                        Math.abs(firstPoint.getX() - point.getX()),
-                        Math.abs(firstPoint.getY() - point.getY()), ARC_SIZE,
-                        ARC_SIZE);
-                firstPoint = null;
-            } else {
-                firstPoint = point;
-            }
-        }
-
-        ImageIO.write(image, FORMAT, imageFile);
-        return manifest;
-    }
-
-    /**
-     * Expects pairs of diagonally opposite points
-     * 
-     * @param scanId
-     * @throws Exception
-     */
-    public ManifestType annotateLine(String scanId, PointType[] points)
+    public ManifestType annotate(String scanId, PointType[] points)
             throws Exception {
 
         ManifestType manifest = new ManifestType();
@@ -176,12 +119,15 @@ public class Locker {
         BasicStroke s = new BasicStroke(STROKE_WIDTH, BasicStroke.CAP_ROUND, 
                 BasicStroke.JOIN_ROUND);
         graphics.setStroke(s);
+        graphics.setFont(COMMENT_FONT);
 
+        String text = null;
         ArrayList<PointType> curve = new ArrayList<PointType>();
         for (PointType point : points) {
             
             curve.add(point);
             if (point.isCodeSpecified()) {
+                
                 switch(point.getCode()) {
                     case 0:
                         graphics.setColor(new Color(WRONG));
@@ -189,18 +135,30 @@ public class Locker {
                     case 1:
                         graphics.setColor(new Color(RIGHT));
                         break;
-                    default:
+                    case 2:
                         graphics.setColor(new Color(WHAT));
+                        break;
+                    case 3:
+                        graphics.setColor(new Color(TEXT));
+                        break;
+                    default:
+                        throw new Exception(
+                                String.format("Invalid annotation code (%s)", 
+                                        point.getCode()));
                 }
                 
                 int nPoints = curve.size();
-                int[] xPoints = new int[nPoints], yPoints = new int[nPoints];
-                for (int i = 0; i < nPoints; i++) {
-                    
-                    xPoints[i] = curve.get(i).getX();
-                    yPoints[i] = curve.get(i).getY();                    
+                if (nPoints > 1) {
+                    int[] xPoints = new int[nPoints], yPoints = new int[nPoints];
+                    for (int i = 0; i < nPoints; i++) {                    
+                        xPoints[i] = curve.get(i).getX();
+                        yPoints[i] = curve.get(i).getY();                    
+                    }
+                    graphics.drawPolyline(xPoints, yPoints, nPoints);
+                } else {
+                    text = point.getText();
+                    graphics.drawString(text, point.getX(), point.getY());
                 }
-                graphics.drawPolyline(xPoints, yPoints, nPoints);                
                 curve.clear();
             }
         }
@@ -272,7 +230,8 @@ public class Locker {
 
     private final String SCAN_SIZE = "600x800";
     private final float  STROKE_WIDTH = 3f;
-    private final int    ARC_SIZE  = 3;
     private final String FORMAT    = "JPG";
-    private final int    RIGHT = 0x4b9630, WRONG = 0xea5115, WHAT = 0xf6bd13;
+    private final int    RIGHT = 0x4b9630, WRONG = 0xea5115, WHAT = 0xf6bd13,
+            TEXT = 0x1b13f1;
+    private final Font COMMENT_FONT = new Font("Ubuntu", 0, 12);
 }
