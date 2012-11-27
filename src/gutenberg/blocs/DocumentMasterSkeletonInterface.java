@@ -85,6 +85,20 @@
         /**
          * Auto generated method signature
          * 
+                                    * @param undoAnnotate
+         */
+
+        
+                public gutenberg.blocs.UndoAnnotateResponse undoAnnotate
+                (
+                  gutenberg.blocs.UndoAnnotate undoAnnotate
+                 )
+            ;
+        
+         
+        /**
+         * Auto generated method signature
+         * 
                                     * @param generateStudentRoster
          */
 

@@ -33,6 +33,16 @@
               
                   if (
                   "http://gutenberg/blocs".equals(namespaceURI) &&
+                  "scanIdType".equals(typeName)){
+                   
+                            return  gutenberg.blocs.ScanIdType.Factory.parse(reader);
+                        
+
+                  }
+
+              
+                  if (
+                  "http://gutenberg/blocs".equals(namespaceURI) &&
                   "questionTagsType".equals(typeName)){
                    
                             return  gutenberg.blocs.QuestionTagsType.Factory.parse(reader);
@@ -76,16 +86,6 @@
                   "pointType".equals(typeName)){
                    
                             return  gutenberg.blocs.PointType.Factory.parse(reader);
-                        
-
-                  }
-
-              
-                  if (
-                  "http://gutenberg/blocs".equals(namespaceURI) &&
-                  "rotateScanRequestType".equals(typeName)){
-                   
-                            return  gutenberg.blocs.RotateScanRequestType.Factory.parse(reader);
                         
 
                   }

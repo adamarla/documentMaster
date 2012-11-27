@@ -83,14 +83,24 @@ public class Mint {
             answerKeyTex.println(newpage);
         }
         endDoc(answerKeyTex);
-        answerKeyTex.close();
+        answerKeyTex.close();        
+        
+        List<String> lines = Files.readAllLines(staging.resolve("answer-key.tex"), StandardCharsets.UTF_8);
+        PrintWriter rubricTex = new PrintWriter(Files.newBufferedWriter(
+                staging.resolve("rubric.tex"), StandardCharsets.UTF_8,
+                StandardOpenOption.CREATE));
+        for (String line : lines) {
+            rubricTex.println(line);
+            if (line.startsWith(printanswers)) {
+                rubricTex.println(printRubric);
+            }
+        }
+        rubricTex.close();
 
         // 2. Link Makefiles and make PDFs
         Path rel = staging.relativize(sharedPath);
         Files.createSymbolicLink(staging.resolve("Makefile"),
-                rel.resolve("answer-key.mk"));
-        Files.createSymbolicLink(staging.resolve("test-paper.mk"),
-                rel.resolve("test-paper.mk"));
+                rel.resolve("makefiles/quiz.mk"));
 
         if (make(staging, downloads, preview) != 0) {
             throw new Exception("Problem! Non-zero return code from make");
@@ -229,7 +239,7 @@ public class Mint {
         // 3. Link Makefiles and make the PDFs
         Path rel = staging.relativize(sharedPath);
         Files.createSymbolicLink(staging.resolve("Makefile"),
-                rel.resolve("test-paper.mk"));
+                rel.resolve("quiz.mk"));
         
         if (make(staging, downloads, null) != 0)
             throw new Exception("Problem! Non-zero return code from make");
@@ -376,7 +386,7 @@ public class Mint {
         writer.println(insertQR + BLANK_PAGE_CODE);
         writer.println(newpage);
     }
-
+    
     private int make(Path workingDir, Path downloadsDir, Path previewsDir)
             throws Exception {
         ProcessBuilder pb = new ProcessBuilder("make");
@@ -414,6 +424,11 @@ public class Mint {
             }
 
         }
+        
+        ProcessBuilder pClean = new ProcessBuilder("make", "clean");
+        pClean.directory(workingDir.toFile());
+        Process clean = pClean.start();
+        clean.waitFor();
 
         return retCode;
     }
@@ -445,6 +460,6 @@ public class Mint {
             beginQuestions = "\\begin{questions}", school = "\\School",
             docClass = "\\documentclass", insertQR = "\\insertQR",
             endQuestions = "\\end{questions}", endDocument = "\\end{document}",
-            BLANK_PAGE_CODE = "{0}";
+            printRubric = "\\printrubric", BLANK_PAGE_CODE = "{0}";
 
 }

@@ -77,6 +77,30 @@ public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
     /**
      * Auto generated method signature
      * 
+     * @param undoAnnotate
+     * @return undoAnnotateResponse
+     */
+    public UndoAnnotateResponse undoAnnotate(UndoAnnotate undoAnnotate) {
+        Locker locker = null;
+        Config config = null;
+        ResponseType response = new ResponseType();
+        try {
+            config = new Config();
+            locker = new Locker(config);
+            String scanId = undoAnnotate.getUndoAnnotate().getScanId();
+            response.setManifest(locker.undoAnnotate(scanId));
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.setError(e.getMessage());
+        }
+        UndoAnnotateResponse undoAnnotateResponse = new UndoAnnotateResponse(); 
+        undoAnnotateResponse.setUndoAnnotateResponse(response);
+        return undoAnnotateResponse;
+    }
+
+    /**
+     * Auto generated method signature
+     * 
      * @param rotateScan
      * @return rotateScanResponse
      */

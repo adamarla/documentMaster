@@ -1,6 +1,6 @@
 
 /**
- * RotateScanRequestType.java
+ * ScanIdType.java
  *
  * This file was auto-generated from WSDL
  * by the Apache Axis2 version: 1.6.1  Built on : Aug 31, 2011 (12:23:23 CEST)
@@ -11,14 +11,14 @@
             
 
             /**
-            *  RotateScanRequestType bean class
+            *  ScanIdType bean class
             */
             @SuppressWarnings({"unchecked","unused"})
         
-        public  class RotateScanRequestType
+        public  class ScanIdType
         implements org.apache.axis2.databinding.ADBBean{
         /* This type was generated from the piece of schema that had
-                name = rotateScanRequestType
+                name = scanIdType
                 Namespace URI = http://gutenberg/blocs
                 Namespace Prefix = ns1
                 */
@@ -102,11 +102,11 @@
                    java.lang.String namespacePrefix = registerPrefix(xmlWriter,"http://gutenberg/blocs");
                    if ((namespacePrefix != null) && (namespacePrefix.trim().length() > 0)){
                        writeAttribute("xsi","http://www.w3.org/2001/XMLSchema-instance","type",
-                           namespacePrefix+":rotateScanRequestType",
+                           namespacePrefix+":scanIdType",
                            xmlWriter);
                    } else {
                        writeAttribute("xsi","http://www.w3.org/2001/XMLSchema-instance","type",
-                           "rotateScanRequestType",
+                           "scanIdType",
                            xmlWriter);
                    }
 
@@ -349,9 +349,9 @@
         * Postcondition: If this object is an element, the reader is positioned at its end element
         *                If this object is a complex type, the reader is positioned at the end element of its outer element
         */
-        public static RotateScanRequestType parse(javax.xml.stream.XMLStreamReader reader) throws java.lang.Exception{
-            RotateScanRequestType object =
-                new RotateScanRequestType();
+        public static ScanIdType parse(javax.xml.stream.XMLStreamReader reader) throws java.lang.Exception{
+            ScanIdType object =
+                new ScanIdType();
 
             int event;
             java.lang.String nillableValue = null;
@@ -375,10 +375,10 @@
 
                     java.lang.String type = fullTypeName.substring(fullTypeName.indexOf(":")+1);
                     
-                            if (!"rotateScanRequestType".equals(type)){
+                            if (!"scanIdType".equals(type)){
                                 //find namespace for the prefix
                                 java.lang.String nsUri = reader.getNamespaceContext().getNamespaceURI(nsPrefix);
-                                return (RotateScanRequestType)gutenberg.blocs.ExtensionMapper.getTypeObject(
+                                return (ScanIdType)gutenberg.blocs.ExtensionMapper.getTypeObject(
                                      nsUri,type,reader);
                               }
                         

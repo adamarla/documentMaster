@@ -1,6 +1,6 @@
 
 /**
- * RotateScan.java
+ * UndoAnnotate.java
  *
  * This file was auto-generated from WSDL
  * by the Apache Axis2 version: 1.6.1  Built on : Aug 31, 2011 (12:23:23 CEST)
@@ -11,45 +11,45 @@
             
 
             /**
-            *  RotateScan bean class
+            *  UndoAnnotate bean class
             */
             @SuppressWarnings({"unchecked","unused"})
         
-        public  class RotateScan
+        public  class UndoAnnotate
         implements org.apache.axis2.databinding.ADBBean{
         
                 public static final javax.xml.namespace.QName MY_QNAME = new javax.xml.namespace.QName(
                 "http://gutenberg/blocs",
-                "rotateScan",
+                "undoAnnotate",
                 "ns1");
 
             
 
                         /**
-                        * field for RotateScan
+                        * field for UndoAnnotate
                         */
 
                         
-                                    protected gutenberg.blocs.ScanIdType localRotateScan ;
+                                    protected gutenberg.blocs.ScanIdType localUndoAnnotate ;
                                 
 
                            /**
                            * Auto generated getter method
                            * @return gutenberg.blocs.ScanIdType
                            */
-                           public  gutenberg.blocs.ScanIdType getRotateScan(){
-                               return localRotateScan;
+                           public  gutenberg.blocs.ScanIdType getUndoAnnotate(){
+                               return localUndoAnnotate;
                            }
 
                            
                         
                             /**
                                * Auto generated setter method
-                               * @param param RotateScan
+                               * @param param UndoAnnotate
                                */
-                               public void setRotateScan(gutenberg.blocs.ScanIdType param){
+                               public void setUndoAnnotate(gutenberg.blocs.ScanIdType param){
                             
-                                            this.localRotateScan=param;
+                                            this.localUndoAnnotate=param;
                                     
 
                                }
@@ -89,10 +89,10 @@
                 
                 //We can safely assume an element has only one type associated with it
                 
-                                 if (localRotateScan==null){
-                                   throw new org.apache.axis2.databinding.ADBException("rotateScan cannot be null!");
+                                 if (localUndoAnnotate==null){
+                                   throw new org.apache.axis2.databinding.ADBException("undoAnnotate cannot be null!");
                                  }
-                                 localRotateScan.serialize(MY_QNAME,xmlWriter);
+                                 localUndoAnnotate.serialize(MY_QNAME,xmlWriter);
                             
 
         }
@@ -275,7 +275,7 @@
         
                 
                 //We can safely assume an element has only one type associated with it
-                return localRotateScan.getPullParser(MY_QNAME);
+                return localUndoAnnotate.getPullParser(MY_QNAME);
 
         }
 
@@ -296,9 +296,9 @@
         * Postcondition: If this object is an element, the reader is positioned at its end element
         *                If this object is a complex type, the reader is positioned at the end element of its outer element
         */
-        public static RotateScan parse(javax.xml.stream.XMLStreamReader reader) throws java.lang.Exception{
-            RotateScan object =
-                new RotateScan();
+        public static UndoAnnotate parse(javax.xml.stream.XMLStreamReader reader) throws java.lang.Exception{
+            UndoAnnotate object =
+                new UndoAnnotate();
 
             int event;
             java.lang.String nillableValue = null;
@@ -321,9 +321,9 @@
                 while(!reader.isEndElement()) {
                     if (reader.isStartElement() ){
                 
-                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://gutenberg/blocs","rotateScan").equals(reader.getName())){
+                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://gutenberg/blocs","undoAnnotate").equals(reader.getName())){
                                 
-                                                object.setRotateScan(gutenberg.blocs.ScanIdType.Factory.parse(reader));
+                                                object.setUndoAnnotate(gutenberg.blocs.ScanIdType.Factory.parse(reader));
                                             
                               }  // End of if for expected property start element
                                 

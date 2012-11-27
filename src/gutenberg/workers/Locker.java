@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
@@ -113,7 +114,14 @@ public class Locker {
         ManifestType manifest = new ManifestType();
         manifest.setRoot(scanId);
 
-        File imageFile = lockerPath.resolve(scanId).toFile();
+        Path imagePath = lockerPath.resolve(scanId);
+        File imageFile = imagePath.toFile();
+        //Create a back up in case we want to revert grading for the page
+        Path backupPath = imagePath.getParent().
+                resolve("." + imagePath.getFileName());
+        if (!Files.exists(backupPath))
+            Files.copy(imagePath, backupPath);
+        
         BufferedImage image = ImageIO.read(imageFile);
         Graphics2D graphics = (Graphics2D) image.getGraphics();
         BasicStroke s = new BasicStroke(STROKE_WIDTH, BasicStroke.CAP_ROUND, 
@@ -167,6 +175,39 @@ public class Locker {
         return manifest;
     }
     
+    public ManifestType undoAnnotate(String scanId) throws Exception {
+
+        ManifestType manifest = new ManifestType();
+        manifest.setRoot(lockerPath.toString());
+
+        Path imagePath = lockerPath.resolve(scanId);
+        Path backupPath = imagePath.getParent().
+                resolve("." + imagePath.getFileName());
+        if (Files.exists(backupPath)) {
+            
+            Files.copy(backupPath, imagePath, StandardCopyOption.REPLACE_EXISTING);
+            
+            EntryType image = new EntryType() ;
+            String value = scanId;
+
+            image.setId(scanId);
+            image.setValue(value) ; 
+            manifest.addImage(image);
+        } else {
+            throw new Exception(String.format("%s not found", scanId));
+        }
+            
+        // workaround for de-serialization bug in Savon
+        // https://github.com/rubiii/savon/issues/11 (supposedly fixed!)
+        if (manifest.getImage() != null && manifest.getImage().length == 1) {
+            EntryType dummyEntry = new EntryType();
+            dummyEntry.setId("SAVON_BUG_SKIP");
+            manifest.addImage(dummyEntry);
+        }
+
+        return manifest;
+    }    
+    
     public ManifestType rotate(String scanId) throws Exception {
 
         ManifestType manifest = new ManifestType();
@@ -196,9 +237,7 @@ public class Locker {
         }
 
         return manifest;
-    }
-
-    
+    }    
     
     private int convert(Path src, Path target, String size, boolean rotate)
             throws Exception {
