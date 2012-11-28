@@ -41,13 +41,13 @@ public class FrontDesk {
                 keyFile, StandardCharsets.UTF_8, StandardOpenOption.CREATE));
         String QRKey = String.format("%s-%s", school.getId(), teacher.getId());
         String QRKeyVal = String.format("%s:%s-%s-0-0-0-1-1", 
-                QRKey, teacher.getId(), teacher.getName());        
+                QRKey, teacher.getId(), teacher.getName());
         keyFileWriter.println(QRKeyVal);
         keyFileWriter.close();
 
         Path workingDirPath = outputDirPath.resolve("working");
         Files.createDirectory(workingDirPath);
-        String templateName = "suggestion.tex";
+        String templateName = "templates/suggestion.tex";
         Path texPath = workingDirPath.resolve(templateName);
         PrintWriter writer = new PrintWriter(Files.newBufferedWriter(texPath,
                 StandardCharsets.UTF_8, StandardOpenOption.CREATE));
@@ -70,7 +70,7 @@ public class FrontDesk {
         writer.close();
 
         Files.createSymbolicLink(workingDirPath.resolve("Makefile"),
-                sharedPath.resolve("suggestion.mk"));
+                sharedPath.resolve("makefiles/front-desk.mk"));
 
         String outputFile = String.format("%s-%s.pdf", teacher.getId(), teacher
                 .getName().split("-")[0]);
@@ -111,7 +111,7 @@ public class FrontDesk {
         if (!Files.exists(workingDirPath))
             Files.createDirectory(workingDirPath);
 
-        String templateName = "roster.tex";
+        String templateName = "templates/roster.tex";
         Path texPath = workingDirPath.resolve(templateName);
         PrintWriter writer = new PrintWriter(Files.newBufferedWriter(texPath,
                 StandardCharsets.UTF_8, StandardOpenOption.CREATE));
@@ -139,7 +139,7 @@ public class FrontDesk {
         writer.close();
 
         Files.createSymbolicLink(workingDirPath.resolve("Makefile"),
-                sharedPath.resolve("roster.mk"));
+                sharedPath.resolve("front-desk.mk"));
 
         String outputFile = String.format("%s-%s.pdf", group.getId(), group
                 .getName().replace(' ', '_'));
@@ -183,7 +183,7 @@ public class FrontDesk {
                 StandardCharsets.UTF_8, StandardOpenOption.CREATE));
         csvWriter.println("name,marks");
         
-        String templateName = "groupreport.tex";
+        String templateName = "templates/groupreport.tex";
         Path texPath = workingDirPath.resolve(templateName);
         PrintWriter writer = new PrintWriter(Files.newBufferedWriter(texPath,
                 StandardCharsets.UTF_8, StandardOpenOption.CREATE));
@@ -216,7 +216,7 @@ public class FrontDesk {
         csvWriter.close();
 
         Files.createSymbolicLink(workingDirPath.resolve("Makefile"),
-                sharedPath.resolve("groupreport.mk"));
+                sharedPath.resolve("front-desk.mk"));
 
         String outputFile = String.format("%s-%s.pdf", testpaper.getId(),
                 testpaper.getName().replace(' ', '_'));

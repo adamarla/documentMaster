@@ -341,7 +341,7 @@ public class Mint {
     private void writePreamble(PrintWriter writer, String school, String author)
             throws Exception {
         List<String> file = Files.readAllLines(
-                sharedPath.resolve("preamble.tex"), StandardCharsets.UTF_8);
+                sharedPath.resolve("templates/preamble.tex"), StandardCharsets.UTF_8);
         String[] lines = new String[file.size()];
         lines = file.toArray(lines);
 

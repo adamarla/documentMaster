@@ -78,11 +78,14 @@ public class Vault {
         Path questionDir = vaultPath.resolve(dirName);
         Files.createDirectory(questionDir);
 
-        Files.copy(sharedPath.resolve(texFile), questionDir.resolve(texFile));
-        Files.copy(sharedPath.resolve(plotFile), questionDir.resolve(plotFile));
-        Files.copy(sharedPath.resolve(bc2FigFile),
+        Files.copy(sharedPath.resolve("templates").resolve(texFile), 
+                questionDir.resolve(texFile));
+        Files.copy(sharedPath.resolve("templates").resolve(plotFile), 
+                questionDir.resolve(plotFile));
+        Files.copy(sharedPath.resolve("templates").resolve(bc2FigFile),
                 questionDir.resolve(bc2FigFile));
-        Path rel = questionDir.relativize(sharedPath.resolve(makeFile));
+        Path rel = questionDir.relativize(sharedPath.resolve("makefiles")
+                .resolve(makeFile));
         Files.createSymbolicLink(questionDir.resolve("Makefile"), rel);
 
         ManifestType manifest = new ManifestType();
