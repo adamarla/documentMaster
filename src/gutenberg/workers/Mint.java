@@ -239,7 +239,7 @@ public class Mint {
         // 3. Link Makefiles and make the PDFs
         Path rel = staging.relativize(sharedPath);
         Files.createSymbolicLink(staging.resolve("Makefile"),
-                rel.resolve("quiz.mk"));
+                rel.resolve("makefiles/quiz.mk"));
         
         if (make(staging, downloads, null) != 0)
             throw new Exception("Problem! Non-zero return code from make");
