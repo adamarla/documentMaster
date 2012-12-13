@@ -118,7 +118,6 @@ public class Vault {
         PrintWriter writer = new PrintWriter(new FileWriter(
                 questionTexTmp.toFile()));
 
-        boolean insertQRC = false;
         int partIdx = 0;
         int pageIdx = 0;
         String line = null, trimmed = null;
@@ -131,7 +130,6 @@ public class Vault {
                     line = line.replaceFirst(
                             Matcher.quoteReplacement(questionTag) + marksRegex,
                             Matcher.quoteReplacement(questionTag) + marks);
-                    insertQRC = true;
                 }
             } else if (trimmed.startsWith(solutionTag)) {
                 length = String.format(lengthFormat, tags.getLength()[partIdx]);
@@ -144,22 +142,17 @@ public class Vault {
                     line = line.replaceFirst(Matcher.quoteReplacement(partTag)
                             + marksRegex, Matcher.quoteReplacement(partTag)
                             + marks);
-                    insertQRC = true;
                     // tricky bit, insert a new page before next part starts
                     if (breaks.length > pageIdx) {
                         if (partIdx == breaks[pageIdx] + 1) {
                             writer.println(newpage);
+                            writer.println(insertQRTag.replace("{}", "{QRC}"));
                             pageIdx++;
                         }
                     }
                 }
             } else if (trimmed.startsWith(insertQRTag)) {
-                if (insertQRC) {
-                    line = line.replace("{}", "{QRC}");
-                    insertQRC = false;
-                } else {
-                    continue;
-                }
+                line = line.replace("{}", "{QRC}");
             } else if (trimmed.equals(newpage)) {
                 continue;
             }
