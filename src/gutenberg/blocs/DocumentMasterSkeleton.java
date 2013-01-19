@@ -303,5 +303,27 @@ public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
 
     }
 
+    @Override
+    public PublishAssignmentResponse publishAssignment(
+            PublishAssignment publishAssignment) {
+        Config config = null;
+        FrontDesk frontdesk = null;
+        ResponseType response = new ResponseType();
+        try {
+            config = new Config();
+            frontdesk = new FrontDesk(config);
+            AssignmentIdType assignmentId = publishAssignment.getPublishAssignment();
+            frontdesk = new FrontDesk(config);
+            response.setManifest(frontdesk.publishAssignment(assignmentId));
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.setError(e.getMessage());
+        }
+        PublishAssignmentResponse 
+            publishAssignmentResponse = new PublishAssignmentResponse();
+        publishAssignmentResponse.setPublishAssignmentResponse(response);
+        return publishAssignmentResponse;
+    }
+
 
 }
