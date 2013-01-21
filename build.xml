@@ -60,6 +60,7 @@
                 <include name="*.xml"/>
                 <include name="*.wsdl"/>
                 <include name="*.xsd"/>
+            	<include name="*.png"/>
             </fileset>
         </copy>
         <jar destfile="${lib}/${name}.aar">

@@ -130,6 +130,7 @@ public class Locker {
         graphics.setFont(COMMENT_FONT);
 
         String text = null;
+        BufferedImage overlay = null;
         ArrayList<PointType> curve = new ArrayList<PointType>();
         for (PointType point : points) {
             
@@ -138,16 +139,21 @@ public class Locker {
                 
                 switch(point.getCode()) {
                     case 0:
-                        graphics.setColor(new Color(WRONG));
+                        overlay = ImageIO.read(this.getClass().getClassLoader()
+                                .getResourceAsStream("META-INF/cross-mark.png"));
                         break;
                     case 1:
-                        graphics.setColor(new Color(RIGHT));
+                        overlay = ImageIO.read(this.getClass().getClassLoader()
+                                .getResourceAsStream("META-INF/check-mark.png"));
                         break;
                     case 2:
-                        graphics.setColor(new Color(WHAT));
+                        overlay = ImageIO.read(this.getClass().getClassLoader()
+                                .getResourceAsStream("META-INF/question-mark.png"));
                         break;
                     case 3:
-                        graphics.setColor(new Color(TEXT));
+                        text = point.getText();
+                        break;
+                    case 4:
                         break;
                     default:
                         throw new Exception(
@@ -157,15 +163,18 @@ public class Locker {
                 
                 int nPoints = curve.size();
                 if (nPoints > 1) {
+                    graphics.setColor(new Color(OUTLINE));
                     int[] xPoints = new int[nPoints], yPoints = new int[nPoints];
                     for (int i = 0; i < nPoints; i++) {                    
                         xPoints[i] = curve.get(i).getX();
                         yPoints[i] = curve.get(i).getY();                    
                     }
                     graphics.drawPolyline(xPoints, yPoints, nPoints);
-                } else {
-                    text = point.getText();
+                } else if (text != null) {
+                    graphics.setColor(new Color(TEXT));                    
                     graphics.drawString(text, point.getX(), point.getY());
+                } else {
+                    graphics.drawImage(overlay, point.getX(), point.getY(), null);                    
                 }
                 curve.clear();
             }
@@ -270,7 +279,6 @@ public class Locker {
     private final String SCAN_SIZE = "600x800";
     private final float  STROKE_WIDTH = 3f;
     private final String FORMAT    = "JPG";
-    private final int    RIGHT = 0x4b9630, WRONG = 0xea5115, WHAT = 0xf6bd13,
-            TEXT = 0x1b13f1;
+    private final int    OUTLINE = 0xf6bd13, TEXT = 0x1b13f1;
     private final Font COMMENT_FONT = new Font("Ubuntu", 0, 12);
 }
