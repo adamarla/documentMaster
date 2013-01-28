@@ -49,6 +49,8 @@ public class Mint {
         Path staging = Files.createDirectory(quizDir.resolve("staging"));
         Path downloads = Files.createDirectory(quizDir.resolve("downloads"));
         Path preview = Files.createDirectory(quizDir.resolve("preview"));
+        Path fillers = Files.createDirectory(quizDir.resolve("fillers"));
+        
         // generate symbolic link to quiz in ATM
         ManifestType manifest = atm.deposit(quizDir.getParent());
 
@@ -56,7 +58,7 @@ public class Mint {
         PrintWriter answerKeyTex = new PrintWriter(Files.newBufferedWriter(
                 staging.resolve("answer-key.tex"), StandardCharsets.UTF_8,
                 StandardOpenOption.CREATE));
-
+        
         PageType[] pages = quiz.getPage();
         // Write any information that might be pertinent during
         // test paper generation - like # of pages at the beginning
@@ -83,27 +85,41 @@ public class Mint {
             answerKeyTex.println(newpage);
         }
         endDoc(answerKeyTex);
-        answerKeyTex.close();        
+        answerKeyTex.close();
         
-        List<String> lines = Files.readAllLines(staging.resolve("answer-key.tex"), StandardCharsets.UTF_8);
+        // write other tex files for supplementary document generation
+        List<String> lines = Files.readAllLines(
+                staging.resolve("answer-key.tex"), StandardCharsets.UTF_8);
         PrintWriter rubricTex = new PrintWriter(Files.newBufferedWriter(
                 staging.resolve("rubric.tex"), StandardCharsets.UTF_8,
                 StandardOpenOption.CREATE));
+        PrintWriter fillerTex = new PrintWriter(Files.newBufferedWriter(
+                staging.resolve("filler.tex"), StandardCharsets.UTF_8,
+                StandardOpenOption.CREATE));
         for (String line : lines) {
+            
             rubricTex.println(line);
             if (line.startsWith(printanswers)) {
-                rubricTex.println(printRubric);
+                rubricTex.println(printRubric);                
+                fillerTex.print("%");//to comment out \printanswers!
+            } else if (line.startsWith(this.beginDocument)) {
+                fillerTex.println("\\usepackage{draftwatermark}");
+                fillerTex.println("\\SetWatermarkColor[rgb]{1,0,0}");
+                fillerTex.println("\\SetWatermarkText{Submit assignment to see solution}");
+                fillerTex.println("\\SetWatermarkScale{0.30}");
             }
+            fillerTex.println(line);
         }
         rubricTex.close();
+        fillerTex.close();
 
         // 2. Link Makefiles and make PDFs
         Path rel = staging.relativize(sharedPath);
         Files.createSymbolicLink(staging.resolve("Makefile"),
                 rel.resolve("makefiles/quiz.mk"));
 
-        if (make(staging, downloads, preview) != 0) {
-            throw new Exception("Problem! Non-zero return code from make");
+        if (make(staging, downloads, preview, fillers) != 0) {
+            throw new Exception("Problemo! Non-zero return code from make");
         }
 
         // 3. Populate manifest
@@ -241,7 +257,7 @@ public class Mint {
         Files.createSymbolicLink(staging.resolve("Makefile"),
                 rel.resolve("makefiles/quiz.mk"));
         
-        if (make(staging, downloads, null) != 0)
+        if (make(staging, downloads, null, null) != 0)
             throw new Exception("Problem! Non-zero return code from make");
 
         // 4. Prepare manifest
@@ -387,7 +403,7 @@ public class Mint {
         writer.println(newpage);
     }
     
-    private int make(Path workingDir, Path downloadsDir, Path previewsDir)
+    private int make(Path workingDir, Path downloadsDir, Path previewsDir, Path fillerDir)
             throws Exception {
         ProcessBuilder pb = new ProcessBuilder("make");
 
@@ -407,7 +423,8 @@ public class Mint {
         if ((retCode = process.waitFor()) == 0) {
             
             Path target = null; 
-            DirectoryStream<Path> stream = Files.newDirectoryStream(workingDir, "*.pdf");
+            DirectoryStream<Path> stream = 
+                    Files.newDirectoryStream(workingDir, "*.pdf");
             for (Path entry: stream) {
                 target = downloadsDir.resolve(entry.getFileName());
                 Files.move(entry, target, StandardCopyOption.REPLACE_EXISTING);
@@ -415,14 +432,21 @@ public class Mint {
             stream.close();
             
             if (previewsDir != null) {
-                stream = Files.newDirectoryStream(workingDir, "page-*.jpeg");
+                stream = Files.newDirectoryStream(workingDir, "anskeypage-*.jpeg");
                 for (Path entry: stream) {
-                    target = previewsDir.resolve(entry.getFileName());
+                    target = previewsDir.resolve(
+                            entry.getFileName().toString().replace("anskey", ""));
+                    Files.move(entry, target, StandardCopyOption.REPLACE_EXISTING);
+                }
+                stream.close();
+                stream = Files.newDirectoryStream(workingDir, "fillerpage-*.jpeg");
+                for (Path entry: stream) {
+                    target = fillerDir.resolve(
+                            entry.getFileName().toString().replace("filler", ""));
                     Files.move(entry, target, StandardCopyOption.REPLACE_EXISTING);
                 }
                 stream.close();
             }
-
         }
         
         ProcessBuilder pClean = new ProcessBuilder("make", "clean");
