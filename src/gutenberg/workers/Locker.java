@@ -12,10 +12,12 @@ import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 
@@ -23,12 +25,13 @@ public class Locker {
 
     public Locker(Config config) throws Exception {
         lockerPath = new File(config.getPath(Resource.locker)).toPath();
+        sharedPath = new File(config.getPath(Resource.shared)).toPath();
     }
 
     /**
      * Creates folder for storing scans related with
      * this test paper or for suggestion scans
-     * @return TODO
+     * @return Path to the place in the locked where scans will be recvd
      */
     public Path makeRoom(String quizId, String testpaperId) throws Exception {
         Path dirPath = lockerPath.resolve(
@@ -116,6 +119,7 @@ public class Locker {
 
         Path imagePath = lockerPath.resolve(scanId);
         File imageFile = imagePath.toFile();
+        
         //Create a back up in case we want to revert grading for the page
         Path backupPath = imagePath.getParent().
                 resolve("." + imagePath.getFileName());
@@ -129,9 +133,9 @@ public class Locker {
         graphics.setStroke(s);
         graphics.setFont(COMMENT_FONT);
 
-        String text = null;
         BufferedImage overlay = null;
         ArrayList<PointType> curve = new ArrayList<PointType>();
+        ArrayList<PointType> annotations = new ArrayList<PointType>();
         for (PointType point : points) {
             
             curve.add(point);
@@ -151,7 +155,7 @@ public class Locker {
                                 .getResourceAsStream("META-INF/question-mark.png"));
                         break;
                     case 3:
-                        text = point.getText();
+                        annotations.add(point);
                         break;
                     case 4:
                         break;
@@ -170,14 +174,19 @@ public class Locker {
                         yPoints[i] = curve.get(i).getY();                    
                     }
                     graphics.drawPolyline(xPoints, yPoints, nPoints);
-                } else if (text != null) {
-                    graphics.setColor(new Color(TEXT));                    
-                    graphics.drawString(text, point.getX(), point.getY());
                 } else {
                     graphics.drawImage(overlay, point.getX(), point.getY(), null);                    
-                }
+                } 
                 curve.clear();
             }
+        }
+        
+        if (annotations.size() != 0) {
+            Path overlayPath = lockerPath.resolve(scanId + ".overlay");
+            overlay = this.getOverlay(overlayPath,
+                    annotations.toArray(new PointType[annotations.size()]));
+            graphics.drawImage(overlay, 0, 0, null);
+            Files.delete(overlayPath);
         }
 
         ImageIO.write(image, FORMAT, imageFile);
@@ -273,12 +282,61 @@ public class Locker {
 
         return process.waitFor();
     }
+    
+    private BufferedImage getOverlay(Path overlayPath, PointType[] annotations) throws Exception {
 
-    private Path lockerPath;
+        Path workingDirPath = Files.createTempDirectory(lockerPath, "annotation");
+        
+        Files.createSymbolicLink(workingDirPath.resolve("Makefile"),
+                sharedPath.resolve("makefiles/annotation.mk"));
+
+        Path annotationTex = workingDirPath.resolve("annotation.tex");
+        Files.copy(sharedPath.resolve("templates/annotation.tex"),
+                annotationTex, StandardCopyOption.REPLACE_EXISTING);
+
+        List<String> lines = Files.readAllLines(annotationTex, StandardCharsets.UTF_8);
+        lines.add("\\begin{document}");        
+        for (PointType annotation: annotations) {
+            lines.add(String.format("\\begin{textblock}{600}(%s,%s)", annotation.getX(), annotation.getY()));
+            //lines.add(String.format("\\[rgb]{0.25,0.57,0.16}%s", annotation.getText()));
+            lines.add(String.format("\\color{blue}%s", annotation.getText()));
+            lines.add("\\end{textblock}");
+        }
+        lines.add("\\end{document}");
+        Files.write(annotationTex, lines, StandardCharsets.UTF_8);
+        
+        BufferedImage overlay = null;
+        if (make(workingDirPath) == 0) {
+            Files.move(workingDirPath.resolve("overlay.png"), overlayPath);
+            Files.delete(workingDirPath.resolve("Makefile"));
+            Files.delete(workingDirPath);
+            overlay = ImageIO.read(overlayPath.toFile());
+        }
+        return overlay;
+    }
+    
+    private int make(Path workingDirPath) throws Exception {
+        
+        ProcessBuilder pb = new ProcessBuilder("make");
+
+        pb.directory(workingDirPath.toFile());
+        pb.redirectErrorStream(true);
+
+        Process build = pb.start();
+        BufferedReader messages = new BufferedReader(new InputStreamReader(build.getInputStream()));
+
+        String line = null;
+        while ((line = messages.readLine()) != null) {
+            System.out.println(line);
+        }        
+        return build.waitFor();
+    }
+
+    private Path lockerPath, sharedPath;
 
     private final String SCAN_SIZE = "600x800";
     private final float  STROKE_WIDTH = 3f;
     private final String FORMAT    = "JPG";
-    private final int    OUTLINE = 0xf6bd13, TEXT = 0x1b13f1;
+    private final int    OUTLINE = 0xf6bd13;
     private final Font COMMENT_FONT = new Font("Ubuntu", 0, 12);
 }

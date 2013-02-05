@@ -3,6 +3,7 @@ package gutenberg.workers;
 import gutenberg.blocs.ManifestType;
 
 import java.io.File;
+import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Random;
@@ -36,7 +37,14 @@ public class ATM {
     public ManifestType deposit(Path directory) throws Exception {
         Path key = atmPath.resolve(generateKey());
         Path rel = atmPath.relativize(directory);
-        Files.createSymbolicLink(key, rel);
+        
+        while (true) {
+            try {
+                Files.createSymbolicLink(key, rel);
+                break;
+            } catch (FileAlreadyExistsException fae) {}
+        }
+        
         ManifestType manifest = new ManifestType();
         manifest.setRoot(key.toString());
         return manifest;
