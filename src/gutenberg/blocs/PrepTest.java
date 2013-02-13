@@ -1,6 +1,6 @@
 
 /**
- * AssignmentIdType.java
+ * PrepTest.java
  *
  * This file was auto-generated from WSDL
  * by the Apache Axis2 version: 1.6.1  Built on : Aug 31, 2011 (12:23:23 CEST)
@@ -11,74 +11,45 @@
             
 
             /**
-            *  AssignmentIdType bean class
+            *  PrepTest bean class
             */
             @SuppressWarnings({"unchecked","unused"})
         
-        public  class AssignmentIdType
+        public  class PrepTest
         implements org.apache.axis2.databinding.ADBBean{
-        /* This type was generated from the piece of schema that had
-                name = assignmentIdType
-                Namespace URI = http://gutenberg/blocs
-                Namespace Prefix = ns1
-                */
+        
+                public static final javax.xml.namespace.QName MY_QNAME = new javax.xml.namespace.QName(
+                "http://gutenberg/blocs",
+                "prepTest",
+                "ns1");
+
             
 
                         /**
-                        * field for Quiz
+                        * field for PrepTest
                         */
 
                         
-                                    protected gutenberg.blocs.EntryType localQuiz ;
+                                    protected gutenberg.blocs.AssignmentType localPrepTest ;
                                 
 
                            /**
                            * Auto generated getter method
-                           * @return gutenberg.blocs.EntryType
+                           * @return gutenberg.blocs.AssignmentType
                            */
-                           public  gutenberg.blocs.EntryType getQuiz(){
-                               return localQuiz;
+                           public  gutenberg.blocs.AssignmentType getPrepTest(){
+                               return localPrepTest;
                            }
 
                            
                         
                             /**
                                * Auto generated setter method
-                               * @param param Quiz
+                               * @param param PrepTest
                                */
-                               public void setQuiz(gutenberg.blocs.EntryType param){
+                               public void setPrepTest(gutenberg.blocs.AssignmentType param){
                             
-                                            this.localQuiz=param;
-                                    
-
-                               }
-                            
-
-                        /**
-                        * field for Instance
-                        */
-
-                        
-                                    protected gutenberg.blocs.EntryType localInstance ;
-                                
-
-                           /**
-                           * Auto generated getter method
-                           * @return gutenberg.blocs.EntryType
-                           */
-                           public  gutenberg.blocs.EntryType getInstance(){
-                               return localInstance;
-                           }
-
-                           
-                        
-                            /**
-                               * Auto generated setter method
-                               * @param param Instance
-                               */
-                               public void setInstance(gutenberg.blocs.EntryType param){
-                            
-                                            this.localInstance=param;
+                                            this.localPrepTest=param;
                                     
 
                                }
@@ -99,8 +70,8 @@
 
         
                org.apache.axiom.om.OMDataSource dataSource =
-                       new org.apache.axis2.databinding.ADBDataSource(this,parentQName);
-               return factory.createOMElement(dataSource,parentQName);
+                       new org.apache.axis2.databinding.ADBDataSource(this,MY_QNAME);
+               return factory.createOMElement(dataSource,MY_QNAME);
             
         }
 
@@ -116,47 +87,13 @@
             throws javax.xml.stream.XMLStreamException, org.apache.axis2.databinding.ADBException{
             
                 
-
-
-                java.lang.String prefix = null;
-                java.lang.String namespace = null;
+                //We can safely assume an element has only one type associated with it
                 
-
-                    prefix = parentQName.getPrefix();
-                    namespace = parentQName.getNamespaceURI();
-                    writeStartElement(prefix, namespace, parentQName.getLocalPart(), xmlWriter);
-                
-                  if (serializeType){
-               
-
-                   java.lang.String namespacePrefix = registerPrefix(xmlWriter,"http://gutenberg/blocs");
-                   if ((namespacePrefix != null) && (namespacePrefix.trim().length() > 0)){
-                       writeAttribute("xsi","http://www.w3.org/2001/XMLSchema-instance","type",
-                           namespacePrefix+":assignmentIdType",
-                           xmlWriter);
-                   } else {
-                       writeAttribute("xsi","http://www.w3.org/2001/XMLSchema-instance","type",
-                           "assignmentIdType",
-                           xmlWriter);
-                   }
-
-               
-                   }
-               
-                                            if (localQuiz==null){
-                                                 throw new org.apache.axis2.databinding.ADBException("quiz cannot be null!!");
-                                            }
-                                           localQuiz.serialize(new javax.xml.namespace.QName("http://gutenberg/blocs","quiz"),
-                                               xmlWriter);
-                                        
-                                            if (localInstance==null){
-                                                 throw new org.apache.axis2.databinding.ADBException("instance cannot be null!!");
-                                            }
-                                           localInstance.serialize(new javax.xml.namespace.QName("http://gutenberg/blocs","instance"),
-                                               xmlWriter);
-                                        
-                    xmlWriter.writeEndElement();
-               
+                                 if (localPrepTest==null){
+                                   throw new org.apache.axis2.databinding.ADBException("prepTest cannot be null!");
+                                 }
+                                 localPrepTest.serialize(MY_QNAME,xmlWriter);
+                            
 
         }
 
@@ -336,32 +273,9 @@
 
 
         
-                 java.util.ArrayList elementList = new java.util.ArrayList();
-                 java.util.ArrayList attribList = new java.util.ArrayList();
-
                 
-                            elementList.add(new javax.xml.namespace.QName("http://gutenberg/blocs",
-                                                                      "quiz"));
-                            
-                            
-                                    if (localQuiz==null){
-                                         throw new org.apache.axis2.databinding.ADBException("quiz cannot be null!!");
-                                    }
-                                    elementList.add(localQuiz);
-                                
-                            elementList.add(new javax.xml.namespace.QName("http://gutenberg/blocs",
-                                                                      "instance"));
-                            
-                            
-                                    if (localInstance==null){
-                                         throw new org.apache.axis2.databinding.ADBException("instance cannot be null!!");
-                                    }
-                                    elementList.add(localInstance);
-                                
-
-                return new org.apache.axis2.databinding.utils.reader.ADBXMLStreamReaderImpl(qName, elementList.toArray(), attribList.toArray());
-            
-            
+                //We can safely assume an element has only one type associated with it
+                return localPrepTest.getPullParser(MY_QNAME);
 
         }
 
@@ -382,9 +296,9 @@
         * Postcondition: If this object is an element, the reader is positioned at its end element
         *                If this object is a complex type, the reader is positioned at the end element of its outer element
         */
-        public static AssignmentIdType parse(javax.xml.stream.XMLStreamReader reader) throws java.lang.Exception{
-            AssignmentIdType object =
-                new AssignmentIdType();
+        public static PrepTest parse(javax.xml.stream.XMLStreamReader reader) throws java.lang.Exception{
+            PrepTest object =
+                new PrepTest();
 
             int event;
             java.lang.String nillableValue = null;
@@ -396,32 +310,6 @@
                     reader.next();
 
                 
-                if (reader.getAttributeValue("http://www.w3.org/2001/XMLSchema-instance","type")!=null){
-                  java.lang.String fullTypeName = reader.getAttributeValue("http://www.w3.org/2001/XMLSchema-instance",
-                        "type");
-                  if (fullTypeName!=null){
-                    java.lang.String nsPrefix = null;
-                    if (fullTypeName.indexOf(":") > -1){
-                        nsPrefix = fullTypeName.substring(0,fullTypeName.indexOf(":"));
-                    }
-                    nsPrefix = nsPrefix==null?"":nsPrefix;
-
-                    java.lang.String type = fullTypeName.substring(fullTypeName.indexOf(":")+1);
-                    
-                            if (!"assignmentIdType".equals(type)){
-                                //find namespace for the prefix
-                                java.lang.String nsUri = reader.getNamespaceContext().getNamespaceURI(nsPrefix);
-                                return (AssignmentIdType)gutenberg.blocs.ExtensionMapper.getTypeObject(
-                                     nsUri,type,reader);
-                              }
-                        
-
-                  }
-                
-
-                }
-
-                
 
                 
                 // Note all attributes that were handled. Used to differ normal attributes
@@ -429,49 +317,26 @@
                 java.util.Vector handledAttributes = new java.util.Vector();
                 
 
+                   
+                while(!reader.isEndElement()) {
+                    if (reader.isStartElement() ){
                 
-                    
-                    reader.next();
-                
-                                    
-                                    while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
+                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://gutenberg/blocs","prepTest").equals(reader.getName())){
                                 
-                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://gutenberg/blocs","quiz").equals(reader.getName())){
-                                
-                                                object.setQuiz(gutenberg.blocs.EntryType.Factory.parse(reader));
-                                              
-                                        reader.next();
-                                    
+                                                object.setPrepTest(gutenberg.blocs.AssignmentType.Factory.parse(reader));
+                                            
                               }  // End of if for expected property start element
                                 
-                                else{
-                                    // A start element we are not expecting indicates an invalid parameter was passed
-                                    throw new org.apache.axis2.databinding.ADBException("Unexpected subelement " + reader.getName());
-                                }
-                            
-                                    
-                                    while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
-                                
-                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://gutenberg/blocs","instance").equals(reader.getName())){
-                                
-                                                object.setInstance(gutenberg.blocs.EntryType.Factory.parse(reader));
-                                              
-                                        reader.next();
-                                    
-                              }  // End of if for expected property start element
-                                
-                                else{
-                                    // A start element we are not expecting indicates an invalid parameter was passed
-                                    throw new org.apache.axis2.databinding.ADBException("Unexpected subelement " + reader.getName());
-                                }
-                              
-                            while (!reader.isStartElement() && !reader.isEndElement())
+                             else{
+                                        // A start element we are not expecting indicates an invalid parameter was passed
+                                        throw new org.apache.axis2.databinding.ADBException("Unexpected subelement " + reader.getName());
+                             }
+                          
+                             } else {
                                 reader.next();
-                            
-                                if (reader.isStartElement())
-                                // A start element we are not expecting indicates a trailing invalid property
-                                throw new org.apache.axis2.databinding.ADBException("Unexpected subelement " + reader.getName());
-                            
+                             }  
+                           }  // end of while loop
+                        
 
 
 

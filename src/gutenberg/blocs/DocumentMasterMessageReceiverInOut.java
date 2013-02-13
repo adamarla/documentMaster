@@ -151,23 +151,23 @@
                                                     "undoAnnotate"));
                                     } else 
 
-            if("publishAssignment".equals(methodName)){
+            if("prepTest".equals(methodName)){
                 
-                gutenberg.blocs.PublishAssignmentResponse publishAssignmentResponse37 = null;
-	                        gutenberg.blocs.PublishAssignment wrappedParam =
-                                                             (gutenberg.blocs.PublishAssignment)fromOM(
+                gutenberg.blocs.PrepTestResponse prepTestResponse37 = null;
+	                        gutenberg.blocs.PrepTest wrappedParam =
+                                                             (gutenberg.blocs.PrepTest)fromOM(
                                     msgContext.getEnvelope().getBody().getFirstElement(),
-                                    gutenberg.blocs.PublishAssignment.class,
+                                    gutenberg.blocs.PrepTest.class,
                                     getEnvelopeNamespaces(msgContext.getEnvelope()));
                                                 
-                                               publishAssignmentResponse37 =
+                                               prepTestResponse37 =
                                                    
                                                    
-                                                         skel.publishAssignment(wrappedParam)
+                                                         skel.prepTest(wrappedParam)
                                                     ;
                                             
-                                        envelope = toEnvelope(getSOAPFactory(msgContext), publishAssignmentResponse37, false, new javax.xml.namespace.QName("http://gutenberg/blocs",
-                                                    "publishAssignment"));
+                                        envelope = toEnvelope(getSOAPFactory(msgContext), prepTestResponse37, false, new javax.xml.namespace.QName("http://gutenberg/blocs",
+                                                    "prepTest"));
                                     } else 
 
             if("generateStudentRoster".equals(methodName)){
@@ -446,12 +446,12 @@
 
             }
         
-            private  org.apache.axiom.om.OMElement  toOM(gutenberg.blocs.PublishAssignment param, boolean optimizeContent)
+            private  org.apache.axiom.om.OMElement  toOM(gutenberg.blocs.PrepTest param, boolean optimizeContent)
             throws org.apache.axis2.AxisFault {
 
             
                         try{
-                             return param.getOMElement(gutenberg.blocs.PublishAssignment.MY_QNAME,
+                             return param.getOMElement(gutenberg.blocs.PrepTest.MY_QNAME,
                                           org.apache.axiom.om.OMAbstractFactory.getOMFactory());
                         } catch(org.apache.axis2.databinding.ADBException e){
                             throw org.apache.axis2.AxisFault.makeFault(e);
@@ -460,12 +460,12 @@
 
             }
         
-            private  org.apache.axiom.om.OMElement  toOM(gutenberg.blocs.PublishAssignmentResponse param, boolean optimizeContent)
+            private  org.apache.axiom.om.OMElement  toOM(gutenberg.blocs.PrepTestResponse param, boolean optimizeContent)
             throws org.apache.axis2.AxisFault {
 
             
                         try{
-                             return param.getOMElement(gutenberg.blocs.PublishAssignmentResponse.MY_QNAME,
+                             return param.getOMElement(gutenberg.blocs.PrepTestResponse.MY_QNAME,
                                           org.apache.axiom.om.OMAbstractFactory.getOMFactory());
                         } catch(org.apache.axis2.databinding.ADBException e){
                             throw org.apache.axis2.AxisFault.makeFault(e);
@@ -728,12 +728,12 @@
                                 return wrappedElement;
                          }
                     
-                    private  org.apache.axiom.soap.SOAPEnvelope toEnvelope(org.apache.axiom.soap.SOAPFactory factory, gutenberg.blocs.PublishAssignmentResponse param, boolean optimizeContent, javax.xml.namespace.QName methodQName)
+                    private  org.apache.axiom.soap.SOAPEnvelope toEnvelope(org.apache.axiom.soap.SOAPFactory factory, gutenberg.blocs.PrepTestResponse param, boolean optimizeContent, javax.xml.namespace.QName methodQName)
                         throws org.apache.axis2.AxisFault{
                       try{
                           org.apache.axiom.soap.SOAPEnvelope emptyEnvelope = factory.getDefaultEnvelope();
                            
-                                    emptyEnvelope.getBody().addChild(param.getOMElement(gutenberg.blocs.PublishAssignmentResponse.MY_QNAME,factory));
+                                    emptyEnvelope.getBody().addChild(param.getOMElement(gutenberg.blocs.PrepTestResponse.MY_QNAME,factory));
                                 
 
                          return emptyEnvelope;
@@ -742,8 +742,8 @@
                     }
                     }
                     
-                         private gutenberg.blocs.PublishAssignmentResponse wrappublishAssignment(){
-                                gutenberg.blocs.PublishAssignmentResponse wrappedElement = new gutenberg.blocs.PublishAssignmentResponse();
+                         private gutenberg.blocs.PrepTestResponse wrapprepTest(){
+                                gutenberg.blocs.PrepTestResponse wrappedElement = new gutenberg.blocs.PrepTestResponse();
                                 return wrappedElement;
                          }
                     
@@ -943,16 +943,16 @@
 
                 }
            
-                if (gutenberg.blocs.PublishAssignment.class.equals(type)){
+                if (gutenberg.blocs.PrepTest.class.equals(type)){
                 
-                           return gutenberg.blocs.PublishAssignment.Factory.parse(param.getXMLStreamReaderWithoutCaching());
+                           return gutenberg.blocs.PrepTest.Factory.parse(param.getXMLStreamReaderWithoutCaching());
                     
 
                 }
            
-                if (gutenberg.blocs.PublishAssignmentResponse.class.equals(type)){
+                if (gutenberg.blocs.PrepTestResponse.class.equals(type)){
                 
-                           return gutenberg.blocs.PublishAssignmentResponse.Factory.parse(param.getXMLStreamReaderWithoutCaching());
+                           return gutenberg.blocs.PrepTestResponse.Factory.parse(param.getXMLStreamReaderWithoutCaching());
                     
 
                 }

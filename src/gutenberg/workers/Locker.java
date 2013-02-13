@@ -174,8 +174,9 @@ public class Locker {
                         yPoints[i] = curve.get(i).getY();                    
                     }
                     graphics.drawPolyline(xPoints, yPoints, nPoints);
-                } else {
-                    graphics.drawImage(overlay, point.getX(), point.getY(), null);                    
+                } else if (overlay != null){
+                    graphics.drawImage(overlay, point.getX()-10, point.getY(), null);
+                    overlay = null;
                 } 
                 curve.clear();
             }
@@ -185,7 +186,7 @@ public class Locker {
             Path overlayPath = lockerPath.resolve(scanId + ".overlay");
             overlay = this.getOverlay(overlayPath,
                     annotations.toArray(new PointType[annotations.size()]));
-            graphics.drawImage(overlay, 0, 0, null);
+            graphics.drawImage(overlay, -50, -10, null);
             Files.delete(overlayPath);
         }
 

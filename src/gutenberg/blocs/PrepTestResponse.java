@@ -1,6 +1,6 @@
 
 /**
- * PublishAssignment.java
+ * PrepTestResponse.java
  *
  * This file was auto-generated from WSDL
  * by the Apache Axis2 version: 1.6.1  Built on : Aug 31, 2011 (12:23:23 CEST)
@@ -11,45 +11,45 @@
             
 
             /**
-            *  PublishAssignment bean class
+            *  PrepTestResponse bean class
             */
             @SuppressWarnings({"unchecked","unused"})
         
-        public  class PublishAssignment
+        public  class PrepTestResponse
         implements org.apache.axis2.databinding.ADBBean{
         
                 public static final javax.xml.namespace.QName MY_QNAME = new javax.xml.namespace.QName(
                 "http://gutenberg/blocs",
-                "publishAssignment",
+                "prepTestResponse",
                 "ns1");
 
             
 
                         /**
-                        * field for PublishAssignment
+                        * field for PrepTestResponse
                         */
 
                         
-                                    protected gutenberg.blocs.AssignmentIdType localPublishAssignment ;
+                                    protected gutenberg.blocs.ResponseType localPrepTestResponse ;
                                 
 
                            /**
                            * Auto generated getter method
-                           * @return gutenberg.blocs.AssignmentIdType
+                           * @return gutenberg.blocs.ResponseType
                            */
-                           public  gutenberg.blocs.AssignmentIdType getPublishAssignment(){
-                               return localPublishAssignment;
+                           public  gutenberg.blocs.ResponseType getPrepTestResponse(){
+                               return localPrepTestResponse;
                            }
 
                            
                         
                             /**
                                * Auto generated setter method
-                               * @param param PublishAssignment
+                               * @param param PrepTestResponse
                                */
-                               public void setPublishAssignment(gutenberg.blocs.AssignmentIdType param){
+                               public void setPrepTestResponse(gutenberg.blocs.ResponseType param){
                             
-                                            this.localPublishAssignment=param;
+                                            this.localPrepTestResponse=param;
                                     
 
                                }
@@ -89,10 +89,10 @@
                 
                 //We can safely assume an element has only one type associated with it
                 
-                                 if (localPublishAssignment==null){
-                                   throw new org.apache.axis2.databinding.ADBException("publishAssignment cannot be null!");
+                                 if (localPrepTestResponse==null){
+                                   throw new org.apache.axis2.databinding.ADBException("prepTestResponse cannot be null!");
                                  }
-                                 localPublishAssignment.serialize(MY_QNAME,xmlWriter);
+                                 localPrepTestResponse.serialize(MY_QNAME,xmlWriter);
                             
 
         }
@@ -275,7 +275,7 @@
         
                 
                 //We can safely assume an element has only one type associated with it
-                return localPublishAssignment.getPullParser(MY_QNAME);
+                return localPrepTestResponse.getPullParser(MY_QNAME);
 
         }
 
@@ -296,9 +296,9 @@
         * Postcondition: If this object is an element, the reader is positioned at its end element
         *                If this object is a complex type, the reader is positioned at the end element of its outer element
         */
-        public static PublishAssignment parse(javax.xml.stream.XMLStreamReader reader) throws java.lang.Exception{
-            PublishAssignment object =
-                new PublishAssignment();
+        public static PrepTestResponse parse(javax.xml.stream.XMLStreamReader reader) throws java.lang.Exception{
+            PrepTestResponse object =
+                new PrepTestResponse();
 
             int event;
             java.lang.String nillableValue = null;
@@ -321,9 +321,9 @@
                 while(!reader.isEndElement()) {
                     if (reader.isStartElement() ){
                 
-                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://gutenberg/blocs","publishAssignment").equals(reader.getName())){
+                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://gutenberg/blocs","prepTestResponse").equals(reader.getName())){
                                 
-                                                object.setPublishAssignment(gutenberg.blocs.AssignmentIdType.Factory.parse(reader));
+                                                object.setPrepTestResponse(gutenberg.blocs.ResponseType.Factory.parse(reader));
                                             
                               }  // End of if for expected property start element
                                 

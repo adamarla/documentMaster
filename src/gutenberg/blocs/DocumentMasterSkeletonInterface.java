@@ -99,20 +99,6 @@
         /**
          * Auto generated method signature
          * 
-                                    * @param publishAssignment
-         */
-
-        
-                public gutenberg.blocs.PublishAssignmentResponse publishAssignment
-                (
-                  gutenberg.blocs.PublishAssignment publishAssignment
-                 )
-            ;
-        
-         
-        /**
-         * Auto generated method signature
-         * 
                                     * @param generateStudentRoster
          */
 
@@ -179,5 +165,17 @@
                  )
             ;
         
+                /**
+                 * Auto generated method signature
+                 * 
+                                            * @param assignQuiz
+                 */
+
+                
+                public gutenberg.blocs.PrepTestResponse prepTest
+                (
+                  gutenberg.blocs.PrepTest prepTest
+                 )
+            ;
          }
     

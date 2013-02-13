@@ -53,16 +53,6 @@
               
                   if (
                   "http://gutenberg/blocs".equals(namespaceURI) &&
-                  "assignmentIdType".equals(typeName)){
-                   
-                            return  gutenberg.blocs.AssignmentIdType.Factory.parse(reader);
-                        
-
-                  }
-
-              
-                  if (
-                  "http://gutenberg/blocs".equals(namespaceURI) &&
                   "teacherType".equals(typeName)){
                    
                             return  gutenberg.blocs.TeacherType.Factory.parse(reader);
