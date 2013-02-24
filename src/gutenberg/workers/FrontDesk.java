@@ -1,6 +1,5 @@
 package gutenberg.workers;
 
-import gutenberg.blocs.AssignmentIdType;
 import gutenberg.blocs.EntryType;
 import gutenberg.blocs.ManifestType;
 import gutenberg.blocs.StudentGroupType;
@@ -23,7 +22,6 @@ public class FrontDesk {
     public FrontDesk(Config config) throws Exception {
         frontdeskPath = new File(config.getPath(Resource.frontdesk)).toPath();
         sharedPath = new File(config.getPath(Resource.shared)).toPath();
-        mintPath = new File(config.getPath(Resource.mint)).toPath();
         locker = new Locker(config);
     }
 
@@ -257,72 +255,9 @@ public class FrontDesk {
         return manifest;
     }
 
-    public ManifestType publishAssignment(AssignmentIdType assignmentId)
-            throws Exception {
-
-        EntryType quizId = assignmentId.getQuiz();
-        EntryType instanceId = assignmentId.getInstance();
-
-        ManifestType manifest = new ManifestType();
-        manifest.setRoot(frontdeskPath.resolve("students").toString());
-        Path quizDirPath =
-                mintPath.resolve(quizId.getId()).resolve(instanceId.getId());
-        if (Files.exists(quizDirPath)) {
-
-            String[] downloads =
-                    quizDirPath.resolve("downloads").toFile().list();
-            for (String pdf : downloads) {
-
-                if (pdf.startsWith("assignment"))
-                    continue;
-
-                String studentId = pdf.split("-")[2].split("\\.")[0];
-                Path studentDirPath =
-                        frontdeskPath.resolve("students").resolve(studentId);
-                if (!studentDirPath.toFile().exists()) {
-                    studentDirPath.toFile().mkdir();
-                }
-
-                String assignmentDir =
-                        String.format("%s-%s", quizId.getId(),
-                                instanceId.getId());
-                Path assignmentDirPath = studentDirPath.resolve(assignmentDir);
-                if (!assignmentDirPath.toFile().exists()) {
-                    assignmentDirPath.toFile().mkdir();
-                    assignmentDirPath.resolve("downloads").toFile().mkdir();
-                    assignmentDirPath.resolve("preview").toFile().mkdir();
-                } else
-                    continue;
-
-                Path target =
-                        Files.copy(
-                                quizDirPath.resolve("downloads").resolve(pdf),
-                                assignmentDirPath.resolve("downloads").resolve(
-                                        pdf));
-                EntryType document = new EntryType();
-
-                document.setId(target.relativize(
-                        frontdeskPath.resolve("students")).toString());
-
-                this.generateJpegs(target);
-                String[] jpegs =
-                        target.getParent().toFile()
-                                .list(new NameFilter("jpeg"));
-                for (String jpeg : jpegs) {
-                    Path image = target.getParent().resolve(jpeg);
-                    resize(image);
-                    Files.move(image, assignmentDirPath.resolve("preview")
-                            .resolve(jpeg));
-                }
-            }
-        }
-
-        return manifest;
-
-    }
 
     private Locker locker;
-    private Path   frontdeskPath, sharedPath, mintPath;
+    private Path   frontdeskPath, sharedPath;
     private final String school_tag = "\\School", author_tag = "\\DocAuthor",
             insertQRC_tag = "\\insertQR", table_end = "\\end{tabular}";
 
@@ -359,48 +294,5 @@ public class FrontDesk {
         }
 
         return 0;
-    }
-
-    private int generateJpegs(Path pdf) throws Exception {
-
-        ProcessBuilder pb = new ProcessBuilder();
-        pb.command("gs", "-dNOPAUSE", "-dBATCH", "-sDEVICE=jpeg", "-r700",
-                "-sOutputFile=page-%d.jpeg", pdf.getFileName().toString());
-        pb.directory(pdf.getParent().toFile());
-        pb.redirectErrorStream(true);
-
-        Process process = pb.start();
-        BufferedReader messages =
-                new BufferedReader(new InputStreamReader(
-                        process.getInputStream()));
-        String line = null;
-
-        while ((line = messages.readLine()) != null) {
-            System.out.println(line);
-        }
-
-        return process.waitFor();
-    }
-
-    private int resize(Path jpeg) throws Exception {
-
-        ProcessBuilder pb = new ProcessBuilder();
-        pb.command("convert", jpeg.getFileName().toString(), "-resize",
-                "600x800", jpeg.getFileName().toString());
-
-        pb.directory(jpeg.getParent().toFile());
-        pb.redirectErrorStream(true);
-
-        Process process = pb.start();
-        BufferedReader messages =
-                new BufferedReader(new InputStreamReader(
-                        process.getInputStream()));
-        String line = null;
-
-        while ((line = messages.readLine()) != null) {
-            System.out.println(line);
-        }
-
-        return process.waitFor();
     }
 }

@@ -171,17 +171,14 @@
 
             <xsd:element name="prepTestResponse" type="tns:responseType">
             </xsd:element>
+                        
+        <xsd:element name="generateStudentCode" type="tns:entryType"/>
+
+        <xsd:element name="generateStudentCodeResponse" type="tns:responseType">
+        </xsd:element>
             
 		</xsd:schema>
   </wsdl:types>
-  <wsdl:message name="buildQuizResponse">
-    <wsdl:part name="parameters" element="tns:buildQuizResponse">
-    </wsdl:part>
-  </wsdl:message>
-  <wsdl:message name="generateQuizReportResponse">
-    <wsdl:part name="parameters" element="tns:generateQuizReportResponse">
-    </wsdl:part>
-  </wsdl:message>
   <wsdl:message name="undoAnnotateRequest">
     <wsdl:part name="parameters" element="tns:undoAnnotate">
     </wsdl:part>
@@ -194,16 +191,12 @@
     <wsdl:part name="parameters" element="tns:rotateScan">
     </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="generateSuggestionFormRequest">
-    <wsdl:part name="parameters" element="tns:generateSuggestionForm">
+  <wsdl:message name="buildQuizRequest">
+    <wsdl:part name="parameters" element="tns:buildQuiz">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="rotateScanResponse">
     <wsdl:part name="parameters" element="tns:rotateScanResponse">
-    </wsdl:part>
-  </wsdl:message>
-  <wsdl:message name="buildQuizRequest">
-    <wsdl:part name="parameters" element="tns:buildQuiz">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="assignQuizResponse">
@@ -218,32 +211,12 @@
     <wsdl:part name="parameters" element="tns:createQuestion">
     </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="prepTestResponse">
-    <wsdl:part name="parameters" element="tns:prepTestResponse">
-    </wsdl:part>
-  </wsdl:message>
   <wsdl:message name="receiveScansResponse">
     <wsdl:part name="parameters" element="tns:receiveScansResponse">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="undoAnnotateResponse">
     <wsdl:part name="parameters" element="tns:undoAnnotateResponse">
-    </wsdl:part>
-  </wsdl:message>
-  <wsdl:message name="prepTestRequest">
-    <wsdl:part name="parameters" element="tns:prepTest">
-    </wsdl:part>
-  </wsdl:message>
-  <wsdl:message name="createQuestionResponse">
-    <wsdl:part name="parameters" element="tns:createQuestionResponse">
-    </wsdl:part>
-  </wsdl:message>
-  <wsdl:message name="tagQuestionResponse">
-    <wsdl:part name="parameters" element="tns:tagQuestionResponse">
-    </wsdl:part>
-  </wsdl:message>
-  <wsdl:message name="assignQuizRequest">
-    <wsdl:part name="parameters" element="tns:assignQuiz">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="generateSuggestionFormResponse">
@@ -258,16 +231,56 @@
     <wsdl:part name="parameters" element="tns:tagQuestion">
     </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="annotateScanRequest">
-    <wsdl:part name="parameters" element="tns:annotateScan">
+  <wsdl:message name="receiveScansRequest">
+    <wsdl:part name="parameters" element="tns:receiveScans">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="buildQuizResponse">
+    <wsdl:part name="parameters" element="tns:buildQuizResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="generateQuizReportResponse">
+    <wsdl:part name="parameters" element="tns:generateQuizReportResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="generateSuggestionFormRequest">
+    <wsdl:part name="parameters" element="tns:generateSuggestionForm">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="generateStudentCodeRequest">
+    <wsdl:part name="parameters" element="tns:generateStudentCode">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="prepTestResponse">
+    <wsdl:part name="parameters" element="tns:prepTestResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="prepTestRequest">
+    <wsdl:part name="parameters" element="tns:prepTest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="createQuestionResponse">
+    <wsdl:part name="parameters" element="tns:createQuestionResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="generateStudentCodeResponse">
+    <wsdl:part name="parameters" element="tns:generateStudentCodeResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="assignQuizRequest">
+    <wsdl:part name="parameters" element="tns:assignQuiz">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="tagQuestionResponse">
+    <wsdl:part name="parameters" element="tns:tagQuestionResponse">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="annotateScanResponse">
     <wsdl:part name="parameters" element="tns:annotateScanResponse">
     </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="receiveScansRequest">
-    <wsdl:part name="parameters" element="tns:receiveScans">
+  <wsdl:message name="annotateScanRequest">
+    <wsdl:part name="parameters" element="tns:annotateScan">
     </wsdl:part>
   </wsdl:message>
   <wsdl:portType name="documentMaster">
@@ -341,6 +354,12 @@
       <wsdl:input message="tns:prepTestRequest">
     </wsdl:input>
       <wsdl:output message="tns:prepTestResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="generateStudentCode">
+      <wsdl:input message="tns:generateStudentCodeRequest">
+    </wsdl:input>
+      <wsdl:output message="tns:generateStudentCodeResponse">
     </wsdl:output>
     </wsdl:operation>
   </wsdl:portType>
@@ -447,6 +466,15 @@
     </wsdl:operation>
     <wsdl:operation name="prepTest">
       <soap:operation soapAction="http://gutenberg/blocs/prepTest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="generateStudentCode">
+      <soap:operation soapAction="http://gutenberg/blocs/generateStudentCode"/>
       <wsdl:input>
         <soap:body use="literal"/>
       </wsdl:input>

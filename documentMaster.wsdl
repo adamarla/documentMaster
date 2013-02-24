@@ -183,6 +183,11 @@
 
             <xsd:element name="prepTestResponse" type="tns:responseType">
             </xsd:element>
+                        
+        <xsd:element name="generateStudentCode" type="tns:entryType"></xsd:element>
+
+        <xsd:element name="generateStudentCodeResponse" type="tns:responseType">
+        </xsd:element>
             
 		</xsd:schema>
 	</wsdl:types>
@@ -258,6 +263,12 @@
     <wsdl:message name="prepTestResponse">
         <wsdl:part name="parameters" element="tns:prepTestResponse"></wsdl:part>
     </wsdl:message> 
+    <wsdl:message name="generateStudentCodeRequest">
+        <wsdl:part name="parameters" element="tns:generateStudentCode"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="generateStudentCodeResponse">
+        <wsdl:part name="parameters" element="tns:generateStudentCodeResponse"></wsdl:part>
+    </wsdl:message> 
 	<wsdl:portType name="documentMaster">
 		<wsdl:operation name="buildQuiz">
 			<wsdl:input message="tns:buildQuizRequest" />
@@ -307,6 +318,10 @@
             <wsdl:input message="tns:prepTestRequest"></wsdl:input>
             <wsdl:output message="tns:prepTestResponse"></wsdl:output>
         </wsdl:operation>       
+    <wsdl:operation name="generateStudentCode">
+      <wsdl:input message="tns:generateStudentCodeRequest"></wsdl:input>
+      <wsdl:output message="tns:generateStudentCodeResponse"></wsdl:output>
+    </wsdl:operation>   
 	</wsdl:portType>
 	<wsdl:binding name="documentMasterSOAP" type="tns:documentMaster">
 		<soap:binding style="document"
@@ -419,6 +434,15 @@
                 <soap:body use="literal" />
             </wsdl:output>
         </wsdl:operation>
+    <wsdl:operation name="generateStudentCode">
+      <soap:operation soapAction="http://gutenberg/blocs/generateStudentCode" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
 	</wsdl:binding>
 	<wsdl:service name="documentMaster">
 		<wsdl:port binding="tns:documentMasterSOAP" name="documentMasterSOAP">

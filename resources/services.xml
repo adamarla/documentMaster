@@ -17,6 +17,14 @@
             <actionMapping>http://gutenberg/blocs/createQuestion</actionMapping>
             <outputActionMapping>http://gutenberg/blocs/documentMaster/createQuestionResponse</outputActionMapping>
         </operation>
+        <operation name="prepTest" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://gutenberg/blocs">
+            <actionMapping>http://gutenberg/blocs/prepTest</actionMapping>
+            <outputActionMapping>http://gutenberg/blocs/documentMaster/prepTestResponse</outputActionMapping>
+        </operation>
+        <operation name="generateStudentCode" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://gutenberg/blocs">
+            <actionMapping>http://gutenberg/blocs/generateStudentCode</actionMapping>
+            <outputActionMapping>http://gutenberg/blocs/documentMaster/generateStudentCodeResponse</outputActionMapping>
+        </operation>
         <operation name="annotateScan" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://gutenberg/blocs">
             <actionMapping>http://gutenberg/blocs/annotateScan</actionMapping>
             <outputActionMapping>http://gutenberg/blocs/documentMaster/annotateScanResponse</outputActionMapping>
@@ -32,10 +40,6 @@
         <operation name="undoAnnotate" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://gutenberg/blocs">
             <actionMapping>http://gutenberg/blocs/undoAnnotate</actionMapping>
             <outputActionMapping>http://gutenberg/blocs/documentMaster/undoAnnotateResponse</outputActionMapping>
-        </operation>
-        <operation name="publishAssignment" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://gutenberg/blocs">
-            <actionMapping>http://gutenberg/blocs/publishAssignment</actionMapping>
-            <outputActionMapping>http://gutenberg/blocs/documentMaster/publishAssignmentResponse</outputActionMapping>
         </operation>
         <operation name="generateStudentRoster" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://gutenberg/blocs">
             <actionMapping>http://gutenberg/blocs/generateStudentRoster</actionMapping>

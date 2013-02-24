@@ -43,6 +43,34 @@
         /**
          * Auto generated method signature
          * 
+                                    * @param prepTest
+         */
+
+        
+                public gutenberg.blocs.PrepTestResponse prepTest
+                (
+                  gutenberg.blocs.PrepTest prepTest
+                 )
+            ;
+        
+         
+        /**
+         * Auto generated method signature
+         * 
+                                    * @param generateStudentCode
+         */
+
+        
+                public gutenberg.blocs.GenerateStudentCodeResponse generateStudentCode
+                (
+                  gutenberg.blocs.GenerateStudentCode generateStudentCode
+                 )
+            ;
+        
+         
+        /**
+         * Auto generated method signature
+         * 
                                     * @param annotateScan
          */
 
@@ -165,17 +193,5 @@
                  )
             ;
         
-                /**
-                 * Auto generated method signature
-                 * 
-                                            * @param assignQuiz
-                 */
-
-                
-                public gutenberg.blocs.PrepTestResponse prepTest
-                (
-                  gutenberg.blocs.PrepTest prepTest
-                 )
-            ;
          }
     

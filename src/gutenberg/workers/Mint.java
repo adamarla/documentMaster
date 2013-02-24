@@ -44,29 +44,34 @@ public class Mint {
 
         // 0. Set up directories
         String quizId = quiz.getQuiz().getId();
-        Path quizDir = Files.createDirectories(mintPath.resolve(quizId)
-                .resolve("answer-key"));
-        Path staging = Files.createDirectory(quizDir.resolve("staging"));
-        Path downloads = Files.createDirectory(quizDir.resolve("downloads"));
-        Path preview = Files.createDirectory(quizDir.resolve("preview"));
+        Path quizDir = null, staging = null, downloads = null, preview = null;
+        if (!Files.exists(mintPath.resolve(quizId))) {
+            quizDir = Files.createDirectories(mintPath.resolve(quizId)
+                    .resolve("answer-key"));
+            staging = Files.createDirectory(quizDir.resolve("staging"));
+            downloads = Files.createDirectory(quizDir.resolve("downloads"));
+            preview = Files.createDirectory(quizDir.resolve("preview"));                       
+        } else {
+            quizDir = mintPath.resolve(quizId).resolve("answer-key");
+            staging = quizDir.resolve("staging");
+            downloads = quizDir.resolve("downloads");
+            preview = quizDir.resolve("preview");                       
+        }
         
         // generate symbolic link to quiz in ATM
         ManifestType manifest = atm.deposit(quizDir.getParent());
 
         // 1. write latex
-        PrintWriter answerKeyTex = new PrintWriter(Files.newBufferedWriter(
-                staging.resolve("answer-key.tex"), StandardCharsets.UTF_8,
+        PrintWriter blueprintTex = new PrintWriter(Files.newBufferedWriter(
+                staging.resolve("blueprintTex"), StandardCharsets.UTF_8,
                 StandardOpenOption.CREATE));
         
-        writePreamble(answerKeyTex, quiz.getSchool().getName(), quiz
+        writePreamble(blueprintTex, quiz.getSchool().getName(), quiz
                 .getTeacher().getName());
         
-        beginDoc(answerKeyTex);
+        beginDoc(blueprintTex);
+        blueprintTex.println(printanswers);
 
-        answerKeyTex.println(printanswers);
-        answerKeyTex.println("\\setcounter{rolldice}{0}");
-
-        // when printing the answer-key, only the first variation is picked
         PageType[] pages = quiz.getPage();        
         for (int i = 0; i < pages.length; i++) {
 
@@ -75,52 +80,31 @@ public class Mint {
                 continue;
 
             for (EntryType question : questions) {
-                setQuestion(question.getId(), answerKeyTex, staging);
+                setQuestion(question.getId(), blueprintTex, staging);
             }
-            answerKeyTex.println(newpage);
+            blueprintTex.println(newpage);
         }
-        endDoc(answerKeyTex);
-        answerKeyTex.close();
+        endDoc(blueprintTex);
+        blueprintTex.close();
         
-        // write other tex files for supplementary document generation
-        List<String> lines = Files.readAllLines(
-                staging.resolve("answer-key.tex"), StandardCharsets.UTF_8);
-        PrintWriter rubricTex = new PrintWriter(Files.newBufferedWriter(
-                staging.resolve("rubric.tex"), StandardCharsets.UTF_8,
-                StandardOpenOption.CREATE));
-        PrintWriter fillerTex = new PrintWriter(Files.newBufferedWriter(
-                staging.resolve("filler.tex"), StandardCharsets.UTF_8,
-                StandardOpenOption.CREATE));
-        for (String line : lines) {
-            
-            rubricTex.println(line);
-            if (line.startsWith(printanswers)) {
-                rubricTex.println(printRubric);                
-                fillerTex.print("%");//to comment out \printanswers!
-            } else if (line.startsWith(this.beginDocument)) {
-                fillerTex.println("\\usepackage{draftwatermark}");
-                fillerTex.println("\\SetWatermarkColor[rgb]{1,0,0}");
-                fillerTex.println("\\SetWatermarkText{Submit assignment to see solution}");
-                fillerTex.println("\\SetWatermarkScale{0.30}");
-            }
-            fillerTex.println(line);
-        }
-        rubricTex.close();
-        fillerTex.close();
-
         // 2. Link Makefiles and make PDFs
-        Path rel = staging.relativize(sharedPath);
-        Files.createSymbolicLink(staging.resolve("Makefile"),
-                rel.resolve("makefiles/quiz.mk"));
+        Path toMakefile = staging.relativize(sharedPath).
+                resolve("makefiles");
+        if (!Files.exists(staging.resolve("Makefile")))
+            Files.createSymbolicLink(staging.resolve("Makefile"),
+                    toMakefile.resolve("quiz.mk"));
 
+        Files.copy(staging.resolve("blueprintTex"), 
+                staging.resolve("answer-key.tex"));
         if (make(staging, downloads, preview) != 0) {
             throw new Exception("Problemo! Non-zero return code from make");
         }
+        Files.delete(staging.resolve("answer-key.tex"));
 
         // 3. Populate manifest
         String[] filenames = preview.toFile().list();
         if (filenames.length == 0) {
-            throw new Exception("All preview files not prepared.");
+            throw new Exception("All preview files not prepared");
         }
         EntryType[] images = new EntryType[filenames.length];
         for (int i = 0; i < images.length; i++) {
@@ -136,6 +120,22 @@ public class Mint {
         documents[0] = new EntryType();
         documents[0].setId("answer-key.pdf");
         manifest.setDocument(documents);
+        
+        // write other TeX files for supplementary document generation
+        List<String> lines = Files.readAllLines(
+                staging.resolve("blueprintTex"), StandardCharsets.UTF_8);
+        PrintWriter rubricTex = new PrintWriter(Files.newBufferedWriter(
+                staging.resolve("rubric.tex"), StandardCharsets.UTF_8,
+                StandardOpenOption.CREATE));
+        for (String line : lines) {
+            rubricTex.println(line);
+            if (line.startsWith(printanswers)) {
+                rubricTex.println(printRubric);
+            }
+        }
+        rubricTex.close();
+        make(staging, downloads, null);
+        Files.delete(staging.resolve("rubric.tex"));
         
         return manifest;
     }
@@ -154,28 +154,28 @@ public class Mint {
         // 0. Set up directories
         String quizId = assignment.getQuiz().getId();
         String testpaperId = assignment.getInstance().getId();
+        
         Path quizDir = mintPath.resolve(quizId);
-        Path blueprintDir = quizDir.resolve("answer-key/staging");
-        Path assignmentDir = Files
-                .createDirectory(quizDir.resolve(testpaperId));
-        Path staging = Files.createDirectory(assignmentDir.resolve("staging"));
-        Path downloads = Files.createDirectory(assignmentDir
-                .resolve("downloads"));
+        Path assignmentDir = Files.createDirectory(mintPath.
+                resolve(quizId).resolve(testpaperId));
+        Path staging = Files.createDirectory(assignmentDir.
+                resolve("staging"));
+        Path downloads = Files.createDirectory(assignmentDir.
+                resolve("downloads"));
         // generate symbolic link to test paper in ATM
         ManifestType manifest = atm.deposit(assignmentDir);
 
         // 1. Copy blueprint answer-key.tex
         List<String> linesList = Files.readAllLines(
-                blueprintDir.resolve("answer-key.tex"), StandardCharsets.UTF_8);
+                quizDir.resolve("answer-key").resolve("staging").
+                resolve("blueprintTex"), StandardCharsets.UTF_8);
         String[] lines = linesList.toArray(new String[linesList.size()]);
-        int totalPages = Integer.parseInt(lines[0].split("=")[1]);
 
         // copy plot files from blueprint folder
         File[] plotfiles = quizDir.resolve("answer-key").resolve("staging")
                 .toFile().listFiles(new NameFilter(".gnuplot"));
         for (int i = 0; i < plotfiles.length; i++) {
-            Files.copy(plotfiles[i].toPath(),
-                    staging.resolve(plotfiles[i].getName()));
+            Files.copy(plotfiles[i].toPath(), staging.resolve(plotfiles[i].getName()));
         }
 
         // 2. Write latex files for each student's test paper
@@ -205,27 +205,24 @@ public class Mint {
         for (int i = 0; i < students.length; i++) {
             
             Path studentDir = this.mintPath.resolve("s" + students[i].getId());
-            Path testpaperDir, studentStaging = null;
-            if (!Files.exists(studentDir)) {
+            if (!Files.exists(studentDir))
                 Files.createDirectory(studentDir);
-            }
-            
-            testpaperDir = Files.createDirectory(studentDir.resolve(
+            Path testpaperDir = Files.createDirectory(studentDir.resolve(
                     String.format("%s-%s", quizId, testpaperId)));
-            studentStaging = Files.createDirectory(testpaperDir.resolve("staging"));
+            Path studentStaging = Files.createDirectory(testpaperDir.
+                    resolve("staging"));
 
             Path singleTex = studentStaging.resolve(String.format(nameFormat,
-                    quizId, testpaperId, students[i].getId(), "tex"));
+                    students[i].getId(), quizId, testpaperId, "tex"));
             PrintWriter single = new PrintWriter(Files.newBufferedWriter(
                     singleTex, StandardCharsets.UTF_8,
                     StandardOpenOption.CREATE));
             
-            // QRKey = [TestPaperId(6)][studentIdx(2)][pageNum(1/2)]
             pseudoStudentId = Integer.toString(
                     random.nextInt(MAX_2_DIG_BASE36_NUM), Character.MAX_RADIX);
             while (keys.contains(pseudoStudentId)) {
                 pseudoStudentId = Integer.toString(
-                        random.nextInt(MAX_2_DIG_BASE36_NUM), Character.MAX_RADIX);
+                random.nextInt(MAX_2_DIG_BASE36_NUM), Character.MAX_RADIX);
             }
             keys.add(pseudoStudentId);
             pseudoStudentId = Integer.toString(i, Character.MAX_RADIX);
@@ -244,14 +241,12 @@ public class Mint {
 
             String baseQR = baseQR(students[i], assignment);
             String QRKeyVal = null;
-            int pageNumber = 0;
+            int totalPages = quizDir.resolve("answer-key").resolve("preview").
+                    toFile().list().length;
             for (int j = 0; j < totalPages; j++) {
-
-                pageNumber = j + 1;
-                QRKeyVal = String.format("%s%s:%s-0-%s-%s", QRKey, pageNumber,
-                        baseQR, pageNumber, totalPages);
+                QRKeyVal = String.format("%s%s:%s-0-%s-%s", QRKey, j+1, baseQR, 
+                        j+1, totalPages);
                 keyFileWriter.println(QRKeyVal);
-
             }
 
             if (totalPages % 2 != 0) {
@@ -266,9 +261,10 @@ public class Mint {
         keyFileWriter.close();
 
         // 3. Link Makefiles and make the PDFs
-        Path rel = staging.relativize(sharedPath);
+        Path toMakefile = staging.relativize(sharedPath).
+                resolve("makefiles");
         Files.createSymbolicLink(staging.resolve("Makefile"),
-                rel.resolve("makefiles/quiz.mk"));
+                toMakefile.resolve("quiz.mk"));
         
         if (make(staging, downloads, null) != 0)
             throw new Exception("Problem! Non-zero return code from make");
@@ -336,21 +332,26 @@ public class Mint {
         return manifest;    
     }
 
+    public ManifestType generateStudentCode(EntryType student) 
+            throws Exception {        
+        Path studentDir = Files.createDirectory(
+                mintPath.resolve("s" + student.getId()));        
+        return atm.deposit(studentDir);
+    }
     
     private Path  sharedPath, mintPath;
     private Locker locker;
     private ATM   atm;
     private Vault vault;
 
-    private void setQuestion(String questionId, PrintWriter answerKeyTex,
+    private void setQuestion(String questionId, PrintWriter writer,
             Path staging) throws Exception {
+        writer.println("\\setcounter{rolldice}{0}");
         String content = vault.getContent(questionId, "question.tex")[0];
-        answerKeyTex.print(content);
-
+        writer.println(content);
         Path plotfile = vault.getFiles(questionId, "figure.gnuplot")[0]
                 .toPath();
-        Files.copy(plotfile, staging.resolve(questionId + ".gnuplot"));
-
+        Files.copy(plotfile, staging.resolve(questionId + ".gnuplot"), StandardCopyOption.REPLACE_EXISTING);
     }
 
     private void replicateBlueprint(String[] lines, PrintWriter composite,
@@ -363,19 +364,18 @@ public class Mint {
             String trimmed = line.trim();
 
             if (trimmed.startsWith("%")) { // => a comment
-              continue;
-            } else if (trimmed.startsWith(printanswers)|| 
-              trimmed.startsWith("\\setcounter{rolldice}")) {
-              continue;
+                continue;
+            } else if (trimmed.startsWith(printanswers)) {
+                continue;              
+            } else if (trimmed.startsWith("\\setcounter{rolldice}")) {
+                line = String.format("\\setcounter{rolldice}{%d}", 
+                        dice.nextInt(4));
             } else if (trimmed.startsWith(insertQR)) {
                 line = line.replace("QRC", baseQRKey + pageNumber);
             } else if (trimmed.startsWith(docAuthor)) {
                 line = docAuthor + "{" + author + "}"; // change the name
-            } else if (trimmed.startsWith("\\question")) {
-                line = String.format("\\setcounter{rolldice}{%d}\n%s", 
-                        dice.nextInt(4), line);
             } 
-
+            
             // This is the only chance the per-student TeX has to
             // get content. So, grab it ...
             single.println(line);
@@ -451,6 +451,9 @@ public class Mint {
     private int make(Path workingDir, Path downloadsDir, Path previewsDir)
             throws Exception {
         ProcessBuilder pb = new ProcessBuilder("make");
+        if (previewsDir == null) {
+            pb.command().add("pdf");
+        }
 
         pb.directory(workingDir.toFile());
         pb.redirectErrorStream(true);

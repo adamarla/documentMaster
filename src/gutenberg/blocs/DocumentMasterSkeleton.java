@@ -20,13 +20,7 @@ import java.io.File;
  */
 public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
 
-	/**
-	 * Auto generated method signature
-	 * 
-	 * @param tagQuestion2
-	 * @return tagQuestionResponse3
-	 */
-
+    @Override
 	public gutenberg.blocs.TagQuestionResponse tagQuestion(
 			gutenberg.blocs.TagQuestion tagQuestion) {
 		Vault vault = null;
@@ -46,13 +40,7 @@ public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
 		return tagQuestionResponse;
 	}
 
-	/**
-	 * Auto generated method signature
-	 * 
-	 * @param annotateScan6
-	 * @return annotateScanResponse7
-	 */
-
+	@Override
 	public gutenberg.blocs.AnnotateScanResponse annotateScan(
 			gutenberg.blocs.AnnotateScan annotateScan) {
 		Locker locker = null;
@@ -74,12 +62,7 @@ public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
 		return annotateScanResponse;
 	}
 
-    /**
-     * Auto generated method signature
-     * 
-     * @param undoAnnotate
-     * @return undoAnnotateResponse
-     */
+	@Override
     public UndoAnnotateResponse undoAnnotate(UndoAnnotate undoAnnotate) {
         Locker locker = null;
         Config config = null;
@@ -98,13 +81,7 @@ public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
         return undoAnnotateResponse;
     }
 
-    /**
-     * Auto generated method signature
-     * 
-     * @param rotateScan
-     * @return rotateScanResponse
-     */
-	
+    @Override
     public RotateScanResponse rotateScan(RotateScan rotateScan) {
         Locker locker = null;
         Config config = null;
@@ -123,12 +100,7 @@ public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
         return rotateScanResponse;
     }
     
-	/**
-	 * Auto generated method signature
-	 * 
-	 * @param createQuestion
-	 * @return createQuestionResponse
-	 */
+    @Override
 	public gutenberg.blocs.CreateQuestionResponse createQuestion(
 			gutenberg.blocs.CreateQuestion createQuestion) {
 		Config config = null;
@@ -147,12 +119,7 @@ public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
 		return createQuestionResponse;
 	}
 
-	/**
-	 * Auto generated method signature
-	 * 
-	 * @param buildQuiz6
-	 * @return buildQuizResponse7
-	 */
+	@Override
 	public gutenberg.blocs.BuildQuizResponse buildQuiz(
 			gutenberg.blocs.BuildQuiz buildQuiz) {
 		Config config = null;
@@ -172,12 +139,7 @@ public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
 		return buildQuizResponse;
 	}
 
-	/**
-	 * Auto generated method signature
-	 * 
-	 * @param assignQuiz8
-	 * @return assignQuizResponse9
-	 */
+	@Override
 	public gutenberg.blocs.AssignQuizResponse assignQuiz(
 			gutenberg.blocs.AssignQuiz assignQuiz) {
 		Config config = null;
@@ -196,13 +158,7 @@ public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
 		return assignQuizResponse;
 	}
 
-	/**
-	 * Auto generated method signature
-	 * 
-	 * @param receiveScans8
-	 * @return receiveScansResponse9
-	 */
-
+	@Override
 	public gutenberg.blocs.ReceiveScansResponse receiveScans(
 			gutenberg.blocs.ReceiveScans receiveScans) {
 		Locker locker = null;
@@ -223,13 +179,7 @@ public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
 		return receiveScansResponse;
 	}
 
-	/**
-	 * Auto generated method signature
-	 * 
-	 * @param generateSuggestionForm14
-	 * @return generateSuggestionFormResponse15
-	 */
-
+	@Override
 	public gutenberg.blocs.GenerateSuggestionFormResponse generateSuggestionForm(
 			gutenberg.blocs.GenerateSuggestionForm generateSuggestionForm) {
 		Config config = null;
@@ -250,10 +200,6 @@ public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
 		return generateSuggestionFormResponse;
 	}
 
-    /**
-     * Auto generated method signature
-     * 
-     */
 	@Override
 	public GenerateStudentRosterResponse generateStudentRoster(
 			GenerateStudentRoster generateStudentRoster) {
@@ -275,13 +221,7 @@ public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
 		return generateStudentRosterResponse;
 	}
 
-    /**
-     * Auto generated method signature
-     * 
-     * @param generateQuizReport14
-     * @return generateQuizReportResponse15
-     */
-
+	@Override
     public gutenberg.blocs.GenerateQuizReportResponse generateQuizReport(
             gutenberg.blocs.GenerateQuizReport generateQuizReport) {
         Config config = null;
@@ -322,6 +262,27 @@ public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
             prepTestResponse = new PrepTestResponse();
         prepTestResponse.setPrepTestResponse(response);
         return prepTestResponse;
+    }
+
+    @Override
+    public GenerateStudentCodeResponse generateStudentCode(
+            GenerateStudentCode generateStudentCode) {
+        Config config = null;
+        Mint mint = null;
+        ResponseType response = new ResponseType();
+        try {
+            config = new Config();
+            mint = new Mint(config);
+            EntryType student = generateStudentCode.getGenerateStudentCode();
+            response.setManifest(mint.generateStudentCode(student));
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.setError(e.getMessage());
+        }
+        GenerateStudentCodeResponse
+            generateStudentCodeResponse = new GenerateStudentCodeResponse();
+        generateStudentCodeResponse.setGenerateStudentCodeResponse(response);
+        return generateStudentCodeResponse;
     }
 
 
