@@ -55,7 +55,14 @@ public class Mint {
             quizDir = mintPath.resolve(quizId).resolve("answer-key");
             staging = quizDir.resolve("staging");
             downloads = quizDir.resolve("downloads");
-            preview = quizDir.resolve("preview");                       
+            preview = quizDir.resolve("preview");
+            
+            DirectoryStream<Path> stream = 
+                    Files.newDirectoryStream(preview, "page-*.jpeg");
+            for (Path entry: stream) {
+                Files.delete(entry);
+            }
+            stream.close();            
         }
         
         // generate symbolic link to quiz in ATM
@@ -333,9 +340,11 @@ public class Mint {
     }
 
     public ManifestType generateStudentCode(EntryType student) 
-            throws Exception {        
-        Path studentDir = Files.createDirectory(
-                mintPath.resolve("s" + student.getId()));        
+            throws Exception {
+        Path studentDir = mintPath.resolve("s" + student.getId());
+        if (!Files.exists(studentDir)) {
+            Files.createDirectory(studentDir);
+        }
         return atm.deposit(studentDir);
     }
     
