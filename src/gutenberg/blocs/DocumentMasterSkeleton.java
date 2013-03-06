@@ -188,7 +188,7 @@ public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
 		try {
 			config = new Config();
 			frontdesk = new FrontDesk(config);
-			TeacherType teacherInfo = generateSuggestionForm.getGenerateSuggestionForm();
+			EntryType teacherInfo = generateSuggestionForm.getGenerateSuggestionForm();
 			response.setManifest(frontdesk.generateSuggestionForm(teacherInfo));
 		} catch (Exception e) {
 			e.printStackTrace();

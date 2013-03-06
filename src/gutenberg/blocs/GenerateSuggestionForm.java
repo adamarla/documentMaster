@@ -30,14 +30,14 @@
                         */
 
                         
-                                    protected gutenberg.blocs.TeacherType localGenerateSuggestionForm ;
+                                    protected gutenberg.blocs.EntryType localGenerateSuggestionForm ;
                                 
 
                            /**
                            * Auto generated getter method
-                           * @return gutenberg.blocs.TeacherType
+                           * @return gutenberg.blocs.EntryType
                            */
-                           public  gutenberg.blocs.TeacherType getGenerateSuggestionForm(){
+                           public  gutenberg.blocs.EntryType getGenerateSuggestionForm(){
                                return localGenerateSuggestionForm;
                            }
 
@@ -47,7 +47,7 @@
                                * Auto generated setter method
                                * @param param GenerateSuggestionForm
                                */
-                               public void setGenerateSuggestionForm(gutenberg.blocs.TeacherType param){
+                               public void setGenerateSuggestionForm(gutenberg.blocs.EntryType param){
                             
                                             this.localGenerateSuggestionForm=param;
                                     
@@ -323,7 +323,7 @@
                 
                                     if (reader.isStartElement() && new javax.xml.namespace.QName("http://gutenberg/blocs","generateSuggestionForm").equals(reader.getName())){
                                 
-                                                object.setGenerateSuggestionForm(gutenberg.blocs.TeacherType.Factory.parse(reader));
+                                                object.setGenerateSuggestionForm(gutenberg.blocs.EntryType.Factory.parse(reader));
                                             
                               }  // End of if for expected property start element
                                 

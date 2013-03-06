@@ -3,8 +3,6 @@ package gutenberg.workers;
 import gutenberg.blocs.EntryType;
 import gutenberg.blocs.ManifestType;
 import gutenberg.blocs.StudentGroupType;
-import gutenberg.blocs.TeacherType;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
@@ -25,16 +23,12 @@ public class FrontDesk {
         locker = new Locker(config);
     }
 
-    public ManifestType generateSuggestionForm(TeacherType teacherInfo)
+    public ManifestType generateSuggestionForm(EntryType teacher)
             throws Exception {
-
-        EntryType teacher = teacherInfo.getTeacher();
-        EntryType school = teacherInfo.getSchool();
 
         Path outputDirPath =
                 frontdeskPath.resolve(String.format(
-                        "teachers/%s-%s/petty-cash", school.getId(),
-                        teacher.getId()));
+                        "teachers/0-%s/petty-cash", teacher.getId()));
         if (!Files.exists(outputDirPath))
             Files.createDirectories(outputDirPath);
 
@@ -42,7 +36,7 @@ public class FrontDesk {
         PrintWriter keyFileWriter =
                 new PrintWriter(Files.newBufferedWriter(keyFile,
                         StandardCharsets.UTF_8, StandardOpenOption.CREATE));
-        String QRKey = String.format("%s-%s", school.getId(), teacher.getId());
+        String QRKey = String.format("0-%s", teacher.getId());
         String QRKeyVal =
                 String.format("%s:%s-%s-0-0-0-1-1", QRKey, teacher.getId(),
                         teacher.getName());
@@ -65,12 +59,9 @@ public class FrontDesk {
         for (String line : template) {
 
             trimmed = line.trim();
-            if (trimmed.startsWith(school_tag)) {
-                line = line.replace("school", school.getName());
-            } else if (trimmed.startsWith(author_tag)) {
-                line =
-                        line.replace("name", teacher.getName()
-                                .replace('-', ' '));
+            if (trimmed.startsWith(author_tag)) {
+                line = line.replace("name", teacher.getName()
+                        .replace('-', ' '));
             } else if (trimmed.startsWith(insertQRC_tag)) {
                 line = line.replace("QRC", QRKey);
             }
@@ -101,8 +92,8 @@ public class FrontDesk {
     public ManifestType generateStudentRoster(StudentGroupType studentGroup)
             throws Exception {
 
+        EntryType teacher = studentGroup.getTeacher();
         EntryType group = studentGroup.getGroup();
-        EntryType school = studentGroup.getSchool();
         EntryType[] members = studentGroup.getMembers();
 
         if (members == null)
@@ -113,8 +104,8 @@ public class FrontDesk {
         }
 
         Path outputDirPath =
-                frontdeskPath.resolve(String.format("schools/%s/rosters",
-                        school.getId()));
+                frontdeskPath.resolve(String.format("teachers/%s/rosters",
+                        teacher.getId()));
         if (!Files.exists(outputDirPath))
             Files.createDirectories(outputDirPath);
 
@@ -135,8 +126,8 @@ public class FrontDesk {
         String trim = null;
         for (String line : template) {
             trim = line.trim();
-            if (trim.contains("{school}")) {
-                line = line.replace("school", school.getName());
+            if (trim.contains("{teacher}")) {
+                line = line.replace("teacher", teacher.getName());
             } else if (trim.contains("{sektion}")) {
                 line = line.replace("sektion", group.getName());
             } else if (trim.startsWith(table_end)) {
@@ -171,8 +162,8 @@ public class FrontDesk {
     public ManifestType generateQuizReport(StudentGroupType studentGroup)
             throws Exception {
 
+        EntryType teacher = studentGroup.getTeacher();
         EntryType testpaper = studentGroup.getGroup();
-        EntryType school = studentGroup.getSchool();
         EntryType[] members = studentGroup.getMembers();
 
         if (members == null)
@@ -183,8 +174,8 @@ public class FrontDesk {
         }
 
         Path outputDirPath =
-                frontdeskPath.resolve(String.format("schools/%s/reports",
-                        school.getId()));
+                frontdeskPath.resolve(String.format("teachers/%s/reports",
+                        teacher.getId()));
         if (!Files.exists(outputDirPath))
             Files.createDirectories(outputDirPath);
 
@@ -215,7 +206,7 @@ public class FrontDesk {
         for (String line : template) {
             trim = line.trim();
             if (trim.contains("{school}")) {
-                line = line.replace("school", school.getName());
+                line = line.replace("school", teacher.getName());
             } else if (trim.contains("{sektion-testpaper}")) {
                 line = line.replace("sektion-testpaper", testpaper.getName());
             } else if (trim.startsWith(table_end)) {
@@ -258,8 +249,8 @@ public class FrontDesk {
 
     private Locker locker;
     private Path   frontdeskPath, sharedPath;
-    private final String school_tag = "\\School", author_tag = "\\DocAuthor",
-            insertQRC_tag = "\\insertQR", table_end = "\\end{tabular}";
+    private final String author_tag = "\\DocAuthor", insertQRC_tag = "\\insertQR", 
+            table_end = "\\end{tabular}";
 
     private int generatePdf(Path workingDirPath, Path outputFilePath)
             throws Exception {

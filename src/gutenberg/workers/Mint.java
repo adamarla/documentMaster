@@ -73,7 +73,7 @@ public class Mint {
                 staging.resolve("blueprintTex"), StandardCharsets.UTF_8,
                 StandardOpenOption.CREATE));
         
-        writePreamble(blueprintTex, quiz.getSchool().getName(), quiz
+        writePreamble(blueprintTex, quiz.getQuiz().getName(), quiz
                 .getTeacher().getName());
         
         beginDoc(blueprintTex);
@@ -201,6 +201,10 @@ public class Mint {
         PrintWriter keyFileWriter = new PrintWriter(Files.newBufferedWriter(
                 keyFile, StandardCharsets.UTF_8, StandardOpenOption.CREATE));
 
+        Path diceRoll = assignmentDir.resolve("diceRoll");
+        PrintWriter diceRollWriter = new PrintWriter(Files.newBufferedWriter(
+                diceRoll, StandardCharsets.UTF_8, StandardOpenOption.CREATE));
+
         HashSet<String> keys = new HashSet<String>();
         int MAX_2_DIG_BASE36_NUM = 1296;
         Random random = new Random();
@@ -239,7 +243,7 @@ public class Mint {
                     .replace(' ', '0');
             
             replicateBlueprint(lines, composite, single, QRKey, 
-                    students[i].getName(), (i == 0), dice) ;
+                    students[i].getName(), (i == 0), dice, diceRollWriter);
             
             for (int j = 0; j < plotfiles.length; j++) {
                 Files.copy(plotfiles[j].toPath(),
@@ -365,8 +369,9 @@ public class Mint {
 
     private void replicateBlueprint(String[] lines, PrintWriter composite,
             PrintWriter single, String baseQRKey, String author,
-            boolean firstPass, Random dice) 
+            boolean firstPass, Random dice, PrintWriter diceRoll) 
    {
+        int roll;
         for (int j = 0; j < lines.length; j++) {
 
             String line = lines[j];
@@ -377,8 +382,10 @@ public class Mint {
             } else if (trimmed.startsWith(printanswers)) {
                 continue;              
             } else if (trimmed.startsWith("\\setcounter{rolldice}")) {
+                roll = dice.nextInt(4);
                 line = String.format("\\setcounter{rolldice}{%d}", 
-                        dice.nextInt(4));
+                        roll);
+                diceRoll.print(roll);
             } else if (trimmed.startsWith(insertQR)) {
                 line = line.replace("QRC", baseQRKey + pageNumber);
             } else if (trimmed.startsWith(docAuthor)) {

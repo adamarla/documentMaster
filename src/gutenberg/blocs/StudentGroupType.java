@@ -25,30 +25,30 @@
             
 
                         /**
-                        * field for School
+                        * field for Teacher
                         */
 
                         
-                                    protected gutenberg.blocs.EntryType localSchool ;
+                                    protected gutenberg.blocs.EntryType localTeacher ;
                                 
 
                            /**
                            * Auto generated getter method
                            * @return gutenberg.blocs.EntryType
                            */
-                           public  gutenberg.blocs.EntryType getSchool(){
-                               return localSchool;
+                           public  gutenberg.blocs.EntryType getTeacher(){
+                               return localTeacher;
                            }
 
                            
                         
                             /**
                                * Auto generated setter method
-                               * @param param School
+                               * @param param Teacher
                                */
-                               public void setSchool(gutenberg.blocs.EntryType param){
+                               public void setTeacher(gutenberg.blocs.EntryType param){
                             
-                                            this.localSchool=param;
+                                            this.localTeacher=param;
                                     
 
                                }
@@ -223,10 +223,10 @@
                
                    }
                
-                                            if (localSchool==null){
-                                                 throw new org.apache.axis2.databinding.ADBException("school cannot be null!!");
+                                            if (localTeacher==null){
+                                                 throw new org.apache.axis2.databinding.ADBException("teacher cannot be null!!");
                                             }
-                                           localSchool.serialize(new javax.xml.namespace.QName("http://gutenberg/blocs","school"),
+                                           localTeacher.serialize(new javax.xml.namespace.QName("http://gutenberg/blocs","teacher"),
                                                xmlWriter);
                                         
                                             if (localGroup==null){
@@ -439,13 +439,13 @@
 
                 
                             elementList.add(new javax.xml.namespace.QName("http://gutenberg/blocs",
-                                                                      "school"));
+                                                                      "teacher"));
                             
                             
-                                    if (localSchool==null){
-                                         throw new org.apache.axis2.databinding.ADBException("school cannot be null!!");
+                                    if (localTeacher==null){
+                                         throw new org.apache.axis2.databinding.ADBException("teacher cannot be null!!");
                                     }
-                                    elementList.add(localSchool);
+                                    elementList.add(localTeacher);
                                 
                             elementList.add(new javax.xml.namespace.QName("http://gutenberg/blocs",
                                                                       "group"));
@@ -557,9 +557,9 @@
                                     
                                     while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
                                 
-                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://gutenberg/blocs","school").equals(reader.getName())){
+                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://gutenberg/blocs","teacher").equals(reader.getName())){
                                 
-                                                object.setSchool(gutenberg.blocs.EntryType.Factory.parse(reader));
+                                                object.setTeacher(gutenberg.blocs.EntryType.Factory.parse(reader));
                                               
                                         reader.next();
                                     

@@ -16,7 +16,6 @@
 				<xsd:sequence>
 					<xsd:element name="quiz" type="tns:entryType"/>
 					<xsd:element name="teacher" type="tns:entryType"/>
-					<xsd:element name="school" type="tns:entryType"/>
 					<xsd:element maxOccurs="unbounded" minOccurs="1" name="page" type="tns:pageType">					
 					</xsd:element>
 				</xsd:sequence>
@@ -97,16 +96,9 @@
 				</xsd:restriction>
 			</xsd:simpleType>
 						
-			<xsd:complexType name="teacherType">
-			  <xsd:sequence>
-			    <xsd:element name="teacher" type="tns:entryType"/>
-			    <xsd:element name="school" type="tns:entryType"/>
-			  </xsd:sequence>
-			</xsd:complexType>
-			
 			<xsd:complexType name="studentGroupType">
 			  <xsd:sequence>
-			    <xsd:element name="school" type="tns:entryType"/>
+			    <xsd:element name="teacher" type="tns:entryType"/>
 			    <xsd:element name="group" type="tns:entryType"/>
 			    <xsd:element maxOccurs="unbounded" minOccurs="0" name="members" type="tns:entryType"/>
 			  </xsd:sequence>
@@ -152,7 +144,7 @@
 			<xsd:element name="tagQuestionResponse" type="tns:responseType">
 			</xsd:element>
 						
-			<xsd:element name="generateSuggestionForm" type="tns:teacherType"/>
+			<xsd:element name="generateSuggestionForm" type="tns:entryType"/>
 
 			<xsd:element name="generateSuggestionFormResponse" type="tns:responseType">
 			</xsd:element>
