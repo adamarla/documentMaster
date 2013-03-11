@@ -13,6 +13,10 @@
             <actionMapping>http://gutenberg/blocs/tagQuestion</actionMapping>
             <outputActionMapping>http://gutenberg/blocs/documentMaster/tagQuestionResponse</outputActionMapping>
         </operation>
+        <operation name="uploadSuggestion" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://gutenberg/blocs">
+            <actionMapping>http://gutenberg/blocs/uploadSuggestion</actionMapping>
+            <outputActionMapping>http://gutenberg/blocs/documentMaster/uploadSuggestionResponse</outputActionMapping>
+        </operation>
         <operation name="createQuestion" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://gutenberg/blocs">
             <actionMapping>http://gutenberg/blocs/createQuestion</actionMapping>
             <outputActionMapping>http://gutenberg/blocs/documentMaster/createQuestionResponse</outputActionMapping>

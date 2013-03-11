@@ -29,6 +29,20 @@
         /**
          * Auto generated method signature
          * 
+                                    * @param uploadSuggestion
+         */
+
+        
+                public gutenberg.blocs.UploadSuggestionResponse uploadSuggestion
+                (
+                  gutenberg.blocs.UploadSuggestion uploadSuggestion
+                 )
+            ;
+        
+         
+        /**
+         * Auto generated method signature
+         * 
                                     * @param createQuestion
          */
 

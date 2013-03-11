@@ -285,5 +285,26 @@ public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
         return generateStudentCodeResponse;
     }
 
+    @Override
+    public UploadSuggestionResponse uploadSuggestion(
+            UploadSuggestion uploadSuggestion) {
+        Locker locker = null;
+        Config config = null;
+        ResponseType response = new ResponseType();
+        try {
+            config = new Config();
+            locker = new Locker(config);
+            SuggestionType suggestion = uploadSuggestion.getUploadSuggestion();            
+            response.setManifest(locker.uploadSuggestion(suggestion.getSignature(),
+                    suggestion.getTeacher(), suggestion.getContent()));
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.setError(e.getMessage());
+        }
+        UploadSuggestionResponse uploadSuggestionResponse = new UploadSuggestionResponse();
+        uploadSuggestionResponse.setUploadSuggestionResponse(response);
+        return uploadSuggestionResponse;
+    }
+
 
 }

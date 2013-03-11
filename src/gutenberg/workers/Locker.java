@@ -12,14 +12,18 @@ import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.imageio.ImageIO;
+
+import org.apache.commons.codec.binary.Base64;
 
 public class Locker {
 
@@ -40,6 +44,30 @@ public class Locker {
             Files.createDirectory(dirPath);
         }
         return dirPath;
+    }
+    
+    public ManifestType uploadSuggestion(String signature, EntryType teacher,
+            String content) throws Exception {
+        Path teacherDirPath = lockerPath.resolve(
+                String.format("0-%s", teacher.getId()));
+        
+        if (!Files.exists(teacherDirPath)) {
+            Files.createDirectory(teacherDirPath);
+        }
+        
+        byte[] raw = Base64.decodeBase64(content.getBytes());
+        OutputStream ostream = Files.newOutputStream(teacherDirPath.resolve(signature), 
+                StandardOpenOption.CREATE);
+        ostream.write(raw);
+        ostream.close();
+        
+        ManifestType manifest = new ManifestType();
+        manifest.setRoot(teacherDirPath.toString());
+        EntryType suggestionFile = new EntryType();
+        suggestionFile.setId(signature);
+        manifest.addDocument(suggestionFile);
+        
+        return manifest;
     }
     
     

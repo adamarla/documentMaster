@@ -171,6 +171,12 @@ public class Mint {
                 resolve("downloads"));
         // generate symbolic link to test paper in ATM
         ManifestType manifest = atm.deposit(assignmentDir);
+        
+        //for backward compatibility
+        Path quizStaging = quizDir.resolve("answer-key").resolve("staging");
+        if (Files.exists(quizStaging.resolve("answer-key.tex"))) {
+            Files.move(quizStaging.resolve("answer-key.tex"), quizStaging.resolve("blueprintTex"));
+        }
 
         // 1. Copy blueprint answer-key.tex
         List<String> linesList = Files.readAllLines(
