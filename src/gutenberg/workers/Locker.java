@@ -14,12 +14,16 @@ import java.io.File;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.imageio.ImageIO;
 
@@ -56,13 +60,53 @@ public class Locker {
         }
         
         byte[] raw = Base64.decodeBase64(content.getBytes());
-        OutputStream ostream = Files.newOutputStream(teacherDirPath.resolve(signature), 
+        OutputStream ostream = Files.newOutputStream(
+                teacherDirPath.resolve(signature), 
                 StandardOpenOption.CREATE);
         ostream.write(raw);
         ostream.close();
         
+        String imageFile = null, basename = null, extension = null;
+        String[] tokens = signature.split("\\.");
+        basename = tokens[0];
+        extension = tokens[1];
+        // {*.doc, *.docx, *.txt} => *.pdf
+        if (DOCS.contains(extension)) {
+            libreOfficeCmd[4] = signature;
+            if (execute(teacherDirPath, libreOfficeCmd) != 0)
+                throw new Exception(libreOfficeCmd[0] + " had an error");
+            imageFile = basename + ".pdf";
+        } else {
+            imageFile = signature;
+        }
+        
+        // {*.pdf, *.tiff, *.png ....} => *.jpg
+        if (IMAGES.contains(imageFile.split("\\.")[1])) {
+            convertCmd[1] = imageFile;
+            convertCmd[6] += basename;
+            if (execute(teacherDirPath, convertCmd) != 0)
+                throw new Exception(convertCmd[0] + " had an error");
+        } else {
+            throw new Exception("Unhandled file format " + signature);            
+        }
+
         ManifestType manifest = new ManifestType();
         manifest.setRoot(teacherDirPath.toString());
+        
+        DirectoryStream<Path> stream = 
+                Files.newDirectoryStream(teacherDirPath, basename + "*");
+        for (Path entry: stream) {
+            String filename = entry.getFileName().toString();
+            if (filename.equals(basename) || filename.contains("-")) {
+                EntryType image = new EntryType();
+                image.setId(filename);
+                manifest.addImage(image);
+            } else if (!filename.equals(signature)) {
+                Files.delete(entry);
+            }            
+        }
+        stream.close();
+        
         EntryType suggestionFile = new EntryType();
         suggestionFile.setId(signature);
         manifest.addDocument(suggestionFile);
@@ -288,28 +332,9 @@ public class Locker {
     
     private int convert(Path src, Path target, String size, boolean rotate)
             throws Exception {
-        ProcessBuilder pb = new ProcessBuilder();
-        pb.command("convert", src.toString(), "-resize", size, "-type",
-                "TrueColor");
-        if (rotate) {
-            pb.command().add("-rotate");
-            pb.command().add("180");
-        }
-        pb.command().add(target.toString());
-
-        pb.directory(lockerPath.toFile());
-        pb.redirectErrorStream(true);
-
-        Process process = pb.start();
-        BufferedReader messages = new BufferedReader(new InputStreamReader(
-                process.getInputStream()));
-        String line = null;
-
-        while ((line = messages.readLine()) != null) {
-            System.out.println(line);
-        }
-
-        return process.waitFor();
+        
+        return execute(lockerPath, new String[]{"convert", src.toString(), "-resize",
+                size, "-type", "TrueColor"});
     }
     
     private BufferedImage getOverlay(Path overlayPath, PointType[] annotations) throws Exception {
@@ -335,7 +360,7 @@ public class Locker {
         Files.write(annotationTex, lines, StandardCharsets.UTF_8);
         
         BufferedImage overlay = null;
-        if (make(workingDirPath) == 0) {
+        if (execute(workingDirPath, new String[]{"make"}) == 0) {
             Files.move(workingDirPath.resolve("overlay.png"), overlayPath);
             Files.delete(workingDirPath.resolve("Makefile"));
             Files.delete(workingDirPath);
@@ -344,15 +369,24 @@ public class Locker {
         return overlay;
     }
     
-    private int make(Path workingDirPath) throws Exception {
+    private int execute(Path workingDirPath, String[] commands) throws Exception {
         
-        ProcessBuilder pb = new ProcessBuilder("make");
+        System.out.print("[Locker] execute:");
+        for (String s : commands) {
+            System.out.print(s + " ");
+        }
+        System.out.println();
+        
+        ProcessBuilder pb = new ProcessBuilder();
+        pb.environment().put("HOME", "/opt/tomcat6-writable/");
+        pb.command(commands);
 
         pb.directory(workingDirPath.toFile());
         pb.redirectErrorStream(true);
 
         Process build = pb.start();
-        BufferedReader messages = new BufferedReader(new InputStreamReader(build.getInputStream()));
+        BufferedReader messages = new 
+                BufferedReader(new InputStreamReader(build.getInputStream()));
 
         String line = null;
         while ((line = messages.readLine()) != null) {
@@ -362,10 +396,19 @@ public class Locker {
     }
 
     private Path lockerPath, sharedPath;
+    private String[] libreOfficeCmd = 
+        {"libreoffice", "--headless", "--convert-to", "pdf", ""};
+    private String[] convertCmd = 
+        {"convert", "", "-resize", "600x800", "-scene", "1", "jpg:"};
 
     private final String SCAN_SIZE = "600x800";
     private final float  STROKE_WIDTH = 3f;
     private final String FORMAT    = "JPG";
     private final int    OUTLINE = 0xf6bd13;
     private final Font COMMENT_FONT = new Font("Ubuntu", 0, 12);
+    
+    private static final Set<String> 
+        IMAGES = new HashSet<String>(Arrays.asList("tif", "tiff", "png", "jpg", "jpeg",
+                "gif", "bmp", "pdf")), 
+        DOCS = new HashSet<String>(Arrays.asList("doc", "docx", "txt"));
 }
