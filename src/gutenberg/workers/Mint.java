@@ -66,7 +66,7 @@ public class Mint {
         }
         
         // generate symbolic link to quiz in ATM
-        ManifestType manifest = atm.deposit(quizDir.getParent());
+        ManifestType manifest = atm.deposit(quizDir.getParent(), "q");
 
         // 1. write latex
         PrintWriter blueprintTex = new PrintWriter(Files.newBufferedWriter(

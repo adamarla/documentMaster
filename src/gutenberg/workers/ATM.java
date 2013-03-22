@@ -34,20 +34,27 @@ public class ATM {
      * Creates a symlink in ATM pointing to the given directory
      * @param directory to be linked
      */
-    public ManifestType deposit(Path directory) throws Exception {
-        Path key = atmPath.resolve(generateKey());
+    public ManifestType deposit(Path directory, String prefix) 
+        throws Exception {
+        Path key = atmPath.resolve(prefix + generateKey());
         Path rel = atmPath.relativize(directory);
         
         while (true) {
             try {
                 Files.createSymbolicLink(key, rel);
                 break;
-            } catch (FileAlreadyExistsException fae) {}
+            } catch (FileAlreadyExistsException fae) {
+                key = atmPath.resolve(prefix + generateKey());
+            }
         }
         
         ManifestType manifest = new ManifestType();
         manifest.setRoot(key.toString());
         return manifest;
+    }
+    
+    public ManifestType deposit(Path directory) throws Exception { 
+        return deposit(directory, "");
     }
 
     private static ATM atm;
