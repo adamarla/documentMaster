@@ -20,10 +20,10 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
+//import java.util.Arrays;
+//import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+//import java.util.Set;
 
 import javax.imageio.ImageIO;
 
@@ -55,55 +55,44 @@ public class Locker {
         Path teacherDirPath = lockerPath.resolve(
                 String.format("0-%s", teacher.getId()));
         
-        if (!Files.exists(teacherDirPath)) {
-            Files.createDirectory(teacherDirPath);
-        }
+        String[] tokens = signature.split("\\.");
+        String basename = tokens[0];
+        String extension = tokens[1];
+        
+        Path workingDirPath = Files.createDirectories(teacherDirPath.
+                resolve(basename));                
+        String workingFilename = "suggestion";
         
         byte[] raw = Base64.decodeBase64(content.getBytes());
         OutputStream ostream = Files.newOutputStream(
-                teacherDirPath.resolve(signature), 
+                workingDirPath.resolve(workingFilename), 
                 StandardOpenOption.CREATE);
         ostream.write(raw);
         ostream.close();
-        
-        String imageFile = null, basename = null, extension = null;
-        String[] tokens = signature.split("\\.");
-        basename = tokens[0];
-        extension = tokens[1];
+
         // {*.doc, *.docx, *.txt} => *.pdf
-        if (DOCS.contains(extension)) {
-            libreOfficeCmd[4] = signature;
-            if (execute(teacherDirPath, libreOfficeCmd) != 0)
+        if (extension.equalsIgnoreCase("01")) {
+            libreOfficeCmd[4] = workingFilename;
+            if (execute(workingDirPath, libreOfficeCmd) != 0)
                 throw new Exception(libreOfficeCmd[0] + " had an error");
-            imageFile = basename + ".pdf";
-        } else {
-            imageFile = signature;
+            workingFilename = "suggestion.pdf";
         }
         
         // {*.pdf, *.tiff, *.png ....} => *.jpg
-        if (IMAGES.contains(imageFile.split("\\.")[1])) {
-            convertCmd[1] = imageFile;
-            convertCmd[6] += basename;
-            if (execute(teacherDirPath, convertCmd) != 0)
-                throw new Exception(convertCmd[0] + " had an error");
-        } else {
-            throw new Exception("Unhandled file format " + signature);            
-        }
+        convertCmd[1] = workingFilename;
+        if (execute(workingDirPath, convertCmd) != 0)
+            throw new Exception(convertCmd[0] + " had an error");
 
         ManifestType manifest = new ManifestType();
         manifest.setRoot(teacherDirPath.toString());
         
         DirectoryStream<Path> stream = 
-                Files.newDirectoryStream(teacherDirPath, basename + "*");
+                Files.newDirectoryStream(workingDirPath, "page*");
         for (Path entry: stream) {
             String filename = entry.getFileName().toString();
-            if (filename.equals(basename) || filename.contains("-")) {
-                EntryType image = new EntryType();
-                image.setId(filename);
-                manifest.addImage(image);
-            } else if (!filename.equals(signature)) {
-                Files.delete(entry);
-            }            
+            EntryType image = new EntryType();
+            image.setId(filename);
+            manifest.addImage(image);
         }
         stream.close();
         
@@ -399,7 +388,7 @@ public class Locker {
     private String[] libreOfficeCmd = 
         {"libreoffice", "--headless", "--convert-to", "pdf", ""};
     private String[] convertCmd = 
-        {"convert", "", "-resize", "600x800", "-scene", "1", "jpg:"};
+        {"convert", "", "-resize", "600x800", "-scene", "1", "jpg:page-%01d"};
 
     private final String SCAN_SIZE = "600x800";
     private final float  STROKE_WIDTH = 3f;
@@ -407,8 +396,4 @@ public class Locker {
     private final int    OUTLINE = 0xf6bd13;
     private final Font COMMENT_FONT = new Font("Ubuntu", 0, 12);
     
-    private static final Set<String> 
-        IMAGES = new HashSet<String>(Arrays.asList("tif", "tiff", "png", "jpg", "jpeg",
-                "gif", "bmp", "pdf")), 
-        DOCS = new HashSet<String>(Arrays.asList("doc", "docx", "txt"));
 }
