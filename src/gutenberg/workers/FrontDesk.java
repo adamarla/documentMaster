@@ -4,7 +4,6 @@ import gutenberg.blocs.EntryType;
 import gutenberg.blocs.ManifestType;
 import gutenberg.blocs.StudentGroupType;
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 
@@ -18,75 +17,9 @@ import java.util.List;
 public class FrontDesk {
 
     public FrontDesk(Config config) throws Exception {
-        frontdeskPath = new File(config.getPath(Resource.frontdesk)).toPath();
-        sharedPath = new File(config.getPath(Resource.shared)).toPath();
-        locker = new Locker(config);
-    }
-
-    public ManifestType generateSuggestionForm(EntryType teacher)
-            throws Exception {
-
-        Path outputDirPath =
-                frontdeskPath.resolve(String.format(
-                        "teachers/0-%s/petty-cash", teacher.getId()));
-        if (!Files.exists(outputDirPath))
-            Files.createDirectories(outputDirPath);
-
-        Path keyFile = outputDirPath.resolve("keyFile");
-        PrintWriter keyFileWriter =
-                new PrintWriter(Files.newBufferedWriter(keyFile,
-                        StandardCharsets.UTF_8, StandardOpenOption.CREATE));
-        String QRKey = String.format("0-%s", teacher.getId());
-        String QRKeyVal =
-                String.format("%s:%s-%s-0-0-0-1-1", QRKey, teacher.getId(),
-                        teacher.getName());
-        keyFileWriter.println(QRKeyVal);
-        keyFileWriter.close();
-
-        Path workingDirPath = outputDirPath.resolve("working");
-        Files.createDirectory(workingDirPath);
-        String templateName = "suggestion.tex";
-        Path texPath = workingDirPath.resolve(templateName);
-        PrintWriter writer =
-                new PrintWriter(Files.newBufferedWriter(texPath,
-                        StandardCharsets.UTF_8, StandardOpenOption.CREATE));
-
-        List<String> template =
-                Files.readAllLines(
-                        sharedPath.resolve("templates").resolve(templateName),
-                        StandardCharsets.UTF_8);
-        String trimmed = null;
-        for (String line : template) {
-
-            trimmed = line.trim();
-            if (trimmed.startsWith(author_tag)) {
-                line = line.replace("name", teacher.getName()
-                        .replace('-', ' '));
-            } else if (trimmed.startsWith(insertQRC_tag)) {
-                line = line.replace("QRC", QRKey);
-            }
-            writer.println(line);
-        }
-        writer.close();
-
-        Files.createSymbolicLink(workingDirPath.resolve("Makefile"),
-                sharedPath.resolve("makefiles/front-desk.mk"));
-
-        String outputFile =
-                String.format("%s-%s.pdf", teacher.getId(), teacher.getName()
-                        .split("-")[0]);
-        generatePdf(workingDirPath, outputDirPath.resolve(outputFile));
-
-        ManifestType manifest = new ManifestType();
-        manifest.setRoot(outputDirPath.toString());
-        EntryType document = new EntryType();
-        document.setId(outputFile);
-        manifest.addDocument(document);
-
-        // Make room in the locker for receiving scans
-        locker.makeRoom("0", teacher.getId());
-
-        return manifest;
+        frontdeskPath = config.getPath(Resource.frontdesk);
+        sharedPath = config.getPath(Resource.shared);
+        new Locker(config);
     }
 
     public ManifestType generateStudentRoster(StudentGroupType studentGroup)
@@ -205,8 +138,8 @@ public class FrontDesk {
         String trim = null;
         for (String line : template) {
             trim = line.trim();
-            if (trim.contains("{school}")) {
-                line = line.replace("school", teacher.getName());
+            if (trim.contains("{teacher}")) {
+                line = line.replace("teacher", teacher.getName());
             } else if (trim.contains("{sektion-testpaper}")) {
                 line = line.replace("sektion-testpaper", testpaper.getName());
             } else if (trim.startsWith(table_end)) {
@@ -246,11 +179,13 @@ public class FrontDesk {
         return manifest;
     }
 
+    public ManifestType generateSuggestionForm(EntryType teacherInfo) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-    private Locker locker;
     private Path   frontdeskPath, sharedPath;
-    private final String author_tag = "\\DocAuthor", insertQRC_tag = "\\insertQR", 
-            table_end = "\\end{tabular}";
+    private final String table_end = "\\end{tabular}";
 
     private int generatePdf(Path workingDirPath, Path outputFilePath)
             throws Exception {

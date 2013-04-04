@@ -4,80 +4,102 @@ import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-public class DocumentWriter {
+
+public class DocumentWriter extends PrintWriter implements ITagLib {
     
-    PrintWriter writer;
-    Path templates;
+    private XORRandom dice;
     
-    public DocumentWriter(PrintWriter writer, Path templates) {
-        this.templates = templates;
-        this.writer = writer;
+    public DocumentWriter(Path writerPath) throws Exception {
+        super(Files.newBufferedWriter(writerPath,
+            StandardCharsets.UTF_8, StandardOpenOption.CREATE));
+        dice = new XORRandom(4);
     }
-    
-    public void writeTemplate(String template, Map<String, String> params)
-            throws Exception {
-        List<String> file = Files.readAllLines(templates.resolve(template), 
-                StandardCharsets.UTF_8);
-        String[] lines = new String[file.size()];
-        lines = file.toArray(lines);
-
-        for (int j = 0; j < lines.length; j++) {
-            String line = lines[j];
-            String trimmed = line.trim();
-
-            if (trimmed.startsWith(this.school)) {
-                writer.println(this.school + "{" + params.get(this.school) + "}");
-            } else if (trimmed.startsWith(docAuthor)) {
-                if (params.get(this.docAuthor) == null)
-                    params.put(this.docAuthor, "Gutenberg");
-                writer.println(docAuthor + "{" + params.get(this.docAuthor) + "}");
-            } else { // write whatever else is in preamble.tex
-                writer.println(line);
-            }
+        
+    public void writeTemplate(Path template) throws Exception{
+        List<String> file = Files.readAllLines(template, StandardCharsets.UTF_8);
+        for (String line : file) {
+            println(line);
         }
     }
     
+    public void writeTemplate(Path template,  HashMap<String, String>params) throws Exception{
+        
+        List<String> file = Files.readAllLines(template, StandardCharsets.UTF_8);
+        for (String line : file) {
+            
+            String trimmed = line.trim();
+            if (trimmed.startsWith(comment)) { // => a comment
+                continue;
+            } else if (trimmed.startsWith(ITagLib.printanswers)) {
+                continue;
+            } else if (trimmed.startsWith(setCounter)) {
+                int counter = params.get(setCounter).equalsIgnoreCase("0")? 
+                    0:dice.nextInt();
+                line = line.replace("{0}", String.format("{%d}", counter));
+            } else if (trimmed.startsWith(insertQR)) {
+                String QRCode = String.format("{%s%s}", params.get(insertQR), 
+                    ITagLib.pageNumber);
+                line = line.replace("{QRC}", QRCode);
+            }
+            println(line);
+        }
+    }
+    
+    public void writePreamble(String quiz) {
+        println("\\documentclass[12pt,a4paper,justified]{tufte-exam}");
+        println(String.format("%s{%s}", school, quiz));
+        println(fancyfooter);
+    }
+    
+    public void printAuthor(String author) { 
+        println(String.format("%s{%s}",docAuthor, author));        
+    }
+    public void beginQuiz() {
+        println(beginDocument);
+        println(beginQuestions);
+    }
+
+    public void endQuiz() {
+        println(endQuestions);
+        println(endDocument);
+    }
+    
+    public void newPage() {
+        println(newpage);
+    }
+    
     public void printAnswers() {
-        writer.println(printanswers);
+        println(printanswers);
     }
-
-    public void beginDoc() {
-        writer.println(beginDocument);
-        writer.println(beginQuestions);
-    }
-
-    public void endDoc() {
-        writer.println(endQuestions);
-        writer.println(endDocument);
+    
+    public void printRubric() {
+        println(printRubric);
     }
 
     public void resetPageNumbering() {
-        writer.println("\\setcounter{page}{1}");
+        println("\\setcounter{page}{1}");
     }
 
     public void resetQuestionNumbering() {
-        writer.println("\\setcounter{question}{0}");
+        println("\\setcounter{question}{0}");
     }
     
     public void setCounter(int i) {
-        writer.println(String.format("\\setcounter{rolldice}{i}", i));
+        println(String.format("\\setcounter{rolldice}{%d}", i));
     }
 
     public void insertBlankPage() {
-        writer.print("\\begingroup");
-        writer.print("\\centering For rough work only. Will NOT be graded \\\\");
-        writer.println("\\endgroup");
-        writer.println(insertQR + BLANK_PAGE_CODE);
-        writer.println(newpage);
+        print("\\begingroup");
+        print("\\centering For rough work only. Will NOT be graded \\\\");
+        println("\\endgroup");
+        println(insertQR + BLANK_PAGE_CODE);
+        println(newpage);
     }
+    
+    private String BLANK_PAGE_CODE = "{0}";
         
-    private final String school = "\\School", docAuthor = "\\DocAuthor", 
-            beginDocument = "\\begin{document}", endDocument = "\\end{document}",
-            beginQuestions = "\\begin{questions}", endQuestions = "\\end{questions}", 
-            insertQR = "\\insertQR", newpage = "nextpg", printanswers = "\\printanswers", 
-            BLANK_PAGE_CODE = "\\DocAuthor{0}";    
-
 }

@@ -20,10 +20,9 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
-//import java.util.Arrays;
-//import java.util.HashSet;
+import java.util.Calendar;
+import java.util.Locale;
 import java.util.List;
-//import java.util.Set;
 
 import javax.imageio.ImageIO;
 
@@ -32,24 +31,11 @@ import org.apache.commons.codec.binary.Base64;
 public class Locker {
 
     public Locker(Config config) throws Exception {
-        lockerPath = new File(config.getPath(Resource.locker)).toPath();
-        sharedPath = new File(config.getPath(Resource.shared)).toPath();
+        stagingPath = config.getPath(Resource.staging);
+        lockerPath = config.getPath(Resource.locker);
+        sharedPath = config.getPath(Resource.shared);
     }
 
-    /**
-     * Creates folder for storing scans related with
-     * this test paper or for suggestion scans
-     * @return Path to the place in the locked where scans will be recvd
-     */
-    public Path makeRoom(String quizId, String testpaperId) throws Exception {
-        Path dirPath = lockerPath.resolve(
-                String.format("%s-%s", quizId, testpaperId));
-        if (!Files.exists(dirPath)) {
-            Files.createDirectory(dirPath);
-        }
-        return dirPath;
-    }
-    
     public ManifestType uploadSuggestion(String signature, EntryType teacher,
             String content) throws Exception {
         Path teacherDirPath = lockerPath.resolve(
@@ -104,55 +90,43 @@ public class Locker {
     }
     
     
-    public ManifestType save(File[] scans) throws Exception {
+    public ManifestType receiveScans() throws Exception {
 
+        Path resolvedPath = makeRoom();
+        Path unresolvedPath = lockerPath.resolve("Unresolved");
+        
         ManifestType manifest = new ManifestType();
-        manifest.setRoot(lockerPath.toString());
+        manifest.setRoot(resolvedPath.toString());
 
-        String scanId = null, base36ScanId = null;
         boolean rotate = false;
         String[] tokens = null;
-        for (File scan : scans) {
+        String detected = null, base36ScanId = null;
+        while (stagingPath.iterator().hasNext()) {
+            Path scan = stagingPath.iterator().next();
             
-            //scanId(base36)_scanId(base10)_orientation
-            tokens = scan.getName().split("_");
+            //base36ScanId_detected?_upright?
+            tokens = scan.getFileName().toString().split("_");
             if (tokens.length != 3) {
-                scan.delete();
+                Files.delete(scan);
                 continue;
             }
 
             base36ScanId = tokens[0];
-            scanId = tokens[1];
+            detected = tokens[1];
             rotate = tokens[2].equals("1") ? true : false;
             
-            //scanId(base10)=quizId-testpaperId-studentId-pageNo
-            //scanId(suggestion)=0-[signature]-teacherId-1
-            String[] subTokens = scanId.split("-");            
-            boolean  isSuggestion = subTokens[0].equals("0") ;
-            String   subpath = null ;
-
-            if (isSuggestion) {
-                subpath = String.format("0-%s/%s", subTokens[2],
-                        subTokens[1]);
-            } else {
-                subpath = String.format("%s-%s/%s", subTokens[0],
-                    subTokens[1], base36ScanId);
-            }
-            
-            Path stored = lockerPath.resolve(subpath);            
-            if (!Files.exists(stored)) {
-                if (convert(scan.toPath(), stored, SCAN_SIZE, rotate) != 0) {
-                    Files.copy(scan.toPath(), stored);
-                }
+            Path target = null;
+            if (detected.equalsIgnoreCase("0")) {
+                target = resolvedPath.resolve(base36ScanId);
                 EntryType image = new EntryType() ;
-                String value = stored.getFileName().toString(); 
-
-                image.setId(scanId);
-                image.setValue(value) ; 
+                image.setId(base36ScanId);
                 manifest.addImage(image);
+            } else {
+                target = unresolvedPath.resolve(base36ScanId);
             }
-            
-            scan.delete();
+            convert(scan, target, SCAN_SIZE, rotate);
+            Files.copy(scan, target);
+            Files.delete(scan);
         }
 
         // workaround for de-serialization bug in Savon
@@ -317,13 +291,29 @@ public class Locker {
         }
 
         return manifest;
-    }    
+    }
+
+    /**
+     * Creates folder for storing scans related with
+     * this test paper or for suggestion scans
+     * @return Path to the place in the locked where scans will be recvd
+     */
+    private Path makeRoom() throws Exception {
+        Calendar rightNow = Calendar.getInstance();
+        Path dirPath = lockerPath.resolve(
+            String.format("%s.%s.%s", rightNow.get(Calendar.DAY_OF_MONTH),
+            rightNow.getDisplayName(Calendar.MONDAY, Calendar.LONG, Locale.ENGLISH)));
+        if (!Files.exists(dirPath)) {
+            Files.createDirectory(dirPath);
+        }
+        return dirPath;
+    }      
     
     private int convert(Path src, Path target, String size, boolean rotate)
             throws Exception {
         
         return execute(lockerPath, new String[]{"convert", src.toString(), "-resize",
-                size, "-type", "TrueColor"});
+                size, "-type", "TrueColor", target.toString()});
     }
     
     private BufferedImage getOverlay(Path overlayPath, PointType[] annotations) throws Exception {
@@ -384,7 +374,7 @@ public class Locker {
         return build.waitFor();
     }
 
-    private Path lockerPath, sharedPath;
+    private Path lockerPath, sharedPath, stagingPath;
     private String[] libreOfficeCmd = 
         {"libreoffice", "--headless", "--convert-to", "pdf", ""};
     private String[] convertCmd = 

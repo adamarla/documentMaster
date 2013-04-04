@@ -18,14 +18,14 @@ import java.util.regex.Matcher;
 public class Vault {
 
     public Vault(Config config) {
-        vaultPath = new File(config.getPath(Resource.vault)).toPath();
-        sharedPath = new File(config.getPath(Resource.shared)).toPath();
+        vaultPath = config.getPath(Resource.vault);
+        sharedPath = config.getPath(Resource.shared);
     }
 
     public Vault() throws Exception {
         Config config = new Config();
-        vaultPath = new File(config.getPath(Resource.vault)).toPath();
-        sharedPath = new File(config.getPath(Resource.shared)).toPath();
+        vaultPath = config.getPath(Resource.vault);
+        sharedPath = config.getPath(Resource.shared);
     }
 
     /**

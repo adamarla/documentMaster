@@ -1,6 +1,8 @@
 package gutenberg.workers;
 
+import java.io.File;
 import java.io.FileInputStream;
+import java.nio.file.Path;
 import java.util.Properties;
 
 public class Config {
@@ -12,31 +14,31 @@ public class Config {
         bankRoot = properties.getProperty("BANK_ROOT");
     }
 
-    public String getPath(Resource id) {
-        String path = bankRoot;
+    public Path getPath(Resource id) {
+        Path path = new File(bankRoot).toPath();
         switch (id) {
         case bank:
             break;
         case mint:
-            path += "/mint";
+            path.resolve("mint");
             break;
         case locker:
-            path += "/locker";
+            path.resolve("locker");
             break;
         case atm:
-            path += "/atm";
+            path.resolve("atm");
             break;
         case vault:
-            path += "/vault";
+            path.resolve("vault");
             break;
         case shared:
-            path += "/shared";
+            path.resolve("shared");
             break;
         case staging:
-            path += "/staging";
+            path.resolve("staging");
             break;
         case frontdesk:
-            path += "/front-desk";
+            path.resolve("front-desk");
             break;
         default:
         }

@@ -2,7 +2,6 @@ package gutenberg.workers;
 
 import gutenberg.blocs.ManifestType;
 
-import java.io.File;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -26,17 +25,27 @@ public class ATM {
     }
 
     private ATM(Config config) throws Exception {
-        atmPath = new File(config.getPath(Resource.atm)).toPath();
+        atmPath = config.getPath(Resource.atm);
         random = new Random();
     }
 
+    public ManifestType deposit(Path directory, String key) throws Exception { 
+        Path atmKey = atmPath.resolve(key);
+        Path rel = atmPath.relativize(directory);
+        Files.createSymbolicLink(atmKey, rel);
+        
+        ManifestType manifest = new ManifestType();
+        manifest.setRoot(key.toString());
+        return manifest;
+    }    
+
     /**
-     * Creates a symlink in ATM pointing to the given directory
+     * Creates a symbolic link in ATM pointing to the given 
+     * directory
      * @param directory to be linked
      */
-    public ManifestType deposit(Path directory, String prefix) 
-        throws Exception {
-        Path key = atmPath.resolve(prefix + generateKey());
+    public ManifestType deposit(Path directory) throws Exception { 
+        Path key = atmPath.resolve(generateKey());
         Path rel = atmPath.relativize(directory);
         
         while (true) {
@@ -44,7 +53,7 @@ public class ATM {
                 Files.createSymbolicLink(key, rel);
                 break;
             } catch (FileAlreadyExistsException fae) {
-                key = atmPath.resolve(prefix + generateKey());
+                key = atmPath.resolve(generateKey());
             }
         }
         
@@ -53,19 +62,19 @@ public class ATM {
         return manifest;
     }
     
-    public ManifestType deposit(Path directory) throws Exception { 
-        return deposit(directory, "");
-    }
-
     private static ATM atm;
-    private Path       atmPath;
-    private Random     random;
+    private Path atmPath;
+    private Random random;
 
     private String generateKey() {
-        int name = Math.abs(random.nextInt());
-        return String
-                .format("%6s", Integer.toString(name, Character.MAX_RADIX))
+        while (true)
+        {
+        int number = Math.abs(random.nextInt());
+        String name = String
+                .format("%6s", Integer.toString(number, Character.MAX_RADIX))
                 .replace(' ', '0');
+        if (!name.matches("^[0-9]*$")) return name;            
+        }
     }
 
 }

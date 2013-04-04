@@ -16,7 +16,10 @@ import java.util.Random;
 
 public class XORRandom extends Random {
 	
-	public XORRandom(int max) {
+	/**
+     * 
+     */
+    public XORRandom(int max) {
 		this.max = max;
 	} 
 	
@@ -30,5 +33,7 @@ public class XORRandom extends Random {
 	}
 
 	private long seed = System.nanoTime() ;
-	private int max ; 
+	private int max ;
+	
+    private static final long serialVersionUID = 2360131650554833587L;
 }

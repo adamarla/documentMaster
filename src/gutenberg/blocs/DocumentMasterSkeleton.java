@@ -9,11 +9,8 @@ package gutenberg.blocs;
 import gutenberg.workers.Config;
 import gutenberg.workers.FrontDesk;
 import gutenberg.workers.Locker;
-import gutenberg.workers.Resource;
 import gutenberg.workers.Mint;
 import gutenberg.workers.Vault;
-
-import java.io.File;
 
 /**
  * DocumentMasterSkeleton java skeleton for the axisService
@@ -167,9 +164,7 @@ public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
 		try {
 			config = new Config();
 			locker = new Locker(config);
-			File staging = new File(config.getPath(Resource.staging));
-			File[] listFiles = staging.listFiles();
-			response.setManifest(locker.save(listFiles));
+			response.setManifest(locker.receiveScans());
 		} catch (Exception e) {
 			e.printStackTrace();
 			response.setError(e.getMessage());
