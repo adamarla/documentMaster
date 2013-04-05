@@ -98,9 +98,9 @@ public class Locker {
         ManifestType manifest = new ManifestType();
         manifest.setRoot(resolvedPath.toString());
 
-        boolean rotate = false;
+        boolean rotated = false, detected = false;
         String[] tokens = null;
-        String detected = null, base36ScanId = null;
+        String base36ScanId = null;
         while (stagingPath.iterator().hasNext()) {
             Path scan = stagingPath.iterator().next();
             
@@ -112,11 +112,11 @@ public class Locker {
             }
 
             base36ScanId = tokens[0];
-            detected = tokens[1];
-            rotate = tokens[2].equals("1") ? true : false;
+            detected = tokens[1].equals("1") ? true : false;
+            rotated = tokens[2].equals("1") ? true : false;
             
             Path target = null;
-            if (detected.equalsIgnoreCase("0")) {
+            if (detected) {
                 target = resolvedPath.resolve(base36ScanId);
                 EntryType image = new EntryType() ;
                 image.setId(base36ScanId);
@@ -124,12 +124,11 @@ public class Locker {
             } else {
                 target = unresolvedPath.resolve(base36ScanId);
             }
-            convert(scan, target, SCAN_SIZE, rotate);
-            Files.copy(scan, target);
+            convert(scan, target, SCAN_SIZE, rotated);
             Files.delete(scan);
         }
 
-        // workaround for de-serialization bug in Savon
+        // workaround for xml de-serialization bug in Savon
         // https://github.com/rubiii/savon/issues/11 (supposedly fixed!)
         if (manifest.getImage() != null && manifest.getImage().length == 1) {
             EntryType dummyEntry = new EntryType();
