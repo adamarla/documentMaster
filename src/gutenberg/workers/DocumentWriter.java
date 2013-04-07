@@ -11,8 +11,6 @@ import java.util.List;
 
 public class DocumentWriter extends PrintWriter implements ITagLib {
     
-    private XORRandom dice;
-    
     public DocumentWriter(Path writerPath) throws Exception {
         super(Files.newBufferedWriter(writerPath,
             StandardCharsets.UTF_8, StandardOpenOption.CREATE));
@@ -100,6 +98,7 @@ public class DocumentWriter extends PrintWriter implements ITagLib {
         println(newpage);
     }
     
+    private XORRandom dice;
     private String BLANK_PAGE_CODE = "{0}";
         
 }

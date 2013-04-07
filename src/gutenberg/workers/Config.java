@@ -1,44 +1,43 @@
 package gutenberg.workers;
 
-import java.io.File;
-import java.io.FileInputStream;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Properties;
 
 public class Config {
 
     public Config() throws Exception {
         Properties properties = new Properties();
-        properties
-                .loadFromXML(new FileInputStream("/opt/gutenberg/config.xml"));
+        properties.loadFromXML(Files.newInputStream(Paths.get("/opt/gutenberg/config.xml")));
         bankRoot = properties.getProperty("BANK_ROOT");
     }
 
     public Path getPath(Resource id) {
-        Path path = new File(bankRoot).toPath();
+        Path path = Paths.get(bankRoot);
         switch (id) {
         case bank:
             break;
         case mint:
-            path.resolve("mint");
+            path = path.resolve("mint");
             break;
         case locker:
-            path.resolve("locker");
+            path = path.resolve("locker");
             break;
         case atm:
-            path.resolve("atm");
+            path = path.resolve("atm");
             break;
         case vault:
-            path.resolve("vault");
+            path = path.resolve("vault");
             break;
         case shared:
-            path.resolve("shared");
+            path = path.resolve("shared");
             break;
         case staging:
-            path.resolve("staging");
+            path = path.resolve("staging");
             break;
         case frontdesk:
-            path.resolve("front-desk");
+            path = path.resolve("front-desk");
             break;
         default:
         }
