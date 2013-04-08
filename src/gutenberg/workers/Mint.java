@@ -172,6 +172,9 @@ public class Mint {
             DocumentWriter individualDoc = new DocumentWriter(individualTex);
             individualDoc.writePreamble(assignment.getInstance().getName());
             individualDoc.beginQuiz();                       
+
+            compositeDoc.resetQuestionNumbering();
+            compositeDoc.resetPageNumbering();
             
             compositeDoc.printAuthor(studentName);
             individualDoc.printAuthor(studentName);
@@ -193,9 +196,8 @@ public class Mint {
             int totalPages = quizDir.resolve(previewDirName).
                 toFile().list().length;
             if (totalPages % 2 != 0) compositeDoc.insertBlankPage();
-
-            compositeDoc.resetQuestionNumbering();
-            compositeDoc.resetPageNumbering();
+            
+            individualDoc.endQuiz();
             individualDoc.close();
         }
         compositeDoc.endQuiz();
@@ -223,16 +225,20 @@ public class Mint {
     public ManifestType prepTest(AssignmentType assignment)
             throws Exception {
 
+        String quizId = assignment.getQuiz().getId();
+        String assignmentId = assignment.getInstance().getId();
         String assignmentValue = assignment.getInstance().getValue();
 
-        ManifestType manifest = null;
-        Path assignmentDir = mintPath.resolve(worksheetDirName).
-            resolve(assignmentValue);
+        Path studentsDir = mintPath.resolve(worksheetDirName).
+            resolve(assignmentValue).resolve(studentDirName);
+        ManifestType manifest = prepareManifest(studentsDir, null, null);
+        
         Path studentDir, stagingDir, previewDir, toMakefile;        
         for (EntryType student: assignment.getStudents()) {
             
+            String studentId = student.getId();
             String studentKey = student.getValue();
-            studentDir = assignmentDir.resolve(studentDirName).resolve(studentKey);
+            studentDir = studentsDir.resolve(studentKey);
             stagingDir = studentDir.resolve(stagingDirName);
             previewDir = studentDir.resolve(previewDirName);
             
@@ -243,10 +249,12 @@ public class Mint {
             Files.createSymbolicLink(stagingDir.resolve(makefile), toMakefile);
             
             if (make(stagingDir, studentDir, previewDir) == 0) {
-                manifest = prepareManifest(assignmentDir, studentDir, previewDir);
-            } else {
-                throw new Exception("Eeee! Make returned non-zero!");
-            }
+                EntryType document = new EntryType();
+                document.setId(studentsDir.relativize(studentDir).resolve(
+                    String.format(nameFormat, studentId, quizId, 
+                    assignmentId, "pdf")).toString());
+                manifest.addDocument(document);
+            } 
         }
         return manifest;    
     }
