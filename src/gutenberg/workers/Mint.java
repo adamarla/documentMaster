@@ -38,7 +38,7 @@ public class Mint {
         String quizId = quiz.getQuiz().getId();
         String quizKey = quiz.getQuiz().getValue();
         
-        Path quizDir = mintPath.resolve("quiz").resolve(quizKey);
+        Path quizDir = mintPath.resolve(quizDirName).resolve(quizKey);
         Path staging = quizDir.resolve(stagingDirName);
         Path preview = quizDir.resolve(previewDirName);
         
@@ -48,7 +48,7 @@ public class Mint {
             Files.createDirectory(preview);
         }
         
-        Path blueprintTex = staging.resolve("blueprintTex");
+        Path blueprintTex = staging.resolve(blueprintFile);
         DocumentWriter blueprintDoc = new DocumentWriter(blueprintTex);
         PageType[] pages = quiz.getPage();
         for (int i = 0; i < pages.length; i++) {
@@ -76,10 +76,10 @@ public class Mint {
         answerkeyDoc.endQuiz();
         answerkeyDoc.close();
         
-        Path toMakefile = staging.relativize(sharedPath).resolve("makefiles");
-        if (!Files.exists(staging.resolve("Makefile")))
-            Files.createSymbolicLink(staging.resolve("Makefile"),
-                    toMakefile.resolve("quiz.mk"));
+        Path toMakefile = staging.relativize(sharedPath).resolve(makefilesDir).
+            resolve(quizMakefile);
+        if (!Files.exists(staging.resolve(makefile)))
+            Files.createSymbolicLink(staging.resolve(makefile), toMakefile);
 
         if (make(staging, quizDir, preview) != 0) {
             throw new Exception("Problemo! Non-zero return code from make");
@@ -125,10 +125,10 @@ public class Mint {
         String testpaperId = assignment.getInstance().getId();
         String assignmentKey = assignment.getInstance().getValue();
         
-        Path quizDir = mintPath.resolve("quiz").resolve(quizKey);
-        Path assignmentDir = mintPath.resolve("ws").resolve(assignmentKey);
+        Path quizDir = mintPath.resolve(quizDirName).resolve(quizKey);
+        Path assignmentDir = mintPath.resolve(worksheetDirName).resolve(assignmentKey);
         Path staging = assignmentDir.resolve(stagingDirName);
-        Path studentsDir = assignmentDir.resolve("students");
+        Path studentsDir = assignmentDir.resolve(studentDirName);
         
         Files.createDirectory(assignmentDir);        
         Files.createDirectory(staging);
@@ -148,7 +148,7 @@ public class Mint {
         compositeDoc.beginQuiz();
 
         Path studentDir, studentStaging;
-        Path blueprintTex = quizStaging.resolve("blueprintTex");
+        Path blueprintTex = quizStaging.resolve(blueprintFile);
         EntryType[] students = assignment.getStudents();        
         for (int i = 0; i < students.length; i++) {
             
@@ -182,7 +182,7 @@ public class Mint {
             HashMap<String,String> params = new HashMap<String,String>();
             params.put(ITagLib.insertQR, QRKey);
             params.put(ITagLib.setCounter, "0");
-            Path questionsTex = staging.resolve("questionsTex");            
+            Path questionsTex = staging.resolve(questionsFile);            
             DocumentWriter questionsDoc = new DocumentWriter(questionsTex);            
             questionsDoc.writeTemplate(blueprintTex, params);
             questionsDoc.close();
@@ -202,10 +202,9 @@ public class Mint {
         compositeDoc.close();
 
         // 3. Link Makefiles and make the PDFs
-        Path toMakefile = staging.relativize(sharedPath).
-                resolve("makefiles");
-        Files.createSymbolicLink(staging.resolve("Makefile"),
-                toMakefile.resolve("quiz.mk"));
+        Path toMakefile = staging.relativize(sharedPath).resolve(makefilesDir).
+            resolve(quizMakefile);
+        Files.createSymbolicLink(staging.resolve(makefile), toMakefile);
         
         if (make(staging, assignmentDir, null) != 0)
             throw new Exception("Problem! Non-zero return code from make");
@@ -227,22 +226,23 @@ public class Mint {
         String assignmentValue = assignment.getInstance().getValue();
 
         ManifestType manifest = null;
-        Path assignmentDir = mintPath.resolve("ws").resolve(assignmentValue);
-        Path studentDir, stagingDir, previewDir;        
+        Path assignmentDir = mintPath.resolve(worksheetDirName).
+            resolve(assignmentValue);
+        Path studentDir, stagingDir, previewDir, toMakefile;        
         for (EntryType student: assignment.getStudents()) {
             
             String studentKey = student.getValue();
-            studentDir = assignmentDir.resolve("student").resolve(studentKey);
+            studentDir = assignmentDir.resolve(studentDirName).resolve(studentKey);
             stagingDir = studentDir.resolve(stagingDirName);
             previewDir = studentDir.resolve(previewDirName);
             
             Files.createDirectory(previewDir);
             
-            Path rel = stagingDir.relativize(sharedPath);
-            Files.createSymbolicLink(stagingDir.resolve("Makefile"),
-                    rel.resolve("makefiles/quiz.mk"));
+            toMakefile = stagingDir.relativize(sharedPath).
+                resolve(makefilesDir).resolve(quizMakefile);
+            Files.createSymbolicLink(stagingDir.resolve(makefile), toMakefile);
             
-            if (make(stagingDir, assignmentDir, previewDir) == 0) {
+            if (make(stagingDir, studentDir, previewDir) == 0) {
                 manifest = prepareManifest(assignmentDir, studentDir, previewDir);
             } else {
                 throw new Exception("Eeee! Make returned non-zero!");
@@ -259,9 +259,6 @@ public class Mint {
         }
         return atm.deposit(studentDir);
     }
-    
-    private Path  sharedPath, mintPath, vaultPath;
-    private ATM   atm;
     
     private int make(Path workingDir, Path downloadsDir, Path previewsDir)
             throws Exception {
@@ -365,8 +362,20 @@ public class Mint {
         return manifest;
     }
     
-    private final String stagingDirName = "staging",
+    private Path  sharedPath, mintPath, vaultPath;
+    private ATM   atm;
+    
+    private final String 
+        stagingDirName = "staging",
         previewDirName = "preview",
+        quizDirName = "quiz",
+        worksheetDirName = "ws",
+        studentDirName = "student",
+        makefilesDir = "makefiles",
+        makefile = "Makefile",
+        quizMakefile = "quiz.mk",
+        blueprintFile = "blueprintTex",
+        questionsFile = "questionsTex",
         nameFormat = "%s-%s-%s.%s";
 
 }
