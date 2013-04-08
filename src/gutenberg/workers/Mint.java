@@ -170,7 +170,7 @@ public class Mint {
             Path individualTex = studentStaging.resolve(
                 String.format(nameFormat, studentId, quizId, testpaperId, "tex"));
             DocumentWriter individualDoc = new DocumentWriter(individualTex);
-            individualDoc.writePreamble(assignment.getInstance().getName());
+            individualDoc.writePreamble(assignment.getQuiz().getName());
             individualDoc.beginQuiz();                       
 
             compositeDoc.resetQuestionNumbering();
