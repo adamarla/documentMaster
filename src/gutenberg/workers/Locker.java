@@ -93,7 +93,7 @@ public class Locker {
     public ManifestType receiveScans() throws Exception {
 
         Path resolvedPath = makeRoom();
-        Path unresolvedPath = lockerPath.resolve("Unresolved");
+        Path unresolvedPath = lockerPath.resolve("unresolved");
         
         ManifestType manifest = new ManifestType();
         manifest.setRoot(resolvedPath.toString());
@@ -101,8 +101,9 @@ public class Locker {
         boolean rotated = false, detected = false;
         String[] tokens = null;
         String base36ScanId = null;
-        while (stagingPath.iterator().hasNext()) {
-            Path scan = stagingPath.iterator().next();
+        DirectoryStream<Path> scans = 
+           Files.newDirectoryStream(stagingPath);
+        for (Path scan : scans) {
             
             //base36ScanId_detected?_upright?
             tokens = scan.getFileName().toString().split("_");
@@ -301,7 +302,8 @@ public class Locker {
         Calendar rightNow = Calendar.getInstance();
         Path dirPath = lockerPath.resolve(
             String.format("%s.%s.%s", rightNow.get(Calendar.DAY_OF_MONTH),
-            rightNow.getDisplayName(Calendar.MONDAY, Calendar.LONG, Locale.ENGLISH)));
+            rightNow.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ENGLISH),
+            rightNow.get(Calendar.YEAR)));
         if (!Files.exists(dirPath)) {
             Files.createDirectory(dirPath);
         }
