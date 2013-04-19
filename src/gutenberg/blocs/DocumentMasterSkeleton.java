@@ -301,5 +301,45 @@ public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
         return uploadSuggestionResponse;
     }
 
+    @Override
+    public FetchUnresolvedScansResponse fetchUnresolvedScans(
+        FetchUnresolvedScans fetchUnresolvedScans) {
+        Locker locker = null;
+        Config config = null;
+        ResponseType response = new ResponseType();
+        try {
+            config = new Config();
+            locker = new Locker(config);
+            WorkRequestType workRequest = fetchUnresolvedScans.
+                getFetchUnresolvedScans();
+            response.setManifest(locker.fetchUnresolved(
+                workRequest.getGrader(), workRequest.getMaxQuantity()));
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.setError(e.getMessage());
+        }
+        FetchUnresolvedScansResponse fetchUnresolvedScansResponse = new FetchUnresolvedScansResponse();
+        fetchUnresolvedScansResponse.setFetchUnresolvedScansResponse(response);
+        return fetchUnresolvedScansResponse;
+    }
+
+    @Override
+    public ResolveScanResponse resolveScan(ResolveScan resolveScan) {
+        Locker locker = null;
+        Config config = null;
+        ResponseType response = new ResponseType();
+        try {
+            config = new Config();
+            locker = new Locker(config);
+            EntryType scan = resolveScan.getResolveScan();
+            response.setManifest(locker.resolveScan(scan.getValue(), scan.getId()));
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.setError(e.getMessage());
+        }
+        ResolveScanResponse resolveScanResponse = new ResolveScanResponse();
+        resolveScanResponse.setResolveScanResponse(response);
+        return resolveScanResponse;
+    }
 
 }

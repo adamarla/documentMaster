@@ -83,6 +83,16 @@
               
                   if (
                   "http://gutenberg/blocs".equals(namespaceURI) &&
+                  "workRequestType".equals(typeName)){
+                   
+                            return  gutenberg.blocs.WorkRequestType.Factory.parse(reader);
+                        
+
+                  }
+
+              
+                  if (
+                  "http://gutenberg/blocs".equals(namespaceURI) &&
                   "quizType".equals(typeName)){
                    
                             return  gutenberg.blocs.QuizType.Factory.parse(reader);

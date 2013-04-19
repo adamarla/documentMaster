@@ -35,6 +35,51 @@ public class Locker {
         lockerPath = config.getPath(Resource.locker);
         sharedPath = config.getPath(Resource.shared);
     }
+    
+    public ManifestType fetchUnresolved(EntryType grader, int max) throws Exception {
+        
+        Path unresolvedDirPath = lockerPath.resolve(UNRESOLVED_DIR);
+        ManifestType manifest = new ManifestType();
+        manifest.setRoot(lockerPath.relativize(unresolvedDirPath).toString());
+        
+        DirectoryStream<Path> stream = 
+            Files.newDirectoryStream(unresolvedDirPath);
+        for (Path entry: stream) {
+            
+            if (max == 0) break;
+            String filename = entry.getFileName().toString();
+            if (filename.contains(".")) continue;
+            
+            filename = filename.concat("." + grader.getId());
+            Files.move(entry, entry.resolveSibling(filename));
+            
+            EntryType scan = new EntryType();
+            scan.setId(filename);
+            
+            manifest.addImage(scan);
+            max--;
+        }
+        
+        return manifest;
+    }
+    
+    public ManifestType resolveScan(String source, String target) throws Exception {
+        
+        Path unresolvedDirPath = lockerPath.resolve(UNRESOLVED_DIR);
+        ManifestType manifest = new ManifestType();
+        manifest.setRoot(stagingPath.getFileName().toString());
+        
+        Path targetPath = stagingPath.resolve(String.format("%s_1_0", target));
+        Path sourcePath = unresolvedDirPath.resolve(source);
+        
+        Files.move(sourcePath, targetPath);
+        
+        EntryType scan = new EntryType();
+        scan.setId(target);
+        
+        manifest.addImage(scan);        
+        return manifest;
+    }
 
     public ManifestType uploadSuggestion(String signature, EntryType teacher,
             String content) throws Exception {
@@ -88,8 +133,7 @@ public class Locker {
         
         return manifest;
     }
-    
-    
+        
     public ManifestType receiveScans() throws Exception {
 
         Path resolvedPath = makeRoom();
@@ -140,12 +184,6 @@ public class Locker {
         return manifest;
     }
 
-    /**
-     * Annotate various things, lines curves etc.
-     * 
-     * @param scanId
-     * @throws Exception
-     */
     public ManifestType annotate(String scanId, PointType[] points)
             throws Exception {
 
@@ -293,11 +331,6 @@ public class Locker {
         return manifest;
     }
 
-    /**
-     * Creates folder for storing scans related with
-     * this test paper or for suggestion scans
-     * @return Path to the place in the locked where scans will be recvd
-     */
     private Path makeRoom() throws Exception {
         Calendar rightNow = Calendar.getInstance();
         Path dirPath = lockerPath.resolve(
@@ -381,6 +414,7 @@ public class Locker {
     private String[] convertCmd = 
         {"convert", "", "-resize", "600x800", "-scene", "1", "jpg:page-%01d"};
 
+    private final String UNRESOLVED_DIR = "unresolved";
     private final String SCAN_SIZE = "600x800";
     private final float  STROKE_WIDTH = 3f;
     private final String FORMAT    = "JPG";

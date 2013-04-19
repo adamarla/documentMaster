@@ -43,6 +43,34 @@
         /**
          * Auto generated method signature
          * 
+                                    * @param fetchUnresolvedScans
+         */
+
+        
+                public gutenberg.blocs.FetchUnresolvedScansResponse fetchUnresolvedScans
+                (
+                  gutenberg.blocs.FetchUnresolvedScans fetchUnresolvedScans
+                 )
+            ;
+        
+         
+        /**
+         * Auto generated method signature
+         * 
+                                    * @param resolveScan
+         */
+
+        
+                public gutenberg.blocs.ResolveScanResponse resolveScan
+                (
+                  gutenberg.blocs.ResolveScan resolveScan
+                 )
+            ;
+        
+         
+        /**
+         * Auto generated method signature
+         * 
                                     * @param createQuestion
          */
 
