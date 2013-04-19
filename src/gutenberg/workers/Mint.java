@@ -356,7 +356,7 @@ public class Mint {
         
         if (preview != null) {
             DirectoryStream<Path> jpegs = 
-                Files.newDirectoryStream(downloads, "*.jpeg");
+                Files.newDirectoryStream(preview, "*.jpeg");
             for (Path jpeg : jpegs) {
                 EntryType img = new EntryType();
                 img.setId(root.relativize(jpeg).toString());

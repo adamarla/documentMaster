@@ -4,7 +4,7 @@ public interface ITagLib {
     
     String comment ="%",
             printanswers = "\\printanswers",
-            pageNumber = "\\thealphnumpage", 
+            pageNumber = "\\alphnum{\\thepage}",
             docAuthor = "\\DocAuthor",
             newpage = "\\nextpg", 
             usepackage = "\\usepackage",
