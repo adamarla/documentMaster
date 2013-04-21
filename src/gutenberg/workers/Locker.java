@@ -142,19 +142,20 @@ public class Locker {
         
     public ManifestType receiveScans(boolean simulation) throws Exception {
 
-        DirectoryStream<Path> scans = 
-            Files.newDirectoryStream(stagingPath);
-        if (!scans.iterator().hasNext()) return new ManifestType();
-        
-        Path resolvedPath = makeRoom();
-        Path unresolvedPath = lockerPath.resolve("unresolved");
-        
         ManifestType manifest = new ManifestType();
+        
+        DirectoryStream<Path> scans = Files.newDirectoryStream(stagingPath);
+        Path resolvedPath = lockerPath,
+            unresolvedPath = lockerPath.resolve(UNRESOLVED_DIR);
+        if (scans.iterator().hasNext()) {
+            resolvedPath = makeRoom();
+        }
         manifest.setRoot(lockerPath.relativize(resolvedPath).toString());
-
+        
         boolean rotated = false, detected = false;
         String[] tokens = null;
         String base36ScanId = null;
+        scans = Files.newDirectoryStream(stagingPath);
         for (Path scan : scans) {
             
             //base36ScanId_detected?_upright?
