@@ -123,6 +123,13 @@
 			    <xsd:element name="content" type="xsd:string" />
 			  </xsd:sequence>			
 			</xsd:complexType>
+			
+			<xsd:complexType name="workRequestType">
+			  <xsd:sequence>
+			    <xsd:element name="grader" type="tns:entryType" />
+			    <xsd:element name="maxQuantity" type="xsd:int" />
+			  </xsd:sequence>
+			</xsd:complexType>
 						
 			<xsd:element name="buildQuiz" type="tns:quizType">
 			</xsd:element>
@@ -192,6 +199,16 @@
       <xsd:element name="uploadSuggestion" type="tns:suggestionType"></xsd:element>
 
       <xsd:element name="uploadSuggestionResponse" type="tns:responseType">
+      </xsd:element>
+            
+      <xsd:element name="fetchUnresolvedScans" type="tns:workRequestType"></xsd:element>
+
+      <xsd:element name="fetchUnresolvedScansResponse" type="tns:responseType">
+      </xsd:element>
+            
+      <xsd:element name="resolveScan" type="tns:entryType"></xsd:element>
+
+      <xsd:element name="resolveScanResponse" type="tns:responseType">
       </xsd:element>
             
 		</xsd:schema>
@@ -280,6 +297,18 @@
     <wsdl:message name="uploadSuggestionResponse">
         <wsdl:part name="parameters" element="tns:uploadSuggestionResponse"></wsdl:part>
     </wsdl:message> 
+    <wsdl:message name="fetchUnresolvedScansRequest">
+        <wsdl:part name="parameters" element="tns:fetchUnresolvedScans"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="fetchUnresolvedScansResponse">
+        <wsdl:part name="parameters" element="tns:fetchUnresolvedScansResponse"></wsdl:part>
+    </wsdl:message> 
+    <wsdl:message name="resolveScan">
+        <wsdl:part name="parameters" element="tns:resolveScan"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="resolveScanResponse">
+        <wsdl:part name="parameters" element="tns:resolveScanResponse"></wsdl:part>
+    </wsdl:message> 
 	<wsdl:portType name="documentMaster">
 		<wsdl:operation name="buildQuiz">
 			<wsdl:input message="tns:buildQuizRequest" />
@@ -336,6 +365,14 @@
     <wsdl:operation name="uploadSuggestion">
       <wsdl:input message="tns:uploadSuggestionRequest"></wsdl:input>
       <wsdl:output message="tns:uploadSuggestionResponse"></wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="fetchUnresolvedScans">
+      <wsdl:input message="tns:fetchUnresolvedScansRequest"></wsdl:input>
+      <wsdl:output message="tns:fetchUnresolvedScansResponse"></wsdl:output>
+    </wsdl:operation>   
+    <wsdl:operation name="resolveScan">
+      <wsdl:input message="tns:resolveScan"></wsdl:input>
+      <wsdl:output message="tns:resolveScanResponse"></wsdl:output>
     </wsdl:operation>   
 	</wsdl:portType>
 	<wsdl:binding name="documentMasterSOAP" type="tns:documentMaster">
@@ -467,7 +504,25 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-	</wsdl:binding>
+    <wsdl:operation name="fetchUnresolvedScans">
+      <soap:operation soapAction="http://gutenberg/blocs/fetchUnresolvedScans" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="resolveScan">
+      <soap:operation soapAction="http://gutenberg/blocs/resolveScan" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
 	<wsdl:service name="documentMaster">
 		<wsdl:port binding="tns:documentMasterSOAP" name="documentMasterSOAP">
 			<soap:address location="http://localhost/blocks" />

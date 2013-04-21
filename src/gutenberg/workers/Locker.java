@@ -41,6 +41,7 @@ public class Locker {
         Path unresolvedDirPath = lockerPath.resolve(UNRESOLVED_DIR);
         ManifestType manifest = new ManifestType();
         manifest.setRoot(lockerPath.relativize(unresolvedDirPath).toString());
+        String gradersExtnsn = "." + grader.getId();
         
         DirectoryStream<Path> stream = 
             Files.newDirectoryStream(unresolvedDirPath);
@@ -48,10 +49,15 @@ public class Locker {
             
             if (max == 0) break;
             String filename = entry.getFileName().toString();
-            if (filename.contains(".")) continue;
             
-            filename = filename.concat("." + grader.getId());
-            Files.move(entry, entry.resolveSibling(filename));
+            if (filename.contains(".")) {
+                if (!filename.endsWith(gradersExtnsn)) {
+                    continue;
+                }
+            } else {
+                filename = filename.concat(gradersExtnsn);
+                Files.move(entry, entry.resolveSibling(filename));
+            }
             
             EntryType scan = new EntryType();
             scan.setId(filename);
@@ -134,19 +140,21 @@ public class Locker {
         return manifest;
     }
         
-    public ManifestType receiveScans() throws Exception {
+    public ManifestType receiveScans(boolean simulation) throws Exception {
 
+        DirectoryStream<Path> scans = 
+            Files.newDirectoryStream(stagingPath);
+        if (!scans.iterator().hasNext()) return new ManifestType();
+        
         Path resolvedPath = makeRoom();
         Path unresolvedPath = lockerPath.resolve("unresolved");
         
         ManifestType manifest = new ManifestType();
-        manifest.setRoot(resolvedPath.toString());
+        manifest.setRoot(lockerPath.relativize(resolvedPath).toString());
 
         boolean rotated = false, detected = false;
         String[] tokens = null;
         String base36ScanId = null;
-        DirectoryStream<Path> scans = 
-           Files.newDirectoryStream(stagingPath);
         for (Path scan : scans) {
             
             //base36ScanId_detected?_upright?
@@ -169,8 +177,11 @@ public class Locker {
             } else {
                 target = unresolvedPath.resolve(base36ScanId);
             }
-            convert(scan, target, SCAN_SIZE, rotated);
-            Files.delete(scan);
+            
+            if (!simulation) {
+                convert(scan, target, SCAN_SIZE, rotated);
+                Files.delete(scan);
+            }
         }
 
         // workaround for xml de-serialization bug in Savon

@@ -194,6 +194,11 @@
       <xsd:element name="fetchUnresolvedScansResponse" type="tns:responseType">
       </xsd:element>
             
+      <xsd:element name="resolveScan" type="tns:entryType"/>
+
+      <xsd:element name="resolveScanResponse" type="tns:responseType">
+      </xsd:element>
+            
 		</xsd:schema>
   </wsdl:types>
   <wsdl:message name="undoAnnotateRequest">
@@ -252,6 +257,10 @@
     <wsdl:part name="parameters" element="tns:generateStudentRoster">
     </wsdl:part>
   </wsdl:message>
+  <wsdl:message name="resolveScan">
+    <wsdl:part name="parameters" element="tns:resolveScan">
+    </wsdl:part>
+  </wsdl:message>
   <wsdl:message name="tagQuestionRequest">
     <wsdl:part name="parameters" element="tns:tagQuestion">
     </wsdl:part>
@@ -274,6 +283,10 @@
   </wsdl:message>
   <wsdl:message name="generateSuggestionFormRequest">
     <wsdl:part name="parameters" element="tns:generateSuggestionForm">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="resolveScanResponse">
+    <wsdl:part name="parameters" element="tns:resolveScanResponse">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="generateStudentCodeRequest">
@@ -407,6 +420,12 @@
       <wsdl:output message="tns:fetchUnresolvedScansResponse">
     </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="resolveScan">
+      <wsdl:input message="tns:resolveScan">
+    </wsdl:input>
+      <wsdl:output message="tns:resolveScanResponse">
+    </wsdl:output>
+    </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="documentMasterSOAP" type="tns:documentMaster">
     <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
@@ -538,6 +557,15 @@
     </wsdl:operation>
     <wsdl:operation name="fetchUnresolvedScans">
       <soap:operation soapAction="http://gutenberg/blocs/fetchUnresolvedScans"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="resolveScan">
+      <soap:operation soapAction="http://gutenberg/blocs/resolveScan"/>
       <wsdl:input>
         <soap:body use="literal"/>
       </wsdl:input>

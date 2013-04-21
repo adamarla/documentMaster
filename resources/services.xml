@@ -17,6 +17,14 @@
             <actionMapping>http://gutenberg/blocs/uploadSuggestion</actionMapping>
             <outputActionMapping>http://gutenberg/blocs/documentMaster/uploadSuggestionResponse</outputActionMapping>
         </operation>
+        <operation name="fetchUnresolvedScans" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://gutenberg/blocs">
+            <actionMapping>http://gutenberg/blocs/fetchUnresolvedScans</actionMapping>
+            <outputActionMapping>http://gutenberg/blocs/documentMaster/fetchUnresolvedScansResponse</outputActionMapping>
+        </operation>
+        <operation name="resolveScan" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://gutenberg/blocs">
+            <actionMapping>http://gutenberg/blocs/resolveScan</actionMapping>
+            <outputActionMapping>http://gutenberg/blocs/documentMaster/resolveScanResponse</outputActionMapping>
+        </operation>
         <operation name="createQuestion" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://gutenberg/blocs">
             <actionMapping>http://gutenberg/blocs/createQuestion</actionMapping>
             <outputActionMapping>http://gutenberg/blocs/documentMaster/createQuestionResponse</outputActionMapping>

@@ -162,9 +162,11 @@ public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
 		Config config = null;
 		ResponseType response = new ResponseType();
 		try {
+		    boolean simulation = receiveScans.getReceiveScans().
+		        equals("simulation");
 			config = new Config();
 			locker = new Locker(config);
-			response.setManifest(locker.receiveScans());
+			response.setManifest(locker.receiveScans(simulation));
 		} catch (Exception e) {
 			e.printStackTrace();
 			response.setError(e.getMessage());
