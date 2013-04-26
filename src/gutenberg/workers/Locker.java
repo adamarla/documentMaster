@@ -36,7 +36,8 @@ public class Locker {
         sharedPath = config.getPath(Resource.shared);
     }
     
-    public ManifestType fetchUnresolved(EntryType grader, int max) throws Exception {
+    public ManifestType fetchUnresolved(EntryType grader, int max) 
+        throws Exception {
         
         Path unresolvedDirPath = lockerPath.resolve(UNRESOLVED_DIR);
         ManifestType manifest = new ManifestType();
@@ -69,7 +70,8 @@ public class Locker {
         return manifest;
     }
     
-    public ManifestType resolveScan(String source, String target) throws Exception {
+    public ManifestType resolveScan(String source, String target) 
+        throws Exception {
         
         Path unresolvedDirPath = lockerPath.resolve(UNRESOLVED_DIR);
         ManifestType manifest = new ManifestType();
@@ -87,8 +89,9 @@ public class Locker {
         return manifest;
     }
 
-    public ManifestType uploadSuggestion(String signature, EntryType teacher,
-            String content) throws Exception {
+    public ManifestType uploadSuggestion(String signature, EntryType teacher, 
+        String content) throws Exception {
+        
         Path teacherDirPath = lockerPath.resolve(
                 String.format("0-%s", teacher.getId()));
         
@@ -108,17 +111,15 @@ public class Locker {
         ostream.close();
 
         // {*.doc, *.docx, *.txt} => *.pdf
-        if (extension.equalsIgnoreCase("01")) {
-            libreOfficeCmd[4] = workingFilename;
-            if (execute(workingDirPath, libreOfficeCmd) != 0)
-                throw new Exception(libreOfficeCmd[0] + " had an error");
+        if (extension.equals("01")) {
+            execute(workingDirPath, String.format(libreOfficeCmd, 
+                workingFilename));
             workingFilename = "suggestion.pdf";
         }
         
         // {*.pdf, *.tiff, *.png ....} => *.jpg
-        convertCmd[1] = workingFilename;
-        if (execute(workingDirPath, convertCmd) != 0)
-            throw new Exception(convertCmd[0] + " had an error");
+        execute(workingDirPath, String.format(convertCmd, workingFilename,
+            "-resize 600x800", "", "-scene 1 jpg:page-%01d"));
 
         ManifestType manifest = new ManifestType();
         manifest.setRoot(teacherDirPath.toString());
@@ -157,7 +158,7 @@ public class Locker {
         String base36ScanId = null;
         scans = Files.newDirectoryStream(stagingPath);
         for (Path scan : scans) {
-            
+
             //base36ScanId_detected?_upright?
             tokens = scan.getFileName().toString().split("_");
             if (tokens.length != 3) {
@@ -180,7 +181,11 @@ public class Locker {
             }
             
             if (!simulation) {
-                convert(scan, target, SCAN_SIZE, rotated);
+                execute(lockerPath, String.format(convertCmd, 
+                    scan.toString(),
+                    rotated? "-resize 600x800 -type TrueColor": 
+                        "-resize 600x800 -type TrueColor -rotate 180",
+                    target.toString(),""));
                 Files.delete(scan);
             }
         }
@@ -196,8 +201,8 @@ public class Locker {
         return manifest;
     }
 
-    public ManifestType annotate(String scanId, PointType[] points)
-            throws Exception {
+    public ManifestType annotate(String scanId, PointType[] points) 
+        throws Exception {
 
         ManifestType manifest = new ManifestType();
         manifest.setRoot(scanId);
@@ -319,8 +324,9 @@ public class Locker {
 
         Path imageFile = lockerPath.resolve(scanId);
         if (Files.exists(imageFile)) {
-            
-            convert(imageFile, imageFile, SCAN_SIZE, true);
+            execute(lockerPath, String.format(convertCmd, 
+                imageFile.toString(), "-rotate 180",
+                imageFile.toString(), ""));
                         
             EntryType image = new EntryType() ;
             String value = imageFile.getFileName().toString(); 
@@ -354,14 +360,7 @@ public class Locker {
         }
         return dirPath;
     }      
-    
-    private int convert(Path src, Path target, String size, boolean rotate)
-            throws Exception {
         
-        return execute(lockerPath, new String[]{"convert", src.toString(), "-resize",
-                size, "-type", "TrueColor", target.toString()});
-    }
-    
     private BufferedImage getOverlay(Path overlayPath, PointType[] annotations) throws Exception {
 
         Path workingDirPath = Files.createTempDirectory(lockerPath, "annotation");
@@ -385,7 +384,7 @@ public class Locker {
         Files.write(annotationTex, lines, StandardCharsets.UTF_8);
         
         BufferedImage overlay = null;
-        if (execute(workingDirPath, new String[]{"make"}) == 0) {
+        if (execute(workingDirPath, "make") == 0) {
             Files.move(workingDirPath.resolve("overlay.png"), overlayPath);
             Files.delete(workingDirPath.resolve("Makefile"));
             Files.delete(workingDirPath);
@@ -394,17 +393,14 @@ public class Locker {
         return overlay;
     }
     
-    private int execute(Path workingDirPath, String[] commands) throws Exception {
+    private int execute(Path workingDirPath, String command) throws Exception {
         
-        System.out.print("[Locker] execute:");
-        for (String s : commands) {
-            System.out.print(s + " ");
-        }
-        System.out.println();
+        System.out.println("[Locker] execute: " + command);
+        String[] tokens = command.split(" ");
         
         ProcessBuilder pb = new ProcessBuilder();
         pb.environment().put("HOME", "/opt/tomcat6-writable/");
-        pb.command(commands);
+        pb.command(tokens);
 
         pb.directory(workingDirPath.toFile());
         pb.redirectErrorStream(true);
@@ -421,13 +417,9 @@ public class Locker {
     }
 
     private Path lockerPath, sharedPath, stagingPath;
-    private String[] libreOfficeCmd = 
-        {"libreoffice", "--headless", "--convert-to", "pdf", ""};
-    private String[] convertCmd = 
-        {"convert", "", "-resize", "600x800", "-scene", "1", "jpg:page-%01d"};
-
+    private final String libreOfficeCmd = "libreoffice --headless --convert-to pdf %s";
+    private final String convertCmd = "convert %s %s %s %s";
     private final String UNRESOLVED_DIR = "unresolved";
-    private final String SCAN_SIZE = "600x800";
     private final float  STROKE_WIDTH = 3f;
     private final String FORMAT    = "JPG";
     private final int    OUTLINE = 0xf6bd13;
