@@ -8,6 +8,7 @@ import gutenberg.blocs.QuizType;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -149,6 +150,7 @@ public class Mint {
 
         Path studentDir, studentStaging;
         Path blueprintTex = quizStaging.resolve(blueprintFile);
+        int totalPages = getTotalPages(blueprintTex);
         EntryType[] students = assignment.getStudents();        
         for (int i = 0; i < students.length; i++) {
             
@@ -193,8 +195,6 @@ public class Mint {
             compositeDoc.writeTemplate(questionsTex);
             individualDoc.writeTemplate(questionsTex);
             
-            int totalPages = quizDir.resolve(previewDirName).
-                toFile().list().length;
             if (totalPages % 2 != 0) compositeDoc.insertBlankPage();
             
             individualDoc.endQuiz();
@@ -334,6 +334,16 @@ public class Mint {
             Files.copy(plotfile, target,
                 StandardCopyOption.REPLACE_EXISTING);
         }
+    }
+
+    private int getTotalPages(Path blueprintTex) throws Exception {
+        int pageCount = 0;
+        String[] lines = Files.readAllLines(blueprintTex, 
+            StandardCharsets.UTF_8).toArray(new String[0]);
+        for (String line: lines) {
+            if (line.startsWith(ITagLib.newpage)) pageCount++;
+        }
+        return pageCount;
     }
 
     private ManifestType prepareManifest(Path root,  

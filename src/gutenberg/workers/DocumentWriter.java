@@ -42,6 +42,10 @@ public class DocumentWriter extends PrintWriter implements ITagLib {
                 String QRCode = String.format("{%s%s}", params.get(insertQR), 
                     ITagLib.pageNumber);
                 line = line.replace("{QRC}", QRCode);
+            } else if (trimmed.startsWith(school)) {
+                line = String.format("%s{%s}", school, params.get(school));
+            } else if (trimmed.startsWith(docAuthor)) {
+                line = String.format("%s{%s}",docAuthor, params.get(docAuthor));
             }
             println(line);
         }
@@ -50,12 +54,15 @@ public class DocumentWriter extends PrintWriter implements ITagLib {
     public void writePreamble(String quiz) {
         println("\\documentclass[12pt,a4paper,justified]{tufte-exam}");
         println(String.format("%s{%s}", school, quiz));
-        println(fancyfooter);
+        println("\\usepackage[absolute]{textpos}");
+        println("\\TPGrid{600}{800}");
+        println(fancyfooter);        
     }
     
     public void printAuthor(String author) { 
         println(String.format("%s{%s}",docAuthor, author));        
     }
+    
     public void beginQuiz() {
         println(beginDocument);
         println(beginQuestions);
