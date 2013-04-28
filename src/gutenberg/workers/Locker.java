@@ -13,6 +13,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
@@ -21,12 +22,24 @@ import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Hashtable;
 import java.util.Locale;
 import java.util.List;
 
 import javax.imageio.ImageIO;
 
 import org.apache.commons.codec.binary.Base64;
+
+import com.google.zxing.Binarizer;
+import com.google.zxing.BinaryBitmap;
+import com.google.zxing.DecodeHintType;
+import com.google.zxing.LuminanceSource;
+import com.google.zxing.Reader;
+import com.google.zxing.Result;
+import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
+import com.google.zxing.common.GlobalHistogramBinarizer;
+import com.google.zxing.common.HybridBinarizer;
+import com.google.zxing.qrcode.QRCodeReader;
 
 public class Locker {
 
@@ -142,7 +155,7 @@ public class Locker {
     }
         
     public ManifestType receiveScans(boolean simulation) throws Exception {
-
+        
         ManifestType manifest = new ManifestType();
         
         DirectoryStream<Path> scans = Files.newDirectoryStream(stagingPath);
@@ -169,6 +182,10 @@ public class Locker {
             base36ScanId = tokens[0];
             detected = tokens[1].equals("1") ? true : false;
             rotated = tokens[2].equals("1") ? true : false;
+            
+            if (!detected) {
+                //detected = detect(scan);
+            }
             
             Path target = null;
             if (detected) {
@@ -197,7 +214,7 @@ public class Locker {
             dummyEntry.setId("SAVON_BUG_SKIP");
             manifest.addImage(dummyEntry);
         }
-
+        
         return manifest;
     }
 
@@ -325,7 +342,7 @@ public class Locker {
         Path imageFile = lockerPath.resolve(scanId);
         if (Files.exists(imageFile)) {
             execute(lockerPath, String.format(convertCmd, 
-                imageFile.toString(), "-rotate 180",
+                imageFile.toString(), "-rotate 180 -type TrueColor",
                 imageFile.toString(), ""));
                         
             EntryType image = new EntryType() ;
@@ -347,6 +364,70 @@ public class Locker {
         }
 
         return manifest;
+    }
+
+    private boolean detect(Path scan) {
+        
+        boolean detected = false;
+        QRConfig[] configs = new QRConfig[2];
+        BufferedImage img = null;
+        LuminanceSource source = null;
+        BinaryBitmap bitmap = null;
+        Binarizer binarizer = null;
+        bitmap = null;
+        Hashtable<DecodeHintType, Boolean> hints = null;
+        Reader reader = null;
+        PrintStream results = null;
+        Result QRCodeResult = null;
+
+        try {                        
+            hints = new Hashtable<DecodeHintType, Boolean>();
+            hints.put(DecodeHintType.TRY_HARDER, Boolean.TRUE);
+            
+            int w = img.getWidth();
+            int third = (int)(w/3.0);
+            
+            img = ImageIO.read(scan.toFile());
+            int[] widths = {425, 566, 333, 283};
+            for (int width : widths) {
+                
+                if (third < width) continue;
+                Path workingDir = Files.createTempDirectory("RS");
+                Path subImgPath = workingDir.resolve(scan.getFileName());
+                
+                BufferedImage subImg = img.getSubimage(2*third, 0, third, third);
+                ImageIO.write(subImg, "JPG", subImgPath.toFile());
+                
+                int height = subImg.getHeight();
+                String resize = String.format("-resize %sx%s", width, (int)height*1.0/img.getWidth());
+                execute(workingDir, String.format(convertCmd, 
+                    scan.getFileName(),
+                    resize, width,""));
+                
+                source = new BufferedImageLuminanceSource(subImg);
+                
+                configs[0] = new QRConfig();
+                configs[0].binarizer = new GlobalHistogramBinarizer(source);
+                configs[0].reader = new QRCodeReader();
+
+                configs[1] = new QRConfig();
+                configs[1].binarizer = new HybridBinarizer(source);
+                configs[1].reader = new QRCodeReader();
+
+                for (int i = 0; i < configs.length; i++) {
+                    
+                    binarizer = configs[i].binarizer;
+                    bitmap = new BinaryBitmap(binarizer);
+                    reader = configs[i].reader;
+                    try {
+                        QRCodeResult = reader.decode(bitmap, hints);
+                    } catch (Exception e) {}
+                }
+                QRCodeResult = null;
+                results.flush();
+            }            
+        } catch (Exception e) {}
+        return detected;
     }
 
     private Path makeRoom() throws Exception {
@@ -426,3 +507,11 @@ public class Locker {
     private final Font COMMENT_FONT = new Font("Ubuntu", 0, 12);
     
 }
+
+class QRConfig {
+
+    public Binarizer binarizer;
+    public Reader    reader;
+
+}
+
