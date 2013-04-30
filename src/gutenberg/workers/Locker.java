@@ -202,7 +202,7 @@ public class Locker {
                     scan.toString(),
                     rotated? "-resize 600x800 -type TrueColor": 
                         "-resize 600x800 -type TrueColor -rotate 180",
-                    target.toString(),""));
+                    "jpg:"+target.toString(),""));
                 Files.delete(scan);
             }
         }
