@@ -55,6 +55,7 @@ public class DocumentWriter extends PrintWriter implements ITagLib {
         println("\\documentclass[12pt,a4paper,justified]{tufte-exam}");
         println(String.format("%s{%s}", school, quiz));
         println("\\usepackage[absolute]{textpos}");
+        println("\\usepackage{xstring}");
         println("\\TPGrid{600}{800}");
         println(fancyfooter);        
     }
