@@ -34,8 +34,10 @@ public class DocumentWriter extends PrintWriter implements ITagLib {
                 continue;
             } else if (trimmed.startsWith(ITagLib.printanswers)) {
                 continue;
-            } else if (trimmed.startsWith(setCounter)) {
-                int counter = params.get(setCounter).equalsIgnoreCase("0")? 
+            } else if (trimmed.startsWith(ITagLib.printRubric)) {
+                continue;
+            } else if (trimmed.startsWith(rollDice)) {
+                int counter = params.get(rollDice).equalsIgnoreCase("0")? 
                     0:dice.nextInt();
                 line = line.replace("{0}", String.format("{%d}", counter));
             } else if (trimmed.startsWith(insertQR)) {
@@ -94,7 +96,7 @@ public class DocumentWriter extends PrintWriter implements ITagLib {
         println("\\setcounter{question}{0}");
     }
     
-    public void setCounter(int i) {
+    public void rollDice(int i) {
         println(String.format("\\setcounter{rolldice}{%d}", i));
     }
 

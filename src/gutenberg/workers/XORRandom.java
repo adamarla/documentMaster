@@ -29,7 +29,7 @@ public class XORRandom extends Random {
 		x ^= ( x >>> 35) ;
 		x ^= ( x << 4) ;
 		this.seed = x ; 
-		return (int)(x % max) ;
+		return Math.abs((int)(x % max));
 	}
 
 	private long seed = System.nanoTime() ;

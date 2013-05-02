@@ -21,6 +21,6 @@ public interface ITagLib {
             solution = "\\begin{solution}", 
             part = "\\part",            
             tableEnd = "\\end{tabular}",
-            setCounter = "\\setcounter{rolldice}",
+            rollDice = "\\setcounter{rolldice}",
             fancyfooter = "\\fancyfoot[C]{\\copyright\\, www.gradians.com}";    
 }

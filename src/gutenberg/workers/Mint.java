@@ -59,7 +59,7 @@ public class Mint {
                 continue;
 
             for (EntryType question : questions) {
-                blueprintDoc.setCounter(0);
+                blueprintDoc.rollDice(0);
                 copyQuestion(staging, blueprintDoc, question.getId());
             }
             blueprintDoc.newPage();
@@ -186,7 +186,7 @@ public class Mint {
             
             HashMap<String,String> params = new HashMap<String,String>();
             params.put(ITagLib.insertQR, QRKey);
-            params.put(ITagLib.setCounter, "0");
+            params.put(ITagLib.rollDice, "random");
             Path questionsTex = staging.resolve(questionsFile);            
             DocumentWriter questionsDoc = new DocumentWriter(questionsTex);            
             questionsDoc.writeTemplate(blueprintTex, params);
