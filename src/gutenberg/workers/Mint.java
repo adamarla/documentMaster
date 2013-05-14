@@ -195,7 +195,7 @@ public class Mint {
             compositeDoc.writeTemplate(questionsTex);
             individualDoc.writeTemplate(questionsTex);
             
-            if (totalPages % 2 != 0) compositeDoc.insertBlankPage();
+            if (totalPages % 2 != 0 && students.length > 1) compositeDoc.insertBlankPage();
             
             individualDoc.endQuiz();
             individualDoc.close();
