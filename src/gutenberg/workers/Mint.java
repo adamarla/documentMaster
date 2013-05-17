@@ -15,7 +15,7 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
 
-public class Mint {
+public class Mint implements ITagLib {
     
     public Mint(Config config) throws Exception {
         sharedPath = config.getPath(Resource.shared);
@@ -186,8 +186,8 @@ public class Mint {
             String QRKey = String.format("%s%s", assignmentKey, studentKey);
             
             HashMap<String,String> params = new HashMap<String,String>();
-            params.put(ITagLib.insertQR, QRKey);
-            params.put(ITagLib.rollDice, "random");
+            params.put(insertQR, QRKey);
+            params.put(rollDice, "random");
             Path questionsTex = staging.resolve(questionsFile);            
             DocumentWriter questionsDoc = new DocumentWriter(questionsTex);            
             questionsDoc.writeTemplate(blueprintTex, params);
@@ -342,7 +342,7 @@ public class Mint {
         String[] lines = Files.readAllLines(blueprintTex, 
             StandardCharsets.UTF_8).toArray(new String[0]);
         for (String line: lines) {
-            if (line.startsWith(ITagLib.newpage)) pageCount++;
+            if (line.startsWith(newpage)) pageCount++;
         }
         return pageCount;
     }

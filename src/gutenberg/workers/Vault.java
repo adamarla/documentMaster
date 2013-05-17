@@ -15,7 +15,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 
-public class Vault {
+public class Vault implements ITagLib {
 
     public Vault(Config config) {
         vaultPath = config.getPath(Resource.vault);
@@ -123,24 +123,24 @@ public class Vault {
         String line = null, trimmed = null;
         while ((line = reader.readLine()) != null) {
             trimmed = line.trim();
-            if (trimmed.startsWith(questionTag)) {
+            if (trimmed.startsWith(question)) {
                 if (tags.getMarks().length == 1) {// no parts to the question
                     marks = String
                             .format(marksFormat, tags.getMarks()[partIdx]);
                     line = line.replaceFirst(
-                            Matcher.quoteReplacement(questionTag) + marksRegex,
-                            Matcher.quoteReplacement(questionTag) + marks);
+                            Matcher.quoteReplacement(question) + marksRegex,
+                            Matcher.quoteReplacement(question) + marks);
                 }
-            } else if (trimmed.startsWith(solutionTag)) {
+            } else if (trimmed.startsWith(solution)) {
                 length = String.format(lengthFormat, tags.getLength()[partIdx]);
-                line = solutionTag + length;
+                line = solution + length;
                 partIdx++;
-            } else if (trimmed.startsWith(partTag)) {
+            } else if (trimmed.startsWith(part)) {
                 if (tags.getMarks().length > 1) {// multiple part question
                     marks = String
                             .format(marksFormat, tags.getMarks()[partIdx]);
-                    line = line.replaceFirst(Matcher.quoteReplacement(partTag)
-                            + marksRegex, Matcher.quoteReplacement(partTag)
+                    line = line.replaceFirst(Matcher.quoteReplacement(part)
+                            + marksRegex, Matcher.quoteReplacement(part)
                             + marks);
                     // tricky bit, insert a new page before next part starts
                     if (breaks.length > pageIdx) {
@@ -179,12 +179,9 @@ public class Vault {
     }
 
     private Path vaultPath, sharedPath;
+    
     private final String texFile = "question.tex", plotFile = "figure.gnuplot",
             bc2FigFile = "figure.bc", makeFile = "individual.mk";
-
-    private final String questionTag = "\\question",
-            solutionTag = "\\begin{solution}", partTag = "\\part",
-            lengthFormat = "[\\%s]", marksFormat = "[%s]",
-            marksRegex = "\\[?[1-9]?\\]?", newpage = "\\nextpg",
-            insertQRTag = "\\insertQR";
+    private final String lengthFormat = "[\\%s]", marksFormat = "[%s]",
+            marksRegex = "\\[?[1-9]?\\]?";
 }

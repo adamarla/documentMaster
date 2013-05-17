@@ -29,7 +29,7 @@ import javax.imageio.ImageIO;
 import org.apache.commons.codec.binary.Base64;
 
 
-public class Locker {
+public class Locker implements ITagLib {
 
     public Locker(Config config) throws Exception {
         stagingPath = config.getPath(Resource.staging);
@@ -373,14 +373,14 @@ public class Locker {
                 annotationTex, StandardCopyOption.REPLACE_EXISTING);
 
         List<String> lines = Files.readAllLines(annotationTex, StandardCharsets.UTF_8);
-        lines.add("\\begin{document}");        
+        lines.add(beginDocument);        
         for (PointType annotation: annotations) {
             lines.add(String.format("\\begin{textblock}{600}(%s,%s)", annotation.getX(), annotation.getY()));
             //lines.add(String.format("\\[rgb]{0.25,0.57,0.16}%s", annotation.getText()));
             lines.add(String.format("\\color{blue}%s", annotation.getText()));
             lines.add("\\end{textblock}");
         }
-        lines.add("\\end{document}");
+        lines.add(endDocument);
         Files.write(annotationTex, lines, StandardCharsets.UTF_8);
         
         BufferedImage overlay = null;
