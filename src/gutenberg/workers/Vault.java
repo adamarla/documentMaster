@@ -146,13 +146,10 @@ public class Vault {
                     if (breaks.length > pageIdx) {
                         if (partIdx == breaks[pageIdx] + 1) {
                             writer.println(newpage);
-                            writer.println(insertQRTag.replace("{}", "{QRC}"));
                             pageIdx++;
                         }
                     }
                 }
-            } else if (trimmed.startsWith(insertQRTag)) {
-                line = line.replaceFirst("\\{.*\\}", "{QRC}");
             } else if (trimmed.equals(newpage)) {
                 continue;
             }

@@ -43,7 +43,7 @@ public class DocumentWriter extends PrintWriter implements ITagLib {
             } else if (trimmed.startsWith(insertQR)) {
                 String QRCode = String.format("{%s%s}", params.get(insertQR), 
                     ITagLib.pageNumber);
-                line = line.replace("{QRC}", QRCode);
+                line = line.replaceFirst("\\{.*\\}", QRCode);
             } else if (trimmed.startsWith(school)) {
                 line = String.format("%s{%s}", school, params.get(school));
             } else if (trimmed.startsWith(docAuthor)) {
