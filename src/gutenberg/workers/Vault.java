@@ -152,7 +152,7 @@ public class Vault {
                     }
                 }
             } else if (trimmed.startsWith(insertQRTag)) {
-                line = line.replace("{}", "{QRC}");
+                line = line.replaceFirst("\\{.*\\}", "{QRC}");
             } else if (trimmed.equals(newpage)) {
                 continue;
             }

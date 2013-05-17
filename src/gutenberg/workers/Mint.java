@@ -48,21 +48,22 @@ public class Mint {
             Files.createDirectory(staging);
             Files.createDirectory(preview);
         }
-        
+
         Path blueprintTex = staging.resolve(blueprintFile);
         DocumentWriter blueprintDoc = new DocumentWriter(blueprintTex);
         PageType[] pages = quiz.getPage();
-        for (int i = 0; i < pages.length; i++) {
-
-            EntryType[] questions = pages[i].getQuestion();
-            if (questions == null)
+        for (PageType page : pages) {
+            
+            EntryType[] questions = page.getQuestion();
+            if (questions == null) //2nd page of multi-part
                 continue;
-
+            else if (page.getNumber() != 1) 
+                blueprintDoc.newPage();            
+            
             for (EntryType question : questions) {
                 blueprintDoc.rollDice(0);
                 copyQuestion(staging, blueprintDoc, question.getId());
             }
-            blueprintDoc.newPage();
         }
         blueprintDoc.close();
         
