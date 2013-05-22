@@ -51,7 +51,7 @@
         </javac>
     </target>
     <target depends="pre.compile.test" name="echo.classpath.problem" unless="jars.ok">
-        <echo message="The class path is not set right!                                Please make sure the following classes are in the classpath                                1. XmlBeans                                2. Stax                                3. Axis2                 "/>
+        <echo message="The class path is not set right! Please make sure the following classes are in the classpath 1. XmlBeans 2. Stax 3. Axis2"/>
     </target>
     <target depends="jar.server, jar.client" name="jar.all"/>
     <target depends="compile.src,echo.classpath.problem" name="jar.server" if="jars.ok">

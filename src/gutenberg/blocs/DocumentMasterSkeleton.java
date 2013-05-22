@@ -156,27 +156,6 @@ public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
 	}
 
 	@Override
-	public gutenberg.blocs.ReceiveScansResponse receiveScans(
-			gutenberg.blocs.ReceiveScans receiveScans) {
-		Locker locker = null;
-		Config config = null;
-		ResponseType response = new ResponseType();
-		try {
-		    boolean simulation = receiveScans.getReceiveScans().
-		        equals("simulation");
-			config = new Config();
-			locker = new Locker(config);
-			response.setManifest(locker.receiveScans(simulation));
-		} catch (Exception e) {
-			e.printStackTrace();
-			response.setError(e.getMessage());
-		}
-		ReceiveScansResponse receiveScansResponse = new ReceiveScansResponse();
-		receiveScansResponse.setReceiveScansResponse(response);
-		return receiveScansResponse;
-	}
-
-	@Override
 	public gutenberg.blocs.GenerateSuggestionFormResponse generateSuggestionForm(
 			gutenberg.blocs.GenerateSuggestionForm generateSuggestionForm) {
 		Config config = null;

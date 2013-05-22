@@ -141,11 +141,6 @@
 			<xsd:element name="assignQuizResponse" type="tns:responseType">
 			</xsd:element>
 
-			<xsd:element name="receiveScans" type="xsd:string"></xsd:element>
-
-			<xsd:element name="receiveScansResponse" type="tns:responseType">
-			</xsd:element>
-
 			<xsd:element name="createQuestion" type="xsd:string"></xsd:element>
 
 			<xsd:element name="createQuestionResponse" type="tns:responseType">
@@ -224,12 +219,6 @@
 	</wsdl:message>
 	<wsdl:message name="assignQuizResponse">
 		<wsdl:part name="parameters" element="tns:assignQuizResponse"></wsdl:part>
-	</wsdl:message>
-	<wsdl:message name="receiveScansRequest">
-		<wsdl:part name="parameters" element="tns:receiveScans"></wsdl:part>
-	</wsdl:message>
-	<wsdl:message name="receiveScansResponse">
-		<wsdl:part name="parameters" element="tns:receiveScansResponse"></wsdl:part>
 	</wsdl:message>
 	<wsdl:message name="createQuestionRequest">
 		<wsdl:part name="parameters" element="tns:createQuestion"></wsdl:part>
@@ -318,10 +307,6 @@
 			<wsdl:input message="tns:assignQuizRequest"></wsdl:input>
 			<wsdl:output message="tns:assignQuizResponse"></wsdl:output>
 		</wsdl:operation>
-		<wsdl:operation name="receiveScans">
-			<wsdl:input message="tns:receiveScansRequest"></wsdl:input>
-			<wsdl:output message="tns:receiveScansResponse"></wsdl:output>
-		</wsdl:operation>
 		<wsdl:operation name="createQuestion">
 			<wsdl:input message="tns:createQuestionRequest"></wsdl:input>
 			<wsdl:output message="tns:createQuestionResponse"></wsdl:output>
@@ -389,15 +374,6 @@
 		</wsdl:operation>
 		<wsdl:operation name="assignQuiz">
 			<soap:operation soapAction="http://gutenberg/blocs/assignQuiz" />
-			<wsdl:input>
-				<soap:body use="literal" />
-			</wsdl:input>
-			<wsdl:output>
-				<soap:body use="literal" />
-			</wsdl:output>
-		</wsdl:operation>
-		<wsdl:operation name="receiveScans">
-			<soap:operation soapAction="http://gutenberg/blocs/receiveScans" />
 			<wsdl:input>
 				<soap:body use="literal" />
 			</wsdl:input>

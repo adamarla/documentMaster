@@ -7,6 +7,7 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.HashMap;
 import java.util.List;
+import java.util.regex.Matcher;
 
 
 public class DocumentWriter extends PrintWriter implements ITagLib {
@@ -43,7 +44,8 @@ public class DocumentWriter extends PrintWriter implements ITagLib {
             } else if (trimmed.startsWith(insertQR)) {
                 String QRCode = String.format("{%s%s}", params.get(insertQR), 
                     ITagLib.pageNumber);
-                line = line.replaceFirst("\\{.*\\}", QRCode);
+                line = line.replaceFirst("\\{.*\\}", 
+                    Matcher.quoteReplacement(QRCode));
             } else if (trimmed.startsWith(school)) {
                 line = String.format("%s{%s}", school, params.get(school));
             } else if (trimmed.startsWith(docAuthor)) {

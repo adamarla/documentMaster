@@ -211,20 +211,6 @@
         /**
          * Auto generated method signature
          * 
-                                    * @param receiveScans
-         */
-
-        
-                public gutenberg.blocs.ReceiveScansResponse receiveScans
-                (
-                  gutenberg.blocs.ReceiveScans receiveScans
-                 )
-            ;
-        
-         
-        /**
-         * Auto generated method signature
-         * 
                                     * @param assignQuiz
          */
 

@@ -65,10 +65,6 @@
             <actionMapping>http://gutenberg/blocs/rotateScan</actionMapping>
             <outputActionMapping>http://gutenberg/blocs/documentMaster/rotateScanResponse</outputActionMapping>
         </operation>
-        <operation name="receiveScans" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://gutenberg/blocs">
-            <actionMapping>http://gutenberg/blocs/receiveScans</actionMapping>
-            <outputActionMapping>http://gutenberg/blocs/documentMaster/receiveScansResponse</outputActionMapping>
-        </operation>
         <operation name="assignQuiz" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://gutenberg/blocs">
             <actionMapping>http://gutenberg/blocs/assignQuiz</actionMapping>
             <outputActionMapping>http://gutenberg/blocs/documentMaster/assignQuizResponse</outputActionMapping>

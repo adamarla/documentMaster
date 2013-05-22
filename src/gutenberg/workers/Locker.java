@@ -20,8 +20,6 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Locale;
 import java.util.List;
 
 import javax.imageio.ImageIO;
@@ -142,65 +140,6 @@ public class Locker implements ITagLib {
         return manifest;
     }
         
-    public ManifestType receiveScans(boolean simulation) throws Exception {
-        
-        ManifestType manifest = new ManifestType();
-        
-        DirectoryStream<Path> scans = Files.newDirectoryStream(stagingPath);
-        Path resolvedPath = lockerPath;
-        if (scans.iterator().hasNext()) {
-            resolvedPath = makeRoom();
-        }
-        manifest.setRoot(lockerPath.relativize(resolvedPath).toString());
-        
-        boolean rotated = false, detected = false;
-        String[] tokens = null;
-        String base36ScanId = null;
-        scans = Files.newDirectoryStream(stagingPath);
-        for (Path scan : scans) {
-
-            //base36ScanId_detected?_upright?
-            tokens = scan.getFileName().toString().split("_");
-            if (tokens.length != 3) {
-                Files.delete(scan);
-                continue;
-            }
-
-            base36ScanId = tokens[0];
-            detected = tokens[1].equals("1") ? true : false;
-            rotated = tokens[2].equals("1") ? true : false;
-            
-            Path target = null;
-            if (detected) {
-                target = resolvedPath.resolve(base36ScanId);
-                EntryType image = new EntryType() ;
-                image.setId(base36ScanId);
-                manifest.addImage(image);
-            } else {
-                continue;
-            }
-            
-            if (!simulation) {
-                execute(lockerPath, String.format(convertCmd, 
-                    scan.toString(),
-                    rotated? "-resize 600x800 -type TrueColor": 
-                        "-resize 600x800 -type TrueColor -rotate 180",
-                    "jpg:"+target.toString(),""));
-                Files.delete(scan);
-            }
-        }
-
-        // workaround for xml de-serialization bug in Savon
-        // https://github.com/rubiii/savon/issues/11 (supposedly fixed!)
-        if (manifest.getImage() != null && manifest.getImage().length == 1) {
-            EntryType dummyEntry = new EntryType();
-            dummyEntry.setId("SAVON_BUG_SKIP");
-            manifest.addImage(dummyEntry);
-        }
-        
-        return manifest;
-    }
-
     public ManifestType annotate(String scanId, PointType[] points) 
         throws Exception {
 
@@ -349,18 +288,6 @@ public class Locker implements ITagLib {
         return manifest;
     }
 
-    private Path makeRoom() throws Exception {
-        Calendar rightNow = Calendar.getInstance();
-        Path dirPath = lockerPath.resolve(
-            String.format("%s.%s.%s", rightNow.get(Calendar.DAY_OF_MONTH),
-            rightNow.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ENGLISH),
-            rightNow.get(Calendar.YEAR)));
-        if (!Files.exists(dirPath)) {
-            Files.createDirectory(dirPath);
-        }
-        return dirPath;
-    }      
-        
     private BufferedImage getOverlay(Path overlayPath, PointType[] annotations) throws Exception {
 
         Path workingDirPath = Files.createTempDirectory(lockerPath, "annotation");

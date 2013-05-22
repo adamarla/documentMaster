@@ -139,9 +139,9 @@ public class Vault implements ITagLib {
                 if (tags.getMarks().length > 1) {// multiple part question
                     marks = String
                             .format(marksFormat, tags.getMarks()[partIdx]);
-                    line = line.replaceFirst(Matcher.quoteReplacement(part)
-                            + marksRegex, Matcher.quoteReplacement(part)
-                            + marks);
+                    line = line.replaceFirst(
+                            Matcher.quoteReplacement(part) + marksRegex, 
+                            Matcher.quoteReplacement(part) + marks);
                     // tricky bit, insert a new page before next part starts
                     if (breaks.length > pageIdx) {
                         if (partIdx == breaks[pageIdx] + 1) {
