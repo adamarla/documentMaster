@@ -57,13 +57,12 @@ public class Mint implements ITagLib {
             EntryType[] questions = page.getQuestion();
             if (questions == null) //2nd page of multi-part
                 continue;
-            else if (page.getNumber() != 1) 
-                blueprintDoc.newPage();            
             
             for (EntryType question : questions) {
                 blueprintDoc.rollDice(0);
                 copyQuestion(staging, blueprintDoc, question.getId());
             }
+            blueprintDoc.newPage();            
         }
         blueprintDoc.close();
         
