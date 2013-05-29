@@ -100,28 +100,35 @@ public class Locker implements ITagLib {
         
         Path workingDirPath = Files.createDirectories(teacherDirPath.
                 resolve(basename));                
-        String workingFilename = "suggestion";
+        String original = "suggestion.original";
+        String working = "suggestion";
         
         byte[] raw = Base64.decodeBase64(content.getBytes());
         OutputStream ostream = Files.newOutputStream(
-                workingDirPath.resolve(workingFilename), 
+                workingDirPath.resolve(original), 
                 StandardOpenOption.CREATE);
         ostream.write(raw);
         ostream.close();
 
         // {*.doc, *.docx, *.txt} => *.pdf
         if (extension.equals("01")) {
-            execute(workingDirPath, String.format(libreOfficeCmd, 
-                workingFilename));
-            workingFilename = "suggestion.pdf";
+            if (execute(workingDirPath, String.format(libreOfficeCmd, 
+                original)) == 0)
+                //libreoffice forces outputfile extension to be .pdf
+                Files.move(workingDirPath.resolve(working + ".pdf"), 
+                    workingDirPath.resolve(working));
+            else
+                throw new Exception("libreoffice returned non-zero");
+        } else {
+            Files.copy(workingDirPath.resolve(original), 
+                workingDirPath.resolve(working));
         }
         
         // {*.pdf, *.tiff, *.png ....} => *.jpg
-        execute(workingDirPath, String.format(convertCmd, workingFilename,
-            "-resize 600x800", "", "-scene 1 jpg:page-%01d"));
+        execute(workingDirPath, String.format(convertCmd, working));
 
         ManifestType manifest = new ManifestType();
-        manifest.setRoot(teacherDirPath.toString());
+        manifest.setRoot(lockerPath.relativize(workingDirPath).toString());
         
         DirectoryStream<Path> stream = 
                 Files.newDirectoryStream(workingDirPath, "page*");
@@ -133,10 +140,7 @@ public class Locker implements ITagLib {
         }
         stream.close();
         
-        EntryType suggestionFile = new EntryType();
-        suggestionFile.setId(signature);
-        manifest.addDocument(suggestionFile);
-        
+        Files.delete(workingDirPath.resolve(working));
         return manifest;
     }
         
@@ -263,9 +267,7 @@ public class Locker implements ITagLib {
 
         Path imageFile = lockerPath.resolve(scanId);
         if (Files.exists(imageFile)) {
-            execute(lockerPath, String.format(convertCmd, 
-                imageFile.toString(), "-rotate 180 -type TrueColor",
-                imageFile.toString(), ""));
+            execute(lockerPath, String.format(rotateCmd, imageFile.toString()));
                         
             EntryType image = new EntryType() ;
             String value = imageFile.getFileName().toString(); 
@@ -322,11 +324,14 @@ public class Locker implements ITagLib {
     
     private int execute(Path workingDirPath, String command) throws Exception {
         
-        System.out.println("[Locker] execute: " + command);
         String[] tokens = command.split(" ");
+        System.out.print("[Locker]: execute");
+        for (String token : tokens) {
+            System.out.print(" " + token);
+        }
+        System.out.println();
         
         ProcessBuilder pb = new ProcessBuilder();
-        pb.environment().put("HOME", "/opt/tomcat6-writable/");
         pb.command(tokens);
 
         pb.directory(workingDirPath.toFile());
@@ -339,13 +344,14 @@ public class Locker implements ITagLib {
         String line = null;
         while ((line = messages.readLine()) != null) {
             System.out.println(line);
-        }        
+        }
         return build.waitFor();
     }
 
     private Path lockerPath, sharedPath, stagingPath;
     private final String libreOfficeCmd = "libreoffice --headless --convert-to pdf %s";
-    private final String convertCmd = "convert %s %s %s %s";
+    private final String convertCmd = "convert %s -resize 600x800 -scene 1 jpg:page-%%01d.jpeg";
+    private final String rotateCmd = "convert %1$s -rotate 180 -type TrueColor %1$s";
     private final String UNRESOLVED_DIR = "unresolved";
     private final float  STROKE_WIDTH = 3f;
     private final String FORMAT    = "JPG";
