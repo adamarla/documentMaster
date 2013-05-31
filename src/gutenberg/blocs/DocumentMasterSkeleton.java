@@ -313,7 +313,7 @@ public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
             config = new Config();
             locker = new Locker(config);
             EntryType scan = resolveScan.getResolveScan();
-            response.setManifest(locker.resolveScan(scan.getValue(), scan.getId()));
+            response.setManifest(locker.resolveScan(scan.getId(), scan.getValue()));
         } catch (Exception e) {
             e.printStackTrace();
             response.setError(e.getMessage());
