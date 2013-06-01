@@ -76,15 +76,13 @@ public class Locker implements ITagLib {
         ManifestType manifest = new ManifestType();
         manifest.setRoot(stagingPath.getFileName().toString());
         
-        Path targetPath = stagingPath.resolve(String.format("%s_1_0", target));
-        Path sourcePath = unresolvedDirPath.resolve(source);
-        
-        Files.move(sourcePath, targetPath);
-        
-        EntryType scan = new EntryType();
-        scan.setId(target);
-        
-        manifest.addImage(scan);        
+        Path targetPath = null, sourcePath = unresolvedDirPath.resolve(source);
+        if (target != null) {
+            targetPath = stagingPath.resolve(String.format("%s_1_0", target));
+            Files.move(sourcePath, targetPath);            
+        } else {
+            Files.delete(sourcePath);
+        }
         return manifest;
     }
 
