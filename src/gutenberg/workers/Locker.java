@@ -42,29 +42,36 @@ public class Locker implements ITagLib {
         ManifestType manifest = new ManifestType();
         manifest.setRoot(lockerPath.relativize(unresolvedDirPath).toString());
         String gradersExtnsn = "." + grader.getId();
+        String undetected = ".ud";
         
         DirectoryStream<Path> stream = 
-            Files.newDirectoryStream(unresolvedDirPath);
+            Files.newDirectoryStream(unresolvedDirPath, "*" + gradersExtnsn);
         for (Path entry: stream) {
             
             if (max == 0) break;
-            String filename = entry.getFileName().toString();
-            
-            if (filename.contains(".")) {
-                if (!filename.endsWith(gradersExtnsn)) {
-                    continue;
-                }
-            } else {
-                filename = filename.concat(gradersExtnsn);
-                Files.move(entry, entry.resolveSibling(filename));
-            }
-            
+            String filename = entry.getFileName().toString();            
             EntryType scan = new EntryType();
             scan.setId(filename);
             
             manifest.addImage(scan);
             max--;
         }
+        
+        stream = Files.newDirectoryStream(unresolvedDirPath, "*" + undetected);
+        for (Path entry: stream) {
+            
+            if (max == 0) break;
+            String filename = entry.getFileName().toString();
+            
+            filename = filename.replace(undetected, gradersExtnsn);
+            Files.move(entry, entry.resolveSibling(filename));
+            
+            EntryType scan = new EntryType();
+            scan.setId(filename);
+            
+            manifest.addImage(scan);
+            max--;
+        }        
         
         return manifest;
     }
