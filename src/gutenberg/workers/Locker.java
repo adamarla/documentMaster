@@ -64,7 +64,8 @@ public class Locker implements ITagLib {
             String filename = entry.getFileName().toString();
             
             filename = filename.replace(undetected, gradersExtnsn);
-            Files.move(entry, entry.resolveSibling(filename));
+            Files.move(entry, entry.resolveSibling(
+                filename.replace(undetected, gradersExtnsn)));
             
             EntryType scan = new EntryType();
             scan.setId(filename);
