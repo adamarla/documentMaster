@@ -42,14 +42,16 @@ public class Mint implements ITagLib {
         Path quizDir = mintPath.resolve(quizDirName).resolve(quizKey);
         Path staging = quizDir.resolve(stagingDirName);
         Path preview = quizDir.resolve(previewDirName);
+        Path blueprintTex = staging.resolve(blueprintFile);
         
         if (!Files.exists(quizDir)) {
             Files.createDirectory(quizDir);
             Files.createDirectory(staging);
             Files.createDirectory(preview);
+        } else {
+            Files.deleteIfExists(blueprintTex);
         }
 
-        Path blueprintTex = staging.resolve(blueprintFile);
         DocumentWriter blueprintDoc = new DocumentWriter(blueprintTex);
         PageType[] pages = quiz.getPage();
         for (PageType page : pages) {
