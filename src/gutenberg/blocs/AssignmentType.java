@@ -153,6 +153,51 @@
                              }
                              
 
+                        /**
+                        * field for Publish
+                        */
+
+                        
+                                    protected boolean localPublish ;
+                                
+                           /*  This tracker boolean wil be used to detect whether the user called the set method
+                          *   for this attribute. It will be used to determine whether to include this field
+                           *   in the serialized XML
+                           */
+                           protected boolean localPublishTracker = false ;
+
+                           public boolean isPublishSpecified(){
+                               return localPublishTracker;
+                           }
+
+                           
+
+                           /**
+                           * Auto generated getter method
+                           * @return boolean
+                           */
+                           public  boolean getPublish(){
+                               return localPublish;
+                           }
+
+                           
+                        
+                            /**
+                               * Auto generated setter method
+                               * @param param Publish
+                               */
+                               public void setPublish(boolean param){
+                            
+                                       // setting primitive attribute tracker to true
+                                       localPublishTracker =
+                                       true;
+                                   
+                                            this.localPublish=param;
+                                    
+
+                               }
+                            
+
      
      
         /**
@@ -241,7 +286,20 @@
                                                throw new org.apache.axis2.databinding.ADBException("students cannot be null!!");
                                         
                                     }
-                                 
+                                  if (localPublishTracker){
+                                    namespace = "http://gutenberg/blocs";
+                                    writeStartElement(null, namespace, "publish", xmlWriter);
+                             
+                                               if (false) {
+                                           
+                                                         throw new org.apache.axis2.databinding.ADBException("publish cannot be null!!");
+                                                      
+                                               } else {
+                                                    xmlWriter.writeCharacters(org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localPublish));
+                                               }
+                                    
+                                   xmlWriter.writeEndElement();
+                             }
                     xmlWriter.writeEndElement();
                
 
@@ -465,7 +523,13 @@
                                     
                              }
 
-                        
+                         if (localPublishTracker){
+                                      elementList.add(new javax.xml.namespace.QName("http://gutenberg/blocs",
+                                                                      "publish"));
+                                 
+                                elementList.add(
+                                   org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localPublish));
+                            }
 
                 return new org.apache.axis2.databinding.utils.reader.ADBXMLStreamReaderImpl(qName, elementList.toArray(), attribList.toArray());
             
@@ -621,7 +685,25 @@
                                     // A start element we are not expecting indicates an invalid parameter was passed
                                     throw new org.apache.axis2.databinding.ADBException("Unexpected subelement " + reader.getName());
                                 }
-                              
+                            
+                                    
+                                    while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
+                                
+                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://gutenberg/blocs","publish").equals(reader.getName())){
+                                
+                                    java.lang.String content = reader.getElementText();
+                                    
+                                              object.setPublish(
+                                                    org.apache.axis2.databinding.utils.ConverterUtil.convertToBoolean(content));
+                                              
+                                        reader.next();
+                                    
+                              }  // End of if for expected property start element
+                                
+                                    else {
+                                        
+                                    }
+                                  
                             while (!reader.isStartElement() && !reader.isEndElement())
                                 reader.next();
                             

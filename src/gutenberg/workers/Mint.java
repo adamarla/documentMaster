@@ -127,6 +127,7 @@ public class Mint implements ITagLib {
         String quizKey = assignment.getQuiz().getValue();
         String testpaperId = assignment.getInstance().getId();
         String assignmentKey = assignment.getInstance().getValue();
+        boolean publish = assignment.getPublish();
         
         Path quizDir = mintPath.resolve(quizDirName).resolve(quizKey);
         Path assignmentDir = mintPath.resolve(worksheetDirName).resolve(assignmentKey);
@@ -177,10 +178,13 @@ public class Mint implements ITagLib {
             individualDoc.writePreamble(assignment.getQuiz().getName());
             individualDoc.beginQuiz();                       
 
-            compositeDoc.resetQuestionNumbering();
-            compositeDoc.resetPageNumbering();
-            
-            compositeDoc.printAuthor(studentName);
+            if (publish) {
+                if (i == 0) compositeDoc.printAuthor("sample copy");
+            } else {
+                compositeDoc.resetQuestionNumbering();
+                compositeDoc.resetPageNumbering();
+                compositeDoc.printAuthor(studentName);
+            }
             individualDoc.printAuthor(studentName);
             
             // QRKey = [TestPaperId(6)][studentIdx(3)][pageNum(1)]            
@@ -194,10 +198,15 @@ public class Mint implements ITagLib {
             questionsDoc.writeTemplate(blueprintTex, params);
             questionsDoc.close();
             
-            compositeDoc.writeTemplate(questionsTex);
+            if (publish) {
+                if (i == 0) compositeDoc.writeTemplate(questionsTex);
+            } else {
+                compositeDoc.writeTemplate(questionsTex);
+            }
             individualDoc.writeTemplate(questionsTex);
             
-            if (totalPages % 2 != 0 && students.length > 1) compositeDoc.insertBlankPage();
+            if (!publish && totalPages % 2 != 0 && students.length > 1) 
+                compositeDoc.insertBlankPage();
             
             individualDoc.endQuiz();
             individualDoc.close();

@@ -53,6 +53,7 @@
 					<xsd:element name="instance" type="tns:entryType"/>
 					<xsd:element maxOccurs="unbounded" minOccurs="1" name="students" type="tns:entryType">
 					</xsd:element>
+                                        <xsd:element minOccurs="0" name="publish" type="xsd:boolean"/>
 				</xsd:sequence>
 			</xsd:complexType>
 			
@@ -232,12 +233,12 @@
     <wsdl:part name="parameters" element="tns:createQuestion">
     </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="undoAnnotateResponse">
-    <wsdl:part name="parameters" element="tns:undoAnnotateResponse">
-    </wsdl:part>
-  </wsdl:message>
   <wsdl:message name="uploadSuggestionRequest">
     <wsdl:part name="parameters" element="tns:uploadSuggestion">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="undoAnnotateResponse">
+    <wsdl:part name="parameters" element="tns:undoAnnotateResponse">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="generateSuggestionFormResponse">
