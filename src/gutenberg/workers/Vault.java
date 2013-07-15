@@ -61,35 +61,48 @@ public class Vault implements ITagLib {
         return directory.listFiles(new NameFilter(filter));
     }
 
+
     /**
      * Creates a question in the Vault
      * 
-     * @param quizMasterId
+     * @param examinerId
      *            - id of person creating question
      * @return Manifest
      * @throws Exception
      */
-    public ManifestType createQuestion(String quizMasterId) throws Exception {
+    public ManifestType createQuestion(String examinerId) throws Exception {
 
-        String hexTimestamp = Long.toString(System.currentTimeMillis(),
-                Character.MAX_RADIX);
-        String dirName = quizMasterId + "-" + hexTimestamp.substring(0, 3)
-                + "-" + hexTimestamp.substring(3);
+        String timeStamp = Long.toString(System.currentTimeMillis(), Character.MAX_RADIX);
+        String reversed = new StringBuffer(timeStamp).reverse().toString() ;
+        String levelOne = reversed.substring(5),
+        	   levelTwo = reversed.substring(0,4) ;
+        String dirName = examinerId + "/" + levelOne + "/" + levelTwo ;
+        
         Path questionDir = vaultPath.resolve(dirName);
+        Path templates = sharedPath.resolve("templates") ;
+        String[] files = {texFile, plotFile, bc2FigFile} ;
+        
         Files.createDirectory(questionDir);
-
-        Files.copy(sharedPath.resolve("templates").resolve(texFile), 
-                questionDir.resolve(texFile));
-        Files.copy(sharedPath.resolve("templates").resolve(plotFile), 
-                questionDir.resolve(plotFile));
-        Files.copy(sharedPath.resolve("templates").resolve(bc2FigFile),
-                questionDir.resolve(bc2FigFile));
-        Path rel = questionDir.relativize(sharedPath.resolve("makefiles")
-                .resolve(makeFile));
-        Files.createSymbolicLink(questionDir.resolve("Makefile"), rel);
-
+        
+        // Copy question.tex etc. 
+        for(String f: files) {
+        	Files.copy(templates.resolve(f), questionDir.resolve(f)) ;
+        }
+        
+        // Ensure that Makefiles are present all the way down to examinerId/levelOne
+        String[] hierarchy = {examinerId, examinerId + "/" + levelOne} ;
+        Path     toMake = null ;
+        for(String h: hierarchy) {
+        	toMake = vaultPath.resolve(h + "/Makefile") ;
+        	if (!Files.exists(toMake)){ 
+        		Files.createLink(toMake, sharedPath.resolve("makefiles/divedown-vault.mk"));
+        	}
+        }
+        // As a last step, add a Makefile within levelTwo
+        Files.createLink(questionDir.resolve("Makefile"), sharedPath.resolve("makefiles/individual.mk")) ;
+        
         ManifestType manifest = new ManifestType();
-        manifest.setRoot(questionDir.toString());
+        manifest.setRoot(examinerId + "/" + levelOne + "/" + levelTwo); // eg. 1/ozs/yuuw6
         return manifest;
     }
 
@@ -179,9 +192,11 @@ public class Vault implements ITagLib {
     }
 
     private Path vaultPath, sharedPath;
-    
-    private final String texFile = "question.tex", plotFile = "figure.gnuplot",
-            bc2FigFile = "figure.bc", makeFile = "individual.mk";
+    private final String texFile = "question.tex", 
+                         plotFile = "figure.gnuplot",
+                         bc2FigFile = "figure.bc", 
+                         makeFile = "individual.mk";
+
     private final String lengthFormat = "[\\%s]", marksFormat = "[%s]",
             marksRegex = "\\[?[1-9]?\\]?";
 }
