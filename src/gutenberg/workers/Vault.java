@@ -75,14 +75,14 @@ public class Vault implements ITagLib {
         String timeStamp = Long.toString(System.currentTimeMillis(), Character.MAX_RADIX);
         String reversed = new StringBuffer(timeStamp).reverse().toString() ;
         String levelOne = reversed.substring(5),
-        	   levelTwo = reversed.substring(0,4) ;
+        	   levelTwo = reversed.substring(0,5) ;
         String dirName = examinerId + "/" + levelOne + "/" + levelTwo ;
         
         Path questionDir = vaultPath.resolve(dirName);
         Path templates = sharedPath.resolve("templates") ;
         String[] files = {texFile, plotFile, bc2FigFile} ;
         
-        Files.createDirectory(questionDir);
+        Files.createDirectories(questionDir);
         
         // Copy question.tex etc. 
         for(String f: files) {
@@ -98,6 +98,7 @@ public class Vault implements ITagLib {
         		Files.createLink(toMake, sharedPath.resolve("makefiles/divedown-vault.mk"));
         	}
         }
+        
         // As a last step, add a Makefile within levelTwo
         Files.createLink(questionDir.resolve("Makefile"), sharedPath.resolve("makefiles/individual.mk")) ;
         
