@@ -340,9 +340,8 @@ public class Mint implements ITagLib {
         blueprintDoc.writeTemplate(questionTex);
         plotfile = questionDir.resolve("figure.gnuplot");
         if (Files.exists(plotfile)) {
-        	String mangled = questionId.replace('/', '-') ;
+       	    String mangled = questionId.replace('/', '-') ;
             target = staging.resolve(String.format("%s.gnuplot", mangled)) ;
-            
             Files.copy(plotfile, target, StandardCopyOption.REPLACE_EXISTING);
         }
     }
