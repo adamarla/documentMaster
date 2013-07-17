@@ -285,7 +285,7 @@ public class Mint implements ITagLib {
         if (previewsDir == null) {
             pb.command().add("pdf");
         }
-
+        
         pb.directory(workingDir.toFile());
         pb.redirectErrorStream(true);
 
@@ -340,10 +340,10 @@ public class Mint implements ITagLib {
         blueprintDoc.writeTemplate(questionTex);
         plotfile = questionDir.resolve("figure.gnuplot");
         if (Files.exists(plotfile)) {
-            target = staging.resolve(
-                String.format("%s.gnuplot", questionId));
-            Files.copy(plotfile, target,
-                StandardCopyOption.REPLACE_EXISTING);
+        	String mangled = questionId.replace('/', '-') ;
+            target = staging.resolve(String.format("%s.gnuplot", mangled)) ;
+            
+            Files.copy(plotfile, target, StandardCopyOption.REPLACE_EXISTING);
         }
     }
 
