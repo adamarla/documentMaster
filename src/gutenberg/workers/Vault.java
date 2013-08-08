@@ -75,35 +75,39 @@ public class Vault implements ITagLib {
         String timeStamp = Long.toString(System.currentTimeMillis(), Character.MAX_RADIX);
         String reversed = new StringBuffer(timeStamp).reverse().toString() ;
         String levelOne = reversed.substring(5),
-        	   levelTwo = reversed.substring(0,5) ;
-        String dirName = examinerId + "/" + levelOne + "/" + levelTwo ;
+        	   levelTwo = reversed.substring(0,5);
+        
+        // eg. 1/ozs/yuuw6
+        String dirName = String.format("%s/%s/%s", examinerId, levelOne, levelTwo);
         
         Path questionDir = vaultPath.resolve(dirName);
-        Path templates = sharedPath.resolve("templates") ;
-        String[] files = {texFile, plotFile, bc2FigFile} ;
+        Path templatesDir = sharedPath.resolve(templates);
+        String[] files = {texFile, plotFile, bc2FigFile};
         
         Files.createDirectories(questionDir);
         
         // Copy question.tex etc. 
         for(String f: files) {
-        	Files.copy(templates.resolve(f), questionDir.resolve(f)) ;
+        	Files.copy(templatesDir.resolve(f), questionDir.resolve(f)) ;
         }
         
         // Ensure that Makefiles are present all the way down to examinerId/levelOne
         String[] hierarchy = {examinerId, examinerId + "/" + levelOne} ;
         Path     toMake = null ;
         for(String h: hierarchy) {
-        	toMake = vaultPath.resolve(h + "/Makefile") ;
+        	toMake = vaultPath.resolve(h).resolve(makeFile);
         	if (!Files.exists(toMake)){ 
-        		Files.createLink(toMake, sharedPath.resolve("makefiles/divedown-vault.mk"));
+        		Files.createLink(toMake, sharedPath.resolve(makefiles).resolve(diveDown));
         	}
         }
         
         // As a last step, add a Makefile within levelTwo
-        Files.createLink(questionDir.resolve("Makefile"), sharedPath.resolve("makefiles/individual.mk")) ;
+        Files.createLink(questionDir.resolve(makeFile), 
+                sharedPath.resolve("makefiles").resolve(individual));
         
         ManifestType manifest = new ManifestType();
-        manifest.setRoot(examinerId + "/" + levelOne + "/" + levelTwo); // eg. 1/ozs/yuuw6
+        manifest.setRoot(dirName); 
+        
         return manifest;
     }
 
@@ -125,51 +129,53 @@ public class Vault implements ITagLib {
         }
 
         Path questionTex = vaultPath.resolve(id).resolve(texFile);
-        BufferedReader reader = new BufferedReader(new FileReader(
-                questionTex.toFile()));
-
+        
         Path questionTexTmp = questionTex.resolveSibling(texFile + ".tmp");
         PrintWriter writer = new PrintWriter(new FileWriter(
                 questionTexTmp.toFile()));
 
         int partIdx = 0;
         int pageIdx = 0;
-        String line = null, trimmed = null;
-        while ((line = reader.readLine()) != null) {
-            trimmed = line.trim();
-            if (trimmed.startsWith(question)) {
-                if (tags.getMarks().length == 1) {// no parts to the question
-                    marks = String
-                            .format(marksFormat, tags.getMarks()[partIdx]);
-                    line = line.replaceFirst(
-                            Matcher.quoteReplacement(question) + marksRegex,
-                            Matcher.quoteReplacement(question) + marks);
-                }
-            } else if (trimmed.startsWith(solution)) {
-                length = String.format(lengthFormat, tags.getLength()[partIdx]);
-                line = solution + length;
-                partIdx++;
-            } else if (trimmed.startsWith(part)) {
-                if (tags.getMarks().length > 1) {// multiple part question
-                    marks = String
-                            .format(marksFormat, tags.getMarks()[partIdx]);
-                    line = line.replaceFirst(
-                            Matcher.quoteReplacement(part) + marksRegex, 
-                            Matcher.quoteReplacement(part) + marks);
-                    // tricky bit, insert a new page before next part starts
-                    if (breaks.length > pageIdx) {
-                        if (partIdx == breaks[pageIdx] + 1) {
-                            writer.println(newpage);
-                            pageIdx++;
+        String line = null, trimmed = null;        
+        
+        try (BufferedReader reader = 
+                new BufferedReader(new FileReader(questionTex.toFile()))) {
+            while ((line = reader.readLine()) != null) {
+                trimmed = line.trim();
+                if (trimmed.startsWith(question)) {
+                    if (tags.getMarks().length == 1) {// no parts to the question
+                        marks = String
+                                .format(marksFormat, tags.getMarks()[partIdx]);
+                        line = line.replaceFirst(
+                                Matcher.quoteReplacement(question) + marksRegex,
+                                Matcher.quoteReplacement(question) + marks);
+                    }
+                } else if (trimmed.startsWith(solution)) {
+                    length = String.format(lengthFormat, tags.getLength()[partIdx]);
+                    line = solution + length;
+                    partIdx++;
+                } else if (trimmed.startsWith(part)) {
+                    if (tags.getMarks().length > 1) {// multiple part question
+                        marks = String
+                                .format(marksFormat, tags.getMarks()[partIdx]);
+                        line = line.replaceFirst(
+                                Matcher.quoteReplacement(part) + marksRegex, 
+                                Matcher.quoteReplacement(part) + marks);
+                        // tricky bit, insert a new page before next part starts
+                        if (breaks.length > pageIdx) {
+                            if (partIdx == breaks[pageIdx] + 1) {
+                                writer.println(newpage);
+                                pageIdx++;
+                            }
                         }
                     }
+                } else if (trimmed.equals(newpage)) {
+                    continue;
                 }
-            } else if (trimmed.equals(newpage)) {
-                continue;
-            }
-            writer.println(line);
+                writer.println(line);
+            }            
         }
-        writer.flush();
+        
         writer.close();
         Files.move(questionTexTmp, questionTex,
                 StandardCopyOption.REPLACE_EXISTING);
@@ -196,7 +202,11 @@ public class Vault implements ITagLib {
     private final String texFile = "question.tex", 
                          plotFile = "figure.gnuplot",
                          bc2FigFile = "figure.bc", 
-                         makeFile = "individual.mk";
+                         individual = "individual.mk",
+                         diveDown = "divedown-vault.mk",
+                         makeFile = "Makefile",
+                         templates = "templates",
+                         makefiles = "makefiles";
 
     private final String lengthFormat = "[\\%s]", marksFormat = "[%s]",
             marksRegex = "\\[?[1-9]?\\]?";

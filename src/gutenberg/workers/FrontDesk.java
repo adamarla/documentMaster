@@ -179,11 +179,6 @@ public class FrontDesk {
         return manifest;
     }
 
-    public ManifestType generateSuggestionForm(EntryType teacherInfo) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
     private Path   frontdeskPath, sharedPath;
     private final String table_end = "\\end{tabular}";
 

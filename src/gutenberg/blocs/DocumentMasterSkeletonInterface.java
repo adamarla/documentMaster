@@ -99,20 +99,6 @@
         /**
          * Auto generated method signature
          * 
-                                    * @param generateStudentCode
-         */
-
-        
-                public gutenberg.blocs.GenerateStudentCodeResponse generateStudentCode
-                (
-                  gutenberg.blocs.GenerateStudentCode generateStudentCode
-                 )
-            ;
-        
-         
-        /**
-         * Auto generated method signature
-         * 
                                     * @param annotateScan
          */
 
@@ -176,20 +162,6 @@
                 public gutenberg.blocs.GenerateStudentRosterResponse generateStudentRoster
                 (
                   gutenberg.blocs.GenerateStudentRoster generateStudentRoster
-                 )
-            ;
-        
-         
-        /**
-         * Auto generated method signature
-         * 
-                                    * @param generateSuggestionForm
-         */
-
-        
-                public gutenberg.blocs.GenerateSuggestionFormResponse generateSuggestionForm
-                (
-                  gutenberg.blocs.GenerateSuggestionForm generateSuggestionForm
                  )
             ;
         

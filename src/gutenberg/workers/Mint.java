@@ -21,7 +21,6 @@ public class Mint implements ITagLib {
         sharedPath = config.getPath(Resource.shared);
         mintPath = config.getPath(Resource.mint);
         vaultPath = config.getPath(Resource.vault);
-        atm = ATM.instance(config);
     }
 
     /**
@@ -270,15 +269,6 @@ public class Mint implements ITagLib {
         return manifest;    
     }
 
-    public ManifestType generateStudentCode(EntryType student) 
-            throws Exception {
-        Path studentDir = mintPath.resolve(String.format("s%s", student.getId()));
-        if (!Files.exists(studentDir)) {
-            Files.createDirectory(studentDir);
-        }
-        return atm.deposit(studentDir);
-    }
-    
     private int make(Path workingDir, Path downloadsDir, Path previewsDir)
             throws Exception {
         ProcessBuilder pb = new ProcessBuilder("make");
@@ -391,7 +381,6 @@ public class Mint implements ITagLib {
     }
     
     private Path  sharedPath, mintPath, vaultPath;
-    private ATM   atm;
     
     private final String 
         stagingDirName = "staging",

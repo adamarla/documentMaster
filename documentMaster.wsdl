@@ -162,20 +162,20 @@
       <xsd:element name="rotateScanResponse" type="tns:responseType">
       </xsd:element>
             
-			<xsd:element name="tagQuestion" type="tns:questionTagsType"></xsd:element>
+	  <xsd:element name="tagQuestion" type="tns:questionTagsType"></xsd:element>
 
-			<xsd:element name="tagQuestionResponse" type="tns:responseType">
-			</xsd:element>
+	  <xsd:element name="tagQuestionResponse" type="tns:responseType">
+	  </xsd:element>
 						
-			<xsd:element name="generateSuggestionForm" type="tns:entryType"></xsd:element>
+	  <xsd:element name="generateSuggestionForm" type="tns:entryType"></xsd:element>
 
-			<xsd:element name="generateSuggestionFormResponse" type="tns:responseType">
-			</xsd:element>
+	  <xsd:element name="generateSuggestionFormResponse" type="tns:responseType">
+	  </xsd:element>
 			
-			<xsd:element name="generateStudentRoster" type="tns:studentGroupType"></xsd:element>
+	  <xsd:element name="generateStudentRoster" type="tns:studentGroupType"></xsd:element>
 
-			<xsd:element name="generateStudentRosterResponse" type="tns:responseType">
-			</xsd:element>
+	  <xsd:element name="generateStudentRosterResponse" type="tns:responseType">
+	  </xsd:element>
 			
       <xsd:element name="generateQuizReport" type="tns:studentGroupType"></xsd:element>
 
@@ -207,7 +207,7 @@
       <xsd:element name="resolveScanResponse" type="tns:responseType">
       </xsd:element>
             
-		</xsd:schema>
+	</xsd:schema>
 	</wsdl:types>
 	<wsdl:message name="buildQuizRequest">
 		<wsdl:part name="parameters" element="tns:buildQuiz" />
@@ -216,7 +216,7 @@
 		<wsdl:part element="tns:buildQuizResponse" name="parameters" />
 	</wsdl:message>
 	<wsdl:message name="assignQuizRequest">
-		<wsdl:part name="parameters" element="tns:assignQuiz"></wsdl:part>
+		<wsdl:part name="parameters" element="tns:assignQuiz" />
 	</wsdl:message>
 	<wsdl:message name="assignQuizResponse">
 		<wsdl:part name="parameters" element="tns:assignQuizResponse"></wsdl:part>
@@ -300,65 +300,57 @@
         <wsdl:part name="parameters" element="tns:resolveScanResponse"></wsdl:part>
     </wsdl:message> 
 	<wsdl:portType name="documentMaster">
-		<wsdl:operation name="buildQuiz">
-			<wsdl:input message="tns:buildQuizRequest" />
-			<wsdl:output message="tns:buildQuizResponse" />
-		</wsdl:operation>
-		<wsdl:operation name="assignQuiz">
-			<wsdl:input message="tns:assignQuizRequest"></wsdl:input>
-			<wsdl:output message="tns:assignQuizResponse"></wsdl:output>
-		</wsdl:operation>
-		<wsdl:operation name="createQuestion">
-			<wsdl:input message="tns:createQuestionRequest"></wsdl:input>
-			<wsdl:output message="tns:createQuestionResponse"></wsdl:output>
-		</wsdl:operation>
-		<wsdl:operation name="annotateScan">
-			<wsdl:input message="tns:annotateScanRequest"></wsdl:input>
-			<wsdl:output message="tns:annotateScanResponse"></wsdl:output>
-		</wsdl:operation>
+	<wsdl:operation name="buildQuiz">
+	    <wsdl:input message="tns:buildQuizRequest" />
+	    <wsdl:output message="tns:buildQuizResponse" />
+	</wsdl:operation>
+	<wsdl:operation name="assignQuiz">
+        <wsdl:input message="tns:assignQuizRequest"></wsdl:input>
+	    <wsdl:output message="tns:assignQuizResponse"></wsdl:output>
+	</wsdl:operation>
+	<wsdl:operation name="createQuestion">
+	    <wsdl:input message="tns:createQuestionRequest"></wsdl:input>
+	    <wsdl:output message="tns:createQuestionResponse"></wsdl:output>
+	</wsdl:operation>
+	<wsdl:operation name="annotateScan">
+	    <wsdl:input message="tns:annotateScanRequest"></wsdl:input>
+	    <wsdl:output message="tns:annotateScanResponse"></wsdl:output>
+	</wsdl:operation>
     <wsdl:operation name="undoAnnotate">
-      <wsdl:input message="tns:undoAnnotateRequest"></wsdl:input>
-      <wsdl:output message="tns:undoAnnotateResponse"></wsdl:output>
+        <wsdl:input message="tns:undoAnnotateRequest"></wsdl:input>
+        <wsdl:output message="tns:undoAnnotateResponse"></wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="rotateScan">
-      <wsdl:input message="tns:rotateScanRequest"></wsdl:input>
-      <wsdl:output message="tns:rotateScanResponse"></wsdl:output>
+        <wsdl:input message="tns:rotateScanRequest"></wsdl:input>
+        <wsdl:output message="tns:rotateScanResponse"></wsdl:output>
     </wsdl:operation>
-		<wsdl:operation name="tagQuestion">
-			<wsdl:input message="tns:tagQuestionRequest"></wsdl:input>
-			<wsdl:output message="tns:tagQuestionResponse"></wsdl:output>
-		</wsdl:operation>
-		<wsdl:operation name="generateSuggestionForm">
-			<wsdl:input message="tns:generateSuggestionFormRequest"></wsdl:input>
-			<wsdl:output message="tns:generateSuggestionFormResponse"></wsdl:output>
-		</wsdl:operation>
-		<wsdl:operation name="generateStudentRoster">
-			<wsdl:input message="tns:generateStudentRosterRequest"></wsdl:input>
-			<wsdl:output message="tns:generateStudentRosterResponse"></wsdl:output>
-		</wsdl:operation>		
+	<wsdl:operation name="tagQuestion">
+	    <wsdl:input message="tns:tagQuestionRequest"></wsdl:input>
+	    <wsdl:output message="tns:tagQuestionResponse"></wsdl:output>
+	</wsdl:operation>
+	    <wsdl:operation name="generateStudentRoster">
+		    <wsdl:input message="tns:generateStudentRosterRequest"></wsdl:input>
+		    <wsdl:output message="tns:generateStudentRosterResponse"></wsdl:output>
+	    </wsdl:operation>		
     <wsdl:operation name="generateQuizReport">
-      <wsdl:input message="tns:generateQuizReportRequest"></wsdl:input>
-      <wsdl:output message="tns:generateQuizReportResponse"></wsdl:output>
+        <wsdl:input message="tns:generateQuizReportRequest"></wsdl:input>
+        <wsdl:output message="tns:generateQuizReportResponse"></wsdl:output>
     </wsdl:operation>       
     <wsdl:operation name="prepTest">
-      <wsdl:input message="tns:prepTestRequest"></wsdl:input>
-      <wsdl:output message="tns:prepTestResponse"></wsdl:output>
+        <wsdl:input message="tns:prepTestRequest"></wsdl:input>
+        <wsdl:output message="tns:prepTestResponse"></wsdl:output>
     </wsdl:operation>       
-    <wsdl:operation name="generateStudentCode">
-      <wsdl:input message="tns:generateStudentCodeRequest"></wsdl:input>
-      <wsdl:output message="tns:generateStudentCodeResponse"></wsdl:output>
-    </wsdl:operation>   
     <wsdl:operation name="uploadSuggestion">
-      <wsdl:input message="tns:uploadSuggestionRequest"></wsdl:input>
-      <wsdl:output message="tns:uploadSuggestionResponse"></wsdl:output>
+        <wsdl:input message="tns:uploadSuggestionRequest"></wsdl:input>
+        <wsdl:output message="tns:uploadSuggestionResponse"></wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="fetchUnresolvedScans">
-      <wsdl:input message="tns:fetchUnresolvedScansRequest"></wsdl:input>
-      <wsdl:output message="tns:fetchUnresolvedScansResponse"></wsdl:output>
+        <wsdl:input message="tns:fetchUnresolvedScansRequest"></wsdl:input>
+        <wsdl:output message="tns:fetchUnresolvedScansResponse"></wsdl:output>
     </wsdl:operation>   
     <wsdl:operation name="resolveScan">
-      <wsdl:input message="tns:resolveScan"></wsdl:input>
-      <wsdl:output message="tns:resolveScanResponse"></wsdl:output>
+        <wsdl:input message="tns:resolveScan"></wsdl:input>
+        <wsdl:output message="tns:resolveScanResponse"></wsdl:output>
     </wsdl:operation>   
 	</wsdl:portType>
 	<wsdl:binding name="documentMasterSOAP" type="tns:documentMaster">
@@ -427,15 +419,6 @@
 				<soap:body use="literal" />
 			</wsdl:output>
 		</wsdl:operation>
-		<wsdl:operation name="generateSuggestionForm">
-			<soap:operation soapAction="http://gutenberg/blocs/generateSuggestionForm" />
-			<wsdl:input>
-				<soap:body use="literal" />
-			</wsdl:input>
-			<wsdl:output>
-				<soap:body use="literal" />
-			</wsdl:output>
-		</wsdl:operation>
 		<wsdl:operation name="generateStudentRoster">
 			<soap:operation soapAction="http://gutenberg/blocs/generateStudentRoster" />
 			<wsdl:input>
@@ -462,15 +445,6 @@
         <wsdl:output>
             <soap:body use="literal" />
         </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="generateStudentCode">
-      <soap:operation soapAction="http://gutenberg/blocs/generateStudentCode" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="uploadSuggestion">
       <soap:operation soapAction="http://gutenberg/blocs/uploadSuggestion" />

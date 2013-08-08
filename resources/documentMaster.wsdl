@@ -150,20 +150,20 @@
       <xsd:element name="rotateScanResponse" type="tns:responseType">
       </xsd:element>
             
-			<xsd:element name="tagQuestion" type="tns:questionTagsType"/>
+	  <xsd:element name="tagQuestion" type="tns:questionTagsType"/>
 
-			<xsd:element name="tagQuestionResponse" type="tns:responseType">
-			</xsd:element>
+	  <xsd:element name="tagQuestionResponse" type="tns:responseType">
+	  </xsd:element>
 						
-			<xsd:element name="generateSuggestionForm" type="tns:entryType"/>
+	  <xsd:element name="generateSuggestionForm" type="tns:entryType"/>
 
-			<xsd:element name="generateSuggestionFormResponse" type="tns:responseType">
-			</xsd:element>
+	  <xsd:element name="generateSuggestionFormResponse" type="tns:responseType">
+	  </xsd:element>
 			
-			<xsd:element name="generateStudentRoster" type="tns:studentGroupType"/>
+	  <xsd:element name="generateStudentRoster" type="tns:studentGroupType"/>
 
-			<xsd:element name="generateStudentRosterResponse" type="tns:responseType">
-			</xsd:element>
+	  <xsd:element name="generateStudentRosterResponse" type="tns:responseType">
+	  </xsd:element>
 			
       <xsd:element name="generateQuizReport" type="tns:studentGroupType"/>
 
@@ -195,7 +195,7 @@
       <xsd:element name="resolveScanResponse" type="tns:responseType">
       </xsd:element>
             
-		</xsd:schema>
+	</xsd:schema>
   </wsdl:types>
   <wsdl:message name="undoAnnotateRequest">
     <wsdl:part name="parameters" element="tns:undoAnnotate">
@@ -360,12 +360,6 @@
       <wsdl:output message="tns:tagQuestionResponse">
     </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="generateSuggestionForm">
-      <wsdl:input message="tns:generateSuggestionFormRequest">
-    </wsdl:input>
-      <wsdl:output message="tns:generateSuggestionFormResponse">
-    </wsdl:output>
-    </wsdl:operation>
     <wsdl:operation name="generateStudentRoster">
       <wsdl:input message="tns:generateStudentRosterRequest">
     </wsdl:input>
@@ -382,12 +376,6 @@
       <wsdl:input message="tns:prepTestRequest">
     </wsdl:input>
       <wsdl:output message="tns:prepTestResponse">
-    </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="generateStudentCode">
-      <wsdl:input message="tns:generateStudentCodeRequest">
-    </wsdl:input>
-      <wsdl:output message="tns:generateStudentCodeResponse">
     </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="uploadSuggestion">
@@ -474,15 +462,6 @@
         <soap:body use="literal"/>
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="generateSuggestionForm">
-      <soap:operation soapAction="http://gutenberg/blocs/generateSuggestionForm"/>
-      <wsdl:input>
-        <soap:body use="literal"/>
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal"/>
-      </wsdl:output>
-    </wsdl:operation>
     <wsdl:operation name="generateStudentRoster">
       <soap:operation soapAction="http://gutenberg/blocs/generateStudentRoster"/>
       <wsdl:input>
@@ -503,15 +482,6 @@
     </wsdl:operation>
     <wsdl:operation name="prepTest">
       <soap:operation soapAction="http://gutenberg/blocs/prepTest"/>
-      <wsdl:input>
-        <soap:body use="literal"/>
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal"/>
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="generateStudentCode">
-      <soap:operation soapAction="http://gutenberg/blocs/generateStudentCode"/>
       <wsdl:input>
         <soap:body use="literal"/>
       </wsdl:input>

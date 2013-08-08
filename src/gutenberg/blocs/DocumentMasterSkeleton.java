@@ -18,48 +18,48 @@ import gutenberg.workers.Vault;
 public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
 
     @Override
-	public gutenberg.blocs.TagQuestionResponse tagQuestion(
-			gutenberg.blocs.TagQuestion tagQuestion) {
-		Vault vault = null;
-		Config config = null;
-		ResponseType response = new ResponseType();
-		try {
-			config = new Config();
-			vault = new Vault(config);
-			QuestionTagsType tags = tagQuestion.getTagQuestion();
-			response.setManifest(vault.tagQuestion(tags));
-		} catch (Exception e) {
-			e.printStackTrace();
-			response.setError(e.getMessage());
-		}
-		TagQuestionResponse tagQuestionResponse = new TagQuestionResponse();
-		tagQuestionResponse.setTagQuestionResponse(response);
-		return tagQuestionResponse;
-	}
+    public gutenberg.blocs.TagQuestionResponse tagQuestion(
+            gutenberg.blocs.TagQuestion tagQuestion) {
+        Vault vault = null;
+        Config config = null;
+        ResponseType response = new ResponseType();
+        try {
+            config = new Config();
+            vault = new Vault(config);
+            QuestionTagsType tags = tagQuestion.getTagQuestion();
+            response.setManifest(vault.tagQuestion(tags));
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.setError(e.getMessage());
+        }
+        TagQuestionResponse tagQuestionResponse = new TagQuestionResponse();
+        tagQuestionResponse.setTagQuestionResponse(response);
+        return tagQuestionResponse;
+    }
 
-	@Override
-	public gutenberg.blocs.AnnotateScanResponse annotateScan(
-			gutenberg.blocs.AnnotateScan annotateScan) {
-		Locker locker = null;
-		Config config = null;
-		ResponseType response = new ResponseType();
-		try {
-			config = new Config();
-			locker = new Locker(config);
-			String scanId = annotateScan.getAnnotateScan().getScanId();
-			PointType[] points = annotateScan.getAnnotateScan()
-					.getCoordinates();
-			response.setManifest(locker.annotate(scanId, points));
-		} catch (Exception e) {
-			e.printStackTrace();
-			response.setError(e.getMessage());
-		}
-		AnnotateScanResponse annotateScanResponse = new AnnotateScanResponse();
-		annotateScanResponse.setAnnotateScanResponse(response);
-		return annotateScanResponse;
-	}
+    @Override
+    public gutenberg.blocs.AnnotateScanResponse annotateScan(
+            gutenberg.blocs.AnnotateScan annotateScan) {
+        Locker locker = null;
+        Config config = null;
+        ResponseType response = new ResponseType();
+        try {
+            config = new Config();
+            locker = new Locker(config);
+            String scanId = annotateScan.getAnnotateScan().getScanId();
+            PointType[] points = annotateScan.getAnnotateScan()
+                    .getCoordinates();
+            response.setManifest(locker.annotate(scanId, points));
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.setError(e.getMessage());
+        }
+        AnnotateScanResponse annotateScanResponse = new AnnotateScanResponse();
+        annotateScanResponse.setAnnotateScanResponse(response);
+        return annotateScanResponse;
+    }
 
-	@Override
+    @Override
     public UndoAnnotateResponse undoAnnotate(UndoAnnotate undoAnnotate) {
         Locker locker = null;
         Config config = null;
@@ -98,106 +98,85 @@ public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
     }
     
     @Override
-	public gutenberg.blocs.CreateQuestionResponse createQuestion(
-			gutenberg.blocs.CreateQuestion createQuestion) {
-		Config config = null;
-		ResponseType response = new ResponseType();
-		try {
-			String quizMasterId = createQuestion.getCreateQuestion();
-			config = new Config();
-			Vault vault = new Vault(config);
-			response.setManifest(vault.createQuestion(quizMasterId));
-		} catch (Exception e) {
-			e.printStackTrace();
-			response.setError(e.getMessage());
-		}
-		CreateQuestionResponse createQuestionResponse = new CreateQuestionResponse();
-		createQuestionResponse.setCreateQuestionResponse(response);
-		return createQuestionResponse;
-	}
+    public gutenberg.blocs.CreateQuestionResponse createQuestion(
+            gutenberg.blocs.CreateQuestion createQuestion) {
+        Config config = null;
+        ResponseType response = new ResponseType();
+        try {
+            String quizMasterId = createQuestion.getCreateQuestion();
+            config = new Config();
+            Vault vault = new Vault(config);
+            response.setManifest(vault.createQuestion(quizMasterId));
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.setError(e.getMessage());
+        }
+        CreateQuestionResponse createQuestionResponse = new CreateQuestionResponse();
+        createQuestionResponse.setCreateQuestionResponse(response);
+        return createQuestionResponse;
+    }
 
-	@Override
-	public gutenberg.blocs.BuildQuizResponse buildQuiz(
-			gutenberg.blocs.BuildQuiz buildQuiz) {
-		Config config = null;
-		Mint mint = null;
-		ResponseType response = new ResponseType();
-		try {
-			config = new Config();
-			mint = new Mint(config);
-			QuizType quiz = buildQuiz.getBuildQuiz();
-			response.setManifest(mint.generate(quiz));
-		} catch (Exception e) {
-			e.printStackTrace();
-			response.setError(e.getMessage());
-		}
-		BuildQuizResponse buildQuizResponse = new BuildQuizResponse();
-		buildQuizResponse.setBuildQuizResponse(response);
-		return buildQuizResponse;
-	}
+    @Override
+    public gutenberg.blocs.BuildQuizResponse buildQuiz(
+            gutenberg.blocs.BuildQuiz buildQuiz) {
+        Config config = null;
+        Mint mint = null;
+        ResponseType response = new ResponseType();
+        try {
+            config = new Config();
+            mint = new Mint(config);
+            QuizType quiz = buildQuiz.getBuildQuiz();
+            response.setManifest(mint.generate(quiz));
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.setError(e.getMessage());
+        }
+        BuildQuizResponse buildQuizResponse = new BuildQuizResponse();
+        buildQuizResponse.setBuildQuizResponse(response);
+        return buildQuizResponse;
+    }
 
-	@Override
-	public gutenberg.blocs.AssignQuizResponse assignQuiz(
-			gutenberg.blocs.AssignQuiz assignQuiz) {
-		Config config = null;
-		ResponseType response = new ResponseType();
-		try {
-			config = new Config();
-			Mint mint = new Mint(config);
-			AssignmentType assignment = assignQuiz.getAssignQuiz();
-			response.setManifest(mint.generate(assignment));
-		} catch (Exception e) {
-			e.printStackTrace();
-			response.setError(e.getMessage());
-		}
-		AssignQuizResponse assignQuizResponse = new AssignQuizResponse();
-		assignQuizResponse.setAssignQuizResponse(response);
-		return assignQuizResponse;
-	}
+    @Override
+    public gutenberg.blocs.AssignQuizResponse assignQuiz(
+            gutenberg.blocs.AssignQuiz assignQuiz) {
+        Config config = null;
+        ResponseType response = new ResponseType();
+        try {
+            config = new Config();
+            Mint mint = new Mint(config);
+            AssignmentType assignment = assignQuiz.getAssignQuiz();
+            response.setManifest(mint.generate(assignment));
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.setError(e.getMessage());
+        }
+        AssignQuizResponse assignQuizResponse = new AssignQuizResponse();
+        assignQuizResponse.setAssignQuizResponse(response);
+        return assignQuizResponse;
+    }
 
-	@Override
-	public gutenberg.blocs.GenerateSuggestionFormResponse generateSuggestionForm(
-			gutenberg.blocs.GenerateSuggestionForm generateSuggestionForm) {
-		Config config = null;
-		FrontDesk frontdesk = null;
-		ResponseType response = new ResponseType();
-		try {
-			config = new Config();
-			frontdesk = new FrontDesk(config);
-			EntryType teacherInfo = generateSuggestionForm.getGenerateSuggestionForm();
-			response.setManifest(frontdesk.generateSuggestionForm(teacherInfo));
-		} catch (Exception e) {
-			e.printStackTrace();
-			response.setError(e.getMessage());
-		}		
-		GenerateSuggestionFormResponse 
-			generateSuggestionFormResponse = new GenerateSuggestionFormResponse();
-		generateSuggestionFormResponse.setGenerateSuggestionFormResponse(response);
-		return generateSuggestionFormResponse;
-	}
+    @Override
+    public GenerateStudentRosterResponse generateStudentRoster(
+            GenerateStudentRoster generateStudentRoster) {
+        Config config = null;
+        FrontDesk frontdesk = null;
+        ResponseType response = new ResponseType();
+        try {
+            config = new Config();
+            frontdesk = new FrontDesk(config);
+            StudentGroupType studentGroup = generateStudentRoster.getGenerateStudentRoster();
+            response.setManifest(frontdesk.generateStudentRoster(studentGroup));
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.setError(e.getMessage());
+        }
+        GenerateStudentRosterResponse
+            generateStudentRosterResponse = new GenerateStudentRosterResponse();
+        generateStudentRosterResponse.setGenerateStudentRosterResponse(response);
+        return generateStudentRosterResponse;
+    }
 
-	@Override
-	public GenerateStudentRosterResponse generateStudentRoster(
-			GenerateStudentRoster generateStudentRoster) {
-		Config config = null;
-		FrontDesk frontdesk = null;
-		ResponseType response = new ResponseType();
-		try {
-			config = new Config();
-			frontdesk = new FrontDesk(config);
-			StudentGroupType studentGroup = generateStudentRoster.getGenerateStudentRoster();
-			response.setManifest(frontdesk.generateStudentRoster(studentGroup));
-		} catch (Exception e) {
-			e.printStackTrace();
-			response.setError(e.getMessage());
-		}
-		GenerateStudentRosterResponse
-			generateStudentRosterResponse = new GenerateStudentRosterResponse();
-		generateStudentRosterResponse.setGenerateStudentRosterResponse(response);
-		return generateStudentRosterResponse;
-	}
-
-	@Override
+    @Override
     public gutenberg.blocs.GenerateQuizReportResponse generateQuizReport(
             gutenberg.blocs.GenerateQuizReport generateQuizReport) {
         Config config = null;
@@ -238,27 +217,6 @@ public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
             prepTestResponse = new PrepTestResponse();
         prepTestResponse.setPrepTestResponse(response);
         return prepTestResponse;
-    }
-
-    @Override
-    public GenerateStudentCodeResponse generateStudentCode(
-            GenerateStudentCode generateStudentCode) {
-        Config config = null;
-        Mint mint = null;
-        ResponseType response = new ResponseType();
-        try {
-            config = new Config();
-            mint = new Mint(config);
-            EntryType student = generateStudentCode.getGenerateStudentCode();
-            response.setManifest(mint.generateStudentCode(student));
-        } catch (Exception e) {
-            e.printStackTrace();
-            response.setError(e.getMessage());
-        }
-        GenerateStudentCodeResponse
-            generateStudentCodeResponse = new GenerateStudentCodeResponse();
-        generateStudentCodeResponse.setGenerateStudentCodeResponse(response);
-        return generateStudentCodeResponse;
     }
 
     @Override
