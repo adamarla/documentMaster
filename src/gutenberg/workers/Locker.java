@@ -30,7 +30,7 @@ import org.apache.commons.codec.binary.Base64;
 public class Locker implements ITagLib {
 
     public Locker(Config config) throws Exception {
-        stagingPath = config.getPath(Resource.staging);
+        scantrayPath = config.getPath(Resource.scantray);
         lockerPath = config.getPath(Resource.locker);
         sharedPath = config.getPath(Resource.shared);
     }
@@ -38,14 +38,13 @@ public class Locker implements ITagLib {
     public ManifestType fetchUnresolved(EntryType grader, int max) 
         throws Exception {
         
-        Path unresolvedDirPath = lockerPath.resolve(UNRESOLVED_DIR);
         ManifestType manifest = new ManifestType();
-        manifest.setRoot(lockerPath.relativize(unresolvedDirPath).toString());
-        String gradersExtnsn = "." + grader.getId();
-        String undetected = ".ud";
+        manifest.setRoot(scantrayPath.getFileName().toString());
+        String gradersExt = "." + grader.getId();
+        String undetected = ".md"; //manual detection
         
         DirectoryStream<Path> stream = 
-            Files.newDirectoryStream(unresolvedDirPath, "*" + gradersExtnsn);
+            Files.newDirectoryStream(scantrayPath, "*" + gradersExt);
         for (Path entry: stream) {
             
             if (max == 0) break;
@@ -57,15 +56,15 @@ public class Locker implements ITagLib {
             max--;
         }
         
-        stream = Files.newDirectoryStream(unresolvedDirPath, "*" + undetected);
+        stream = Files.newDirectoryStream(scantrayPath, "*" + undetected);
         for (Path entry: stream) {
             
             if (max == 0) break;
             String filename = entry.getFileName().toString();
             
-            filename = filename.replace(undetected, gradersExtnsn);
+            filename = filename.replace(undetected, gradersExt);
             Files.move(entry, entry.resolveSibling(
-                filename.replace(undetected, gradersExtnsn)));
+                filename.replace(undetected, gradersExt)));
             
             EntryType scan = new EntryType();
             scan.setId(filename);
@@ -78,15 +77,13 @@ public class Locker implements ITagLib {
     }
     
     public ManifestType resolveScan(String source, String target) 
-        throws Exception {
-        
-        Path unresolvedDirPath = lockerPath.resolve(UNRESOLVED_DIR);
+        throws Exception {        
         ManifestType manifest = new ManifestType();
-        manifest.setRoot(stagingPath.getFileName().toString());
+        manifest.setRoot(scantrayPath.getFileName().toString());
         
-        Path targetPath = null, sourcePath = unresolvedDirPath.resolve(source);
+        Path targetPath = null, sourcePath = scantrayPath.resolve(source);
         if (target != null) {
-            targetPath = stagingPath.resolve(String.format("%s_1_0", target));
+            targetPath = scantrayPath.resolve(String.format("%s.de", target));
             Files.move(sourcePath, targetPath);            
         } else {
             Files.delete(sourcePath);
@@ -354,7 +351,7 @@ public class Locker implements ITagLib {
         return build.waitFor();
     }
 
-    private Path lockerPath, sharedPath, stagingPath;
+    private Path lockerPath, sharedPath, scantrayPath;
     private final String libreOfficeCmd = "libreoffice --headless --convert-to pdf %s";
     private final String convertCmd = "convert %s -resize 600x800 -scene 1 jpg:page-%%01d.jpeg";
     private final String rotateCmd = "convert %1$s -rotate 180 -type TrueColor %1$s";

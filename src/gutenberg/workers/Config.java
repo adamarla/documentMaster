@@ -33,8 +33,8 @@ public class Config {
         case shared:
             path = path.resolve("shared");
             break;
-        case staging:
-            path = path.resolve("staging");
+        case scantray:
+            path = path.resolve("scantray");
             break;
         case frontdesk:
             path = path.resolve("front-desk");
