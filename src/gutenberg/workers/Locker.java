@@ -83,11 +83,13 @@ public class Locker implements ITagLib {
         
         Path targetPath = null, sourcePath = scantrayPath.resolve(source);
         if (target != null) {
-            targetPath = scantrayPath.resolve(String.format("%s.de", target));
-            Files.move(sourcePath, targetPath);            
+            targetPath = scantrayPath.resolve(String.format("QR_%s_%s.de", 
+                    target, source.split("\\.")[0]));
+            Files.move(sourcePath, targetPath);
         } else {
             Files.delete(sourcePath);
         }
+        
         return manifest;
     }
 
@@ -355,7 +357,6 @@ public class Locker implements ITagLib {
     private final String libreOfficeCmd = "libreoffice --headless --convert-to pdf %s";
     private final String convertCmd = "convert %s -resize 600x800 -scene 1 jpg:page-%%01d.jpeg";
     private final String rotateCmd = "convert %1$s -rotate 180 -type TrueColor %1$s";
-    private final String UNRESOLVED_DIR = "unresolved";
     private final float  STROKE_WIDTH = 3f;
     private final String FORMAT    = "JPG";
     private final int    OUTLINE = 0xf6bd13;
