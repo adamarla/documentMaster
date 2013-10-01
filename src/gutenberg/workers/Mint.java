@@ -8,12 +8,15 @@ import gutenberg.blocs.QuizType;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.nio.file.StandardOpenOption;
 import java.util.HashMap;
+import java.util.List;
 
 public class Mint implements ITagLib {
     
@@ -243,6 +246,87 @@ public class Mint implements ITagLib {
             resolve(assignmentValue).resolve(studentDirName);
         ManifestType manifest = prepareManifest(studentsDir, null, null);
         
+        Path studentDir, stagingDir, previewDir, blanksDir, toMakefile;        
+        for (EntryType student: assignment.getStudents()) {
+            
+            String studentId = student.getId();
+            String studentKey = student.getValue();
+            studentDir = studentsDir.resolve(studentKey);
+            stagingDir = studentDir.resolve(stagingDirName);
+            previewDir = studentDir.resolve(previewDirName);
+            blanksDir = studentDir.resolve(blanksDirName);
+            
+            if (!Files.exists(blanksDir))
+                Files.createDirectory(blanksDir);
+            
+            Path tex = stagingDir.resolve(String.format(nameFormat, 
+                    studentId, quizId, assignmentId, "tex"));
+            
+            List<String> lines = Files.readAllLines(tex, StandardCharsets.UTF_8);
+            Path tmp = stagingDir.resolve("tmp");
+            PrintWriter tmpWriter = new PrintWriter(Files.newBufferedWriter(tmp, 
+                    StandardCharsets.UTF_8, StandardOpenOption.CREATE));
+            for (String line : lines) {
+                if (line.contains(ITagLib.printanswers)) {
+                    continue;
+                }
+                tmpWriter.println(line);
+            }
+            tmpWriter.close();
+            Files.move(tmp, tex, StandardCopyOption.REPLACE_EXISTING);
+            
+            toMakefile = stagingDir.relativize(sharedPath).
+                resolve(makefilesDir).resolve(quizMakefile);
+            
+            if (!Files.exists(stagingDir.resolve(makefile)))
+                Files.createSymbolicLink(stagingDir.resolve(makefile), toMakefile);
+            
+            if (make(stagingDir, studentDir, blanksDir) == 0) {
+                EntryType document = new EntryType();
+                document.setId(studentsDir.relativize(studentDir).resolve(
+                    String.format(nameFormat, studentId, quizId, 
+                    assignmentId, "pdf")).toString());
+                manifest.addDocument(document);
+            }
+
+            if (!Files.exists(previewDir))
+                Files.createDirectory(previewDir);
+            
+            tmpWriter = new PrintWriter(Files.newBufferedWriter(tmp, 
+                    StandardCharsets.UTF_8, StandardOpenOption.CREATE));            
+            for (String line : lines) {
+                if (line.contains(ITagLib.beginQuestions)) {
+                    tmpWriter.println(ITagLib.printanswers);
+                } else if (line.contains(ITagLib.printanswers)) {
+                    continue;
+                }
+                tmpWriter.println(line);
+            }
+            tmpWriter.close();
+            Files.move(tmp, tex, StandardCopyOption.REPLACE_EXISTING);            
+            
+            if (make(stagingDir, null, previewDir) == 0) {
+                EntryType document = new EntryType();
+                document.setId(studentsDir.relativize(studentDir).resolve(
+                    String.format(nameFormat, studentId, quizId, 
+                    assignmentId, "pdf")).toString());
+                manifest.addDocument(document);
+            }            
+        }
+        
+        return manifest;    
+    }
+    
+    public ManifestType showSolution(AssignmentType assignment) throws Exception {
+
+        String quizId = assignment.getQuiz().getId();
+        String assignmentId = assignment.getInstance().getId();
+        String assignmentValue = assignment.getInstance().getValue();
+
+        Path studentsDir = mintPath.resolve(worksheetDirName).
+            resolve(assignmentValue).resolve(studentDirName);
+        ManifestType manifest = prepareManifest(studentsDir, null, null);
+        
         Path studentDir, stagingDir, previewDir, toMakefile;        
         for (EntryType student: assignment.getStudents()) {
             
@@ -252,11 +336,28 @@ public class Mint implements ITagLib {
             stagingDir = studentDir.resolve(stagingDirName);
             previewDir = studentDir.resolve(previewDirName);
             
-            Files.createDirectory(previewDir);
+            if (!Files.exists(previewDir))
+                Files.createDirectory(previewDir);
+            
+            Path tex = stagingDir.resolve(String.format(nameFormat, 
+                    studentId, quizId, assignmentId, "tex"));
+            
+            List<String> lines = Files.readAllLines(tex, StandardCharsets.UTF_8);
+            Path tmp = stagingDir.resolve("tmp");
+            PrintWriter tmpWriter = new PrintWriter(Files.newBufferedWriter(tmp, StandardCharsets.UTF_8, StandardOpenOption.CREATE));
+            for (String line : lines) {
+                if (line.contains(ITagLib.beginQuestions)) {
+                    tmpWriter.println(ITagLib.printanswers);
+                }
+                tmpWriter.println(line);
+            }
+            tmpWriter.close();
+            Files.move(tmp, tex, StandardCopyOption.REPLACE_EXISTING);
             
             toMakefile = stagingDir.relativize(sharedPath).
                 resolve(makefilesDir).resolve(quizMakefile);
-            Files.createSymbolicLink(stagingDir.resolve(makefile), toMakefile);
+            if (!Files.exists(stagingDir.resolve(makefile)))
+                Files.createSymbolicLink(stagingDir.resolve(makefile), toMakefile);
             
             if (make(stagingDir, studentDir, previewDir) == 0) {
                 EntryType document = new EntryType();
@@ -292,13 +393,22 @@ public class Mint implements ITagLib {
         if ((retCode = process.waitFor()) == 0) {
             
             Path target = null;
-            DirectoryStream<Path> stream = 
-                    Files.newDirectoryStream(workingDir, "*.pdf");
-            for (Path entry: stream) {
-                target = downloadsDir.resolve(entry.getFileName());
-                Files.move(entry, target, StandardCopyOption.REPLACE_EXISTING);
+            DirectoryStream<Path> stream = null; 
+            
+            if (downloadsDir != null) {
+                stream = Files.newDirectoryStream(workingDir, "*.pdf");
+                for (Path entry: stream) {
+                    target = downloadsDir.resolve(entry.getFileName());
+                    Files.move(entry, target, StandardCopyOption.REPLACE_EXISTING);
+                }
+                stream.close();
+            } else {
+                stream = Files.newDirectoryStream(workingDir, "*.pdf");
+                for (Path entry: stream) {
+                    Files.delete(entry);
+                }
+                stream.close();
             }
-            stream.close();
             
             if (previewsDir != null) {
                 stream = Files.newDirectoryStream(previewsDir, "*.jpeg");
@@ -385,6 +495,7 @@ public class Mint implements ITagLib {
     private final String 
         stagingDirName = "staging",
         previewDirName = "preview",
+        blanksDirName = "blanks",
         quizDirName = "quiz",
         worksheetDirName = "ws",
         studentDirName = "student",
