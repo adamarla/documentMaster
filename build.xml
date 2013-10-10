@@ -18,6 +18,9 @@
         <fileset dir="${axis2.home}">
             <include name="lib/*.jar"/>
         </fileset>
+        <fileset dir="${resources}">
+            <include name="lib/*.jar"/>
+        </fileset>
     </path>
     <target name="init">
         <mkdir dir="${build}"/>
@@ -64,6 +67,7 @@
         </copy>
         <jar destfile="${lib}/${ant.project.name}.aar">
             <fileset excludes="**/Test.class" dir="${classes}"/>
+            <fileset includes="**/*.jar" dir="${resources}"/>
         </jar>
     </target>
     <target if="jars.ok" name="jar.client" depends="compile.src">

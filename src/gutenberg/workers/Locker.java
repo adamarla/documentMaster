@@ -6,25 +6,25 @@ import gutenberg.blocs.PointType;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
-import java.util.List;
-
 import javax.imageio.ImageIO;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 
 import org.apache.commons.codec.binary.Base64;
+import org.scilab.forge.jlatexmath.TeXConstants;
+import org.scilab.forge.jlatexmath.TeXFormula;
 
 
 public class Locker implements ITagLib {
@@ -32,7 +32,7 @@ public class Locker implements ITagLib {
     public Locker(Config config) throws Exception {
         scantrayPath = config.getPath(Resource.scantray);
         lockerPath = config.getPath(Resource.locker);
-        sharedPath = config.getPath(Resource.shared);
+        config.getPath(Resource.shared);
     }
     
     public ManifestType fetchUnresolved(EntryType grader, int max) 
@@ -159,48 +159,42 @@ public class Locker implements ITagLib {
         File imageFile = imagePath.toFile();
         
         //Create a back up in case we want to revert grading for the page
-        Path backupPath = imagePath.getParent().
-                resolve("." + imagePath.getFileName());
-        if (!Files.exists(backupPath))
-            Files.copy(imagePath, backupPath);
+        Path backupPath = imagePath.resolveSibling("." + imagePath.getFileName());
+        if (!Files.exists(backupPath)) Files.copy(imagePath, backupPath);
         
         BufferedImage image = ImageIO.read(imageFile);
         Graphics2D graphics = (Graphics2D) image.getGraphics();
         BasicStroke s = new BasicStroke(STROKE_WIDTH, BasicStroke.CAP_ROUND, 
                 BasicStroke.JOIN_ROUND);
         graphics.setStroke(s);
-        graphics.setFont(COMMENT_FONT);
 
-        BufferedImage overlay = null;
+        Icon overlay = null;
         ArrayList<PointType> curve = new ArrayList<PointType>();
-        ArrayList<PointType> annotations = new ArrayList<PointType>();
-        for (PointType point : points) {
-            
+        for (PointType point : points) {            
             curve.add(point);
             if (point.isCodeSpecified()) {
-                
-                switch(point.getCode()) {
-                    case 0:
-                        overlay = ImageIO.read(this.getClass().getClassLoader()
-                                .getResourceAsStream("META-INF/cross-mark.png"));
-                        break;
-                    case 1:
-                        overlay = ImageIO.read(this.getClass().getClassLoader()
-                                .getResourceAsStream("META-INF/check-mark.png"));
-                        break;
-                    case 2:
-                        overlay = ImageIO.read(this.getClass().getClassLoader()
-                                .getResourceAsStream("META-INF/question-mark.png"));
-                        break;
-                    case 3:
-                        annotations.add(point);
-                        break;
-                    case 4:
-                        break;
-                    default:
-                        throw new Exception(
-                                String.format("Invalid annotation code (%s)", 
-                                        point.getCode()));
+                switch (point.getCode()) {
+                case 0:
+                    overlay = new ImageIcon(this.getClass().getClassLoader()
+                                .getResource("META-INF/cross-mark.png"));
+                    break;
+                case 1:
+                    overlay = new ImageIcon(this.getClass().getClassLoader()
+                                .getResource("META-INF/check-mark.png"));
+                    break;
+                case 2:
+                    overlay = new ImageIcon(this.getClass().getClassLoader()
+                                .getResource("META-INF/check-mark.png"));
+                    break;
+                case 3:
+                    TeXFormula formula = new TeXFormula(String.format(TEX, point.getText()));
+                    overlay = formula.new TeXIconBuilder().
+                            setStyle(TeXConstants.STYLE_TEXT).setSize(10).build();
+                    break;
+                case 4:
+                    break;
+                default:
+                    throw new Exception("Invalid code " + point.getCode());
                 }
                 
                 int nPoints = curve.size();
@@ -213,21 +207,13 @@ public class Locker implements ITagLib {
                     }
                     graphics.drawPolyline(xPoints, yPoints, nPoints);
                 } else if (overlay != null){
-                    graphics.drawImage(overlay, point.getX()-10, point.getY(), null);
+                    overlay.paintIcon(null, graphics, point.getX()-10, point.getY());
                     overlay = null;
                 } 
                 curve.clear();
             }
         }
         
-        if (annotations.size() != 0) {
-            Path overlayPath = lockerPath.resolve(scanId + ".overlay");
-            overlay = this.getOverlay(overlayPath,
-                    annotations.toArray(new PointType[annotations.size()]));
-            graphics.drawImage(overlay, -50, -10, null);
-            Files.delete(overlayPath);
-        }
-
         ImageIO.write(image, FORMAT, imageFile);
         return manifest;
     }
@@ -295,38 +281,6 @@ public class Locker implements ITagLib {
         return manifest;
     }
 
-    private BufferedImage getOverlay(Path overlayPath, PointType[] annotations) throws Exception {
-
-        Path workingDirPath = Files.createTempDirectory(lockerPath, "annotation");
-        
-        Files.createSymbolicLink(workingDirPath.resolve("Makefile"),
-                sharedPath.resolve("makefiles/annotation.mk"));
-
-        Path annotationTex = workingDirPath.resolve("annotation.tex");
-        Files.copy(sharedPath.resolve("templates/annotation.tex"),
-                annotationTex, StandardCopyOption.REPLACE_EXISTING);
-
-        List<String> lines = Files.readAllLines(annotationTex, StandardCharsets.UTF_8);
-        lines.add(beginDocument);        
-        for (PointType annotation: annotations) {
-            lines.add(String.format("\\begin{textblock}{600}(%s,%s)", annotation.getX(), annotation.getY()));
-            //lines.add(String.format("\\[rgb]{0.25,0.57,0.16}%s", annotation.getText()));
-            lines.add(String.format("\\color{blue}%s", annotation.getText()));
-            lines.add("\\end{textblock}");
-        }
-        lines.add(endDocument);
-        Files.write(annotationTex, lines, StandardCharsets.UTF_8);
-        
-        BufferedImage overlay = null;
-        if (execute(workingDirPath, "make") == 0) {
-            Files.move(workingDirPath.resolve("overlay.png"), overlayPath);
-            Files.delete(workingDirPath.resolve("Makefile"));
-            Files.delete(workingDirPath);
-            overlay = ImageIO.read(overlayPath.toFile());
-        }
-        return overlay;
-    }
-    
     private int execute(Path workingDirPath, String command) throws Exception {
         
         String[] tokens = command.split(" ");
@@ -353,14 +307,14 @@ public class Locker implements ITagLib {
         return build.waitFor();
     }
 
-    private Path lockerPath, sharedPath, scantrayPath;
+    private Path lockerPath, scantrayPath;
     private final String libreOfficeCmd = "libreoffice --headless --convert-to pdf %s";
     private final String convertCmd = "convert %s -resize 600x800 -scene 1 jpg:page-%%01d.jpeg";
     private final String rotateCmd = "convert %1$s -rotate 180 -type TrueColor %1$s";
     private final float  STROKE_WIDTH = 3f;
     private final String FORMAT    = "JPG";
     private final int    OUTLINE = 0xf6bd13;
-    private final Font COMMENT_FONT = new Font("Ubuntu", 0, 12);
+    private final String TEX = "\\textcolor{blue}\\text{%s}";
     
 }
 
