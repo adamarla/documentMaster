@@ -189,7 +189,7 @@ public class Locker implements ITagLib {
                 case 3:
                     TeXFormula formula = new TeXFormula(String.format(TEX, point.getText()));
                     overlay = formula.new TeXIconBuilder().
-                            setStyle(TeXConstants.STYLE_TEXT).setSize(10).build();
+                            setStyle(TeXConstants.STYLE_TEXT).setSize(12).build();
                     break;
                 case 4:
                     break;
