@@ -8,5 +8,6 @@ public enum Resource {
 	atm,
 	shared,
 	scantray,
-	frontdesk
+	frontdesk,
+	common
 }

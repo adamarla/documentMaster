@@ -20,6 +20,7 @@ public class Vault implements ITagLib {
     public Vault(Config config) {
         vaultPath = config.getPath(Resource.vault);
         sharedPath = config.getPath(Resource.shared);
+        commonPath = config.getPath(Resource.common);
     }
 
     public Vault() throws Exception {
@@ -97,13 +98,15 @@ public class Vault implements ITagLib {
         for(String h: hierarchy) {
         	toMake = vaultPath.resolve(h).resolve(makeFile);
         	if (!Files.exists(toMake)){ 
-        		Files.createLink(toMake, sharedPath.resolve(makefiles).resolve(diveDown));
+        		Files.createSymbolicLink(toMake, sharedPath.resolve(makefiles).resolve(diveDown));
         	}
         }
         
         // As a last step, add a Makefile within levelTwo
-        Files.createLink(questionDir.resolve(makeFile), 
+        Files.createSymbolicLink(questionDir.resolve(makeFile),
                 sharedPath.resolve("makefiles").resolve(individual));
+        Files.createSymbolicLink(questionDir.resolve("shell-script"),
+                commonPath.resolve("scripts").resolve("compile.sh"));
         
         ManifestType manifest = new ManifestType();
         manifest.setRoot(dirName); 
@@ -198,11 +201,11 @@ public class Vault implements ITagLib {
         return manifest;
     }
 
-    private Path vaultPath, sharedPath;
+    private Path vaultPath, sharedPath, commonPath;
     private final String texFile = "question.tex", 
                          plotFile = "figure.gnuplot",
                          bc2FigFile = "figure.bc", 
-                         individual = "individual.mk",
+                         individual = "vault.mk",
                          diveDown = "divedown-vault.mk",
                          makeFile = "Makefile",
                          templates = "templates",
