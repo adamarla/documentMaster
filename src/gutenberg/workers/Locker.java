@@ -189,7 +189,7 @@ public class Locker implements ITagLib {
                 case 3:
                     TeXFormula formula = new TeXFormula(String.format(TEX, point.getText()));
                     overlay = formula.new TeXIconBuilder().
-                            setStyle(TeXConstants.STYLE_TEXT).setSize(12).build();
+                            setStyle(TeXConstants.STYLE_TEXT).setSize(FONT_SIZE).build();
                     break;
                 case 4:
                     break;
@@ -313,8 +313,9 @@ public class Locker implements ITagLib {
     private final String rotateCmd = "convert %1$s -rotate 180 -type TrueColor %1$s";
     private final float  STROKE_WIDTH = 3f;
     private final String FORMAT    = "JPG";
+    private final int    FONT_SIZE = 13;
     private final int    OUTLINE = 0xf6bd13;
-    private final String TEX = "\\textcolor{blue}\\text{%s}";
+    private final String TEX = "\\textcolor{blue}\\textsf{%s}";
     
 }
 
