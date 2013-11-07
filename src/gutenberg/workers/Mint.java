@@ -91,23 +91,6 @@ public class Mint implements ITagLib {
         }
         Files.delete(answerkeyTex);
         
-        //non-critical activity
-        Path rubricTex = staging.resolve(String.format(nameFormat,
-            "rubric", "key", quizId, "tex"));
-        DocumentWriter rubricDoc = new DocumentWriter(rubricTex);        
-        rubricDoc.writePreamble(quiz.getQuiz().getName());
-        rubricDoc.printAuthor(quiz.getTeacher().getName());
-        rubricDoc.beginQuiz();
-        rubricDoc.printRubric();
-        rubricDoc.printAnswers();        
-        rubricDoc.writeTemplate(blueprintTex);
-        rubricDoc.endQuiz();
-        rubricDoc.close();
-        try {
-            make(staging, quizDir, null);
-        } catch (Exception e) {}
-        Files.delete(rubricTex);
-        
         ManifestType manifest = new ManifestType();
         manifest.setRoot(mintPath.relativize(quizDir).toString());
         
@@ -136,14 +119,17 @@ public class Mint implements ITagLib {
         Path staging = assignmentDir.resolve(stagingDirName);
         Path studentsDir = assignmentDir.resolve(studentDirName);
         
-        Files.createDirectory(assignmentDir);        
-        Files.createDirectory(staging);
+        if (!Files.exists(assignmentDir)) {
+            Files.createDirectory(assignmentDir);        
+            Files.createDirectory(staging);
+        }
         
         Path quizStaging = quizDir.resolve(stagingDirName);
         DirectoryStream<Path> plotfiles = 
             Files.newDirectoryStream(quizStaging, "*.gnuplot");
         for (Path plotfile : plotfiles) {
-            Files.copy(plotfile, staging.resolve(plotfile.getFileName()));
+            Files.copy(plotfile, staging.resolve(plotfile.getFileName()), 
+                    StandardCopyOption.REPLACE_EXISTING);
         }
         plotfiles.close();
         
@@ -170,7 +156,8 @@ public class Mint implements ITagLib {
             plotfiles = Files.newDirectoryStream(quizStaging, "*.gnuplot");
             for (Path plotfile : plotfiles) {
                 Files.copy(plotfile,
-                    studentStaging.resolve(plotfile.getFileName()));
+                    studentStaging.resolve(plotfile.getFileName()),
+                    StandardCopyOption.REPLACE_EXISTING);
             }
             plotfiles.close();
 
@@ -219,7 +206,8 @@ public class Mint implements ITagLib {
         // 3. Link Makefiles and make the PDFs
         Path toMakefile = staging.relativize(sharedPath).resolve(makefilesDir).
             resolve(quizMakefile);
-        Files.createSymbolicLink(staging.resolve(makefile), toMakefile);
+        if (!Files.exists(staging.resolve(makefile)))
+            Files.createSymbolicLink(staging.resolve(makefile), toMakefile);
         
         if (make(staging, assignmentDir, null) != 0)
             throw new Exception("Problem! Non-zero return code from make");
