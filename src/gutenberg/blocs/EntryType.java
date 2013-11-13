@@ -138,6 +138,48 @@
                                }
                             
 
+                        /**
+                        * field for Fingerprint
+                        */
+
+                        
+                                    protected java.lang.String localFingerprint ;
+                                
+                           /*  This tracker boolean wil be used to detect whether the user called the set method
+                          *   for this attribute. It will be used to determine whether to include this field
+                           *   in the serialized XML
+                           */
+                           protected boolean localFingerprintTracker = false ;
+
+                           public boolean isFingerprintSpecified(){
+                               return localFingerprintTracker;
+                           }
+
+                           
+
+                           /**
+                           * Auto generated getter method
+                           * @return java.lang.String
+                           */
+                           public  java.lang.String getFingerprint(){
+                               return localFingerprint;
+                           }
+
+                           
+                        
+                            /**
+                               * Auto generated setter method
+                               * @param param Fingerprint
+                               */
+                               public void setFingerprint(java.lang.String param){
+                            localFingerprintTracker = param != null;
+                                   
+                                            this.localFingerprint=param;
+                                    
+
+                               }
+                            
+
      
      
         /**
@@ -246,6 +288,24 @@
 
                                         
                                                    xmlWriter.writeCharacters(localValue);
+                                            
+                                          }
+                                    
+                                   xmlWriter.writeEndElement();
+                             } if (localFingerprintTracker){
+                                    namespace = "http://gutenberg/blocs";
+                                    writeStartElement(null, namespace, "fingerprint", xmlWriter);
+                             
+
+                                          if (localFingerprint==null){
+                                              // write the nil attribute
+                                              
+                                                     throw new org.apache.axis2.databinding.ADBException("fingerprint cannot be null!!");
+                                                  
+                                          }else{
+
+                                        
+                                                   xmlWriter.writeCharacters(localFingerprint);
                                             
                                           }
                                     
@@ -462,6 +522,15 @@
                                         } else {
                                            throw new org.apache.axis2.databinding.ADBException("value cannot be null!!");
                                         }
+                                    } if (localFingerprintTracker){
+                                      elementList.add(new javax.xml.namespace.QName("http://gutenberg/blocs",
+                                                                      "fingerprint"));
+                                 
+                                        if (localFingerprint != null){
+                                            elementList.add(org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localFingerprint));
+                                        } else {
+                                           throw new org.apache.axis2.databinding.ADBException("fingerprint cannot be null!!");
+                                        }
                                     }
 
                 return new org.apache.axis2.databinding.utils.reader.ADBXMLStreamReaderImpl(qName, elementList.toArray(), attribList.toArray());
@@ -583,6 +652,24 @@
                                     java.lang.String content = reader.getElementText();
                                     
                                               object.setValue(
+                                                    org.apache.axis2.databinding.utils.ConverterUtil.convertToString(content));
+                                              
+                                        reader.next();
+                                    
+                              }  // End of if for expected property start element
+                                
+                                    else {
+                                        
+                                    }
+                                
+                                    
+                                    while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
+                                
+                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://gutenberg/blocs","fingerprint").equals(reader.getName())){
+                                
+                                    java.lang.String content = reader.getElementText();
+                                    
+                                              object.setFingerprint(
                                                     org.apache.axis2.databinding.utils.ConverterUtil.convertToString(content));
                                               
                                         reader.next();

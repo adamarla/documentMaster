@@ -1,22 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <wsdl:definitions targetNamespace="http://gutenberg/blocs" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://gutenberg/blocs" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
   <wsdl:types>
-    <xsd:schema elementFormDefault="qualified" targetNamespace="http://gutenberg/blocs">			
+    <xsd:schema elementFormDefault="qualified" targetNamespace="http://gutenberg/blocs">
 			<xsd:complexType name="entryType">
 				<xsd:sequence>
 					<xsd:element name="id" type="xsd:string"/>
 					<xsd:element maxOccurs="1" minOccurs="0" name="name" type="xsd:string">
-                    </xsd:element>
+					</xsd:element>
 					<xsd:element maxOccurs="1" minOccurs="0" name="value" type="xsd:string">
+					</xsd:element>
+                    <xsd:element maxOccurs="1" minOccurs="0" name="fingerprint" type="xsd:string">
                     </xsd:element>
 				</xsd:sequence>
 			</xsd:complexType>
-			
+
 			<xsd:complexType name="quizType">
 				<xsd:sequence>
 					<xsd:element name="quiz" type="tns:entryType"/>
 					<xsd:element name="teacher" type="tns:entryType"/>
-					<xsd:element maxOccurs="unbounded" minOccurs="1" name="page" type="tns:pageType">					
+					<xsd:element maxOccurs="unbounded" minOccurs="1" name="page" type="tns:pageType">
 					</xsd:element>
 				</xsd:sequence>
 			</xsd:complexType>
@@ -53,32 +55,32 @@
 					<xsd:element name="instance" type="tns:entryType"/>
 					<xsd:element maxOccurs="unbounded" minOccurs="1" name="students" type="tns:entryType">
 					</xsd:element>
-                                        <xsd:element minOccurs="0" name="publish" type="xsd:boolean"/>
+					<xsd:element minOccurs="0" name="publish" type="xsd:boolean"/>
 				</xsd:sequence>
 			</xsd:complexType>
-			
+
 			<xsd:complexType name="annotationType">
 				<xsd:sequence>
 					<xsd:element name="scanId" type="xsd:string"/>
 					<xsd:element maxOccurs="unbounded" minOccurs="0" name="coordinates" type="tns:pointType"/>
 				</xsd:sequence>
 			</xsd:complexType>
-						
-      <xsd:complexType name="scanIdType">
-        <xsd:sequence>
-          <xsd:element name="scanId" type="xsd:string"/>
-        </xsd:sequence>
-      </xsd:complexType>
-                        
+
+			<xsd:complexType name="scanIdType">
+				<xsd:sequence>
+					<xsd:element name="scanId" type="xsd:string"/>
+				</xsd:sequence>
+			</xsd:complexType>
+
 			<xsd:complexType name="pointType">
 				<xsd:sequence>
 					<xsd:element name="x" type="xsd:int"/>
 					<xsd:element name="y" type="xsd:int"/>
 					<xsd:element minOccurs="0" name="code" type="xsd:int"/>
 					<xsd:element minOccurs="0" name="text" type="xsd:string"/>
-				</xsd:sequence>			
+				</xsd:sequence>
 			</xsd:complexType>
-			
+
 			<xsd:complexType name="questionTagsType">
 				<xsd:sequence>
 					<xsd:element name="id" type="xsd:string"/>
@@ -87,7 +89,7 @@
 					<xsd:element maxOccurs="unbounded" minOccurs="0" name="breaks" type="xsd:int"/>
 				</xsd:sequence>
 			</xsd:complexType>
-			
+
 			<xsd:simpleType name="lengthType">
 				<xsd:restriction base="xsd:string">
 					<xsd:enumeration value="fullpage"/>
@@ -96,35 +98,35 @@
 					<xsd:enumeration value="mcq"/>
 				</xsd:restriction>
 			</xsd:simpleType>
-						
+
 			<xsd:complexType name="studentGroupType">
-			  <xsd:sequence>
-			    <xsd:element name="teacher" type="tns:entryType"/>
-			    <xsd:element name="group" type="tns:entryType"/>
-			    <xsd:element maxOccurs="unbounded" minOccurs="0" name="members" type="tns:entryType"/>
-			  </xsd:sequence>
+				<xsd:sequence>
+					<xsd:element name="teacher" type="tns:entryType"/>
+					<xsd:element name="group" type="tns:entryType"/>
+					<xsd:element maxOccurs="unbounded" minOccurs="0" name="members" type="tns:entryType"/>
+				</xsd:sequence>
 			</xsd:complexType>
-			
+
 			<xsd:complexType name="suggestionType">
-			  <xsd:sequence>
-			    <xsd:element name="teacher" type="tns:entryType"/>
-			    <xsd:element name="signature" type="xsd:string"/>
-			    <xsd:element name="content" type="xsd:string"/>
-			  </xsd:sequence>			
+				<xsd:sequence>
+					<xsd:element name="teacher" type="tns:entryType"/>
+					<xsd:element name="signature" type="xsd:string"/>
+					<xsd:element name="content" type="xsd:string"/>
+				</xsd:sequence>
 			</xsd:complexType>
-			
+
 			<xsd:complexType name="workRequestType">
-			  <xsd:sequence>
-			    <xsd:element name="grader" type="tns:entryType"/>
-			    <xsd:element name="maxQuantity" type="xsd:int"/>
-			  </xsd:sequence>
+				<xsd:sequence>
+					<xsd:element name="grader" type="tns:entryType"/>
+					<xsd:element name="maxQuantity" type="xsd:int"/>
+				</xsd:sequence>
 			</xsd:complexType>
-						
+
 			<xsd:element name="buildQuiz" type="tns:quizType">
 			</xsd:element>
 			<xsd:element name="buildQuizResponse" type="tns:responseType">
 			</xsd:element>
-			
+
 			<xsd:element name="assignQuiz" type="tns:assignmentType"/>
 
 			<xsd:element name="assignQuizResponse" type="tns:responseType">
@@ -140,62 +142,62 @@
 			<xsd:element name="annotateScanResponse" type="tns:responseType">
 			</xsd:element>
 
-      <xsd:element name="undoAnnotate" type="tns:scanIdType"/>
+			<xsd:element name="undoAnnotate" type="tns:scanIdType"/>
 
-      <xsd:element name="undoAnnotateResponse" type="tns:responseType">
-      </xsd:element>
+			<xsd:element name="undoAnnotateResponse" type="tns:responseType">
+			</xsd:element>
 
-      <xsd:element name="rotateScan" type="tns:scanIdType"/>
+			<xsd:element name="rotateScan" type="tns:scanIdType"/>
 
-      <xsd:element name="rotateScanResponse" type="tns:responseType">
-      </xsd:element>
-            
-	  <xsd:element name="tagQuestion" type="tns:questionTagsType"/>
+			<xsd:element name="rotateScanResponse" type="tns:responseType">
+			</xsd:element>
 
-	  <xsd:element name="tagQuestionResponse" type="tns:responseType">
-	  </xsd:element>
-						
-	  <xsd:element name="generateSuggestionForm" type="tns:entryType"/>
+			<xsd:element name="tagQuestion" type="tns:questionTagsType"/>
 
-	  <xsd:element name="generateSuggestionFormResponse" type="tns:responseType">
-	  </xsd:element>
-			
-	  <xsd:element name="generateStudentRoster" type="tns:studentGroupType"/>
+			<xsd:element name="tagQuestionResponse" type="tns:responseType">
+			</xsd:element>
 
-	  <xsd:element name="generateStudentRosterResponse" type="tns:responseType">
-	  </xsd:element>
-			
-      <xsd:element name="generateQuizReport" type="tns:studentGroupType"/>
+			<xsd:element name="generateSuggestionForm" type="tns:entryType"/>
 
-      <xsd:element name="generateQuizReportResponse" type="tns:responseType">
-      </xsd:element>
-            
-      <xsd:element name="prepTest" type="tns:assignmentType"/>
+			<xsd:element name="generateSuggestionFormResponse" type="tns:responseType">
+			</xsd:element>
 
-      <xsd:element name="prepTestResponse" type="tns:responseType">
-      </xsd:element>
+			<xsd:element name="generateStudentRoster" type="tns:studentGroupType"/>
 
-      <xsd:element name="generateStudentCode" type="tns:entryType"/>
+			<xsd:element name="generateStudentRosterResponse" type="tns:responseType">
+			</xsd:element>
 
-      <xsd:element name="generateStudentCodeResponse" type="tns:responseType">
-      </xsd:element>
-      
-      <xsd:element name="uploadSuggestion" type="tns:suggestionType"/>
+			<xsd:element name="generateQuizReport" type="tns:studentGroupType"/>
 
-      <xsd:element name="uploadSuggestionResponse" type="tns:responseType">
-      </xsd:element>
-            
-      <xsd:element name="fetchUnresolvedScans" type="tns:workRequestType"/>
+			<xsd:element name="generateQuizReportResponse" type="tns:responseType">
+			</xsd:element>
 
-      <xsd:element name="fetchUnresolvedScansResponse" type="tns:responseType">
-      </xsd:element>
-            
-      <xsd:element name="resolveScan" type="tns:entryType"/>
+			<xsd:element name="prepTest" type="tns:assignmentType"/>
 
-      <xsd:element name="resolveScanResponse" type="tns:responseType">
-      </xsd:element>
-            
-	</xsd:schema>
+			<xsd:element name="prepTestResponse" type="tns:responseType">
+			</xsd:element>
+
+			<xsd:element name="generateStudentCode" type="tns:entryType"/>
+
+			<xsd:element name="generateStudentCodeResponse" type="tns:responseType">
+			</xsd:element>
+
+			<xsd:element name="uploadSuggestion" type="tns:suggestionType"/>
+
+			<xsd:element name="uploadSuggestionResponse" type="tns:responseType">
+			</xsd:element>
+
+			<xsd:element name="fetchUnresolvedScans" type="tns:workRequestType"/>
+
+			<xsd:element name="fetchUnresolvedScansResponse" type="tns:responseType">
+			</xsd:element>
+
+			<xsd:element name="resolveScan" type="tns:entryType"/>
+
+			<xsd:element name="resolveScanResponse" type="tns:responseType">
+			</xsd:element>
+
+		</xsd:schema>
   </wsdl:types>
   <wsdl:message name="undoAnnotateRequest">
     <wsdl:part name="parameters" element="tns:undoAnnotate">

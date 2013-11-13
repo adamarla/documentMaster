@@ -15,7 +15,6 @@ public class DocumentWriter extends PrintWriter implements ITagLib {
     public DocumentWriter(Path writerPath) throws Exception {
         super(Files.newBufferedWriter(writerPath,
             StandardCharsets.UTF_8, StandardOpenOption.CREATE));
-        dice = new XORRandom(4);
     }
         
     public void writeTemplate(Path template) throws Exception{
@@ -25,8 +24,8 @@ public class DocumentWriter extends PrintWriter implements ITagLib {
         }
     }
     
-    public void writeTemplate(Path template,  HashMap<String, String>params) throws Exception{
-        
+    public void writeTemplate(Path template,  HashMap<String, String>params) throws Exception{        
+        int versCounter = 0;
         List<String> file = Files.readAllLines(template, StandardCharsets.UTF_8);
         for (String line : file) {
             
@@ -38,8 +37,8 @@ public class DocumentWriter extends PrintWriter implements ITagLib {
             } else if (trimmed.startsWith(ITagLib.printRubric)) {
                 continue;
             } else if (trimmed.startsWith(rollDice)) {
-                int counter = params.get(rollDice).equalsIgnoreCase("0")? 
-                    0:dice.nextInt();
+                int counter = Character.getNumericValue(params.get(rollDice).
+                        charAt(versCounter));
                 line = line.replace("{0}", String.format("{%d}", counter));
             } else if (trimmed.startsWith(insertQR)) {
                 String QRCode = String.format("{%s%s}", params.get(insertQR), 
@@ -50,6 +49,8 @@ public class DocumentWriter extends PrintWriter implements ITagLib {
                 line = String.format("%s{%s}", school, params.get(school));
             } else if (trimmed.startsWith(docAuthor)) {
                 line = String.format("%s{%s}",docAuthor, params.get(docAuthor));
+            } else if (trimmed.startsWith(question)) {
+                versCounter++;
             }
             println(line);
         }
@@ -110,7 +111,6 @@ public class DocumentWriter extends PrintWriter implements ITagLib {
         println(newpage);
     }
     
-    private XORRandom dice;
-    private String BLANK_PAGE_CODE = "{0}";
+    private final String BLANK_PAGE_CODE = "{0}";
         
 }

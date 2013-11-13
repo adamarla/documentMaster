@@ -4,25 +4,28 @@
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://gutenberg/blocs">
 	<wsdl:types>
 		<xsd:schema targetNamespace="http://gutenberg/blocs"
-			elementFormDefault="qualified">			
+			elementFormDefault="qualified">
 			<xsd:complexType name="entryType">
 				<xsd:sequence>
 					<xsd:element name="id" type="xsd:string"></xsd:element>
 					<xsd:element name="name" type="xsd:string" maxOccurs="1"
 						minOccurs="0">
-                    </xsd:element>
+					</xsd:element>
 					<xsd:element name="value" type="xsd:string" maxOccurs="1"
+						minOccurs="0">
+					</xsd:element>
+                    <xsd:element name="fingerprint" type="xsd:string" maxOccurs="1"
                         minOccurs="0">
                     </xsd:element>
 				</xsd:sequence>
 			</xsd:complexType>
-			
+
 			<xsd:complexType name="quizType">
 				<xsd:sequence>
 					<xsd:element name="quiz" type="tns:entryType"></xsd:element>
 					<xsd:element name="teacher" type="tns:entryType"></xsd:element>
 					<xsd:element name="page" type="tns:pageType" maxOccurs="unbounded"
-						minOccurs="1">					
+						minOccurs="1">
 					</xsd:element>
 				</xsd:sequence>
 			</xsd:complexType>
@@ -63,80 +66,83 @@
 					<xsd:element name="students" type="tns:entryType"
 						maxOccurs="unbounded" minOccurs="1">
 					</xsd:element>
-                    <xsd:element name="publish" type="xsd:boolean"  minOccurs="0"/>
+					<xsd:element name="publish" type="xsd:boolean"
+						minOccurs="0" />
 				</xsd:sequence>
 			</xsd:complexType>
-			
+
 			<xsd:complexType name="annotationType">
 				<xsd:sequence>
-					<xsd:element name="scanId" type="xsd:string"/>
-					<xsd:element name="coordinates" type="tns:pointType" maxOccurs="unbounded" 
-					minOccurs="0"/>
+					<xsd:element name="scanId" type="xsd:string" />
+					<xsd:element name="coordinates" type="tns:pointType"
+						maxOccurs="unbounded" minOccurs="0" />
 				</xsd:sequence>
 			</xsd:complexType>
-						
-      <xsd:complexType name="scanIdType">
-        <xsd:sequence>
-          <xsd:element name="scanId" type="xsd:string"/>
-        </xsd:sequence>
-      </xsd:complexType>
-                        
+
+			<xsd:complexType name="scanIdType">
+				<xsd:sequence>
+					<xsd:element name="scanId" type="xsd:string" />
+				</xsd:sequence>
+			</xsd:complexType>
+
 			<xsd:complexType name="pointType">
 				<xsd:sequence>
-					<xsd:element name="x" type="xsd:int"/>
-					<xsd:element name="y" type="xsd:int"/>
-					<xsd:element name="code" type="xsd:int" minOccurs="0"/>
-					<xsd:element name="text" type="xsd:string" minOccurs="0"/>
-				</xsd:sequence>			
-			</xsd:complexType>
-			
-			<xsd:complexType name="questionTagsType">
-				<xsd:sequence>
-					<xsd:element name="id" type="xsd:string"/>
-					<xsd:element name="marks" type="xsd:int" maxOccurs="unbounded"/>
-					<xsd:element name="length" type="tns:lengthType" maxOccurs="unbounded"/>
-					<xsd:element name="breaks" type="xsd:int" minOccurs="0" maxOccurs="unbounded"/>
+					<xsd:element name="x" type="xsd:int" />
+					<xsd:element name="y" type="xsd:int" />
+					<xsd:element name="code" type="xsd:int" minOccurs="0" />
+					<xsd:element name="text" type="xsd:string" minOccurs="0" />
 				</xsd:sequence>
 			</xsd:complexType>
-			
+
+			<xsd:complexType name="questionTagsType">
+				<xsd:sequence>
+					<xsd:element name="id" type="xsd:string" />
+					<xsd:element name="marks" type="xsd:int" maxOccurs="unbounded" />
+					<xsd:element name="length" type="tns:lengthType"
+						maxOccurs="unbounded" />
+					<xsd:element name="breaks" type="xsd:int" minOccurs="0"
+						maxOccurs="unbounded" />
+				</xsd:sequence>
+			</xsd:complexType>
+
 			<xsd:simpleType name="lengthType">
 				<xsd:restriction base="xsd:string">
-					<xsd:enumeration value="fullpage"/>
-					<xsd:enumeration value="halfpage"/>
-					<xsd:enumeration value="fewlines"/>
-					<xsd:enumeration value="mcq"/>
+					<xsd:enumeration value="fullpage" />
+					<xsd:enumeration value="halfpage" />
+					<xsd:enumeration value="fewlines" />
+					<xsd:enumeration value="mcq" />
 				</xsd:restriction>
 			</xsd:simpleType>
-						
+
 			<xsd:complexType name="studentGroupType">
-			  <xsd:sequence>
-			    <xsd:element name="teacher" type="tns:entryType" />
-			    <xsd:element name="group" type="tns:entryType"/>
-			    <xsd:element name="members" type="tns:entryType" 
-			    minOccurs="0" maxOccurs="unbounded"/>
-			  </xsd:sequence>
+				<xsd:sequence>
+					<xsd:element name="teacher" type="tns:entryType" />
+					<xsd:element name="group" type="tns:entryType" />
+					<xsd:element name="members" type="tns:entryType"
+						minOccurs="0" maxOccurs="unbounded" />
+				</xsd:sequence>
 			</xsd:complexType>
-			
+
 			<xsd:complexType name="suggestionType">
-			  <xsd:sequence>
-			    <xsd:element name="teacher" type="tns:entryType" />
-			    <xsd:element name="signature" type="xsd:string" />
-			    <xsd:element name="content" type="xsd:string" />
-			  </xsd:sequence>			
+				<xsd:sequence>
+					<xsd:element name="teacher" type="tns:entryType" />
+					<xsd:element name="signature" type="xsd:string" />
+					<xsd:element name="content" type="xsd:string" />
+				</xsd:sequence>
 			</xsd:complexType>
-			
+
 			<xsd:complexType name="workRequestType">
-			  <xsd:sequence>
-			    <xsd:element name="grader" type="tns:entryType" />
-			    <xsd:element name="maxQuantity" type="xsd:int" />
-			  </xsd:sequence>
+				<xsd:sequence>
+					<xsd:element name="grader" type="tns:entryType" />
+					<xsd:element name="maxQuantity" type="xsd:int" />
+				</xsd:sequence>
 			</xsd:complexType>
-						
+
 			<xsd:element name="buildQuiz" type="tns:quizType">
 			</xsd:element>
 			<xsd:element name="buildQuizResponse" type="tns:responseType">
 			</xsd:element>
-			
+
 			<xsd:element name="assignQuiz" type="tns:assignmentType"></xsd:element>
 
 			<xsd:element name="assignQuizResponse" type="tns:responseType">
@@ -152,62 +158,62 @@
 			<xsd:element name="annotateScanResponse" type="tns:responseType">
 			</xsd:element>
 
-      <xsd:element name="undoAnnotate" type="tns:scanIdType"></xsd:element>
+			<xsd:element name="undoAnnotate" type="tns:scanIdType"></xsd:element>
 
-      <xsd:element name="undoAnnotateResponse" type="tns:responseType">
-      </xsd:element>
+			<xsd:element name="undoAnnotateResponse" type="tns:responseType">
+			</xsd:element>
 
-      <xsd:element name="rotateScan" type="tns:scanIdType"></xsd:element>
+			<xsd:element name="rotateScan" type="tns:scanIdType"></xsd:element>
 
-      <xsd:element name="rotateScanResponse" type="tns:responseType">
-      </xsd:element>
-            
-	  <xsd:element name="tagQuestion" type="tns:questionTagsType"></xsd:element>
+			<xsd:element name="rotateScanResponse" type="tns:responseType">
+			</xsd:element>
 
-	  <xsd:element name="tagQuestionResponse" type="tns:responseType">
-	  </xsd:element>
-						
-	  <xsd:element name="generateSuggestionForm" type="tns:entryType"></xsd:element>
+			<xsd:element name="tagQuestion" type="tns:questionTagsType"></xsd:element>
 
-	  <xsd:element name="generateSuggestionFormResponse" type="tns:responseType">
-	  </xsd:element>
-			
-	  <xsd:element name="generateStudentRoster" type="tns:studentGroupType"></xsd:element>
+			<xsd:element name="tagQuestionResponse" type="tns:responseType">
+			</xsd:element>
 
-	  <xsd:element name="generateStudentRosterResponse" type="tns:responseType">
-	  </xsd:element>
-			
-      <xsd:element name="generateQuizReport" type="tns:studentGroupType"></xsd:element>
+			<xsd:element name="generateSuggestionForm" type="tns:entryType"></xsd:element>
 
-      <xsd:element name="generateQuizReportResponse" type="tns:responseType">
-      </xsd:element>
-            
-      <xsd:element name="prepTest" type="tns:assignmentType"></xsd:element>
+			<xsd:element name="generateSuggestionFormResponse" type="tns:responseType">
+			</xsd:element>
 
-      <xsd:element name="prepTestResponse" type="tns:responseType">
-      </xsd:element>
+			<xsd:element name="generateStudentRoster" type="tns:studentGroupType"></xsd:element>
 
-      <xsd:element name="generateStudentCode" type="tns:entryType"></xsd:element>
+			<xsd:element name="generateStudentRosterResponse" type="tns:responseType">
+			</xsd:element>
 
-      <xsd:element name="generateStudentCodeResponse" type="tns:responseType">
-      </xsd:element>
-      
-      <xsd:element name="uploadSuggestion" type="tns:suggestionType"></xsd:element>
+			<xsd:element name="generateQuizReport" type="tns:studentGroupType"></xsd:element>
 
-      <xsd:element name="uploadSuggestionResponse" type="tns:responseType">
-      </xsd:element>
-            
-      <xsd:element name="fetchUnresolvedScans" type="tns:workRequestType"></xsd:element>
+			<xsd:element name="generateQuizReportResponse" type="tns:responseType">
+			</xsd:element>
 
-      <xsd:element name="fetchUnresolvedScansResponse" type="tns:responseType">
-      </xsd:element>
-            
-      <xsd:element name="resolveScan" type="tns:entryType"></xsd:element>
+			<xsd:element name="prepTest" type="tns:assignmentType"></xsd:element>
 
-      <xsd:element name="resolveScanResponse" type="tns:responseType">
-      </xsd:element>
-            
-	</xsd:schema>
+			<xsd:element name="prepTestResponse" type="tns:responseType">
+			</xsd:element>
+
+			<xsd:element name="generateStudentCode" type="tns:entryType"></xsd:element>
+
+			<xsd:element name="generateStudentCodeResponse" type="tns:responseType">
+			</xsd:element>
+
+			<xsd:element name="uploadSuggestion" type="tns:suggestionType"></xsd:element>
+
+			<xsd:element name="uploadSuggestionResponse" type="tns:responseType">
+			</xsd:element>
+
+			<xsd:element name="fetchUnresolvedScans" type="tns:workRequestType"></xsd:element>
+
+			<xsd:element name="fetchUnresolvedScansResponse" type="tns:responseType">
+			</xsd:element>
+
+			<xsd:element name="resolveScan" type="tns:entryType"></xsd:element>
+
+			<xsd:element name="resolveScanResponse" type="tns:responseType">
+			</xsd:element>
+
+		</xsd:schema>
 	</wsdl:types>
 	<wsdl:message name="buildQuizRequest">
 		<wsdl:part name="parameters" element="tns:buildQuiz" />
@@ -233,18 +239,18 @@
 	<wsdl:message name="annotateScanResponse">
 		<wsdl:part name="parameters" element="tns:annotateScanResponse"></wsdl:part>
 	</wsdl:message>
-    <wsdl:message name="undoAnnotateRequest">
-        <wsdl:part name="parameters" element="tns:undoAnnotate"></wsdl:part>
-    </wsdl:message>
-    <wsdl:message name="undoAnnotateResponse">
-        <wsdl:part name="parameters" element="tns:undoAnnotateResponse"></wsdl:part>
-    </wsdl:message>
-    <wsdl:message name="rotateScanRequest">
-        <wsdl:part name="parameters" element="tns:rotateScan"></wsdl:part>
-    </wsdl:message>
-    <wsdl:message name="rotateScanResponse">
-        <wsdl:part name="parameters" element="tns:rotateScanResponse"></wsdl:part>
-    </wsdl:message>
+	<wsdl:message name="undoAnnotateRequest">
+		<wsdl:part name="parameters" element="tns:undoAnnotate"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="undoAnnotateResponse">
+		<wsdl:part name="parameters" element="tns:undoAnnotateResponse"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="rotateScanRequest">
+		<wsdl:part name="parameters" element="tns:rotateScan"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="rotateScanResponse">
+		<wsdl:part name="parameters" element="tns:rotateScanResponse"></wsdl:part>
+	</wsdl:message>
 	<wsdl:message name="tagQuestionRequest">
 		<wsdl:part name="parameters" element="tns:tagQuestion"></wsdl:part>
 	</wsdl:message>
@@ -262,96 +268,96 @@
 	</wsdl:message>
 	<wsdl:message name="generateStudentRosterResponse">
 		<wsdl:part name="parameters" element="tns:generateStudentRosterResponse"></wsdl:part>
-	</wsdl:message>	
-    <wsdl:message name="generateQuizReportRequest">
-        <wsdl:part name="parameters" element="tns:generateQuizReport"></wsdl:part>
-    </wsdl:message>
-    <wsdl:message name="generateQuizReportResponse">
-        <wsdl:part name="parameters" element="tns:generateQuizReportResponse"></wsdl:part>
-    </wsdl:message>
-    <wsdl:message name="prepTestRequest">
-        <wsdl:part name="parameters" element="tns:prepTest"></wsdl:part>
-    </wsdl:message>
-    <wsdl:message name="prepTestResponse">
-        <wsdl:part name="parameters" element="tns:prepTestResponse"></wsdl:part>
-    </wsdl:message>
-    <wsdl:message name="generateStudentCodeRequest">
-        <wsdl:part name="parameters" element="tns:generateStudentCode"></wsdl:part>
-    </wsdl:message>
-    <wsdl:message name="generateStudentCodeResponse">
-        <wsdl:part name="parameters" element="tns:generateStudentCodeResponse"></wsdl:part>
-    </wsdl:message> 
-    <wsdl:message name="uploadSuggestionRequest">
-        <wsdl:part name="parameters" element="tns:uploadSuggestion"></wsdl:part>
-    </wsdl:message>
-    <wsdl:message name="uploadSuggestionResponse">
-        <wsdl:part name="parameters" element="tns:uploadSuggestionResponse"></wsdl:part>
-    </wsdl:message> 
-    <wsdl:message name="fetchUnresolvedScansRequest">
-        <wsdl:part name="parameters" element="tns:fetchUnresolvedScans"></wsdl:part>
-    </wsdl:message>
-    <wsdl:message name="fetchUnresolvedScansResponse">
-        <wsdl:part name="parameters" element="tns:fetchUnresolvedScansResponse"></wsdl:part>
-    </wsdl:message> 
-    <wsdl:message name="resolveScan">
-        <wsdl:part name="parameters" element="tns:resolveScan"></wsdl:part>
-    </wsdl:message>
-    <wsdl:message name="resolveScanResponse">
-        <wsdl:part name="parameters" element="tns:resolveScanResponse"></wsdl:part>
-    </wsdl:message> 
+	</wsdl:message>
+	<wsdl:message name="generateQuizReportRequest">
+		<wsdl:part name="parameters" element="tns:generateQuizReport"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="generateQuizReportResponse">
+		<wsdl:part name="parameters" element="tns:generateQuizReportResponse"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="prepTestRequest">
+		<wsdl:part name="parameters" element="tns:prepTest"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="prepTestResponse">
+		<wsdl:part name="parameters" element="tns:prepTestResponse"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="generateStudentCodeRequest">
+		<wsdl:part name="parameters" element="tns:generateStudentCode"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="generateStudentCodeResponse">
+		<wsdl:part name="parameters" element="tns:generateStudentCodeResponse"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="uploadSuggestionRequest">
+		<wsdl:part name="parameters" element="tns:uploadSuggestion"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="uploadSuggestionResponse">
+		<wsdl:part name="parameters" element="tns:uploadSuggestionResponse"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="fetchUnresolvedScansRequest">
+		<wsdl:part name="parameters" element="tns:fetchUnresolvedScans"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="fetchUnresolvedScansResponse">
+		<wsdl:part name="parameters" element="tns:fetchUnresolvedScansResponse"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="resolveScan">
+		<wsdl:part name="parameters" element="tns:resolveScan"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="resolveScanResponse">
+		<wsdl:part name="parameters" element="tns:resolveScanResponse"></wsdl:part>
+	</wsdl:message>
 	<wsdl:portType name="documentMaster">
-	<wsdl:operation name="buildQuiz">
-	    <wsdl:input message="tns:buildQuizRequest" />
-	    <wsdl:output message="tns:buildQuizResponse" />
-	</wsdl:operation>
-	<wsdl:operation name="assignQuiz">
-        <wsdl:input message="tns:assignQuizRequest"></wsdl:input>
-	    <wsdl:output message="tns:assignQuizResponse"></wsdl:output>
-	</wsdl:operation>
-	<wsdl:operation name="createQuestion">
-	    <wsdl:input message="tns:createQuestionRequest"></wsdl:input>
-	    <wsdl:output message="tns:createQuestionResponse"></wsdl:output>
-	</wsdl:operation>
-	<wsdl:operation name="annotateScan">
-	    <wsdl:input message="tns:annotateScanRequest"></wsdl:input>
-	    <wsdl:output message="tns:annotateScanResponse"></wsdl:output>
-	</wsdl:operation>
-    <wsdl:operation name="undoAnnotate">
-        <wsdl:input message="tns:undoAnnotateRequest"></wsdl:input>
-        <wsdl:output message="tns:undoAnnotateResponse"></wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="rotateScan">
-        <wsdl:input message="tns:rotateScanRequest"></wsdl:input>
-        <wsdl:output message="tns:rotateScanResponse"></wsdl:output>
-    </wsdl:operation>
-	<wsdl:operation name="tagQuestion">
-	    <wsdl:input message="tns:tagQuestionRequest"></wsdl:input>
-	    <wsdl:output message="tns:tagQuestionResponse"></wsdl:output>
-	</wsdl:operation>
-	    <wsdl:operation name="generateStudentRoster">
-		    <wsdl:input message="tns:generateStudentRosterRequest"></wsdl:input>
-		    <wsdl:output message="tns:generateStudentRosterResponse"></wsdl:output>
-	    </wsdl:operation>		
-    <wsdl:operation name="generateQuizReport">
-        <wsdl:input message="tns:generateQuizReportRequest"></wsdl:input>
-        <wsdl:output message="tns:generateQuizReportResponse"></wsdl:output>
-    </wsdl:operation>       
-    <wsdl:operation name="prepTest">
-        <wsdl:input message="tns:prepTestRequest"></wsdl:input>
-        <wsdl:output message="tns:prepTestResponse"></wsdl:output>
-    </wsdl:operation>       
-    <wsdl:operation name="uploadSuggestion">
-        <wsdl:input message="tns:uploadSuggestionRequest"></wsdl:input>
-        <wsdl:output message="tns:uploadSuggestionResponse"></wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="fetchUnresolvedScans">
-        <wsdl:input message="tns:fetchUnresolvedScansRequest"></wsdl:input>
-        <wsdl:output message="tns:fetchUnresolvedScansResponse"></wsdl:output>
-    </wsdl:operation>   
-    <wsdl:operation name="resolveScan">
-        <wsdl:input message="tns:resolveScan"></wsdl:input>
-        <wsdl:output message="tns:resolveScanResponse"></wsdl:output>
-    </wsdl:operation>   
+		<wsdl:operation name="buildQuiz">
+			<wsdl:input message="tns:buildQuizRequest" />
+			<wsdl:output message="tns:buildQuizResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="assignQuiz">
+			<wsdl:input message="tns:assignQuizRequest"></wsdl:input>
+			<wsdl:output message="tns:assignQuizResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="createQuestion">
+			<wsdl:input message="tns:createQuestionRequest"></wsdl:input>
+			<wsdl:output message="tns:createQuestionResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="annotateScan">
+			<wsdl:input message="tns:annotateScanRequest"></wsdl:input>
+			<wsdl:output message="tns:annotateScanResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="undoAnnotate">
+			<wsdl:input message="tns:undoAnnotateRequest"></wsdl:input>
+			<wsdl:output message="tns:undoAnnotateResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="rotateScan">
+			<wsdl:input message="tns:rotateScanRequest"></wsdl:input>
+			<wsdl:output message="tns:rotateScanResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="tagQuestion">
+			<wsdl:input message="tns:tagQuestionRequest"></wsdl:input>
+			<wsdl:output message="tns:tagQuestionResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="generateStudentRoster">
+			<wsdl:input message="tns:generateStudentRosterRequest"></wsdl:input>
+			<wsdl:output message="tns:generateStudentRosterResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="generateQuizReport">
+			<wsdl:input message="tns:generateQuizReportRequest"></wsdl:input>
+			<wsdl:output message="tns:generateQuizReportResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="prepTest">
+			<wsdl:input message="tns:prepTestRequest"></wsdl:input>
+			<wsdl:output message="tns:prepTestResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="uploadSuggestion">
+			<wsdl:input message="tns:uploadSuggestionRequest"></wsdl:input>
+			<wsdl:output message="tns:uploadSuggestionResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="fetchUnresolvedScans">
+			<wsdl:input message="tns:fetchUnresolvedScansRequest"></wsdl:input>
+			<wsdl:output message="tns:fetchUnresolvedScansResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="resolveScan">
+			<wsdl:input message="tns:resolveScan"></wsdl:input>
+			<wsdl:output message="tns:resolveScanResponse"></wsdl:output>
+		</wsdl:operation>
 	</wsdl:portType>
 	<wsdl:binding name="documentMasterSOAP" type="tns:documentMaster">
 		<soap:binding style="document"
@@ -392,24 +398,24 @@
 				<soap:body use="literal" />
 			</wsdl:output>
 		</wsdl:operation>
-    <wsdl:operation name="undoAnnotate">
-        <soap:operation soapAction="http://gutenberg/blocs/undoAnnotate" />
-        <wsdl:input>
-            <soap:body use="literal" />
-        </wsdl:input>
-        <wsdl:output>
-            <soap:body use="literal" />
-        </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="rotateScan">
-      <soap:operation soapAction="http://gutenberg/blocs/rotateScan" />
-        <wsdl:input>
-            <soap:body use="literal" />
-        </wsdl:input>
-        <wsdl:output>
-            <soap:body use="literal" />
-        </wsdl:output>
-    </wsdl:operation>
+		<wsdl:operation name="undoAnnotate">
+			<soap:operation soapAction="http://gutenberg/blocs/undoAnnotate" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="rotateScan">
+			<soap:operation soapAction="http://gutenberg/blocs/rotateScan" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
 		<wsdl:operation name="tagQuestion">
 			<soap:operation soapAction="http://gutenberg/blocs/tagQuestion" />
 			<wsdl:input>
@@ -428,52 +434,52 @@
 				<soap:body use="literal" />
 			</wsdl:output>
 		</wsdl:operation>
-    <wsdl:operation name="generateQuizReport">
-        <soap:operation soapAction="http://gutenberg/blocs/generateQuizReport" />
-        <wsdl:input>
-          <soap:body use="literal" />
-        </wsdl:input>
-        <wsdl:output>
-          <soap:body use="literal" />
-        </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="prepTest">
-        <soap:operation soapAction="http://gutenberg/blocs/prepTest" />
-        <wsdl:input>
-            <soap:body use="literal" />
-        </wsdl:input>
-        <wsdl:output>
-            <soap:body use="literal" />
-        </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="uploadSuggestion">
-      <soap:operation soapAction="http://gutenberg/blocs/uploadSuggestion" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="fetchUnresolvedScans">
-      <soap:operation soapAction="http://gutenberg/blocs/fetchUnresolvedScans" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="resolveScan">
-      <soap:operation soapAction="http://gutenberg/blocs/resolveScan" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-  </wsdl:binding>
+		<wsdl:operation name="generateQuizReport">
+			<soap:operation soapAction="http://gutenberg/blocs/generateQuizReport" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="prepTest">
+			<soap:operation soapAction="http://gutenberg/blocs/prepTest" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="uploadSuggestion">
+			<soap:operation soapAction="http://gutenberg/blocs/uploadSuggestion" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="fetchUnresolvedScans">
+			<soap:operation soapAction="http://gutenberg/blocs/fetchUnresolvedScans" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="resolveScan">
+			<soap:operation soapAction="http://gutenberg/blocs/resolveScan" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
 	<wsdl:service name="documentMaster">
 		<wsdl:port binding="tns:documentMasterSOAP" name="documentMasterSOAP">
 			<soap:address location="http://localhost/blocks" />

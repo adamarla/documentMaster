@@ -148,6 +148,7 @@ public class Mint implements ITagLib {
             String studentId = students[i].getId();
             String studentKey = students[i].getValue();
             String studentName = students[i].getName();
+            String fingerprint = students[i].getFingerprint();
             
             studentDir = studentsDir.resolve(studentKey);
             studentStaging = studentDir.resolve(stagingDirName);
@@ -181,7 +182,7 @@ public class Mint implements ITagLib {
             
             HashMap<String,String> params = new HashMap<String,String>();
             params.put(insertQR, QRKey);
-            params.put(rollDice, "random");
+            params.put(rollDice, fingerprint);
             Path questionsTex = staging.resolve(questionsFile);            
             DocumentWriter questionsDoc = new DocumentWriter(questionsTex);            
             questionsDoc.writeTemplate(blueprintTex, params);
