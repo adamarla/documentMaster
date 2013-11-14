@@ -137,6 +137,7 @@ public class Mint implements ITagLib {
             "assignment", quizId, testpaperId, "tex"));
         DocumentWriter compositeDoc = new DocumentWriter(compositeTex);
         compositeDoc.writePreamble(assignment.getQuiz().getName());
+        compositeDoc.printHooksForVersions();
         compositeDoc.beginQuiz();
 
         Path studentDir, studentStaging;
@@ -148,7 +149,7 @@ public class Mint implements ITagLib {
             String studentId = students[i].getId();
             String studentKey = students[i].getValue();
             String studentName = students[i].getName();
-            String fingerprint = students[i].getFingerprint();
+            String signature = students[i].getSignature();
             
             studentDir = studentsDir.resolve(studentKey);
             studentStaging = studentDir.resolve(stagingDirName);
@@ -166,6 +167,7 @@ public class Mint implements ITagLib {
                 String.format(nameFormat, studentId, quizId, testpaperId, "tex"));
             DocumentWriter individualDoc = new DocumentWriter(individualTex);
             individualDoc.writePreamble(assignment.getQuiz().getName());
+            individualDoc.printHooksForVersions();
             individualDoc.beginQuiz();                       
 
             if (publish) {
@@ -174,15 +176,16 @@ public class Mint implements ITagLib {
                 compositeDoc.resetQuestionNumbering();
                 compositeDoc.resetPageNumbering();
                 compositeDoc.printAuthor(studentName);
+                compositeDoc.printVersions(signature);
             }
-            individualDoc.printAuthor(studentName);
+            individualDoc.printVersions(signature);
+            individualDoc.printAuthor(studentName);            
             
             // QRKey = [TestPaperId(6)][studentIdx(3)][pageNum(1)]            
             String QRKey = String.format("%s%s", assignmentKey, studentKey);
             
             HashMap<String,String> params = new HashMap<String,String>();
             params.put(insertQR, QRKey);
-            params.put(rollDice, fingerprint);
             Path questionsTex = staging.resolve(questionsFile);            
             DocumentWriter questionsDoc = new DocumentWriter(questionsTex);            
             questionsDoc.writeTemplate(blueprintTex, params);

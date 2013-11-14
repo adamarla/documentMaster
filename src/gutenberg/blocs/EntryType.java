@@ -139,20 +139,20 @@
                             
 
                         /**
-                        * field for Fingerprint
+                        * field for Signature
                         */
 
                         
-                                    protected java.lang.String localFingerprint ;
+                                    protected java.lang.String localSignature ;
                                 
                            /*  This tracker boolean wil be used to detect whether the user called the set method
                           *   for this attribute. It will be used to determine whether to include this field
                            *   in the serialized XML
                            */
-                           protected boolean localFingerprintTracker = false ;
+                           protected boolean localSignatureTracker = false ;
 
-                           public boolean isFingerprintSpecified(){
-                               return localFingerprintTracker;
+                           public boolean isSignatureSpecified(){
+                               return localSignatureTracker;
                            }
 
                            
@@ -161,20 +161,20 @@
                            * Auto generated getter method
                            * @return java.lang.String
                            */
-                           public  java.lang.String getFingerprint(){
-                               return localFingerprint;
+                           public  java.lang.String getSignature(){
+                               return localSignature;
                            }
 
                            
                         
                             /**
                                * Auto generated setter method
-                               * @param param Fingerprint
+                               * @param param Signature
                                */
-                               public void setFingerprint(java.lang.String param){
-                            localFingerprintTracker = param != null;
+                               public void setSignature(java.lang.String param){
+                            localSignatureTracker = param != null;
                                    
-                                            this.localFingerprint=param;
+                                            this.localSignature=param;
                                     
 
                                }
@@ -292,20 +292,20 @@
                                           }
                                     
                                    xmlWriter.writeEndElement();
-                             } if (localFingerprintTracker){
+                             } if (localSignatureTracker){
                                     namespace = "http://gutenberg/blocs";
-                                    writeStartElement(null, namespace, "fingerprint", xmlWriter);
+                                    writeStartElement(null, namespace, "signature", xmlWriter);
                              
 
-                                          if (localFingerprint==null){
+                                          if (localSignature==null){
                                               // write the nil attribute
                                               
-                                                     throw new org.apache.axis2.databinding.ADBException("fingerprint cannot be null!!");
+                                                     throw new org.apache.axis2.databinding.ADBException("signature cannot be null!!");
                                                   
                                           }else{
 
                                         
-                                                   xmlWriter.writeCharacters(localFingerprint);
+                                                   xmlWriter.writeCharacters(localSignature);
                                             
                                           }
                                     
@@ -522,14 +522,14 @@
                                         } else {
                                            throw new org.apache.axis2.databinding.ADBException("value cannot be null!!");
                                         }
-                                    } if (localFingerprintTracker){
+                                    } if (localSignatureTracker){
                                       elementList.add(new javax.xml.namespace.QName("http://gutenberg/blocs",
-                                                                      "fingerprint"));
+                                                                      "signature"));
                                  
-                                        if (localFingerprint != null){
-                                            elementList.add(org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localFingerprint));
+                                        if (localSignature != null){
+                                            elementList.add(org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localSignature));
                                         } else {
-                                           throw new org.apache.axis2.databinding.ADBException("fingerprint cannot be null!!");
+                                           throw new org.apache.axis2.databinding.ADBException("signature cannot be null!!");
                                         }
                                     }
 
@@ -665,11 +665,11 @@
                                     
                                     while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
                                 
-                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://gutenberg/blocs","fingerprint").equals(reader.getName())){
+                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://gutenberg/blocs","signature").equals(reader.getName())){
                                 
                                     java.lang.String content = reader.getElementText();
                                     
-                                              object.setFingerprint(
+                                              object.setSignature(
                                                     org.apache.axis2.databinding.utils.ConverterUtil.convertToString(content));
                                               
                                         reader.next();

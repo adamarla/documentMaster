@@ -16,7 +16,7 @@ public class DocumentWriter extends PrintWriter implements ITagLib {
         super(Files.newBufferedWriter(writerPath,
             StandardCharsets.UTF_8, StandardOpenOption.CREATE));
     }
-        
+    
     public void writeTemplate(Path template) throws Exception{
         List<String> file = Files.readAllLines(template, StandardCharsets.UTF_8);
         for (String line : file) {
@@ -24,8 +24,8 @@ public class DocumentWriter extends PrintWriter implements ITagLib {
         }
     }
     
-    public void writeTemplate(Path template,  HashMap<String, String>params) throws Exception{        
-        int versCounter = 0;
+    public void writeTemplate(Path template,  HashMap<String, String>params) throws Exception{ 
+        
         List<String> file = Files.readAllLines(template, StandardCharsets.UTF_8);
         for (String line : file) {
             
@@ -37,9 +37,7 @@ public class DocumentWriter extends PrintWriter implements ITagLib {
             } else if (trimmed.startsWith(ITagLib.printRubric)) {
                 continue;
             } else if (trimmed.startsWith(rollDice)) {
-                int counter = Character.getNumericValue(params.get(rollDice).
-                        charAt(versCounter));
-                line = line.replace("{0}", String.format("{%d}", counter));
+                continue;
             } else if (trimmed.startsWith(insertQR)) {
                 String QRCode = String.format("{%s%s}", params.get(insertQR), 
                     ITagLib.pageNumber);
@@ -49,8 +47,6 @@ public class DocumentWriter extends PrintWriter implements ITagLib {
                 line = String.format("%s{%s}", school, params.get(school));
             } else if (trimmed.startsWith(docAuthor)) {
                 line = String.format("%s{%s}",docAuthor, params.get(docAuthor));
-            } else if (trimmed.startsWith(question)) {
-                versCounter++;
             }
             println(line);
         }
@@ -65,8 +61,22 @@ public class DocumentWriter extends PrintWriter implements ITagLib {
         println(fancyfooter);        
     }
     
+    public void printHooksForVersions() {
+        println("\\AfterEndEnvironment{solution}{");
+        println("  \\setVersionS{\\versionS}");
+        println("}");
+        println("");
+        println("\\AfterEndEnvironment{parts}{");
+        println("  \\setVersionS{\\versionS}");
+        println("}");
+    }
+        
+    public void printVersions(String versions) {
+        println(String.format("%s{%s}", resetVersions, versions));
+    }
+    
     public void printAuthor(String author) { 
-        println(String.format("%s{%s}",docAuthor, author));        
+        println(String.format("%s{%s}", docAuthor, author));        
     }
     
     public void beginQuiz() {

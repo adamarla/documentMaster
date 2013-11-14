@@ -14,7 +14,7 @@
 					<xsd:element name="value" type="xsd:string" maxOccurs="1"
 						minOccurs="0">
 					</xsd:element>
-                    <xsd:element name="fingerprint" type="xsd:string" maxOccurs="1"
+                    <xsd:element name="signature" type="xsd:string" maxOccurs="1"
                         minOccurs="0">
                     </xsd:element>
 				</xsd:sequence>
