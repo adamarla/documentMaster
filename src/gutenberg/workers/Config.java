@@ -39,6 +39,8 @@ public class Config {
         case frontdesk:
             path = path.resolve("front-desk");
             break;
+        case common:
+            path = path.resolve("common");
         default:
         }
         return path;

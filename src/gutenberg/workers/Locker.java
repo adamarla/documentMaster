@@ -32,7 +32,6 @@ public class Locker implements ITagLib {
     public Locker(Config config) throws Exception {
         scantrayPath = config.getPath(Resource.scantray);
         lockerPath = config.getPath(Resource.locker);
-        config.getPath(Resource.shared);
     }
     
     public ManifestType fetchUnresolved(EntryType grader, int max) 

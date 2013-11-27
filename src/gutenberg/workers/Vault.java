@@ -104,7 +104,7 @@ public class Vault implements ITagLib {
         
         // As a last step, add a Makefile within levelTwo
         Files.createSymbolicLink(questionDir.resolve(makeFile),
-                sharedPath.resolve("makefiles").resolve(individual));
+                commonPath.resolve("makefiles").resolve(individual));
         Files.createSymbolicLink(questionDir.resolve("shell-script"),
                 commonPath.resolve("scripts").resolve("compile.sh"));
         
