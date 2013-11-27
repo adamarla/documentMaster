@@ -186,11 +186,11 @@ public class Vault implements ITagLib {
         ManifestType manifest = new ManifestType();
         manifest.setRoot(questionTex.getParent().getFileName().toString());
 
-        String[] pages = questionTex.getParent().toFile().list();
+        String[] pages = questionTex.resolveSibling("0").toFile().list();
         EntryType image = null;
         ArrayList<EntryType> images = new ArrayList<EntryType>();
         for (String filename : pages) {
-            if (filename.matches("page-[\\d]+.jpeg")) {
+            if (filename.matches("pg-[\\d]+.jpg")) {
                 image = new EntryType();
                 image.setId(filename);
                 images.add(image);
