@@ -171,15 +171,18 @@ public class Mint implements ITagLib {
             individualDoc.beginQuiz();                       
 
             if (publish) {
-                if (i == 0) compositeDoc.printAuthor("sample copy");
+                if (i == 0) {
+                    compositeDoc.printAuthor("sample copy");
+                    compositeDoc.printVersions(signature);
+                }
             } else {
                 compositeDoc.resetQuestionNumbering();
                 compositeDoc.resetPageNumbering();
                 compositeDoc.printAuthor(studentName);
                 compositeDoc.printVersions(signature);
             }
-            individualDoc.printVersions(signature);
             individualDoc.printAuthor(studentName);            
+            individualDoc.printVersions(signature);
             
             // QRKey = [TestPaperId(6)][studentIdx(3)][pageNum(1)]            
             String QRKey = String.format("%s%s", assignmentKey, studentKey);
