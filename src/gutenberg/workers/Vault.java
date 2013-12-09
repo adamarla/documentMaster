@@ -104,7 +104,7 @@ public class Vault implements ITagLib {
         
         // As a last step, add a Makefile within levelTwo
         Files.createSymbolicLink(questionDir.resolve(makeFile),
-                sharedPath.resolve("makefiles").resolve(individual));
+                commonPath.resolve("makefiles").resolve(individual));
         Files.createSymbolicLink(questionDir.resolve("shell-script"),
                 commonPath.resolve("scripts").resolve("compile.sh"));
         
@@ -186,11 +186,11 @@ public class Vault implements ITagLib {
         ManifestType manifest = new ManifestType();
         manifest.setRoot(questionTex.getParent().getFileName().toString());
 
-        String[] pages = questionTex.getParent().toFile().list();
+        String[] pages = questionTex.resolveSibling("0").toFile().list();
         EntryType image = null;
         ArrayList<EntryType> images = new ArrayList<EntryType>();
         for (String filename : pages) {
-            if (filename.matches("page-[\\d]+.jpeg")) {
+            if (filename.matches("pg-[\\d]+.jpg")) {
                 image = new EntryType();
                 image.setId(filename);
                 images.add(image);

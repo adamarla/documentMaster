@@ -218,7 +218,7 @@ public class Mint implements ITagLib {
             resolve(assignmentValue).resolve(studentDirName);
         ManifestType manifest = prepareManifest(studentsDir, null, null);
         
-        Path studentDir, stagingDir, previewDir, blanksDir, toMakefile;        
+        Path studentDir, stagingDir, toMakefile;        
         for (EntryType student: assignment.getStudents()) {
             
             String studentId = student.getId();
@@ -226,12 +226,9 @@ public class Mint implements ITagLib {
             
             studentDir = studentsDir.resolve(studentKey);
             stagingDir = studentDir.resolve(stagingDirName);
-            previewDir = studentDir.resolve(previewDirName);
-            blanksDir = studentDir.resolve(blanksDirName);            
             toMakefile = stagingDir.relativize(sharedPath).
                     resolve(makefilesDir).resolve(quizMakefile);
             
-            if (!Files.exists(blanksDir)) Files.createDirectory(blanksDir);
             if (!Files.exists(stagingDir.resolve(makefile)))
                 Files.createSymbolicLink(stagingDir.resolve(makefile), toMakefile);            
             
@@ -251,29 +248,9 @@ public class Mint implements ITagLib {
             tmpWriter.close();
             Files.move(tmp, tex, StandardCopyOption.REPLACE_EXISTING);
             
-            if (make(stagingDir, studentDir, blanksDir) != 0) {
+            if (make(stagingDir, studentDir, null) != 0) {
                 throw new Exception("Oppa! Non-zero return code making worksheet");
             }
-
-            if (!Files.exists(previewDir))
-                Files.createDirectory(previewDir);
-            
-            tmpWriter = new PrintWriter(Files.newBufferedWriter(tmp, 
-                    StandardCharsets.UTF_8, StandardOpenOption.CREATE));            
-            for (String line : lines) {
-                if (line.contains(ITagLib.beginQuestions)) {
-                    tmpWriter.println(ITagLib.printanswers);
-                } else if (line.contains(ITagLib.printanswers)) {
-                    continue;
-                }
-                tmpWriter.println(line);
-            }
-            tmpWriter.close();
-            Files.move(tmp, tex, StandardCopyOption.REPLACE_EXISTING);            
-            
-            if (make(stagingDir, null, previewDir) != 0) {
-                throw new Exception("Oppa! Non-zero return code making solutions");
-            }            
         }        
         return manifest;    
     }    
@@ -411,7 +388,6 @@ public class Mint implements ITagLib {
     private final String 
         stagingDirName = "staging",
         previewDirName = "preview",
-        blanksDirName = "blanks",
         quizDirName = "quiz",
         worksheetDirName = "ws",
         studentDirName = "student",
