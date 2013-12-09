@@ -3,7 +3,6 @@ package gutenberg.workers;
 import gutenberg.blocs.AssignmentType;
 import gutenberg.blocs.EntryType;
 import gutenberg.blocs.ManifestType;
-import gutenberg.blocs.PageType;
 import gutenberg.blocs.QuizType;
 
 import java.io.BufferedReader;
@@ -55,18 +54,9 @@ public class Mint implements ITagLib {
         }
 
         DocumentWriter blueprintDoc = new DocumentWriter(blueprintTex);
-        PageType[] pages = quiz.getPage();
-        for (PageType page : pages) {
-            
-            EntryType[] questions = page.getQuestion();
-            if (questions == null) //2nd page of multi-part
-                continue;
-            
-            for (EntryType question : questions) {
-                blueprintDoc.rollDice(0);
-                copyQuestion(staging, blueprintDoc, question.getId());
-            }
-            blueprintDoc.newPage();            
+        EntryType[] questions = quiz.getQuestions();
+        for (EntryType question : questions) {
+            copyQuestion(staging, blueprintDoc, question.getId());
         }
         blueprintDoc.close();
         
@@ -74,8 +64,8 @@ public class Mint implements ITagLib {
             "answer", "key", quizId, "tex"));
         DocumentWriter answerkeyDoc = new DocumentWriter(answerkeyTex);        
         answerkeyDoc.writePreamble(quiz.getQuiz().getName());
-        answerkeyDoc.printAuthor(quiz.getTeacher().getName());
-        answerkeyDoc.beginQuiz();
+        answerkeyDoc.printAuthor(quiz.getTeacher().getName(), new int[questions.length]);
+        answerkeyDoc.beginQuiz(quiz.getBreaks());
         answerkeyDoc.printAnswers();        
         answerkeyDoc.writeTemplate(blueprintTex);
         answerkeyDoc.endQuiz();
@@ -133,72 +123,62 @@ public class Mint implements ITagLib {
         }
         plotfiles.close();
         
+        Path blueprintTex = quizStaging.resolve(blueprintFile);
+        Path quizTex = quizStaging.resolve(String.format(nameFormat, nameFormat,
+                "answer", "key", quizId, "tex"));
+        int[] breaks = getPageBreaks(quizTex);
+        
         Path compositeTex = staging.resolve(String.format(nameFormat,
-            "assignment", quizId, testpaperId, "tex"));
+                "assignment", quizId, testpaperId, "tex"));
         DocumentWriter compositeDoc = new DocumentWriter(compositeTex);
         compositeDoc.writePreamble(assignment.getQuiz().getName());
-        compositeDoc.printHooksForVersions();
-        compositeDoc.beginQuiz();
-
+        compositeDoc.beginQuiz(breaks);
+        
         Path studentDir, studentStaging;
-        Path blueprintTex = quizStaging.resolve(blueprintFile);
-        int totalPages = getTotalPages(blueprintTex);
+        DocumentWriter individualDoc = null;
         EntryType[] students = assignment.getStudents();        
         for (int i = 0; i < students.length; i++) {
             
             String studentId = students[i].getId();
             String studentKey = students[i].getValue();
             String studentName = students[i].getName();
-            String signature = students[i].getSignature();
-            
-            studentDir = studentsDir.resolve(studentKey);
-            studentStaging = studentDir.resolve(stagingDirName);
-            Files.createDirectories(studentStaging);
-            
-            plotfiles = Files.newDirectoryStream(quizStaging, "*.gnuplot");
-            for (Path plotfile : plotfiles) {
-                Files.copy(plotfile,
-                    studentStaging.resolve(plotfile.getFileName()),
-                    StandardCopyOption.REPLACE_EXISTING);
-            }
-            plotfiles.close();
-
-            Path individualTex = studentStaging.resolve(
-                String.format(nameFormat, studentId, quizId, testpaperId, "tex"));
-            DocumentWriter individualDoc = new DocumentWriter(individualTex);
-            individualDoc.writePreamble(assignment.getQuiz().getName());
-            individualDoc.printHooksForVersions();
-            individualDoc.beginQuiz();                       
-
-            if (publish) {
-                if (i == 0) compositeDoc.printAuthor("sample copy");
-            } else {
-                compositeDoc.resetQuestionNumbering();
-                compositeDoc.resetPageNumbering();
-                compositeDoc.printAuthor(studentName);
-                compositeDoc.printVersions(signature);
-            }
-            individualDoc.printVersions(signature);
-            individualDoc.printAuthor(studentName);            
+            int[] signature = students[i].getSignature();
             
             // QRKey = [TestPaperId(6)][studentIdx(3)][pageNum(1)]            
-            String QRKey = String.format("%s%s", assignmentKey, studentKey);
-            
+            String QRKey = String.format("%s%s", assignmentKey, studentKey);            
             HashMap<String,String> params = new HashMap<String,String>();
-            params.put(insertQR, QRKey);
-            Path questionsTex = staging.resolve(questionsFile);            
-            DocumentWriter questionsDoc = new DocumentWriter(questionsTex);            
-            questionsDoc.writeTemplate(blueprintTex, params);
-            questionsDoc.close();
+            params.put(insertQR, QRKey);            
             
-            if (publish) {
-                if (i == 0) compositeDoc.writeTemplate(questionsTex);
+            if (publish) {                
+                studentDir = studentsDir.resolve(studentKey);
+                studentStaging = studentDir.resolve(stagingDirName);
+                Files.createDirectories(studentStaging);
+                
+                plotfiles = Files.newDirectoryStream(quizStaging, "*.gnuplot");
+                for (Path plotfile : plotfiles) {
+                    Files.copy(plotfile,
+                        studentStaging.resolve(plotfile.getFileName()),
+                        StandardCopyOption.REPLACE_EXISTING);
+                }
+                plotfiles.close();
+                
+                Path individualTex = studentStaging.resolve(
+                        String.format(nameFormat, studentId, quizId, testpaperId, "tex"));            
+                individualDoc = new DocumentWriter(individualTex);            
+                individualDoc.writePreamble(assignment.getQuiz().getName());
+                individualDoc.beginQuiz(breaks);
+                individualDoc.printAuthor(studentName, signature);
+                individualDoc.writeTemplate(blueprintTex, params);
+                if (i == 0) {
+                    compositeDoc.printAuthor("sample copy", new int[signature.length]);
+                    compositeDoc.writeTemplate(blueprintTex, params);
+                }
             } else {
-                compositeDoc.writeTemplate(questionsTex);
+                compositeDoc.printAuthor(studentName, signature);
+                compositeDoc.writeTemplate(blueprintTex, params);
             }
-            individualDoc.writeTemplate(questionsTex);
             
-            if (!publish && totalPages % 2 != 0 && students.length > 1) 
+            if (!publish && breaks.length % 2 != 0 && students.length > 1) 
                 compositeDoc.insertBlankPage();
             
             individualDoc.endQuiz();
@@ -374,14 +354,22 @@ public class Mint implements ITagLib {
         }
     }
 
-    private int getTotalPages(Path blueprintTex) throws Exception {
-        int pageCount = 0;
+    private int[] getPageBreaks(Path blueprintTex) throws Exception {
+        String csv = null;
         String[] lines = Files.readAllLines(blueprintTex, 
             StandardCharsets.UTF_8).toArray(new String[0]);
         for (String line: lines) {
-            if (line.startsWith(newpage)) pageCount++;
+            if (line.startsWith(ITagLib.setPageBreaks)) {
+                csv = line.substring(line.indexOf('{'), line.indexOf('}'));
+                break;
+            }
         }
-        return pageCount;
+        String[] values = csv.split(",");
+        int[] breaks = new int[values.length];
+        for (int i = 0; i < values.length; i++) {
+            breaks[i] = Integer.parseInt(values[i]);
+        }
+        return breaks;
     }
 
     private ManifestType prepareManifest(Path root,  
@@ -431,7 +419,6 @@ public class Mint implements ITagLib {
         makefile = "Makefile",
         quizMakefile = "quiz.mk",
         blueprintFile = "blueprintTex",
-        questionsFile = "questionsTex",
         nameFormat = "%s-%s-%s.%s";
 
 }

@@ -151,16 +151,6 @@
                   }
 
               
-                  if (
-                  "http://gutenberg/blocs".equals(namespaceURI) &&
-                  "pageType".equals(typeName)){
-                   
-                            return  gutenberg.blocs.PageType.Factory.parse(reader);
-                        
-
-                  }
-
-              
              throw new org.apache.axis2.databinding.ADBException("Unsupported type " + namespaceURI + " " + typeName);
           }
 

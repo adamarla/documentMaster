@@ -14,19 +14,20 @@
 					<xsd:element name="value" type="xsd:string" maxOccurs="1"
 						minOccurs="0">
 					</xsd:element>
-                    <xsd:element name="signature" type="xsd:string" maxOccurs="1"
-                        minOccurs="0">
-                    </xsd:element>
-				</xsd:sequence>
+                    <xsd:element name="signature" type="xsd:int" minOccurs="0"
+                        maxOccurs="unbounded" />
+                </xsd:sequence>
 			</xsd:complexType>
 
 			<xsd:complexType name="quizType">
 				<xsd:sequence>
 					<xsd:element name="quiz" type="tns:entryType"></xsd:element>
 					<xsd:element name="teacher" type="tns:entryType"></xsd:element>
-					<xsd:element name="page" type="tns:pageType" maxOccurs="unbounded"
-						minOccurs="1">
-					</xsd:element>
+                    <xsd:element name="questions" type="tns:entryType"
+                        maxOccurs="unbounded" minOccurs="0">
+                    </xsd:element>
+                    <xsd:element name="breaks" type="xsd:int" minOccurs="0"
+                        maxOccurs="unbounded" />
 				</xsd:sequence>
 			</xsd:complexType>
 
@@ -37,15 +38,6 @@
 						maxOccurs="unbounded" minOccurs="0">
 					</xsd:element>
 					<xsd:element name="document" type="tns:entryType"
-						maxOccurs="unbounded" minOccurs="0">
-					</xsd:element>
-				</xsd:sequence>
-			</xsd:complexType>
-
-			<xsd:complexType name="pageType">
-				<xsd:sequence>
-					<xsd:element name="number" type="xsd:int"></xsd:element>
-					<xsd:element name="question" type="tns:entryType"
 						maxOccurs="unbounded" minOccurs="0">
 					</xsd:element>
 				</xsd:sequence>

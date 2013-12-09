@@ -85,20 +85,31 @@
                             
 
                         /**
-                        * field for Page
+                        * field for Questions
                         * This was an Array!
                         */
 
                         
-                                    protected gutenberg.blocs.PageType[] localPage ;
+                                    protected gutenberg.blocs.EntryType[] localQuestions ;
                                 
+                           /*  This tracker boolean wil be used to detect whether the user called the set method
+                          *   for this attribute. It will be used to determine whether to include this field
+                           *   in the serialized XML
+                           */
+                           protected boolean localQuestionsTracker = false ;
+
+                           public boolean isQuestionsSpecified(){
+                               return localQuestionsTracker;
+                           }
+
+                           
 
                            /**
                            * Auto generated getter method
-                           * @return gutenberg.blocs.PageType[]
+                           * @return gutenberg.blocs.EntryType[]
                            */
-                           public  gutenberg.blocs.PageType[] getPage(){
-                               return localPage;
+                           public  gutenberg.blocs.EntryType[] getQuestions(){
+                               return localQuestions;
                            }
 
                            
@@ -107,50 +118,107 @@
 
                                
                               /**
-                               * validate the array for Page
+                               * validate the array for Questions
                                */
-                              protected void validatePage(gutenberg.blocs.PageType[] param){
+                              protected void validateQuestions(gutenberg.blocs.EntryType[] param){
                              
-                              if ((param != null) && (param.length < 1)){
-                                throw new java.lang.RuntimeException();
-                              }
-                              
                               }
 
 
                              /**
                               * Auto generated setter method
-                              * @param param Page
+                              * @param param Questions
                               */
-                              public void setPage(gutenberg.blocs.PageType[] param){
+                              public void setQuestions(gutenberg.blocs.EntryType[] param){
                               
-                                   validatePage(param);
+                                   validateQuestions(param);
 
-                               
-                                      this.localPage=param;
+                               localQuestionsTracker = param != null;
+                                      
+                                      this.localQuestions=param;
                               }
 
                                
                              
                              /**
                              * Auto generated add method for the array for convenience
-                             * @param param gutenberg.blocs.PageType
+                             * @param param gutenberg.blocs.EntryType
                              */
-                             public void addPage(gutenberg.blocs.PageType param){
-                                   if (localPage == null){
-                                   localPage = new gutenberg.blocs.PageType[]{};
+                             public void addQuestions(gutenberg.blocs.EntryType param){
+                                   if (localQuestions == null){
+                                   localQuestions = new gutenberg.blocs.EntryType[]{};
                                    }
 
                             
+                                 //update the setting tracker
+                                localQuestionsTracker = true;
+                            
 
                                java.util.List list =
-                            org.apache.axis2.databinding.utils.ConverterUtil.toList(localPage);
+                            org.apache.axis2.databinding.utils.ConverterUtil.toList(localQuestions);
                                list.add(param);
-                               this.localPage =
-                             (gutenberg.blocs.PageType[])list.toArray(
-                            new gutenberg.blocs.PageType[list.size()]);
+                               this.localQuestions =
+                             (gutenberg.blocs.EntryType[])list.toArray(
+                            new gutenberg.blocs.EntryType[list.size()]);
 
                              }
+                             
+
+                        /**
+                        * field for Breaks
+                        * This was an Array!
+                        */
+
+                        
+                                    protected int[] localBreaks ;
+                                
+                           /*  This tracker boolean wil be used to detect whether the user called the set method
+                          *   for this attribute. It will be used to determine whether to include this field
+                           *   in the serialized XML
+                           */
+                           protected boolean localBreaksTracker = false ;
+
+                           public boolean isBreaksSpecified(){
+                               return localBreaksTracker;
+                           }
+
+                           
+
+                           /**
+                           * Auto generated getter method
+                           * @return int[]
+                           */
+                           public  int[] getBreaks(){
+                               return localBreaks;
+                           }
+
+                           
+                        
+
+
+                               
+                              /**
+                               * validate the array for Breaks
+                               */
+                              protected void validateBreaks(int[] param){
+                             
+                              }
+
+
+                             /**
+                              * Auto generated setter method
+                              * @param param Breaks
+                              */
+                              public void setBreaks(int[] param){
+                              
+                                   validateBreaks(param);
+
+                               localBreaksTracker = param != null;
+                                      
+                                      this.localBreaks=param;
+                              }
+
+                               
                              
 
      
@@ -223,25 +291,51 @@
                                             }
                                            localTeacher.serialize(new javax.xml.namespace.QName("http://gutenberg/blocs","teacher"),
                                                xmlWriter);
-                                        
-                                       if (localPage!=null){
-                                            for (int i = 0;i < localPage.length;i++){
-                                                if (localPage[i] != null){
-                                                 localPage[i].serialize(new javax.xml.namespace.QName("http://gutenberg/blocs","page"),
+                                         if (localQuestionsTracker){
+                                       if (localQuestions!=null){
+                                            for (int i = 0;i < localQuestions.length;i++){
+                                                if (localQuestions[i] != null){
+                                                 localQuestions[i].serialize(new javax.xml.namespace.QName("http://gutenberg/blocs","questions"),
                                                            xmlWriter);
                                                 } else {
                                                    
-                                                           throw new org.apache.axis2.databinding.ADBException("page cannot be null!!");
+                                                        // we don't have to do any thing since minOccures is zero
                                                     
                                                 }
 
                                             }
                                      } else {
                                         
-                                               throw new org.apache.axis2.databinding.ADBException("page cannot be null!!");
+                                               throw new org.apache.axis2.databinding.ADBException("questions cannot be null!!");
                                         
                                     }
+                                 } if (localBreaksTracker){
+                             if (localBreaks!=null) {
+                                   namespace = "http://gutenberg/blocs";
+                                   for (int i = 0;i < localBreaks.length;i++){
+                                        
+                                                   if (localBreaks[i]!=java.lang.Integer.MIN_VALUE) {
+                                               
+                                                writeStartElement(null, namespace, "breaks", xmlWriter);
+
+                                            
+                                                xmlWriter.writeCharacters(org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localBreaks[i]));
+                                                xmlWriter.writeEndElement();
+                                            
+                                                } else {
+                                                   
+                                                           // we have to do nothing since minOccurs is zero
+                                                       
+                                                }
+
+                                   }
+                             } else {
                                  
+                                         throw new org.apache.axis2.databinding.ADBException("breaks cannot be null!!");
+                                    
+                             }
+
+                        }
                     xmlWriter.writeEndElement();
                
 
@@ -444,28 +538,46 @@
                                          throw new org.apache.axis2.databinding.ADBException("teacher cannot be null!!");
                                     }
                                     elementList.add(localTeacher);
-                                
-                             if (localPage!=null) {
-                                 for (int i = 0;i < localPage.length;i++){
+                                 if (localQuestionsTracker){
+                             if (localQuestions!=null) {
+                                 for (int i = 0;i < localQuestions.length;i++){
 
-                                    if (localPage[i] != null){
+                                    if (localQuestions[i] != null){
                                          elementList.add(new javax.xml.namespace.QName("http://gutenberg/blocs",
-                                                                          "page"));
-                                         elementList.add(localPage[i]);
+                                                                          "questions"));
+                                         elementList.add(localQuestions[i]);
                                     } else {
                                         
-                                               throw new org.apache.axis2.databinding.ADBException("page cannot be null !!");
+                                                // nothing to do
                                             
                                     }
 
                                  }
                              } else {
                                  
-                                        throw new org.apache.axis2.databinding.ADBException("page cannot be null!!");
+                                        throw new org.apache.axis2.databinding.ADBException("questions cannot be null!!");
                                     
                              }
 
-                        
+                        } if (localBreaksTracker){
+                            if (localBreaks!=null){
+                                  for (int i = 0;i < localBreaks.length;i++){
+                                      
+                                          elementList.add(new javax.xml.namespace.QName("http://gutenberg/blocs",
+                                                                                                                       "breaks"));
+                                          elementList.add(
+                                          org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localBreaks[i]));
+
+                                      
+
+                                  }
+                            } else {
+                              
+                                    throw new org.apache.axis2.databinding.ADBException("breaks cannot be null!!");
+                                
+                            }
+
+                        }
 
                 return new org.apache.axis2.databinding.utils.reader.ADBXMLStreamReaderImpl(qName, elementList.toArray(), attribList.toArray());
             
@@ -543,6 +655,8 @@
                 
                         java.util.ArrayList list3 = new java.util.ArrayList();
                     
+                        java.util.ArrayList list4 = new java.util.ArrayList();
+                    
                                     
                                     while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
                                 
@@ -578,12 +692,12 @@
                                     
                                     while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
                                 
-                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://gutenberg/blocs","page").equals(reader.getName())){
+                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://gutenberg/blocs","questions").equals(reader.getName())){
                                 
                                     
                                     
                                     // Process the array and step past its final element's end.
-                                    list3.add(gutenberg.blocs.PageType.Factory.parse(reader));
+                                    list3.add(gutenberg.blocs.EntryType.Factory.parse(reader));
                                                                 
                                                         //loop until we find a start element that is not part of this array
                                                         boolean loopDone3 = false;
@@ -600,8 +714,8 @@
                                                                 //two continuous end elements means we are exiting the xml structure
                                                                 loopDone3 = true;
                                                             } else {
-                                                                if (new javax.xml.namespace.QName("http://gutenberg/blocs","page").equals(reader.getName())){
-                                                                    list3.add(gutenberg.blocs.PageType.Factory.parse(reader));
+                                                                if (new javax.xml.namespace.QName("http://gutenberg/blocs","questions").equals(reader.getName())){
+                                                                    list3.add(gutenberg.blocs.EntryType.Factory.parse(reader));
                                                                         
                                                                 }else{
                                                                     loopDone3 = true;
@@ -610,18 +724,63 @@
                                                         }
                                                         // call the converter utility  to convert and set the array
                                                         
-                                                        object.setPage((gutenberg.blocs.PageType[])
+                                                        object.setQuestions((gutenberg.blocs.EntryType[])
                                                             org.apache.axis2.databinding.utils.ConverterUtil.convertToArray(
-                                                                gutenberg.blocs.PageType.class,
+                                                                gutenberg.blocs.EntryType.class,
                                                                 list3));
                                                             
                               }  // End of if for expected property start element
                                 
-                                else{
-                                    // A start element we are not expecting indicates an invalid parameter was passed
-                                    throw new org.apache.axis2.databinding.ADBException("Unexpected subelement " + reader.getName());
-                                }
-                              
+                                    else {
+                                        
+                                    }
+                                
+                                    
+                                    while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
+                                
+                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://gutenberg/blocs","breaks").equals(reader.getName())){
+                                
+                                    
+                                    
+                                    // Process the array and step past its final element's end.
+                                    list4.add(reader.getElementText());
+                                            
+                                            //loop until we find a start element that is not part of this array
+                                            boolean loopDone4 = false;
+                                            while(!loopDone4){
+                                                // Ensure we are at the EndElement
+                                                while (!reader.isEndElement()){
+                                                    reader.next();
+                                                }
+                                                // Step out of this element
+                                                reader.next();
+                                                // Step to next element event.
+                                                while (!reader.isStartElement() && !reader.isEndElement())
+                                                    reader.next();
+                                                if (reader.isEndElement()){
+                                                    //two continuous end elements means we are exiting the xml structure
+                                                    loopDone4 = true;
+                                                } else {
+                                                    if (new javax.xml.namespace.QName("http://gutenberg/blocs","breaks").equals(reader.getName())){
+                                                         list4.add(reader.getElementText());
+                                                        
+                                                    }else{
+                                                        loopDone4 = true;
+                                                    }
+                                                }
+                                            }
+                                            // call the converter utility  to convert and set the array
+                                            
+                                            object.setBreaks((int[])
+                                                org.apache.axis2.databinding.utils.ConverterUtil.convertToArray(
+                                                            int.class,list4));
+                                                
+                              }  // End of if for expected property start element
+                                
+                                    else {
+                                        
+                                    }
+                                  
                             while (!reader.isStartElement() && !reader.isEndElement())
                                 reader.next();
                             
