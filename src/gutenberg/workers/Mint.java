@@ -7,15 +7,12 @@ import gutenberg.blocs.QuizType;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
-import java.nio.file.StandardOpenOption;
 import java.util.HashMap;
-import java.util.List;
 
 public class Mint implements ITagLib {
     
@@ -232,25 +229,13 @@ public class Mint implements ITagLib {
             if (!Files.exists(stagingDir.resolve(makefile)))
                 Files.createSymbolicLink(stagingDir.resolve(makefile), toMakefile);            
             
-            Path tex = stagingDir.resolve(String.format(nameFormat, 
-                    studentId, quizId, assignmentId, "tex"));            
-            List<String> lines = Files.readAllLines(tex, StandardCharsets.UTF_8);            
-            Path tmp = stagingDir.resolve("tmp");
-            
-            PrintWriter tmpWriter = new PrintWriter(Files.newBufferedWriter(tmp, 
-                    StandardCharsets.UTF_8, StandardOpenOption.CREATE));
-            for (String line : lines) {
-                if (line.contains(ITagLib.printanswers)) {
-                    continue;
-                }
-                tmpWriter.println(line);
-            }
-            tmpWriter.close();
-            Files.move(tmp, tex, StandardCopyOption.REPLACE_EXISTING);
-            
             if (make(stagingDir, studentDir, null) != 0) {
                 throw new Exception("Oppa! Non-zero return code making worksheet");
             }
+            
+            EntryType PDF = new EntryType();
+            PDF.setId(String.format(nameFormat, studentId, quizId, assignmentId, "pdf"));
+            manifest.addDocument(PDF);
         }        
         return manifest;    
     }    
