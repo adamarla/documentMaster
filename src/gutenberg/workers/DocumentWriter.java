@@ -5,6 +5,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -47,11 +48,13 @@ public class DocumentWriter extends PrintWriter implements ITagLib {
     }
     
     public void printAuthor(String author, int[] versions) {
-        println(String.format("%s{%s}{%s}", docAuthor, author, versions.toString()));
+        println(String.format("%s{%s}{%s}", docAuthor, author,
+                Arrays.toString(versions).replace('[', '{').replace(']', '}')));
     }
     
     public void beginQuiz(int[] breaks) {
-        println(String.format("%s{%s}", setPageBreaks, breaks.toString()));
+        println(String.format("%s{%s}", setPageBreaks, 
+                Arrays.toString(breaks).replace('[', '{').replace(']', '}')));
         println(beginDocument);
         println(beginQuestions);
     }
