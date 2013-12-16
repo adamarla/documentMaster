@@ -6,10 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.regex.Matcher;
-
 
 public class DocumentWriter extends PrintWriter implements ITagLib {
     
@@ -21,21 +18,9 @@ public class DocumentWriter extends PrintWriter implements ITagLib {
     public void writeTemplate(Path template) throws Exception{
         List<String> file = Files.readAllLines(template, StandardCharsets.UTF_8);
         for (String line : file) {
-            println(line);
-        }
-    }
-    
-    public void writeTemplate(Path template,  HashMap<String, String>params) throws Exception{
-        List<String> file = Files.readAllLines(template, StandardCharsets.UTF_8);
-        for (String line : file) {            
             String trimmed = line.trim();
-            if (trimmed.startsWith(comment)) { // => a comment
+            if (trimmed.startsWith(comment) || trimmed.startsWith(insertQR)) {
                 continue;
-            } else if (trimmed.startsWith(insertQR)) {
-                String QRCode = String.format("{%s%s}", params.get(insertQR), 
-                    ITagLib.pageNumber);
-                line = line.replaceFirst("\\{.*\\}", 
-                    Matcher.quoteReplacement(QRCode));
             }
             println(line);
         }
@@ -59,9 +44,9 @@ public class DocumentWriter extends PrintWriter implements ITagLib {
         println(endDocument);
     }
     
-    public void beginQuiz(String author, int[] versions) {
-        println(String.format("%s%s{%s}", docAuthor,
-                Arrays.toString(versions), author));
+    public void beginQuiz(String author, int[] versions, String baseQR) {
+        println(String.format("%s%s{%s}{%s}", docAuthor,
+                Arrays.toString(versions), author, baseQR == null ? "0" : baseQR));
         println(beginQuestions);
     }
 

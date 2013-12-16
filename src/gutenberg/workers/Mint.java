@@ -12,7 +12,6 @@ import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
-import java.util.HashMap;
 
 public class Mint implements ITagLib {
     
@@ -62,7 +61,7 @@ public class Mint implements ITagLib {
         DocumentWriter answerkeyDoc = new DocumentWriter(answerkeyTex);        
         answerkeyDoc.writePreamble(quiz.getQuiz().getName());
         answerkeyDoc.beginDocument(quiz.getBreaks(), quiz.getVersionTriggers());
-        answerkeyDoc.beginQuiz(quiz.getTeacher().getName(), new int[questions.length]);
+        answerkeyDoc.beginQuiz(quiz.getTeacher().getName(), new int[questions.length], null);
         answerkeyDoc.printAnswers();
         answerkeyDoc.writeTemplate(blueprintTex);
         answerkeyDoc.endQuiz();
@@ -144,9 +143,7 @@ public class Mint implements ITagLib {
             int[] signature = students[i].getSignature();
             
             // QRKey = [TestPaperId(6)][studentIdx(3)][pageNum(1)]            
-            String QRKey = String.format("%s%s", assignmentKey, studentKey);            
-            HashMap<String,String> params = new HashMap<String,String>();
-            params.put(insertQR, QRKey);            
+            String QRKey = String.format("%s%s", assignmentKey, studentKey);
             
             if (publish) {                
                 studentDir = studentsDir.resolve(studentKey);
@@ -166,20 +163,20 @@ public class Mint implements ITagLib {
                 individualDoc = new DocumentWriter(individualTex);            
                 individualDoc.writePreamble(assignment.getQuiz().getName());
                 individualDoc.beginDocument(breaks, triggers);
-                individualDoc.beginQuiz(studentName, signature);
-                individualDoc.writeTemplate(blueprintTex, params);
+                individualDoc.beginQuiz(studentName, signature, QRKey);
+                individualDoc.writeTemplate(blueprintTex);
                 individualDoc.endQuiz();
                 individualDoc.endDocument();
                 individualDoc.close();
                 
                 if (i == 0) {
-                    compositeDoc.beginQuiz("sample copy", new int[signature.length]);
-                    compositeDoc.writeTemplate(blueprintTex, params);
+                    compositeDoc.beginQuiz("sample copy", new int[signature.length], null);
+                    compositeDoc.writeTemplate(blueprintTex);
                     compositeDoc.endQuiz();
                 }
             } else {
-                compositeDoc.beginQuiz(studentName, signature);
-                compositeDoc.writeTemplate(blueprintTex, params);
+                compositeDoc.beginQuiz(studentName, signature, QRKey);
+                compositeDoc.writeTemplate(blueprintTex);
                 compositeDoc.endQuiz();
             }            
         }
