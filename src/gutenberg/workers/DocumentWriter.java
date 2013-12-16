@@ -44,46 +44,33 @@ public class DocumentWriter extends PrintWriter implements ITagLib {
     public void writePreamble(String quiz) {
         println("\\documentclass[12pt,a4paper,justified]{tufte-exam}");
         println(String.format("%s{%s}", school, quiz));
-        println(fancyfooter);        
     }
     
-    public void printAuthor(String author, int[] versions) {
-        println(String.format("%s{%s}{%s}", docAuthor, author,
-                Arrays.toString(versions).replace('[', '{').replace(']', '}')));
-    }
-    
-    public void beginQuiz(int[] breaks) {
-        println(String.format("%s{%s}", setPageBreaks, 
-                Arrays.toString(breaks).replace('[', '{').replace(']', '}')));
+    public void beginDocument(int[] pageBreaks, int[] versionTriggers) {
+        pageBreaks = pageBreaks == null ? new int[0] : pageBreaks;
+        println(String.format("%s%s", setPageBreaks,
+                Arrays.toString(pageBreaks).replaceFirst("(^\\[)(.*)(\\]$)", "{$2}")));
+        println(String.format("%s%s", setVersionTriggers, 
+                Arrays.toString(versionTriggers).replaceFirst("(^\\[)(.*)(\\]$)", "{$2}")));
         println(beginDocument);
+    }
+    
+    public void endDocument() {
+        println(endDocument);
+    }
+    
+    public void beginQuiz(String author, int[] versions) {
+        println(String.format("%s%s{%s}", docAuthor,
+                Arrays.toString(versions), author));
         println(beginQuestions);
     }
 
     public void endQuiz() {
         println(endQuestions);
-        println(endDocument);
-    }
-    
-    public void newPage() {
-        println(newpage);
     }
     
     public void printAnswers() {
         println(printanswers);
     }
     
-    public void printRubric() {
-        println(printRubric);
-    }
-
-    public void insertBlankPage() {
-        print("\\begingroup");
-        print("\\centering For rough work only. Will NOT be graded \\\\");
-        println("\\endgroup");
-        println(insertQR + BLANK_PAGE_CODE);
-        println(newpage);
-    }
-    
-    private final String BLANK_PAGE_CODE = "{0}";
-        
 }

@@ -61,11 +61,12 @@ public class Mint implements ITagLib {
             "answer", "key", quizId, "tex"));
         DocumentWriter answerkeyDoc = new DocumentWriter(answerkeyTex);        
         answerkeyDoc.writePreamble(quiz.getQuiz().getName());
-        answerkeyDoc.printAuthor(quiz.getTeacher().getName(), new int[questions.length]);
-        answerkeyDoc.beginQuiz(quiz.getBreaks());
-        answerkeyDoc.printAnswers();        
+        answerkeyDoc.beginDocument(quiz.getBreaks(), quiz.getVersionTriggers());
+        answerkeyDoc.beginQuiz(quiz.getTeacher().getName(), new int[questions.length]);
+        answerkeyDoc.printAnswers();
         answerkeyDoc.writeTemplate(blueprintTex);
         answerkeyDoc.endQuiz();
+        answerkeyDoc.endDocument();
         answerkeyDoc.close();
         
         Path toMakefile = staging.relativize(sharedPath).resolve(makefilesDir).
@@ -76,7 +77,6 @@ public class Mint implements ITagLib {
         if (make(staging, quizDir, preview) != 0) {
             throw new Exception("Problemo! Non-zero return code from make");
         }
-        Files.delete(answerkeyTex);
         
         ManifestType manifest = new ManifestType();
         manifest.setRoot(mintPath.relativize(quizDir).toString());
@@ -121,15 +121,17 @@ public class Mint implements ITagLib {
         plotfiles.close();
         
         Path blueprintTex = quizStaging.resolve(blueprintFile);
-        Path quizTex = quizStaging.resolve(String.format(nameFormat, nameFormat,
+        Path quizTex = quizStaging.resolve(String.format(nameFormat,
                 "answer", "key", quizId, "tex"));
-        int[] breaks = getPageBreaks(quizTex);
-        
+        String[] lines = Files.readAllLines(quizTex, 
+                StandardCharsets.UTF_8).toArray(new String[0]);
+        int[] breaks = getList(lines, setPageBreaks);
+        int[] triggers = getList(lines, setVersionTriggers);
         Path compositeTex = staging.resolve(String.format(nameFormat,
                 "assignment", quizId, testpaperId, "tex"));
         DocumentWriter compositeDoc = new DocumentWriter(compositeTex);
         compositeDoc.writePreamble(assignment.getQuiz().getName());
-        compositeDoc.beginQuiz(breaks);
+        compositeDoc.beginDocument(breaks, triggers);
         
         Path studentDir, studentStaging;
         DocumentWriter individualDoc = null;
@@ -163,25 +165,25 @@ public class Mint implements ITagLib {
                         String.format(nameFormat, studentId, quizId, testpaperId, "tex"));            
                 individualDoc = new DocumentWriter(individualTex);            
                 individualDoc.writePreamble(assignment.getQuiz().getName());
-                individualDoc.beginQuiz(breaks);
-                individualDoc.printAuthor(studentName, signature);
+                individualDoc.beginDocument(breaks, triggers);
+                individualDoc.beginQuiz(studentName, signature);
                 individualDoc.writeTemplate(blueprintTex, params);
+                individualDoc.endQuiz();
+                individualDoc.endDocument();
+                individualDoc.close();
+                
                 if (i == 0) {
-                    compositeDoc.printAuthor("sample copy", new int[signature.length]);
+                    compositeDoc.beginQuiz("sample copy", new int[signature.length]);
                     compositeDoc.writeTemplate(blueprintTex, params);
+                    compositeDoc.endQuiz();
                 }
             } else {
-                compositeDoc.printAuthor(studentName, signature);
+                compositeDoc.beginQuiz(studentName, signature);
                 compositeDoc.writeTemplate(blueprintTex, params);
-            }
-            
-            if (!publish && breaks.length % 2 != 0 && students.length > 1) 
-                compositeDoc.insertBlankPage();
-            
-            individualDoc.endQuiz();
-            individualDoc.close();
+                compositeDoc.endQuiz();
+            }            
         }
-        compositeDoc.endQuiz();
+        compositeDoc.endDocument();
         compositeDoc.close();
 
         // 3. Link Makefiles and make the PDFs
@@ -316,24 +318,22 @@ public class Mint implements ITagLib {
         }
     }
 
-    private int[] getPageBreaks(Path blueprintTex) throws Exception {
+    private int[] getList(String[] lines, String tag) throws Exception {
         String csv = null;
-        String[] lines = Files.readAllLines(blueprintTex, 
-            StandardCharsets.UTF_8).toArray(new String[0]);
         for (String line: lines) {
-            if (line.startsWith(ITagLib.setPageBreaks)) {
-                csv = line.substring(line.indexOf('{'), line.indexOf('}'));
+            if (line.startsWith(tag)) {
+                csv = line.replaceFirst("(^.*\\{)(.*)(\\}$)", "$2");
                 break;
             }
         }
-        String[] values = csv.split(",");
+        String[] values = csv.trim().length() == 0 ? new String[0] : csv.split(",");
         int[] breaks = new int[values.length];
         for (int i = 0; i < values.length; i++) {
-            breaks[i] = Integer.parseInt(values[i]);
+            breaks[i] = Integer.parseInt(values[i].trim());
         }
         return breaks;
     }
-
+    
     private ManifestType prepareManifest(Path root,  
         Path downloads, Path preview) throws Exception {        
         ManifestType manifest = new ManifestType();

@@ -221,6 +221,63 @@
                                
                              
 
+                        /**
+                        * field for VersionTriggers
+                        * This was an Array!
+                        */
+
+                        
+                                    protected int[] localVersionTriggers ;
+                                
+                           /*  This tracker boolean wil be used to detect whether the user called the set method
+                          *   for this attribute. It will be used to determine whether to include this field
+                           *   in the serialized XML
+                           */
+                           protected boolean localVersionTriggersTracker = false ;
+
+                           public boolean isVersionTriggersSpecified(){
+                               return localVersionTriggersTracker;
+                           }
+
+                           
+
+                           /**
+                           * Auto generated getter method
+                           * @return int[]
+                           */
+                           public  int[] getVersionTriggers(){
+                               return localVersionTriggers;
+                           }
+
+                           
+                        
+
+
+                               
+                              /**
+                               * validate the array for VersionTriggers
+                               */
+                              protected void validateVersionTriggers(int[] param){
+                             
+                              }
+
+
+                             /**
+                              * Auto generated setter method
+                              * @param param VersionTriggers
+                              */
+                              public void setVersionTriggers(int[] param){
+                              
+                                   validateVersionTriggers(param);
+
+                               localVersionTriggersTracker = param != null;
+                                      
+                                      this.localVersionTriggers=param;
+                              }
+
+                               
+                             
+
      
      
         /**
@@ -332,6 +389,32 @@
                              } else {
                                  
                                          throw new org.apache.axis2.databinding.ADBException("breaks cannot be null!!");
+                                    
+                             }
+
+                        } if (localVersionTriggersTracker){
+                             if (localVersionTriggers!=null) {
+                                   namespace = "http://gutenberg/blocs";
+                                   for (int i = 0;i < localVersionTriggers.length;i++){
+                                        
+                                                   if (localVersionTriggers[i]!=java.lang.Integer.MIN_VALUE) {
+                                               
+                                                writeStartElement(null, namespace, "versionTriggers", xmlWriter);
+
+                                            
+                                                xmlWriter.writeCharacters(org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localVersionTriggers[i]));
+                                                xmlWriter.writeEndElement();
+                                            
+                                                } else {
+                                                   
+                                                           // we have to do nothing since minOccurs is zero
+                                                       
+                                                }
+
+                                   }
+                             } else {
+                                 
+                                         throw new org.apache.axis2.databinding.ADBException("versionTriggers cannot be null!!");
                                     
                              }
 
@@ -577,6 +660,24 @@
                                 
                             }
 
+                        } if (localVersionTriggersTracker){
+                            if (localVersionTriggers!=null){
+                                  for (int i = 0;i < localVersionTriggers.length;i++){
+                                      
+                                          elementList.add(new javax.xml.namespace.QName("http://gutenberg/blocs",
+                                                                                                                       "versionTriggers"));
+                                          elementList.add(
+                                          org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localVersionTriggers[i]));
+
+                                      
+
+                                  }
+                            } else {
+                              
+                                    throw new org.apache.axis2.databinding.ADBException("versionTriggers cannot be null!!");
+                                
+                            }
+
                         }
 
                 return new org.apache.axis2.databinding.utils.reader.ADBXMLStreamReaderImpl(qName, elementList.toArray(), attribList.toArray());
@@ -656,6 +757,8 @@
                         java.util.ArrayList list3 = new java.util.ArrayList();
                     
                         java.util.ArrayList list4 = new java.util.ArrayList();
+                    
+                        java.util.ArrayList list5 = new java.util.ArrayList();
                     
                                     
                                     while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
@@ -774,6 +877,52 @@
                                             object.setBreaks((int[])
                                                 org.apache.axis2.databinding.utils.ConverterUtil.convertToArray(
                                                             int.class,list4));
+                                                
+                              }  // End of if for expected property start element
+                                
+                                    else {
+                                        
+                                    }
+                                
+                                    
+                                    while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
+                                
+                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://gutenberg/blocs","versionTriggers").equals(reader.getName())){
+                                
+                                    
+                                    
+                                    // Process the array and step past its final element's end.
+                                    list5.add(reader.getElementText());
+                                            
+                                            //loop until we find a start element that is not part of this array
+                                            boolean loopDone5 = false;
+                                            while(!loopDone5){
+                                                // Ensure we are at the EndElement
+                                                while (!reader.isEndElement()){
+                                                    reader.next();
+                                                }
+                                                // Step out of this element
+                                                reader.next();
+                                                // Step to next element event.
+                                                while (!reader.isStartElement() && !reader.isEndElement())
+                                                    reader.next();
+                                                if (reader.isEndElement()){
+                                                    //two continuous end elements means we are exiting the xml structure
+                                                    loopDone5 = true;
+                                                } else {
+                                                    if (new javax.xml.namespace.QName("http://gutenberg/blocs","versionTriggers").equals(reader.getName())){
+                                                         list5.add(reader.getElementText());
+                                                        
+                                                    }else{
+                                                        loopDone5 = true;
+                                                    }
+                                                }
+                                            }
+                                            // call the converter utility  to convert and set the array
+                                            
+                                            object.setVersionTriggers((int[])
+                                                org.apache.axis2.databinding.utils.ConverterUtil.convertToArray(
+                                                            int.class,list5));
                                                 
                               }  // End of if for expected property start element
                                 

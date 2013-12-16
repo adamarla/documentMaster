@@ -126,10 +126,6 @@ public class Vault implements ITagLib {
         String id = tags.getId();
         String marks = "";
         String length = "";
-        int[] breaks = tags.getBreaks();
-        if (breaks == null) {
-            breaks = new int[0];
-        }
 
         Path questionTex = vaultPath.resolve(id).resolve(texFile);
         
@@ -138,7 +134,6 @@ public class Vault implements ITagLib {
                 questionTexTmp.toFile()));
 
         int partIdx = 0;
-        int pageIdx = 0;
         String line = null, trimmed = null;        
         
         try (BufferedReader reader = 
@@ -164,15 +159,8 @@ public class Vault implements ITagLib {
                         line = line.replaceFirst(
                                 Matcher.quoteReplacement(part) + marksRegex, 
                                 Matcher.quoteReplacement(part) + marks);
-                        // tricky bit, insert a new page before next part starts
-                        if (breaks.length > pageIdx) {
-                            if (partIdx == breaks[pageIdx] + 1) {
-                                writer.println(newpage);
-                                pageIdx++;
-                            }
-                        }
                     }
-                } else if (trimmed.equals(newpage)) {
+                } else if (trimmed.startsWith(comment)) {
                     continue;
                 }
                 writer.println(line);
