@@ -3,8 +3,10 @@ package gutenberg.workers;
 import gutenberg.blocs.AssignmentType;
 import gutenberg.blocs.EntryType;
 import gutenberg.blocs.ManifestType;
+import gutenberg.blocs.QFlagsType;
 import gutenberg.blocs.QuizType;
 import gutenberg.blocs.TexFlagsType;
+import gutenberg.blocs.WFlagsType;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -241,6 +243,15 @@ public class Mint implements ITagLib {
     }    
     
     public ManifestType writeTex(TexFlagsType texFlags) {
+        String mode = texFlags.getMode();
+        String target = texFlags.getTarget();
+        String[] _import = texFlags.get_import();//import is a reserved word
+        String author = texFlags.isAuthorSpecified() ? 
+                texFlags.getAuthor() : null;
+        QFlagsType qFlags = texFlags.isQFlagsSpecified() ? 
+                texFlags.getQFlags() : null;
+        WFlagsType wFlags = texFlags.isWFlagsSpecified() ? 
+                texFlags.getWFlags() : null;
         //TODO: Implement here
         return new ManifestType();
     }
