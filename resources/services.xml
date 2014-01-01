@@ -53,6 +53,10 @@
             <actionMapping>http://gutenberg/blocs/generateStudentRoster</actionMapping>
             <outputActionMapping>http://gutenberg/blocs/documentMaster/generateStudentRosterResponse</outputActionMapping>
         </operation>
+        <operation name="writeTex" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://gutenberg/blocs">
+            <actionMapping>http://gutenberg/blocs/writeTex</actionMapping>
+            <outputActionMapping>http://gutenberg/blocs/documentMaster/writeTexResponse</outputActionMapping>
+        </operation>
         <operation name="rotateScan" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://gutenberg/blocs">
             <actionMapping>http://gutenberg/blocs/rotateScan</actionMapping>
             <outputActionMapping>http://gutenberg/blocs/documentMaster/rotateScanResponse</outputActionMapping>

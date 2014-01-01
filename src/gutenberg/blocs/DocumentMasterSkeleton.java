@@ -281,4 +281,23 @@ public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
         return resolveScanResponse;
     }
 
+    @Override
+    public WriteTexResponse writeTex(WriteTex writeTex) {
+        ResponseType response = new ResponseType();
+        Config config = null;
+        Mint mint = null;
+        try {
+            config = new Config();
+            mint = new Mint(config);
+            TexFlagsType texFlags = writeTex.getWriteTex();            
+            response.setManifest(mint.writeTex(texFlags));
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.setError(e.getMessage());
+        }
+        WriteTexResponse writeTexResponse = new WriteTexResponse();
+        writeTexResponse.setWriteTexResponse(response);
+        return writeTexResponse;
+    }
+
 }

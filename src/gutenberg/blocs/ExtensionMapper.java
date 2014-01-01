@@ -43,9 +43,39 @@
               
                   if (
                   "http://gutenberg/blocs".equals(namespaceURI) &&
+                  "qFlagsType".equals(typeName)){
+                   
+                            return  gutenberg.blocs.QFlagsType.Factory.parse(reader);
+                        
+
+                  }
+
+              
+                  if (
+                  "http://gutenberg/blocs".equals(namespaceURI) &&
                   "questionTagsType".equals(typeName)){
                    
                             return  gutenberg.blocs.QuestionTagsType.Factory.parse(reader);
+                        
+
+                  }
+
+              
+                  if (
+                  "http://gutenberg/blocs".equals(namespaceURI) &&
+                  "wFlagsType".equals(typeName)){
+                   
+                            return  gutenberg.blocs.WFlagsType.Factory.parse(reader);
+                        
+
+                  }
+
+              
+                  if (
+                  "http://gutenberg/blocs".equals(namespaceURI) &&
+                  "texFlagsType".equals(typeName)){
+                   
+                            return  gutenberg.blocs.TexFlagsType.Factory.parse(reader);
                         
 
                   }

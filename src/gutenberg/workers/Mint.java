@@ -4,6 +4,7 @@ import gutenberg.blocs.AssignmentType;
 import gutenberg.blocs.EntryType;
 import gutenberg.blocs.ManifestType;
 import gutenberg.blocs.QuizType;
+import gutenberg.blocs.TexFlagsType;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -238,6 +239,11 @@ public class Mint implements ITagLib {
         }        
         return manifest;    
     }    
+    
+    public ManifestType writeTex(TexFlagsType texFlags) {
+        //TODO: Implement here
+        return new ManifestType();
+    }
 
     private int make(Path workingDir, Path downloadsDir, Path previewsDir)
             throws Exception {

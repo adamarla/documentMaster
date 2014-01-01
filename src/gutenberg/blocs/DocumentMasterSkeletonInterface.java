@@ -169,6 +169,20 @@
         /**
          * Auto generated method signature
          * 
+                                    * @param writeTex
+         */
+
+        
+                public gutenberg.blocs.WriteTexResponse writeTex
+                (
+                  gutenberg.blocs.WriteTex writeTex
+                 )
+            ;
+        
+         
+        /**
+         * Auto generated method signature
+         * 
                                     * @param rotateScan
          */
 
