@@ -3,7 +3,7 @@
  * ExtensionMapper.java
  *
  * This file was auto-generated from WSDL
- * by the Apache Axis2 version: 1.6.1  Built on : Aug 31, 2011 (12:23:23 CEST)
+ * by the Apache Axis2 version: 1.6.2  Built on : Apr 17, 2012 (05:34:40 IST)
  */
 
         
@@ -43,6 +43,26 @@
               
                   if (
                   "http://gutenberg/blocs".equals(namespaceURI) &&
+                  "qFlagsType".equals(typeName)){
+                   
+                            return  gutenberg.blocs.QFlagsType.Factory.parse(reader);
+                        
+
+                  }
+
+              
+                  if (
+                  "http://gutenberg/blocs".equals(namespaceURI) &&
+                  "MkFlags".equals(typeName)){
+                   
+                            return  gutenberg.blocs.MkFlags.Factory.parse(reader);
+                        
+
+                  }
+
+              
+                  if (
+                  "http://gutenberg/blocs".equals(namespaceURI) &&
                   "questionTagsType".equals(typeName)){
                    
                             return  gutenberg.blocs.QuestionTagsType.Factory.parse(reader);
@@ -53,9 +73,29 @@
               
                   if (
                   "http://gutenberg/blocs".equals(namespaceURI) &&
+                  "wFlagsType".equals(typeName)){
+                   
+                            return  gutenberg.blocs.WFlagsType.Factory.parse(reader);
+                        
+
+                  }
+
+              
+                  if (
+                  "http://gutenberg/blocs".equals(namespaceURI) &&
                   "studentGroupType".equals(typeName)){
                    
                             return  gutenberg.blocs.StudentGroupType.Factory.parse(reader);
+                        
+
+                  }
+
+              
+                  if (
+                  "http://gutenberg/blocs".equals(namespaceURI) &&
+                  "TexFlags".equals(typeName)){
+                   
+                            return  gutenberg.blocs.TexFlags.Factory.parse(reader);
                         
 
                   }

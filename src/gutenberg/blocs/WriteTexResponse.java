@@ -1,6 +1,6 @@
 
 /**
- * GenerateQuizReportResponse.java
+ * WriteTexResponse.java
  *
  * This file was auto-generated from WSDL
  * by the Apache Axis2 version: 1.6.2  Built on : Apr 17, 2012 (05:34:40 IST)
@@ -11,45 +11,45 @@
             
 
             /**
-            *  GenerateQuizReportResponse bean class
+            *  WriteTexResponse bean class
             */
             @SuppressWarnings({"unchecked","unused"})
         
-        public  class GenerateQuizReportResponse
+        public  class WriteTexResponse
         implements org.apache.axis2.databinding.ADBBean{
         
                 public static final javax.xml.namespace.QName MY_QNAME = new javax.xml.namespace.QName(
                 "http://gutenberg/blocs",
-                "generateQuizReportResponse",
+                "writeTexResponse",
                 "ns1");
 
             
 
                         /**
-                        * field for GenerateQuizReportResponse
+                        * field for WriteTexResponse
                         */
 
                         
-                                    protected gutenberg.blocs.ResponseType localGenerateQuizReportResponse ;
+                                    protected gutenberg.blocs.ResponseType localWriteTexResponse ;
                                 
 
                            /**
                            * Auto generated getter method
                            * @return gutenberg.blocs.ResponseType
                            */
-                           public  gutenberg.blocs.ResponseType getGenerateQuizReportResponse(){
-                               return localGenerateQuizReportResponse;
+                           public  gutenberg.blocs.ResponseType getWriteTexResponse(){
+                               return localWriteTexResponse;
                            }
 
                            
                         
                             /**
                                * Auto generated setter method
-                               * @param param GenerateQuizReportResponse
+                               * @param param WriteTexResponse
                                */
-                               public void setGenerateQuizReportResponse(gutenberg.blocs.ResponseType param){
+                               public void setWriteTexResponse(gutenberg.blocs.ResponseType param){
                             
-                                            this.localGenerateQuizReportResponse=param;
+                                            this.localWriteTexResponse=param;
                                     
 
                                }
@@ -89,10 +89,10 @@
                 
                 //We can safely assume an element has only one type associated with it
                 
-                                 if (localGenerateQuizReportResponse==null){
-                                   throw new org.apache.axis2.databinding.ADBException("generateQuizReportResponse cannot be null!");
+                                 if (localWriteTexResponse==null){
+                                   throw new org.apache.axis2.databinding.ADBException("writeTexResponse cannot be null!");
                                  }
-                                 localGenerateQuizReportResponse.serialize(MY_QNAME,xmlWriter);
+                                 localWriteTexResponse.serialize(MY_QNAME,xmlWriter);
                             
 
         }
@@ -275,7 +275,7 @@
         
                 
                 //We can safely assume an element has only one type associated with it
-                return localGenerateQuizReportResponse.getPullParser(MY_QNAME);
+                return localWriteTexResponse.getPullParser(MY_QNAME);
 
         }
 
@@ -296,9 +296,9 @@
         * Postcondition: If this object is an element, the reader is positioned at its end element
         *                If this object is a complex type, the reader is positioned at the end element of its outer element
         */
-        public static GenerateQuizReportResponse parse(javax.xml.stream.XMLStreamReader reader) throws java.lang.Exception{
-            GenerateQuizReportResponse object =
-                new GenerateQuizReportResponse();
+        public static WriteTexResponse parse(javax.xml.stream.XMLStreamReader reader) throws java.lang.Exception{
+            WriteTexResponse object =
+                new WriteTexResponse();
 
             int event;
             java.lang.String nillableValue = null;
@@ -321,9 +321,9 @@
                 while(!reader.isEndElement()) {
                     if (reader.isStartElement() ){
                 
-                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://gutenberg/blocs","generateQuizReportResponse").equals(reader.getName())){
+                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://gutenberg/blocs","writeTexResponse").equals(reader.getName())){
                                 
-                                                object.setGenerateQuizReportResponse(gutenberg.blocs.ResponseType.Factory.parse(reader));
+                                                object.setWriteTexResponse(gutenberg.blocs.ResponseType.Factory.parse(reader));
                                             
                               }  // End of if for expected property start element
                                 

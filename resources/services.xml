@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- This file was auto-generated from WSDL -->
-<!-- by the Apache Axis2 version: 1.6.1  Built on : Aug 31, 2011 (12:22:40 CEST) -->
+<!-- by the Apache Axis2 version: 1.6.2  Built on : Apr 17, 2012 (05:33:49 IST) -->
 <serviceGroup>
     <service name="documentMaster">
         <messageReceivers>
@@ -49,9 +49,17 @@
             <actionMapping>http://gutenberg/blocs/undoAnnotate</actionMapping>
             <outputActionMapping>http://gutenberg/blocs/documentMaster/undoAnnotateResponse</outputActionMapping>
         </operation>
+        <operation name="compileTex" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://gutenberg/blocs">
+            <actionMapping>http://gutenberg/blocs/compileTex</actionMapping>
+            <outputActionMapping>http://gutenberg/blocs/documentMaster/compileTexResponse</outputActionMapping>
+        </operation>
         <operation name="generateStudentRoster" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://gutenberg/blocs">
             <actionMapping>http://gutenberg/blocs/generateStudentRoster</actionMapping>
             <outputActionMapping>http://gutenberg/blocs/documentMaster/generateStudentRosterResponse</outputActionMapping>
+        </operation>
+        <operation name="writeTex" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://gutenberg/blocs">
+            <actionMapping>http://gutenberg/blocs/writeTex</actionMapping>
+            <outputActionMapping>http://gutenberg/blocs/documentMaster/writeTexResponse</outputActionMapping>
         </operation>
         <operation name="rotateScan" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://gutenberg/blocs">
             <actionMapping>http://gutenberg/blocs/rotateScan</actionMapping>

@@ -1,6 +1,6 @@
 
 /**
- * GenerateQuizReportResponse.java
+ * MkFlags.java
  *
  * This file was auto-generated from WSDL
  * by the Apache Axis2 version: 1.6.2  Built on : Apr 17, 2012 (05:34:40 IST)
@@ -11,45 +11,44 @@
             
 
             /**
-            *  GenerateQuizReportResponse bean class
+            *  MkFlags bean class
             */
             @SuppressWarnings({"unchecked","unused"})
         
-        public  class GenerateQuizReportResponse
+        public  class MkFlags
         implements org.apache.axis2.databinding.ADBBean{
-        
-                public static final javax.xml.namespace.QName MY_QNAME = new javax.xml.namespace.QName(
-                "http://gutenberg/blocs",
-                "generateQuizReportResponse",
-                "ns1");
-
+        /* This type was generated from the piece of schema that had
+                name = MkFlags
+                Namespace URI = http://gutenberg/blocs
+                Namespace Prefix = ns1
+                */
             
 
                         /**
-                        * field for GenerateQuizReportResponse
+                        * field for Path
                         */
 
                         
-                                    protected gutenberg.blocs.ResponseType localGenerateQuizReportResponse ;
+                                    protected java.lang.String localPath ;
                                 
 
                            /**
                            * Auto generated getter method
-                           * @return gutenberg.blocs.ResponseType
+                           * @return java.lang.String
                            */
-                           public  gutenberg.blocs.ResponseType getGenerateQuizReportResponse(){
-                               return localGenerateQuizReportResponse;
+                           public  java.lang.String getPath(){
+                               return localPath;
                            }
 
                            
                         
                             /**
                                * Auto generated setter method
-                               * @param param GenerateQuizReportResponse
+                               * @param param Path
                                */
-                               public void setGenerateQuizReportResponse(gutenberg.blocs.ResponseType param){
+                               public void setPath(java.lang.String param){
                             
-                                            this.localGenerateQuizReportResponse=param;
+                                            this.localPath=param;
                                     
 
                                }
@@ -70,8 +69,8 @@
 
         
                org.apache.axiom.om.OMDataSource dataSource =
-                       new org.apache.axis2.databinding.ADBDataSource(this,MY_QNAME);
-               return factory.createOMElement(dataSource,MY_QNAME);
+                       new org.apache.axis2.databinding.ADBDataSource(this,parentQName);
+               return factory.createOMElement(dataSource,parentQName);
             
         }
 
@@ -87,13 +86,53 @@
             throws javax.xml.stream.XMLStreamException, org.apache.axis2.databinding.ADBException{
             
                 
-                //We can safely assume an element has only one type associated with it
+
+
+                java.lang.String prefix = null;
+                java.lang.String namespace = null;
                 
-                                 if (localGenerateQuizReportResponse==null){
-                                   throw new org.apache.axis2.databinding.ADBException("generateQuizReportResponse cannot be null!");
-                                 }
-                                 localGenerateQuizReportResponse.serialize(MY_QNAME,xmlWriter);
-                            
+
+                    prefix = parentQName.getPrefix();
+                    namespace = parentQName.getNamespaceURI();
+                    writeStartElement(prefix, namespace, parentQName.getLocalPart(), xmlWriter);
+                
+                  if (serializeType){
+               
+
+                   java.lang.String namespacePrefix = registerPrefix(xmlWriter,"http://gutenberg/blocs");
+                   if ((namespacePrefix != null) && (namespacePrefix.trim().length() > 0)){
+                       writeAttribute("xsi","http://www.w3.org/2001/XMLSchema-instance","type",
+                           namespacePrefix+":MkFlags",
+                           xmlWriter);
+                   } else {
+                       writeAttribute("xsi","http://www.w3.org/2001/XMLSchema-instance","type",
+                           "MkFlags",
+                           xmlWriter);
+                   }
+
+               
+                   }
+               
+                                    namespace = "http://gutenberg/blocs";
+                                    writeStartElement(null, namespace, "path", xmlWriter);
+                             
+
+                                          if (localPath==null){
+                                              // write the nil attribute
+                                              
+                                                     throw new org.apache.axis2.databinding.ADBException("path cannot be null!!");
+                                                  
+                                          }else{
+
+                                        
+                                                   xmlWriter.writeCharacters(localPath);
+                                            
+                                          }
+                                    
+                                   xmlWriter.writeEndElement();
+                             
+                    xmlWriter.writeEndElement();
+               
 
         }
 
@@ -273,9 +312,23 @@
 
 
         
+                 java.util.ArrayList elementList = new java.util.ArrayList();
+                 java.util.ArrayList attribList = new java.util.ArrayList();
+
                 
-                //We can safely assume an element has only one type associated with it
-                return localGenerateQuizReportResponse.getPullParser(MY_QNAME);
+                                      elementList.add(new javax.xml.namespace.QName("http://gutenberg/blocs",
+                                                                      "path"));
+                                 
+                                        if (localPath != null){
+                                            elementList.add(org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localPath));
+                                        } else {
+                                           throw new org.apache.axis2.databinding.ADBException("path cannot be null!!");
+                                        }
+                                    
+
+                return new org.apache.axis2.databinding.utils.reader.ADBXMLStreamReaderImpl(qName, elementList.toArray(), attribList.toArray());
+            
+            
 
         }
 
@@ -296,9 +349,9 @@
         * Postcondition: If this object is an element, the reader is positioned at its end element
         *                If this object is a complex type, the reader is positioned at the end element of its outer element
         */
-        public static GenerateQuizReportResponse parse(javax.xml.stream.XMLStreamReader reader) throws java.lang.Exception{
-            GenerateQuizReportResponse object =
-                new GenerateQuizReportResponse();
+        public static MkFlags parse(javax.xml.stream.XMLStreamReader reader) throws java.lang.Exception{
+            MkFlags object =
+                new MkFlags();
 
             int event;
             java.lang.String nillableValue = null;
@@ -310,6 +363,32 @@
                     reader.next();
 
                 
+                if (reader.getAttributeValue("http://www.w3.org/2001/XMLSchema-instance","type")!=null){
+                  java.lang.String fullTypeName = reader.getAttributeValue("http://www.w3.org/2001/XMLSchema-instance",
+                        "type");
+                  if (fullTypeName!=null){
+                    java.lang.String nsPrefix = null;
+                    if (fullTypeName.indexOf(":") > -1){
+                        nsPrefix = fullTypeName.substring(0,fullTypeName.indexOf(":"));
+                    }
+                    nsPrefix = nsPrefix==null?"":nsPrefix;
+
+                    java.lang.String type = fullTypeName.substring(fullTypeName.indexOf(":")+1);
+                    
+                            if (!"MkFlags".equals(type)){
+                                //find namespace for the prefix
+                                java.lang.String nsUri = reader.getNamespaceContext().getNamespaceURI(nsPrefix);
+                                return (MkFlags)gutenberg.blocs.ExtensionMapper.getTypeObject(
+                                     nsUri,type,reader);
+                              }
+                        
+
+                  }
+                
+
+                }
+
+                
 
                 
                 // Note all attributes that were handled. Used to differ normal attributes
@@ -317,26 +396,42 @@
                 java.util.Vector handledAttributes = new java.util.Vector();
                 
 
-                   
-                while(!reader.isEndElement()) {
-                    if (reader.isStartElement() ){
                 
-                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://gutenberg/blocs","generateQuizReportResponse").equals(reader.getName())){
+                    
+                    reader.next();
+                
+                                    
+                                    while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
                                 
-                                                object.setGenerateQuizReportResponse(gutenberg.blocs.ResponseType.Factory.parse(reader));
-                                            
+                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://gutenberg/blocs","path").equals(reader.getName())){
+                                
+                                    nillableValue = reader.getAttributeValue("http://www.w3.org/2001/XMLSchema-instance","nil");
+                                    if ("true".equals(nillableValue) || "1".equals(nillableValue)){
+                                        throw new org.apache.axis2.databinding.ADBException("The element: "+"path" +"  cannot be null");
+                                    }
+                                    
+
+                                    java.lang.String content = reader.getElementText();
+                                    
+                                              object.setPath(
+                                                    org.apache.axis2.databinding.utils.ConverterUtil.convertToString(content));
+                                              
+                                        reader.next();
+                                    
                               }  // End of if for expected property start element
                                 
-                             else{
-                                        // A start element we are not expecting indicates an invalid parameter was passed
-                                        throw new org.apache.axis2.databinding.ADBException("Unexpected subelement " + reader.getName());
-                             }
-                          
-                             } else {
+                                else{
+                                    // A start element we are not expecting indicates an invalid parameter was passed
+                                    throw new org.apache.axis2.databinding.ADBException("Unexpected subelement " + reader.getName());
+                                }
+                              
+                            while (!reader.isStartElement() && !reader.isEndElement())
                                 reader.next();
-                             }  
-                           }  // end of while loop
-                        
+                            
+                                if (reader.isStartElement())
+                                // A start element we are not expecting indicates a trailing invalid property
+                                throw new org.apache.axis2.databinding.ADBException("Unexpected subelement " + reader.getName());
+                            
 
 
 

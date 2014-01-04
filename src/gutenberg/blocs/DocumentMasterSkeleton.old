@@ -1,0 +1,270 @@
+
+/**
+ * DocumentMasterSkeleton.java
+ *
+ * This file was auto-generated from WSDL
+ * by the Apache Axis2 version: 1.6.2  Built on : Apr 17, 2012 (05:33:49 IST)
+ */
+    package gutenberg.blocs;
+    /**
+     *  DocumentMasterSkeleton java skeleton for the axisService
+     */
+    public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface{
+        
+         
+        /**
+         * Auto generated method signature
+         * 
+                                     * @param tagQuestion0 
+             * @return tagQuestionResponse1 
+         */
+        
+                 public gutenberg.blocs.TagQuestionResponse tagQuestion
+                  (
+                  gutenberg.blocs.TagQuestion tagQuestion0
+                  )
+            {
+                //TODO : fill this with the necessary business logic
+                throw new  java.lang.UnsupportedOperationException("Please implement " + this.getClass().getName() + "#tagQuestion");
+        }
+     
+         
+        /**
+         * Auto generated method signature
+         * 
+                                     * @param uploadSuggestion2 
+             * @return uploadSuggestionResponse3 
+         */
+        
+                 public gutenberg.blocs.UploadSuggestionResponse uploadSuggestion
+                  (
+                  gutenberg.blocs.UploadSuggestion uploadSuggestion2
+                  )
+            {
+                //TODO : fill this with the necessary business logic
+                throw new  java.lang.UnsupportedOperationException("Please implement " + this.getClass().getName() + "#uploadSuggestion");
+        }
+     
+         
+        /**
+         * Auto generated method signature
+         * 
+                                     * @param fetchUnresolvedScans4 
+             * @return fetchUnresolvedScansResponse5 
+         */
+        
+                 public gutenberg.blocs.FetchUnresolvedScansResponse fetchUnresolvedScans
+                  (
+                  gutenberg.blocs.FetchUnresolvedScans fetchUnresolvedScans4
+                  )
+            {
+                //TODO : fill this with the necessary business logic
+                throw new  java.lang.UnsupportedOperationException("Please implement " + this.getClass().getName() + "#fetchUnresolvedScans");
+        }
+     
+         
+        /**
+         * Auto generated method signature
+         * 
+                                     * @param resolveScan6 
+             * @return resolveScanResponse7 
+         */
+        
+                 public gutenberg.blocs.ResolveScanResponse resolveScan
+                  (
+                  gutenberg.blocs.ResolveScan resolveScan6
+                  )
+            {
+                //TODO : fill this with the necessary business logic
+                throw new  java.lang.UnsupportedOperationException("Please implement " + this.getClass().getName() + "#resolveScan");
+        }
+     
+         
+        /**
+         * Auto generated method signature
+         * 
+                                     * @param createQuestion8 
+             * @return createQuestionResponse9 
+         */
+        
+                 public gutenberg.blocs.CreateQuestionResponse createQuestion
+                  (
+                  gutenberg.blocs.CreateQuestion createQuestion8
+                  )
+            {
+                //TODO : fill this with the necessary business logic
+                throw new  java.lang.UnsupportedOperationException("Please implement " + this.getClass().getName() + "#createQuestion");
+        }
+     
+         
+        /**
+         * Auto generated method signature
+         * 
+                                     * @param prepTest10 
+             * @return prepTestResponse11 
+         */
+        
+                 public gutenberg.blocs.PrepTestResponse prepTest
+                  (
+                  gutenberg.blocs.PrepTest prepTest10
+                  )
+            {
+                //TODO : fill this with the necessary business logic
+                throw new  java.lang.UnsupportedOperationException("Please implement " + this.getClass().getName() + "#prepTest");
+        }
+     
+         
+        /**
+         * Auto generated method signature
+         * 
+                                     * @param annotateScan12 
+             * @return annotateScanResponse13 
+         */
+        
+                 public gutenberg.blocs.AnnotateScanResponse annotateScan
+                  (
+                  gutenberg.blocs.AnnotateScan annotateScan12
+                  )
+            {
+                //TODO : fill this with the necessary business logic
+                throw new  java.lang.UnsupportedOperationException("Please implement " + this.getClass().getName() + "#annotateScan");
+        }
+     
+         
+        /**
+         * Auto generated method signature
+         * 
+                                     * @param buildQuiz14 
+             * @return buildQuizResponse15 
+         */
+        
+                 public gutenberg.blocs.BuildQuizResponse buildQuiz
+                  (
+                  gutenberg.blocs.BuildQuiz buildQuiz14
+                  )
+            {
+                //TODO : fill this with the necessary business logic
+                throw new  java.lang.UnsupportedOperationException("Please implement " + this.getClass().getName() + "#buildQuiz");
+        }
+     
+         
+        /**
+         * Auto generated method signature
+         * 
+                                     * @param generateQuizReport16 
+             * @return generateQuizReportResponse17 
+         */
+        
+                 public gutenberg.blocs.GenerateQuizReportResponse generateQuizReport
+                  (
+                  gutenberg.blocs.GenerateQuizReport generateQuizReport16
+                  )
+            {
+                //TODO : fill this with the necessary business logic
+                throw new  java.lang.UnsupportedOperationException("Please implement " + this.getClass().getName() + "#generateQuizReport");
+        }
+     
+         
+        /**
+         * Auto generated method signature
+         * 
+                                     * @param undoAnnotate18 
+             * @return undoAnnotateResponse19 
+         */
+        
+                 public gutenberg.blocs.UndoAnnotateResponse undoAnnotate
+                  (
+                  gutenberg.blocs.UndoAnnotate undoAnnotate18
+                  )
+            {
+                //TODO : fill this with the necessary business logic
+                throw new  java.lang.UnsupportedOperationException("Please implement " + this.getClass().getName() + "#undoAnnotate");
+        }
+     
+         
+        /**
+         * Auto generated method signature
+         * 
+                                     * @param compileTex20 
+             * @return compileTexResponse21 
+         */
+        
+                 public gutenberg.blocs.CompileTexResponse compileTex
+                  (
+                  gutenberg.blocs.CompileTex compileTex20
+                  )
+            {
+                //TODO : fill this with the necessary business logic
+                throw new  java.lang.UnsupportedOperationException("Please implement " + this.getClass().getName() + "#compileTex");
+        }
+     
+         
+        /**
+         * Auto generated method signature
+         * 
+                                     * @param generateStudentRoster22 
+             * @return generateStudentRosterResponse23 
+         */
+        
+                 public gutenberg.blocs.GenerateStudentRosterResponse generateStudentRoster
+                  (
+                  gutenberg.blocs.GenerateStudentRoster generateStudentRoster22
+                  )
+            {
+                //TODO : fill this with the necessary business logic
+                throw new  java.lang.UnsupportedOperationException("Please implement " + this.getClass().getName() + "#generateStudentRoster");
+        }
+     
+         
+        /**
+         * Auto generated method signature
+         * 
+                                     * @param writeTex24 
+             * @return writeTexResponse25 
+         */
+        
+                 public gutenberg.blocs.WriteTexResponse writeTex
+                  (
+                  gutenberg.blocs.WriteTex writeTex24
+                  )
+            {
+                //TODO : fill this with the necessary business logic
+                throw new  java.lang.UnsupportedOperationException("Please implement " + this.getClass().getName() + "#writeTex");
+        }
+     
+         
+        /**
+         * Auto generated method signature
+         * 
+                                     * @param rotateScan26 
+             * @return rotateScanResponse27 
+         */
+        
+                 public gutenberg.blocs.RotateScanResponse rotateScan
+                  (
+                  gutenberg.blocs.RotateScan rotateScan26
+                  )
+            {
+                //TODO : fill this with the necessary business logic
+                throw new  java.lang.UnsupportedOperationException("Please implement " + this.getClass().getName() + "#rotateScan");
+        }
+     
+         
+        /**
+         * Auto generated method signature
+         * 
+                                     * @param assignQuiz28 
+             * @return assignQuizResponse29 
+         */
+        
+                 public gutenberg.blocs.AssignQuizResponse assignQuiz
+                  (
+                  gutenberg.blocs.AssignQuiz assignQuiz28
+                  )
+            {
+                //TODO : fill this with the necessary business logic
+                throw new  java.lang.UnsupportedOperationException("Please implement " + this.getClass().getName() + "#assignQuiz");
+        }
+     
+    }
+    

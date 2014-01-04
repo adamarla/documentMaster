@@ -1,24 +1,33 @@
 package gutenberg.workers;
 
-import gutenberg.blocs.AssignmentType;
+import gutenberg.blocs.AssignmentType ;
+import gutenberg.blocs.TexFlags;
+import gutenberg.blocs.MkFlags; 
+import gutenberg.blocs.QFlagsType; 
+import gutenberg.blocs.WFlagsType; 
 import gutenberg.blocs.EntryType;
 import gutenberg.blocs.ManifestType;
 import gutenberg.blocs.QuizType;
 
 import java.io.BufferedReader;
+import java.io.PrintWriter;
+import java.io.FileWriter; 
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.io.IOException; 
+
 
 public class Mint implements ITagLib {
     
     public Mint(Config config) throws Exception {
         sharedPath = config.getPath(Resource.shared);
         mintPath = config.getPath(Resource.mint);
-        vaultPath = config.getPath(Resource.vault);
+        vaultPath = config.getPath(Resource.vault); 
+        latexRoot = config.getPath(Resource.latexRoot) ;
     }
 
     /**
@@ -31,6 +40,94 @@ public class Mint implements ITagLib {
      * @throws Exception
      * 
      */
+    public int make(Path dir, boolean skel) throws Exception {
+    	ProcessBuilder pb = new ProcessBuilder("/usr/local/bin/make") ;
+    		
+    	String ltx = latexRoot.toString() ;
+    	pb.directory(dir.toFile()) ;
+    	pb.redirectErrorStream(true) ;
+    	
+    	if(skel) pb.command().add("skel") ;
+    	if (ltx != null) {
+				try {
+					String z = new String(pb.environment().get("PATH") + ":" + ltx + "/bin/i386-linux") ;
+					
+					pb.environment().put("PATH", z) ;
+					Process p = pb.start() ;
+					
+					BufferedReader messages = new BufferedReader(new InputStreamReader(
+											p.getInputStream()));
+
+							String line = null;
+							while ((line = messages.readLine()) != null) {
+									System.out.println(line);
+							}
+					return p.waitFor();
+				} catch (IOException e) {
+					throw new IOException(e.getMessage()) ;
+				}
+    	} else {
+    		throw new Exception("Mint.java (69): 'latexRoot' not inferred") ; 
+    	}
+    }
+    
+    public int compileTex(MkFlags f) throws Exception {
+    	Path target = mintPath.resolve(f.getPath()) ;
+    	try{
+    		this.make(target, false) ;
+    	} catch (Exception e) {
+    		throw e ;
+    	}
+    	return 0 ;
+    }
+
+    public int createTex(TexFlags f) throws Exception {
+    	Path target = mintPath.resolve(f.getTarget()) ;
+    	String mode = f.getMode() ;
+    	String[] imports = f.getImports() ;
+    	QFlagsType qflags = null ;
+    	WFlagsType wflags = null ;
+    	
+    	if (mode.compareToIgnoreCase("quiz") == 0) {
+    		qflags = f.getQFlags() ;
+    	} else if (mode.compareToIgnoreCase("worksheet") == 0){
+    		wflags = f.getWFlags() ;
+    	}
+    	// Prepare sandbox 
+    	Files.createDirectories(target) ;
+    	Files.createSymbolicLink(target.resolve("Makefile"), mintPath.resolve("../common/makefiles/compile.mk")) ;
+    	Files.createSymbolicLink(target.resolve("shell-script"), mintPath.resolve("../common/scripts/compile.sh")) ;
+    	
+    	// Write the blueprint file
+    	PrintWriter out ;
+    		String blueprint = target.resolve("blueprint").toString() ;
+    		out = new PrintWriter(new FileWriter(blueprint))  ;
+    		
+    		out.println("mode: " + mode) ;
+    		for(int i = 0 ; i < imports.length ; i++) {
+    			out.println("import: " + imports[i]) ;
+    		}
+    		
+    		if (f.getAuthor() != null)
+    			out.println("author: " + f.getAuthor()) ;
+    		
+    		if (qflags != null){
+    		   out.println("title: " + qflags.getTitle()) ;
+    		   out.println("pageBreaks: " + qflags.getPageBreaks()) ;
+    		   out.println("versionTriggers: " + qflags.getVersionTriggers()) ;
+    		} else if (wflags != null) {
+    			out.println("responses: " + wflags.getResponses()) ;
+    			out.println("versions: " + wflags.getVersions()) ;
+    		}
+    		out.close() ;
+    		try {
+    			this.make(target, true) ;
+    		} catch (Exception e) {
+    			throw e ;
+    		}
+    	return 0 ;
+    }
+    
     public ManifestType generate(QuizType quiz) throws Exception {
 
         String quizId = quiz.getQuiz().getId();
@@ -365,7 +462,7 @@ public class Mint implements ITagLib {
         return manifest;
     }
     
-    private Path  sharedPath, mintPath, vaultPath;
+    private Path  sharedPath, mintPath, vaultPath, latexRoot ;
     
     private final String 
         stagingDirName = "staging",
@@ -377,6 +474,6 @@ public class Mint implements ITagLib {
         makefile = "Makefile",
         quizMakefile = "quiz.mk",
         blueprintFile = "blueprintTex",
-        nameFormat = "%s-%s-%s.%s";
+        nameFormat = "%s-%s-%s.%s" ;
 
 }

@@ -1,6 +1,6 @@
 
 /**
- * EntryType.java
+ * WFlagsType.java
  *
  * This file was auto-generated from WSDL
  * by the Apache Axis2 version: 1.6.2  Built on : Apr 17, 2012 (05:34:40 IST)
@@ -11,189 +11,78 @@
             
 
             /**
-            *  EntryType bean class
+            *  WFlagsType bean class
             */
             @SuppressWarnings({"unchecked","unused"})
         
-        public  class EntryType
+        public  class WFlagsType
         implements org.apache.axis2.databinding.ADBBean{
         /* This type was generated from the piece of schema that had
-                name = entryType
+                name = wFlagsType
                 Namespace URI = http://gutenberg/blocs
                 Namespace Prefix = ns1
                 */
             
 
                         /**
-                        * field for Id
+                        * field for Versions
                         */
 
                         
-                                    protected java.lang.String localId ;
+                                    protected java.lang.String localVersions ;
                                 
 
                            /**
                            * Auto generated getter method
                            * @return java.lang.String
                            */
-                           public  java.lang.String getId(){
-                               return localId;
+                           public  java.lang.String getVersions(){
+                               return localVersions;
                            }
 
                            
                         
                             /**
                                * Auto generated setter method
-                               * @param param Id
+                               * @param param Versions
                                */
-                               public void setId(java.lang.String param){
+                               public void setVersions(java.lang.String param){
                             
-                                            this.localId=param;
+                                            this.localVersions=param;
                                     
 
                                }
                             
 
                         /**
-                        * field for Name
+                        * field for Responses
                         */
 
                         
-                                    protected java.lang.String localName ;
+                                    protected java.lang.String localResponses ;
                                 
-                           /*  This tracker boolean wil be used to detect whether the user called the set method
-                          *   for this attribute. It will be used to determine whether to include this field
-                           *   in the serialized XML
-                           */
-                           protected boolean localNameTracker = false ;
-
-                           public boolean isNameSpecified(){
-                               return localNameTracker;
-                           }
-
-                           
 
                            /**
                            * Auto generated getter method
                            * @return java.lang.String
                            */
-                           public  java.lang.String getName(){
-                               return localName;
+                           public  java.lang.String getResponses(){
+                               return localResponses;
                            }
 
                            
                         
                             /**
                                * Auto generated setter method
-                               * @param param Name
+                               * @param param Responses
                                */
-                               public void setName(java.lang.String param){
-                            localNameTracker = param != null;
-                                   
-                                            this.localName=param;
+                               public void setResponses(java.lang.String param){
+                            
+                                            this.localResponses=param;
                                     
 
                                }
                             
-
-                        /**
-                        * field for Value
-                        */
-
-                        
-                                    protected java.lang.String localValue ;
-                                
-                           /*  This tracker boolean wil be used to detect whether the user called the set method
-                          *   for this attribute. It will be used to determine whether to include this field
-                           *   in the serialized XML
-                           */
-                           protected boolean localValueTracker = false ;
-
-                           public boolean isValueSpecified(){
-                               return localValueTracker;
-                           }
-
-                           
-
-                           /**
-                           * Auto generated getter method
-                           * @return java.lang.String
-                           */
-                           public  java.lang.String getValue(){
-                               return localValue;
-                           }
-
-                           
-                        
-                            /**
-                               * Auto generated setter method
-                               * @param param Value
-                               */
-                               public void setValue(java.lang.String param){
-                            localValueTracker = param != null;
-                                   
-                                            this.localValue=param;
-                                    
-
-                               }
-                            
-
-                        /**
-                        * field for Signature
-                        * This was an Array!
-                        */
-
-                        
-                                    protected int[] localSignature ;
-                                
-                           /*  This tracker boolean wil be used to detect whether the user called the set method
-                          *   for this attribute. It will be used to determine whether to include this field
-                           *   in the serialized XML
-                           */
-                           protected boolean localSignatureTracker = false ;
-
-                           public boolean isSignatureSpecified(){
-                               return localSignatureTracker;
-                           }
-
-                           
-
-                           /**
-                           * Auto generated getter method
-                           * @return int[]
-                           */
-                           public  int[] getSignature(){
-                               return localSignature;
-                           }
-
-                           
-                        
-
-
-                               
-                              /**
-                               * validate the array for Signature
-                               */
-                              protected void validateSignature(int[] param){
-                             
-                              }
-
-
-                             /**
-                              * Auto generated setter method
-                              * @param param Signature
-                              */
-                              public void setSignature(int[] param){
-                              
-                                   validateSignature(param);
-
-                               localSignatureTracker = param != null;
-                                      
-                                      this.localSignature=param;
-                              }
-
-                               
-                             
 
      
      
@@ -243,11 +132,11 @@
                    java.lang.String namespacePrefix = registerPrefix(xmlWriter,"http://gutenberg/blocs");
                    if ((namespacePrefix != null) && (namespacePrefix.trim().length() > 0)){
                        writeAttribute("xsi","http://www.w3.org/2001/XMLSchema-instance","type",
-                           namespacePrefix+":entryType",
+                           namespacePrefix+":wFlagsType",
                            xmlWriter);
                    } else {
                        writeAttribute("xsi","http://www.w3.org/2001/XMLSchema-instance","type",
-                           "entryType",
+                           "wFlagsType",
                            xmlWriter);
                    }
 
@@ -255,85 +144,41 @@
                    }
                
                                     namespace = "http://gutenberg/blocs";
-                                    writeStartElement(null, namespace, "id", xmlWriter);
+                                    writeStartElement(null, namespace, "versions", xmlWriter);
                              
 
-                                          if (localId==null){
+                                          if (localVersions==null){
                                               // write the nil attribute
                                               
-                                                     throw new org.apache.axis2.databinding.ADBException("id cannot be null!!");
+                                                     throw new org.apache.axis2.databinding.ADBException("versions cannot be null!!");
                                                   
                                           }else{
 
                                         
-                                                   xmlWriter.writeCharacters(localId);
+                                                   xmlWriter.writeCharacters(localVersions);
                                             
                                           }
                                     
                                    xmlWriter.writeEndElement();
-                              if (localNameTracker){
+                             
                                     namespace = "http://gutenberg/blocs";
-                                    writeStartElement(null, namespace, "name", xmlWriter);
+                                    writeStartElement(null, namespace, "responses", xmlWriter);
                              
 
-                                          if (localName==null){
+                                          if (localResponses==null){
                                               // write the nil attribute
                                               
-                                                     throw new org.apache.axis2.databinding.ADBException("name cannot be null!!");
+                                                     throw new org.apache.axis2.databinding.ADBException("responses cannot be null!!");
                                                   
                                           }else{
 
                                         
-                                                   xmlWriter.writeCharacters(localName);
+                                                   xmlWriter.writeCharacters(localResponses);
                                             
                                           }
                                     
                                    xmlWriter.writeEndElement();
-                             } if (localValueTracker){
-                                    namespace = "http://gutenberg/blocs";
-                                    writeStartElement(null, namespace, "value", xmlWriter);
                              
-
-                                          if (localValue==null){
-                                              // write the nil attribute
-                                              
-                                                     throw new org.apache.axis2.databinding.ADBException("value cannot be null!!");
-                                                  
-                                          }else{
-
-                                        
-                                                   xmlWriter.writeCharacters(localValue);
-                                            
-                                          }
-                                    
-                                   xmlWriter.writeEndElement();
-                             } if (localSignatureTracker){
-                             if (localSignature!=null) {
-                                   namespace = "http://gutenberg/blocs";
-                                   for (int i = 0;i < localSignature.length;i++){
-                                        
-                                                   if (localSignature[i]!=java.lang.Integer.MIN_VALUE) {
-                                               
-                                                writeStartElement(null, namespace, "signature", xmlWriter);
-
-                                            
-                                                xmlWriter.writeCharacters(org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localSignature[i]));
-                                                xmlWriter.writeEndElement();
-                                            
-                                                } else {
-                                                   
-                                                           // we have to do nothing since minOccurs is zero
-                                                       
-                                                }
-
-                                   }
-                             } else {
-                                 
-                                         throw new org.apache.axis2.databinding.ADBException("signature cannot be null!!");
-                                    
-                             }
-
-                        }
                     xmlWriter.writeEndElement();
                
 
@@ -520,50 +365,23 @@
 
                 
                                       elementList.add(new javax.xml.namespace.QName("http://gutenberg/blocs",
-                                                                      "id"));
+                                                                      "versions"));
                                  
-                                        if (localId != null){
-                                            elementList.add(org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localId));
+                                        if (localVersions != null){
+                                            elementList.add(org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localVersions));
                                         } else {
-                                           throw new org.apache.axis2.databinding.ADBException("id cannot be null!!");
+                                           throw new org.apache.axis2.databinding.ADBException("versions cannot be null!!");
                                         }
-                                     if (localNameTracker){
+                                    
                                       elementList.add(new javax.xml.namespace.QName("http://gutenberg/blocs",
-                                                                      "name"));
+                                                                      "responses"));
                                  
-                                        if (localName != null){
-                                            elementList.add(org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localName));
+                                        if (localResponses != null){
+                                            elementList.add(org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localResponses));
                                         } else {
-                                           throw new org.apache.axis2.databinding.ADBException("name cannot be null!!");
+                                           throw new org.apache.axis2.databinding.ADBException("responses cannot be null!!");
                                         }
-                                    } if (localValueTracker){
-                                      elementList.add(new javax.xml.namespace.QName("http://gutenberg/blocs",
-                                                                      "value"));
-                                 
-                                        if (localValue != null){
-                                            elementList.add(org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localValue));
-                                        } else {
-                                           throw new org.apache.axis2.databinding.ADBException("value cannot be null!!");
-                                        }
-                                    } if (localSignatureTracker){
-                            if (localSignature!=null){
-                                  for (int i = 0;i < localSignature.length;i++){
-                                      
-                                          elementList.add(new javax.xml.namespace.QName("http://gutenberg/blocs",
-                                                                                                                       "signature"));
-                                          elementList.add(
-                                          org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localSignature[i]));
-
-                                      
-
-                                  }
-                            } else {
-                              
-                                    throw new org.apache.axis2.databinding.ADBException("signature cannot be null!!");
-                                
-                            }
-
-                        }
+                                    
 
                 return new org.apache.axis2.databinding.utils.reader.ADBXMLStreamReaderImpl(qName, elementList.toArray(), attribList.toArray());
             
@@ -588,9 +406,9 @@
         * Postcondition: If this object is an element, the reader is positioned at its end element
         *                If this object is a complex type, the reader is positioned at the end element of its outer element
         */
-        public static EntryType parse(javax.xml.stream.XMLStreamReader reader) throws java.lang.Exception{
-            EntryType object =
-                new EntryType();
+        public static WFlagsType parse(javax.xml.stream.XMLStreamReader reader) throws java.lang.Exception{
+            WFlagsType object =
+                new WFlagsType();
 
             int event;
             java.lang.String nillableValue = null;
@@ -614,10 +432,10 @@
 
                     java.lang.String type = fullTypeName.substring(fullTypeName.indexOf(":")+1);
                     
-                            if (!"entryType".equals(type)){
+                            if (!"wFlagsType".equals(type)){
                                 //find namespace for the prefix
                                 java.lang.String nsUri = reader.getNamespaceContext().getNamespaceURI(nsPrefix);
-                                return (EntryType)gutenberg.blocs.ExtensionMapper.getTypeObject(
+                                return (WFlagsType)gutenberg.blocs.ExtensionMapper.getTypeObject(
                                      nsUri,type,reader);
                               }
                         
@@ -639,22 +457,20 @@
                     
                     reader.next();
                 
-                        java.util.ArrayList list4 = new java.util.ArrayList();
-                    
                                     
                                     while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
                                 
-                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://gutenberg/blocs","id").equals(reader.getName())){
+                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://gutenberg/blocs","versions").equals(reader.getName())){
                                 
                                     nillableValue = reader.getAttributeValue("http://www.w3.org/2001/XMLSchema-instance","nil");
                                     if ("true".equals(nillableValue) || "1".equals(nillableValue)){
-                                        throw new org.apache.axis2.databinding.ADBException("The element: "+"id" +"  cannot be null");
+                                        throw new org.apache.axis2.databinding.ADBException("The element: "+"versions" +"  cannot be null");
                                     }
                                     
 
                                     java.lang.String content = reader.getElementText();
                                     
-                                              object.setId(
+                                              object.setVersions(
                                                     org.apache.axis2.databinding.utils.ConverterUtil.convertToString(content));
                                               
                                         reader.next();
@@ -669,97 +485,28 @@
                                     
                                     while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
                                 
-                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://gutenberg/blocs","name").equals(reader.getName())){
+                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://gutenberg/blocs","responses").equals(reader.getName())){
                                 
                                     nillableValue = reader.getAttributeValue("http://www.w3.org/2001/XMLSchema-instance","nil");
                                     if ("true".equals(nillableValue) || "1".equals(nillableValue)){
-                                        throw new org.apache.axis2.databinding.ADBException("The element: "+"name" +"  cannot be null");
+                                        throw new org.apache.axis2.databinding.ADBException("The element: "+"responses" +"  cannot be null");
                                     }
                                     
 
                                     java.lang.String content = reader.getElementText();
                                     
-                                              object.setName(
+                                              object.setResponses(
                                                     org.apache.axis2.databinding.utils.ConverterUtil.convertToString(content));
                                               
                                         reader.next();
                                     
                               }  // End of if for expected property start element
                                 
-                                    else {
-                                        
-                                    }
-                                
-                                    
-                                    while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
-                                
-                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://gutenberg/blocs","value").equals(reader.getName())){
-                                
-                                    nillableValue = reader.getAttributeValue("http://www.w3.org/2001/XMLSchema-instance","nil");
-                                    if ("true".equals(nillableValue) || "1".equals(nillableValue)){
-                                        throw new org.apache.axis2.databinding.ADBException("The element: "+"value" +"  cannot be null");
-                                    }
-                                    
-
-                                    java.lang.String content = reader.getElementText();
-                                    
-                                              object.setValue(
-                                                    org.apache.axis2.databinding.utils.ConverterUtil.convertToString(content));
-                                              
-                                        reader.next();
-                                    
-                              }  // End of if for expected property start element
-                                
-                                    else {
-                                        
-                                    }
-                                
-                                    
-                                    while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
-                                
-                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://gutenberg/blocs","signature").equals(reader.getName())){
-                                
-                                    
-                                    
-                                    // Process the array and step past its final element's end.
-                                    list4.add(reader.getElementText());
-                                            
-                                            //loop until we find a start element that is not part of this array
-                                            boolean loopDone4 = false;
-                                            while(!loopDone4){
-                                                // Ensure we are at the EndElement
-                                                while (!reader.isEndElement()){
-                                                    reader.next();
-                                                }
-                                                // Step out of this element
-                                                reader.next();
-                                                // Step to next element event.
-                                                while (!reader.isStartElement() && !reader.isEndElement())
-                                                    reader.next();
-                                                if (reader.isEndElement()){
-                                                    //two continuous end elements means we are exiting the xml structure
-                                                    loopDone4 = true;
-                                                } else {
-                                                    if (new javax.xml.namespace.QName("http://gutenberg/blocs","signature").equals(reader.getName())){
-                                                         list4.add(reader.getElementText());
-                                                        
-                                                    }else{
-                                                        loopDone4 = true;
-                                                    }
-                                                }
-                                            }
-                                            // call the converter utility  to convert and set the array
-                                            
-                                            object.setSignature((int[])
-                                                org.apache.axis2.databinding.utils.ConverterUtil.convertToArray(
-                                                            int.class,list4));
-                                                
-                              }  // End of if for expected property start element
-                                
-                                    else {
-                                        
-                                    }
-                                  
+                                else{
+                                    // A start element we are not expecting indicates an invalid parameter was passed
+                                    throw new org.apache.axis2.databinding.ADBException("Unexpected subelement " + reader.getName());
+                                }
+                              
                             while (!reader.isStartElement() && !reader.isEndElement())
                                 reader.next();
                             

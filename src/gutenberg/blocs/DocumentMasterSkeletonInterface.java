@@ -3,7 +3,7 @@
  * DocumentMasterSkeletonInterface.java
  *
  * This file was auto-generated from WSDL
- * by the Apache Axis2 version: 1.6.1  Built on : Aug 31, 2011 (12:22:40 CEST)
+ * by the Apache Axis2 version: 1.6.2  Built on : Apr 17, 2012 (05:33:49 IST)
  */
     package gutenberg.blocs;
     /**
@@ -155,6 +155,20 @@
         /**
          * Auto generated method signature
          * 
+                                    * @param compileTex
+         */
+
+        
+                public gutenberg.blocs.CompileTexResponse compileTex
+                (
+                  gutenberg.blocs.CompileTex compileTex
+                 )
+            ;
+        
+         
+        /**
+         * Auto generated method signature
+         * 
                                     * @param generateStudentRoster
          */
 
@@ -162,6 +176,20 @@
                 public gutenberg.blocs.GenerateStudentRosterResponse generateStudentRoster
                 (
                   gutenberg.blocs.GenerateStudentRoster generateStudentRoster
+                 )
+            ;
+        
+         
+        /**
+         * Auto generated method signature
+         * 
+                                    * @param writeTex
+         */
+
+        
+                public gutenberg.blocs.WriteTexResponse writeTex
+                (
+                  gutenberg.blocs.WriteTex writeTex
                  )
             ;
         

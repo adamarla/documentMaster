@@ -9,5 +9,6 @@ public enum Resource {
 	shared,
 	scantray,
 	frontdesk,
-	common
+	common,
+	latexRoot
 }
