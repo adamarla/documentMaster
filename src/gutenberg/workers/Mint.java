@@ -9,12 +9,15 @@ import gutenberg.blocs.EntryType;
 import gutenberg.blocs.ManifestType;
 import gutenberg.blocs.QuizType;
 
+import java.awt.datatransfer.StringSelection;
 import java.io.BufferedReader;
 import java.io.PrintWriter;
 import java.io.FileWriter; 
 import java.io.InputStreamReader;
+import java.lang.ProcessBuilder.Redirect;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.DirectoryStream;
+import java.io.File; 
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
@@ -41,91 +44,90 @@ public class Mint implements ITagLib {
      * 
      */
     public int make(Path dir, boolean skel) throws Exception {
-    	ProcessBuilder pb = new ProcessBuilder("/usr/local/bin/make") ;
-    		
-    	String ltx = latexRoot.toString() ;
-    	pb.directory(dir.toFile()) ;
-    	pb.redirectErrorStream(true) ;
-    	
-    	if(skel) pb.command().add("skel") ;
-    	if (ltx != null) {
-				try {
-					String z = new String(pb.environment().get("PATH") + ":" + ltx + "/bin/i386-linux") ;
-					
-					pb.environment().put("PATH", z) ;
-					Process p = pb.start() ;
-					
-					BufferedReader messages = new BufferedReader(new InputStreamReader(
-											p.getInputStream()));
-
-							String line = null;
-							while ((line = messages.readLine()) != null) {
-									System.out.println(line);
-							}
-					return p.waitFor();
-				} catch (IOException e) {
-					throw new IOException(e.getMessage()) ;
-				}
-    	} else {
-    		throw new Exception("Mint.java (69): 'latexRoot' not inferred") ; 
-    	}
+      ProcessBuilder pb = new ProcessBuilder("/usr/local/bin/make") ;
+        
+      String ltx = latexRoot.toString() ;
+      pb.directory(dir.toFile()) ;
+      
+      try {
+        Path pthLog = dir.resolve("logfile") ;
+        File logf = new File(pthLog.toString()) ;
+        Process p ;
+        
+        pb.redirectErrorStream(true) ;
+        if (skel){
+          pb.redirectOutput(logf) ;
+          pb.command().add("skel") ;
+         } else if (ltx != null){
+           pb.redirectOutput(Redirect.appendTo(logf)) ;
+         } else {
+           throw new Exception("Mint.java:70 LATEX_ROOT not inferred") ;
+         }
+         p = pb.start() ;
+         return p.waitFor();
+      } catch (Exception e) {
+        throw new Exception(e.getMessage()) ;
+      }
     }
     
     public int compileTex(MkFlags f) throws Exception {
-    	Path target = mintPath.resolve(f.getPath()) ;
-    	try{
-    		this.make(target, false) ;
-    	} catch (Exception e) {
-    		throw e ;
-    	}
-    	return 0 ;
+      try{
+    	Path path = mintPath.resolve(f.getPath()) ;
+        this.make(path, false) ;
+      } catch (Exception e) {
+        throw e ;
+      }
+      return 0 ;
     }
 
     public int createTex(TexFlags f) throws Exception {
-    	Path target = mintPath.resolve(f.getTarget()) ;
-    	String mode = f.getMode() ;
-    	String[] imports = f.getImports() ;
-    	QFlagsType qflags = null ;
-    	WFlagsType wflags = null ;
-    	
-    	if (mode.compareToIgnoreCase("quiz") == 0) {
-    		qflags = f.getQFlags() ;
-    	} else if (mode.compareToIgnoreCase("worksheet") == 0){
-    		wflags = f.getWFlags() ;
-    	}
-    	// Prepare sandbox 
-    	Files.createDirectories(target) ;
-    	Files.createSymbolicLink(target.resolve("Makefile"), mintPath.resolve("../common/makefiles/compile.mk")) ;
-    	Files.createSymbolicLink(target.resolve("shell-script"), mintPath.resolve("../common/scripts/compile.sh")) ;
-    	
-    	// Write the blueprint file
-    	PrintWriter out ;
-    		String blueprint = target.resolve("blueprint").toString() ;
-    		out = new PrintWriter(new FileWriter(blueprint))  ;
-    		
-    		out.println("mode: " + mode) ;
-    		for(int i = 0 ; i < imports.length ; i++) {
-    			out.println("import: " + imports[i]) ;
-    		}
-    		
-    		if (f.getAuthor() != null)
-    			out.println("author: " + f.getAuthor()) ;
-    		
-    		if (qflags != null){
-    		   out.println("title: " + qflags.getTitle()) ;
-    		   out.println("pageBreaks: " + qflags.getPageBreaks()) ;
-    		   out.println("versionTriggers: " + qflags.getVersionTriggers()) ;
-    		} else if (wflags != null) {
-    			out.println("responses: " + wflags.getResponses()) ;
-    			out.println("versions: " + wflags.getVersions()) ;
-    		}
-    		out.close() ;
-    		try {
-    			this.make(target, true) ;
-    		} catch (Exception e) {
-    			throw e ;
-    		}
-    	return 0 ;
+      Path target = mintPath.resolve(f.getTarget()) ;
+      String mode = f.getMode() ;
+      String[] imports = f.getImports() ;
+      QFlagsType qflags = null ;
+      WFlagsType wflags = null ;
+      
+      if (mode.compareToIgnoreCase("quiz") == 0) {
+        qflags = f.getQFlags() ;
+      } else if (mode.compareToIgnoreCase("worksheet") == 0){
+        wflags = f.getWFlags() ;
+      }
+      // Prepare sandbox 
+      Files.createDirectories(target) ;
+      
+      if (!Files.exists(target.resolve("Makefile")))
+        Files.createSymbolicLink(target.resolve("Makefile"), mintPath.resolve("../common/makefiles/compile.mk")) ;
+      if (!Files.exists(target.resolve("shell-script")))
+        Files.createSymbolicLink(target.resolve("shell-script"), mintPath.resolve("../common/scripts/compile.sh")) ;
+      
+      // Write the blueprint file
+      PrintWriter out ;
+      String blueprint = target.resolve("blueprint").toString() ;
+      out = new PrintWriter(new FileWriter(blueprint))  ;
+      
+      out.println("mode: " + mode) ;
+      for(int i = 0 ; i < imports.length ; i++) {
+        out.println("import: " + imports[i]) ;
+      }
+      
+      if (f.getAuthor() != null)
+        out.println("author: " + f.getAuthor()) ;
+      
+      if (qflags != null){
+         out.println("title: " + qflags.getTitle()) ;
+         out.println("pageBreaks: " + qflags.getPageBreaks()) ;
+         out.println("versionTriggers: " + qflags.getVersionTriggers()) ;
+      } else if (wflags != null) {
+        out.println("responses: " + wflags.getResponses()) ;
+        out.println("versions: " + wflags.getVersions()) ;
+      }
+      out.close() ;
+      try {
+        this.make(target, true) ;
+      } catch (Exception e) {
+        throw e ;
+      }
+      return 0 ;
     }
     
     public ManifestType generate(QuizType quiz) throws Exception {
@@ -406,7 +408,7 @@ public class Mint implements ITagLib {
         blueprintDoc.writeTemplate(questionTex);
         plotfile = questionDir.resolve("figure.gnuplot");
         if (Files.exists(plotfile)) {
-       	    String mangled = questionId.replace('/', '-') ;
+             String mangled = questionId.replace('/', '-') ;
             target = staging.resolve(String.format("%s.gnuplot", mangled)) ;
             Files.copy(plotfile, target, StandardCopyOption.REPLACE_EXISTING);
         }
