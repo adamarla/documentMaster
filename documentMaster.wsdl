@@ -257,6 +257,11 @@
 					<xsd:element name="path" type="xsd:string" maxOccurs="1" minOccurs="1"></xsd:element>
 				</xsd:sequence>
 			</xsd:complexType>
+			<xsd:element name="errorOut" type="tns:MkFlags">
+			</xsd:element>
+			<xsd:element name="errorOutResponse"
+				type="tns:responseType">
+			</xsd:element>
 		</xsd:schema>
 	</wsdl:types>
 	<wsdl:message name="buildQuizRequest">
@@ -361,6 +366,12 @@
 	<wsdl:message name="compileTexResponse">
 		<wsdl:part name="parameters" element="tns:compileTexResponse"></wsdl:part>
 	</wsdl:message>
+	<wsdl:message name="errorOutRequest">
+		<wsdl:part name="parameters" element="tns:errorOut"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="errorOutResponse">
+		<wsdl:part name="parameters" element="tns:errorOutResponse"></wsdl:part>
+	</wsdl:message>
 	<wsdl:portType name="documentMaster">
 		<wsdl:operation name="buildQuiz">
 			<wsdl:input message="tns:buildQuizRequest" />
@@ -422,10 +433,23 @@
 			<wsdl:input message="tns:compileTexRequest"></wsdl:input>
 			<wsdl:output message="tns:compileTexResponse"></wsdl:output>
 		</wsdl:operation>
+		<wsdl:operation name="errorOut">
+			<wsdl:input message="tns:errorOutRequest"></wsdl:input>
+			<wsdl:output message="tns:errorOutResponse"></wsdl:output>
+		</wsdl:operation>
 	</wsdl:portType>
 	<wsdl:binding name="documentMasterSOAP" type="tns:documentMaster">
 		<soap:binding style="document"
 			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="errorOut">
+			<soap:operation soapAction="http://gutenberg/blocs/errorOut" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
 		<wsdl:operation name="writeTex">
 			<soap:operation soapAction="http://gutenberg/blocs/writeTex" />
 			<wsdl:input>

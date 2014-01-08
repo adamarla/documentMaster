@@ -15,6 +15,20 @@
         /**
          * Auto generated method signature
          * 
+                                    * @param errorOut
+         */
+
+        
+                public gutenberg.blocs.ErrorOutResponse errorOut
+                (
+                  gutenberg.blocs.ErrorOut errorOut
+                 )
+            ;
+        
+         
+        /**
+         * Auto generated method signature
+         * 
                                     * @param tagQuestion
          */
 

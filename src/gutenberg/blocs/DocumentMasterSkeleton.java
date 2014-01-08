@@ -287,50 +287,73 @@ public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
 
     @Override
     public WriteTexResponse writeTex(WriteTex flags){
-    	ResponseType resp = new ResponseType() ;
-    	TexFlags f = flags.getWriteTex() ;
-    	
-    	try { 
-    	  Config cnfg = new Config() ;
-    	  Mint mint = new Mint(cnfg) ;
-    	    
-    	  if (mint.createTex(f) == 0){
-    		  ManifestType m = new ManifestType() ;
-    		  m.setRoot(f.getTarget()) ;
-    		  resp.setManifest(m) ;
-    	  } else {
-    		  resp.setError("(" + f.getTarget() + ") ---> TeX writing failed") ;
-    	  }
-    	} catch (Exception e) {
-    		e.printStackTrace() ;
-    		resp.setError(e.getMessage()) ;
-    	}
-    	WriteTexResponse r = new WriteTexResponse() ;
-    	r.setWriteTexResponse(resp) ;
-    	return r ;
+      ResponseType resp = new ResponseType() ;
+      TexFlags f = flags.getWriteTex() ;
+      
+      try { 
+        Config cnfg = new Config() ;
+        Mint mint = new Mint(cnfg) ;
+          
+        if (mint.createTex(f) == 0){
+          ManifestType m = new ManifestType() ;
+          m.setRoot(f.getTarget()) ;
+          resp.setManifest(m) ;
+        } else {
+          resp.setError("(" + f.getTarget() + ") ---> TeX writing failed") ;
+        }
+      } catch (Exception e) {
+        e.printStackTrace() ;
+        resp.setError(e.getMessage()) ;
+      }
+      WriteTexResponse r = new WriteTexResponse() ;
+      r.setWriteTexResponse(resp) ;
+      return r ;
     }
 
     @Override
     public CompileTexResponse compileTex(CompileTex flags){
-    	ResponseType resp = new ResponseType() ;
-    	MkFlags f = flags.getCompileTex() ;
-    	try { 
-    	  Config cnfg = new Config() ;
-    	  Mint mint = new Mint(cnfg) ;
-    	  if (mint.compileTex(f) == 0){
-    		  ManifestType m = new ManifestType() ;
-    		  m.setRoot(f.getPath()) ;
-    		  resp.setManifest(m) ;
-    	  } else {
-    		  resp.setError("(" + f.getPath() + ") --> compilation failed") ;
-    	  }
-    	} catch (Exception e) {
-    		e.printStackTrace() ;
-    		resp.setError(e.getMessage()) ;
-    	}
-    	CompileTexResponse r = new CompileTexResponse() ;
-    	r.setCompileTexResponse(resp) ;
-    	return r ;
+      ResponseType resp = new ResponseType() ;
+      MkFlags f = flags.getCompileTex() ;
+      try { 
+        Config cnfg = new Config() ;
+        Mint mint = new Mint(cnfg) ;
+        if (mint.compileTex(f) == 0){
+          ManifestType m = new ManifestType() ;
+          m.setRoot(f.getPath()) ;
+          resp.setManifest(m) ;
+        } else {
+          resp.setError("(" + f.getPath() + ") --> compilation failed") ;
+        }
+      } catch (Exception e) {
+        e.printStackTrace() ;
+        resp.setError(e.getMessage()) ;
+      }
+      CompileTexResponse r = new CompileTexResponse() ;
+      r.setCompileTexResponse(resp) ;
+      return r ;
     }
 
+    @Override
+    public ErrorOutResponse errorOut(ErrorOut path){
+      ResponseType resp = new ResponseType();
+      MkFlags f = path.getErrorOut() ;
+      try { 
+        Config cnfg = new Config() ;
+        Mint mint = new Mint(cnfg) ;
+        String lnk = mint.errorOut(f) ;
+        if (lnk != null){
+          ManifestType m = new ManifestType() ;
+          m.setRoot(lnk) ;
+          resp.setManifest(m) ;
+        } else {
+          resp.setError("(" + f.getPath() + ") --> compilation failed") ;
+        }
+      } catch (Exception e) {
+        e.printStackTrace() ;
+        resp.setError(e.getMessage()) ;
+      }
+      ErrorOutResponse r = new ErrorOutResponse() ;
+      r.setErrorOutResponse(resp) ;
+      return r ;
+    }
 }
