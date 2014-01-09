@@ -30,14 +30,14 @@
                         */
 
                         
-                                    protected gutenberg.blocs.TexFlags localWriteTex ;
+                                    protected gutenberg.blocs.TexFlagsType localWriteTex ;
                                 
 
                            /**
                            * Auto generated getter method
-                           * @return gutenberg.blocs.TexFlags
+                           * @return gutenberg.blocs.TexFlagsType
                            */
-                           public  gutenberg.blocs.TexFlags getWriteTex(){
+                           public  gutenberg.blocs.TexFlagsType getWriteTex(){
                                return localWriteTex;
                            }
 
@@ -47,7 +47,7 @@
                                * Auto generated setter method
                                * @param param WriteTex
                                */
-                               public void setWriteTex(gutenberg.blocs.TexFlags param){
+                               public void setWriteTex(gutenberg.blocs.TexFlagsType param){
                             
                                             this.localWriteTex=param;
                                     
@@ -323,7 +323,7 @@
                 
                                     if (reader.isStartElement() && new javax.xml.namespace.QName("http://gutenberg/blocs","writeTex").equals(reader.getName())){
                                 
-                                                object.setWriteTex(gutenberg.blocs.TexFlags.Factory.parse(reader));
+                                                object.setWriteTex(gutenberg.blocs.TexFlagsType.Factory.parse(reader));
                                             
                               }  // End of if for expected property start element
                                 

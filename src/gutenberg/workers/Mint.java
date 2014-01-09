@@ -1,9 +1,9 @@
 package gutenberg.workers;
 
 import gutenberg.blocs.AssignmentType ;
-import gutenberg.blocs.TexFlags;
-import gutenberg.blocs.MkFlags; 
+import gutenberg.blocs.MkFlagsType;
 import gutenberg.blocs.QFlagsType; 
+import gutenberg.blocs.TexFlagsType;
 import gutenberg.blocs.WFlagsType; 
 import gutenberg.blocs.EntryType;
 import gutenberg.blocs.ManifestType;
@@ -27,6 +27,7 @@ import java.io.IOException;
 public class Mint implements ITagLib {
     
     public Mint(Config config) throws Exception {
+    	commonPath = config.getPath(Resource.common);
         sharedPath = config.getPath(Resource.shared);
         mintPath = config.getPath(Resource.mint);
         vaultPath = config.getPath(Resource.vault); 
@@ -70,7 +71,7 @@ public class Mint implements ITagLib {
       }
     }
     
-    public int compileTex(MkFlags f) throws Exception {
+    public int compileTex(MkFlagsType f) throws Exception {
       try{
       Path path = mintPath.resolve(f.getPath()) ;
         this.make(path, false) ;
@@ -80,7 +81,7 @@ public class Mint implements ITagLib {
       return 0 ;
     }
     
-    public String errorOut(MkFlags f) throws Exception {
+    public String errorOut(MkFlagsType f) throws Exception {
       String target = f.getPath() ;
       String lnk = target.replaceAll("/","_") ;
       try {
@@ -99,25 +100,22 @@ public class Mint implements ITagLib {
       return lnk ;
     }
 
-    public int createTex(TexFlags f) throws Exception {
+    public int createTex(TexFlagsType f) throws Exception {
       Path target = mintPath.resolve(f.getTarget()) ;
       String mode = f.getMode() ;
       String[] imports = f.getImports() ;
-      QFlagsType qflags = null ;
-      WFlagsType wflags = null ;
+      QFlagsType qflags = f.isQFlagsSpecified() ? f.getQFlags() : null ;
+      WFlagsType wflags = f.isWFlagsSpecified() ? f.getWFlags() : null ;
       
-      if (mode.compareToIgnoreCase("quiz") == 0) {
-        qflags = f.getQFlags() ;
-      } else if (mode.compareToIgnoreCase("worksheet") == 0){
-        wflags = f.getWFlags() ;
-      }
       // Prepare sandbox 
       Files.createDirectories(target) ;
       
       if (!Files.exists(target.resolve("Makefile")))
-        Files.createSymbolicLink(target.resolve("Makefile"), mintPath.resolve("../common/makefiles/compile.mk")) ;
+        Files.createSymbolicLink(target.resolve("Makefile"),
+        		commonPath.resolve("makefiles/compile.mk"));
       if (!Files.exists(target.resolve("shell-script")))
-        Files.createSymbolicLink(target.resolve("shell-script"), mintPath.resolve("../common/scripts/compile.sh")) ;
+        Files.createSymbolicLink(target.resolve("shell-script"), 
+        		commonPath.resolve("scripts/compile.sh")) ;
       
       // Write the blueprint file
       PrintWriter out ;
@@ -483,7 +481,7 @@ public class Mint implements ITagLib {
         return manifest;
     }
     
-    private Path  sharedPath, mintPath, vaultPath, latexRoot ;
+    private Path  commonPath, sharedPath, mintPath, vaultPath, latexRoot ;
     
     private final String 
         stagingDirName = "staging",

@@ -288,7 +288,7 @@ public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
     @Override
     public WriteTexResponse writeTex(WriteTex flags){
       ResponseType resp = new ResponseType() ;
-      TexFlags f = flags.getWriteTex() ;
+      TexFlagsType f = flags.getWriteTex() ;
       
       try { 
         Config cnfg = new Config() ;
@@ -313,7 +313,7 @@ public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
     @Override
     public CompileTexResponse compileTex(CompileTex flags){
       ResponseType resp = new ResponseType() ;
-      MkFlags f = flags.getCompileTex() ;
+      MkFlagsType f = flags.getCompileTex() ;
       try { 
         Config cnfg = new Config() ;
         Mint mint = new Mint(cnfg) ;
@@ -336,7 +336,7 @@ public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
     @Override
     public ErrorOutResponse errorOut(ErrorOut path){
       ResponseType resp = new ResponseType();
-      MkFlags f = path.getErrorOut() ;
+      MkFlagsType f = path.getErrorOut() ;
       try { 
         Config cnfg = new Config() ;
         Mint mint = new Mint(cnfg) ;

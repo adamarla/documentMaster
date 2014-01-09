@@ -30,14 +30,14 @@
                         */
 
                         
-                                    protected gutenberg.blocs.MkFlags localCompileTex ;
+                                    protected gutenberg.blocs.MkFlagsType localCompileTex ;
                                 
 
                            /**
                            * Auto generated getter method
-                           * @return gutenberg.blocs.MkFlags
+                           * @return gutenberg.blocs.MkFlagsType
                            */
-                           public  gutenberg.blocs.MkFlags getCompileTex(){
+                           public  gutenberg.blocs.MkFlagsType getCompileTex(){
                                return localCompileTex;
                            }
 
@@ -47,7 +47,7 @@
                                * Auto generated setter method
                                * @param param CompileTex
                                */
-                               public void setCompileTex(gutenberg.blocs.MkFlags param){
+                               public void setCompileTex(gutenberg.blocs.MkFlagsType param){
                             
                                             this.localCompileTex=param;
                                     
@@ -323,7 +323,7 @@
                 
                                     if (reader.isStartElement() && new javax.xml.namespace.QName("http://gutenberg/blocs","compileTex").equals(reader.getName())){
                                 
-                                                object.setCompileTex(gutenberg.blocs.MkFlags.Factory.parse(reader));
+                                                object.setCompileTex(gutenberg.blocs.MkFlagsType.Factory.parse(reader));
                                             
                               }  // End of if for expected property start element
                                 

@@ -53,16 +53,6 @@
               
                   if (
                   "http://gutenberg/blocs".equals(namespaceURI) &&
-                  "MkFlags".equals(typeName)){
-                   
-                            return  gutenberg.blocs.MkFlags.Factory.parse(reader);
-                        
-
-                  }
-
-              
-                  if (
-                  "http://gutenberg/blocs".equals(namespaceURI) &&
                   "questionTagsType".equals(typeName)){
                    
                             return  gutenberg.blocs.QuestionTagsType.Factory.parse(reader);
@@ -83,6 +73,16 @@
               
                   if (
                   "http://gutenberg/blocs".equals(namespaceURI) &&
+                  "texFlagsType".equals(typeName)){
+                   
+                            return  gutenberg.blocs.TexFlagsType.Factory.parse(reader);
+                        
+
+                  }
+
+              
+                  if (
+                  "http://gutenberg/blocs".equals(namespaceURI) &&
                   "studentGroupType".equals(typeName)){
                    
                             return  gutenberg.blocs.StudentGroupType.Factory.parse(reader);
@@ -93,9 +93,9 @@
               
                   if (
                   "http://gutenberg/blocs".equals(namespaceURI) &&
-                  "TexFlags".equals(typeName)){
+                  "manifestType".equals(typeName)){
                    
-                            return  gutenberg.blocs.TexFlags.Factory.parse(reader);
+                            return  gutenberg.blocs.ManifestType.Factory.parse(reader);
                         
 
                   }
@@ -103,9 +103,9 @@
               
                   if (
                   "http://gutenberg/blocs".equals(namespaceURI) &&
-                  "manifestType".equals(typeName)){
+                  "mkFlagsType".equals(typeName)){
                    
-                            return  gutenberg.blocs.ManifestType.Factory.parse(reader);
+                            return  gutenberg.blocs.MkFlagsType.Factory.parse(reader);
                         
 
                   }

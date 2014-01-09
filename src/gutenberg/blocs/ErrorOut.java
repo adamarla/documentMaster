@@ -30,14 +30,14 @@
                         */
 
                         
-                                    protected gutenberg.blocs.MkFlags localErrorOut ;
+                                    protected gutenberg.blocs.MkFlagsType localErrorOut ;
                                 
 
                            /**
                            * Auto generated getter method
-                           * @return gutenberg.blocs.MkFlags
+                           * @return gutenberg.blocs.MkFlagsType
                            */
-                           public  gutenberg.blocs.MkFlags getErrorOut(){
+                           public  gutenberg.blocs.MkFlagsType getErrorOut(){
                                return localErrorOut;
                            }
 
@@ -47,7 +47,7 @@
                                * Auto generated setter method
                                * @param param ErrorOut
                                */
-                               public void setErrorOut(gutenberg.blocs.MkFlags param){
+                               public void setErrorOut(gutenberg.blocs.MkFlagsType param){
                             
                                             this.localErrorOut=param;
                                     
@@ -323,7 +323,7 @@
                 
                                     if (reader.isStartElement() && new javax.xml.namespace.QName("http://gutenberg/blocs","errorOut").equals(reader.getName())){
                                 
-                                                object.setErrorOut(gutenberg.blocs.MkFlags.Factory.parse(reader));
+                                                object.setErrorOut(gutenberg.blocs.MkFlagsType.Factory.parse(reader));
                                             
                               }  // End of if for expected property start element
                                 
