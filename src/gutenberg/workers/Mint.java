@@ -72,7 +72,7 @@ public class Mint implements ITagLib {
     
     public int compileTex(MkFlags f) throws Exception {
       try{
-    	Path path = mintPath.resolve(f.getPath()) ;
+      Path path = mintPath.resolve(f.getPath()) ;
         this.make(path, false) ;
       } catch (Exception e) {
         throw e ;
@@ -81,21 +81,22 @@ public class Mint implements ITagLib {
     }
     
     public String errorOut(MkFlags f) throws Exception {
-    	String target = f.getPath() ;
-    	String lnk = target.replaceAll("/","_") ;
-    	try {
-    		Path to = mintPath.resolve(target) ;
-    		Path errFolder = mintPath.resolve("errors") ;
-    		
-    		if (!Files.exists(errFolder))
-    			Files.createDirectory(errFolder) ;
-    		
-    		Path softLnk = errFolder.resolve(lnk) ;
-    		Files.createSymbolicLink(softLnk, to) ;
-    	} catch (Exception e) {
-    		throw new Exception(e.getMessage()) ;
-    	}
-    	return lnk ;
+      String target = f.getPath() ;
+      String lnk = target.replaceAll("/","_") ;
+      try {
+        Path to = mintPath.resolve(target) ;
+        Path errFolder = mintPath.resolve("errors") ;
+        
+        if (!Files.exists(errFolder))
+          Files.createDirectory(errFolder) ;
+        
+        Path softLnk = errFolder.resolve(lnk) ;
+        if (!Files.exists(softLnk))
+          Files.createSymbolicLink(softLnk, to) ;
+      } catch (Exception e) {
+        throw new Exception(e.getMessage()) ;
+      }
+      return lnk ;
     }
 
     public int createTex(TexFlags f) throws Exception {
