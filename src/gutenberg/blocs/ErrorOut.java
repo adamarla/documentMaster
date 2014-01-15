@@ -1,6 +1,6 @@
 
 /**
- * WFlagsType.java
+ * ErrorOut.java
  *
  * This file was auto-generated from WSDL
  * by the Apache Axis2 version: 1.6.1  Built on : Aug 31, 2011 (12:23:23 CEST)
@@ -11,74 +11,45 @@
             
 
             /**
-            *  WFlagsType bean class
+            *  ErrorOut bean class
             */
             @SuppressWarnings({"unchecked","unused"})
         
-        public  class WFlagsType
+        public  class ErrorOut
         implements org.apache.axis2.databinding.ADBBean{
-        /* This type was generated from the piece of schema that had
-                name = wFlagsType
-                Namespace URI = http://gutenberg/blocs
-                Namespace Prefix = ns1
-                */
+        
+                public static final javax.xml.namespace.QName MY_QNAME = new javax.xml.namespace.QName(
+                "http://gutenberg/blocs",
+                "errorOut",
+                "ns1");
+
             
 
                         /**
-                        * field for Versions
+                        * field for ErrorOut
                         */
 
                         
-                                    protected java.lang.String localVersions ;
+                                    protected gutenberg.blocs.MkFlagsType localErrorOut ;
                                 
 
                            /**
                            * Auto generated getter method
-                           * @return java.lang.String
+                           * @return gutenberg.blocs.MkFlagsType
                            */
-                           public  java.lang.String getVersions(){
-                               return localVersions;
+                           public  gutenberg.blocs.MkFlagsType getErrorOut(){
+                               return localErrorOut;
                            }
 
                            
                         
                             /**
                                * Auto generated setter method
-                               * @param param Versions
+                               * @param param ErrorOut
                                */
-                               public void setVersions(java.lang.String param){
+                               public void setErrorOut(gutenberg.blocs.MkFlagsType param){
                             
-                                            this.localVersions=param;
-                                    
-
-                               }
-                            
-
-                        /**
-                        * field for Responses
-                        */
-
-                        
-                                    protected java.lang.String localResponses ;
-                                
-
-                           /**
-                           * Auto generated getter method
-                           * @return java.lang.String
-                           */
-                           public  java.lang.String getResponses(){
-                               return localResponses;
-                           }
-
-                           
-                        
-                            /**
-                               * Auto generated setter method
-                               * @param param Responses
-                               */
-                               public void setResponses(java.lang.String param){
-                            
-                                            this.localResponses=param;
+                                            this.localErrorOut=param;
                                     
 
                                }
@@ -99,8 +70,8 @@
 
         
                org.apache.axiom.om.OMDataSource dataSource =
-                       new org.apache.axis2.databinding.ADBDataSource(this,parentQName);
-               return factory.createOMElement(dataSource,parentQName);
+                       new org.apache.axis2.databinding.ADBDataSource(this,MY_QNAME);
+               return factory.createOMElement(dataSource,MY_QNAME);
             
         }
 
@@ -116,71 +87,13 @@
             throws javax.xml.stream.XMLStreamException, org.apache.axis2.databinding.ADBException{
             
                 
-
-
-                java.lang.String prefix = null;
-                java.lang.String namespace = null;
+                //We can safely assume an element has only one type associated with it
                 
-
-                    prefix = parentQName.getPrefix();
-                    namespace = parentQName.getNamespaceURI();
-                    writeStartElement(prefix, namespace, parentQName.getLocalPart(), xmlWriter);
-                
-                  if (serializeType){
-               
-
-                   java.lang.String namespacePrefix = registerPrefix(xmlWriter,"http://gutenberg/blocs");
-                   if ((namespacePrefix != null) && (namespacePrefix.trim().length() > 0)){
-                       writeAttribute("xsi","http://www.w3.org/2001/XMLSchema-instance","type",
-                           namespacePrefix+":wFlagsType",
-                           xmlWriter);
-                   } else {
-                       writeAttribute("xsi","http://www.w3.org/2001/XMLSchema-instance","type",
-                           "wFlagsType",
-                           xmlWriter);
-                   }
-
-               
-                   }
-               
-                                    namespace = "http://gutenberg/blocs";
-                                    writeStartElement(null, namespace, "versions", xmlWriter);
-                             
-
-                                          if (localVersions==null){
-                                              // write the nil attribute
-                                              
-                                                     throw new org.apache.axis2.databinding.ADBException("versions cannot be null!!");
-                                                  
-                                          }else{
-
-                                        
-                                                   xmlWriter.writeCharacters(localVersions);
-                                            
-                                          }
-                                    
-                                   xmlWriter.writeEndElement();
-                             
-                                    namespace = "http://gutenberg/blocs";
-                                    writeStartElement(null, namespace, "responses", xmlWriter);
-                             
-
-                                          if (localResponses==null){
-                                              // write the nil attribute
-                                              
-                                                     throw new org.apache.axis2.databinding.ADBException("responses cannot be null!!");
-                                                  
-                                          }else{
-
-                                        
-                                                   xmlWriter.writeCharacters(localResponses);
-                                            
-                                          }
-                                    
-                                   xmlWriter.writeEndElement();
-                             
-                    xmlWriter.writeEndElement();
-               
+                                 if (localErrorOut==null){
+                                   throw new org.apache.axis2.databinding.ADBException("errorOut cannot be null!");
+                                 }
+                                 localErrorOut.serialize(MY_QNAME,xmlWriter);
+                            
 
         }
 
@@ -360,32 +273,9 @@
 
 
         
-                 java.util.ArrayList elementList = new java.util.ArrayList();
-                 java.util.ArrayList attribList = new java.util.ArrayList();
-
                 
-                                      elementList.add(new javax.xml.namespace.QName("http://gutenberg/blocs",
-                                                                      "versions"));
-                                 
-                                        if (localVersions != null){
-                                            elementList.add(org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localVersions));
-                                        } else {
-                                           throw new org.apache.axis2.databinding.ADBException("versions cannot be null!!");
-                                        }
-                                    
-                                      elementList.add(new javax.xml.namespace.QName("http://gutenberg/blocs",
-                                                                      "responses"));
-                                 
-                                        if (localResponses != null){
-                                            elementList.add(org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localResponses));
-                                        } else {
-                                           throw new org.apache.axis2.databinding.ADBException("responses cannot be null!!");
-                                        }
-                                    
-
-                return new org.apache.axis2.databinding.utils.reader.ADBXMLStreamReaderImpl(qName, elementList.toArray(), attribList.toArray());
-            
-            
+                //We can safely assume an element has only one type associated with it
+                return localErrorOut.getPullParser(MY_QNAME);
 
         }
 
@@ -406,9 +296,9 @@
         * Postcondition: If this object is an element, the reader is positioned at its end element
         *                If this object is a complex type, the reader is positioned at the end element of its outer element
         */
-        public static WFlagsType parse(javax.xml.stream.XMLStreamReader reader) throws java.lang.Exception{
-            WFlagsType object =
-                new WFlagsType();
+        public static ErrorOut parse(javax.xml.stream.XMLStreamReader reader) throws java.lang.Exception{
+            ErrorOut object =
+                new ErrorOut();
 
             int event;
             java.lang.String nillableValue = null;
@@ -420,32 +310,6 @@
                     reader.next();
 
                 
-                if (reader.getAttributeValue("http://www.w3.org/2001/XMLSchema-instance","type")!=null){
-                  java.lang.String fullTypeName = reader.getAttributeValue("http://www.w3.org/2001/XMLSchema-instance",
-                        "type");
-                  if (fullTypeName!=null){
-                    java.lang.String nsPrefix = null;
-                    if (fullTypeName.indexOf(":") > -1){
-                        nsPrefix = fullTypeName.substring(0,fullTypeName.indexOf(":"));
-                    }
-                    nsPrefix = nsPrefix==null?"":nsPrefix;
-
-                    java.lang.String type = fullTypeName.substring(fullTypeName.indexOf(":")+1);
-                    
-                            if (!"wFlagsType".equals(type)){
-                                //find namespace for the prefix
-                                java.lang.String nsUri = reader.getNamespaceContext().getNamespaceURI(nsPrefix);
-                                return (WFlagsType)gutenberg.blocs.ExtensionMapper.getTypeObject(
-                                     nsUri,type,reader);
-                              }
-                        
-
-                  }
-                
-
-                }
-
-                
 
                 
                 // Note all attributes that were handled. Used to differ normal attributes
@@ -453,55 +317,26 @@
                 java.util.Vector handledAttributes = new java.util.Vector();
                 
 
+                   
+                while(!reader.isEndElement()) {
+                    if (reader.isStartElement() ){
                 
-                    
-                    reader.next();
-                
-                                    
-                                    while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
+                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://gutenberg/blocs","errorOut").equals(reader.getName())){
                                 
-                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://gutenberg/blocs","versions").equals(reader.getName())){
-                                
-                                    java.lang.String content = reader.getElementText();
-                                    
-                                              object.setVersions(
-                                                    org.apache.axis2.databinding.utils.ConverterUtil.convertToString(content));
-                                              
-                                        reader.next();
-                                    
+                                                object.setErrorOut(gutenberg.blocs.MkFlagsType.Factory.parse(reader));
+                                            
                               }  // End of if for expected property start element
                                 
-                                else{
-                                    // A start element we are not expecting indicates an invalid parameter was passed
-                                    throw new org.apache.axis2.databinding.ADBException("Unexpected subelement " + reader.getName());
-                                }
-                            
-                                    
-                                    while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
-                                
-                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://gutenberg/blocs","responses").equals(reader.getName())){
-                                
-                                    java.lang.String content = reader.getElementText();
-                                    
-                                              object.setResponses(
-                                                    org.apache.axis2.databinding.utils.ConverterUtil.convertToString(content));
-                                              
-                                        reader.next();
-                                    
-                              }  // End of if for expected property start element
-                                
-                                else{
-                                    // A start element we are not expecting indicates an invalid parameter was passed
-                                    throw new org.apache.axis2.databinding.ADBException("Unexpected subelement " + reader.getName());
-                                }
-                              
-                            while (!reader.isStartElement() && !reader.isEndElement())
+                             else{
+                                        // A start element we are not expecting indicates an invalid parameter was passed
+                                        throw new org.apache.axis2.databinding.ADBException("Unexpected subelement " + reader.getName());
+                             }
+                          
+                             } else {
                                 reader.next();
-                            
-                                if (reader.isStartElement())
-                                // A start element we are not expecting indicates a trailing invalid property
-                                throw new org.apache.axis2.databinding.ADBException("Unexpected subelement " + reader.getName());
-                            
+                             }  
+                           }  // end of while loop
+                        
 
 
 

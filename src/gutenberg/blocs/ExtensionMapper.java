@@ -103,6 +103,16 @@
               
                   if (
                   "http://gutenberg/blocs".equals(namespaceURI) &&
+                  "mkFlagsType".equals(typeName)){
+                   
+                            return  gutenberg.blocs.MkFlagsType.Factory.parse(reader);
+                        
+
+                  }
+
+              
+                  if (
+                  "http://gutenberg/blocs".equals(namespaceURI) &&
                   "pointType".equals(typeName)){
                    
                             return  gutenberg.blocs.PointType.Factory.parse(reader);

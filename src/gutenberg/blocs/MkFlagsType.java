@@ -1,6 +1,6 @@
 
 /**
- * WFlagsType.java
+ * MkFlagsType.java
  *
  * This file was auto-generated from WSDL
  * by the Apache Axis2 version: 1.6.1  Built on : Aug 31, 2011 (12:23:23 CEST)
@@ -11,74 +11,44 @@
             
 
             /**
-            *  WFlagsType bean class
+            *  MkFlagsType bean class
             */
             @SuppressWarnings({"unchecked","unused"})
         
-        public  class WFlagsType
+        public  class MkFlagsType
         implements org.apache.axis2.databinding.ADBBean{
         /* This type was generated from the piece of schema that had
-                name = wFlagsType
+                name = mkFlagsType
                 Namespace URI = http://gutenberg/blocs
                 Namespace Prefix = ns1
                 */
             
 
                         /**
-                        * field for Versions
+                        * field for Path
                         */
 
                         
-                                    protected java.lang.String localVersions ;
+                                    protected java.lang.String localPath ;
                                 
 
                            /**
                            * Auto generated getter method
                            * @return java.lang.String
                            */
-                           public  java.lang.String getVersions(){
-                               return localVersions;
+                           public  java.lang.String getPath(){
+                               return localPath;
                            }
 
                            
                         
                             /**
                                * Auto generated setter method
-                               * @param param Versions
+                               * @param param Path
                                */
-                               public void setVersions(java.lang.String param){
+                               public void setPath(java.lang.String param){
                             
-                                            this.localVersions=param;
-                                    
-
-                               }
-                            
-
-                        /**
-                        * field for Responses
-                        */
-
-                        
-                                    protected java.lang.String localResponses ;
-                                
-
-                           /**
-                           * Auto generated getter method
-                           * @return java.lang.String
-                           */
-                           public  java.lang.String getResponses(){
-                               return localResponses;
-                           }
-
-                           
-                        
-                            /**
-                               * Auto generated setter method
-                               * @param param Responses
-                               */
-                               public void setResponses(java.lang.String param){
-                            
-                                            this.localResponses=param;
+                                            this.localPath=param;
                                     
 
                                }
@@ -132,11 +102,11 @@
                    java.lang.String namespacePrefix = registerPrefix(xmlWriter,"http://gutenberg/blocs");
                    if ((namespacePrefix != null) && (namespacePrefix.trim().length() > 0)){
                        writeAttribute("xsi","http://www.w3.org/2001/XMLSchema-instance","type",
-                           namespacePrefix+":wFlagsType",
+                           namespacePrefix+":mkFlagsType",
                            xmlWriter);
                    } else {
                        writeAttribute("xsi","http://www.w3.org/2001/XMLSchema-instance","type",
-                           "wFlagsType",
+                           "mkFlagsType",
                            xmlWriter);
                    }
 
@@ -144,36 +114,18 @@
                    }
                
                                     namespace = "http://gutenberg/blocs";
-                                    writeStartElement(null, namespace, "versions", xmlWriter);
+                                    writeStartElement(null, namespace, "path", xmlWriter);
                              
 
-                                          if (localVersions==null){
+                                          if (localPath==null){
                                               // write the nil attribute
                                               
-                                                     throw new org.apache.axis2.databinding.ADBException("versions cannot be null!!");
+                                                     throw new org.apache.axis2.databinding.ADBException("path cannot be null!!");
                                                   
                                           }else{
 
                                         
-                                                   xmlWriter.writeCharacters(localVersions);
-                                            
-                                          }
-                                    
-                                   xmlWriter.writeEndElement();
-                             
-                                    namespace = "http://gutenberg/blocs";
-                                    writeStartElement(null, namespace, "responses", xmlWriter);
-                             
-
-                                          if (localResponses==null){
-                                              // write the nil attribute
-                                              
-                                                     throw new org.apache.axis2.databinding.ADBException("responses cannot be null!!");
-                                                  
-                                          }else{
-
-                                        
-                                                   xmlWriter.writeCharacters(localResponses);
+                                                   xmlWriter.writeCharacters(localPath);
                                             
                                           }
                                     
@@ -365,21 +317,12 @@
 
                 
                                       elementList.add(new javax.xml.namespace.QName("http://gutenberg/blocs",
-                                                                      "versions"));
+                                                                      "path"));
                                  
-                                        if (localVersions != null){
-                                            elementList.add(org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localVersions));
+                                        if (localPath != null){
+                                            elementList.add(org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localPath));
                                         } else {
-                                           throw new org.apache.axis2.databinding.ADBException("versions cannot be null!!");
-                                        }
-                                    
-                                      elementList.add(new javax.xml.namespace.QName("http://gutenberg/blocs",
-                                                                      "responses"));
-                                 
-                                        if (localResponses != null){
-                                            elementList.add(org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localResponses));
-                                        } else {
-                                           throw new org.apache.axis2.databinding.ADBException("responses cannot be null!!");
+                                           throw new org.apache.axis2.databinding.ADBException("path cannot be null!!");
                                         }
                                     
 
@@ -406,9 +349,9 @@
         * Postcondition: If this object is an element, the reader is positioned at its end element
         *                If this object is a complex type, the reader is positioned at the end element of its outer element
         */
-        public static WFlagsType parse(javax.xml.stream.XMLStreamReader reader) throws java.lang.Exception{
-            WFlagsType object =
-                new WFlagsType();
+        public static MkFlagsType parse(javax.xml.stream.XMLStreamReader reader) throws java.lang.Exception{
+            MkFlagsType object =
+                new MkFlagsType();
 
             int event;
             java.lang.String nillableValue = null;
@@ -432,10 +375,10 @@
 
                     java.lang.String type = fullTypeName.substring(fullTypeName.indexOf(":")+1);
                     
-                            if (!"wFlagsType".equals(type)){
+                            if (!"mkFlagsType".equals(type)){
                                 //find namespace for the prefix
                                 java.lang.String nsUri = reader.getNamespaceContext().getNamespaceURI(nsPrefix);
-                                return (WFlagsType)gutenberg.blocs.ExtensionMapper.getTypeObject(
+                                return (MkFlagsType)gutenberg.blocs.ExtensionMapper.getTypeObject(
                                      nsUri,type,reader);
                               }
                         
@@ -460,30 +403,11 @@
                                     
                                     while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
                                 
-                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://gutenberg/blocs","versions").equals(reader.getName())){
+                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://gutenberg/blocs","path").equals(reader.getName())){
                                 
                                     java.lang.String content = reader.getElementText();
                                     
-                                              object.setVersions(
-                                                    org.apache.axis2.databinding.utils.ConverterUtil.convertToString(content));
-                                              
-                                        reader.next();
-                                    
-                              }  // End of if for expected property start element
-                                
-                                else{
-                                    // A start element we are not expecting indicates an invalid parameter was passed
-                                    throw new org.apache.axis2.databinding.ADBException("Unexpected subelement " + reader.getName());
-                                }
-                            
-                                    
-                                    while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
-                                
-                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://gutenberg/blocs","responses").equals(reader.getName())){
-                                
-                                    java.lang.String content = reader.getElementText();
-                                    
-                                              object.setResponses(
+                                              object.setPath(
                                                     org.apache.axis2.databinding.utils.ConverterUtil.convertToString(content));
                                               
                                         reader.next();

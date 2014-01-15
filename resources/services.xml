@@ -9,6 +9,10 @@
         <parameter name="ServiceClass">gutenberg.blocs.DocumentMasterSkeleton</parameter>
         <parameter name="useOriginalwsdl">true</parameter>
         <parameter name="modifyUserWSDLPortAddress">true</parameter>
+        <operation name="errorOut" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://gutenberg/blocs">
+            <actionMapping>http://gutenberg/blocs/errorOut</actionMapping>
+            <outputActionMapping>http://gutenberg/blocs/documentMaster/errorOutResponse</outputActionMapping>
+        </operation>
         <operation name="tagQuestion" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://gutenberg/blocs">
             <actionMapping>http://gutenberg/blocs/tagQuestion</actionMapping>
             <outputActionMapping>http://gutenberg/blocs/documentMaster/tagQuestionResponse</outputActionMapping>
@@ -48,6 +52,10 @@
         <operation name="undoAnnotate" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://gutenberg/blocs">
             <actionMapping>http://gutenberg/blocs/undoAnnotate</actionMapping>
             <outputActionMapping>http://gutenberg/blocs/documentMaster/undoAnnotateResponse</outputActionMapping>
+        </operation>
+        <operation name="compileTex" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://gutenberg/blocs">
+            <actionMapping>http://gutenberg/blocs/compileTex</actionMapping>
+            <outputActionMapping>http://gutenberg/blocs/documentMaster/compileTexResponse</outputActionMapping>
         </operation>
         <operation name="generateStudentRoster" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://gutenberg/blocs">
             <actionMapping>http://gutenberg/blocs/generateStudentRoster</actionMapping>

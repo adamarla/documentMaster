@@ -114,32 +114,38 @@
 				</xsd:sequence>
 			</xsd:complexType>
 
-			<xsd:complexType name="texFlagsType">
-				<xsd:sequence>
-					<xsd:element name="mode" type="xsd:string"/>
-					<xsd:element name="target" type="xsd:string"/>
-					<xsd:element maxOccurs="unbounded" minOccurs="1" name="import" type="xsd:string"/>
-					<xsd:element minOccurs="0" name="author" type="xsd:string"/>
-					<xsd:element minOccurs="0" name="qFlags" type="tns:qFlagsType"/>
-					<xsd:element minOccurs="0" name="wFlags" type="tns:wFlagsType"/>
-				</xsd:sequence>
-			</xsd:complexType>
-
-			<xsd:complexType name="qFlagsType">
-				<xsd:sequence>
-					<xsd:element name="title" type="xsd:string"/>
-					<xsd:element name="pageBreaks" type="xsd:string"/>
-					<xsd:element name="versionTriggers" type="xsd:string"/>
-				</xsd:sequence>
-			</xsd:complexType>
-
-			<xsd:complexType name="wFlagsType">
-				<xsd:sequence>
-					<xsd:element name="versions" type="xsd:string"/>
-					<xsd:element maxOccurs="unbounded" minOccurs="1" name="responses" type="xsd:string"/>
-				</xsd:sequence>
-			</xsd:complexType>
-
+            <xsd:complexType name="texFlagsType">
+                <xsd:sequence>
+                    <xsd:element name="target" type="xsd:string"/>
+                    <xsd:element name="mode" type="xsd:string"/>
+                    <xsd:element maxOccurs="unbounded" minOccurs="1" name="imports" type="xsd:string"/>
+                    <xsd:element maxOccurs="1" minOccurs="0" name="author" type="xsd:string"/>
+                    <xsd:element maxOccurs="1" minOccurs="0" name="qFlags" type="tns:qFlagsType"/>
+                    <xsd:element maxOccurs="1" minOccurs="0" name="wFlags" type="tns:wFlagsType"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        
+            <xsd:complexType name="qFlagsType">
+                <xsd:sequence>
+                    <xsd:element name="title" type="xsd:string"/>
+                    <xsd:element name="pageBreaks" type="xsd:string"/>
+                    <xsd:element name="versionTriggers" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        
+            <xsd:complexType name="wFlagsType">
+                <xsd:sequence>
+                    <xsd:element name="versions" type="xsd:string"/>
+                    <xsd:element name="responses" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        
+            <xsd:complexType name="mkFlagsType">
+                <xsd:sequence>
+                    <xsd:element name="path" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            
 			<xsd:element name="buildQuiz" type="tns:quizType">
 			</xsd:element>
 			<xsd:element name="buildQuizResponse" type="tns:responseType">
@@ -214,13 +220,19 @@
 
 			<xsd:element name="resolveScanResponse" type="tns:responseType">
 			</xsd:element>
+			
+            <xsd:element name="errorOut" type="tns:mkFlagsType"/>
+            <xsd:element name="errorOutResponse" type="tns:responseType">
+            </xsd:element>
 
-			<xsd:element name="writeTex" type="tns:texFlagsType"/>
-
-			<xsd:element name="writeTexResponse" type="tns:responseType">
-			</xsd:element>
-
-
+            <xsd:element name="writeTex" type="tns:texFlagsType">
+            </xsd:element>
+            <xsd:element name="writeTexResponse" type="tns:responseType">
+            </xsd:element>
+            <xsd:element name="compileTex" type="tns:mkFlagsType">
+            </xsd:element>
+            <xsd:element name="compileTexResponse" type="tns:responseType">
+            </xsd:element>
 		</xsd:schema>
   </wsdl:types>
   <wsdl:message name="undoAnnotateRequest">
@@ -239,6 +251,10 @@
     <wsdl:part name="parameters" element="tns:rotateScan">
     </wsdl:part>
   </wsdl:message>
+  <wsdl:message name="compileTex">
+    <wsdl:part name="parameters" element="tns:compileTex">
+    </wsdl:part>
+  </wsdl:message>
   <wsdl:message name="rotateScanResponse">
     <wsdl:part name="parameters" element="tns:rotateScanResponse">
     </wsdl:part>
@@ -255,8 +271,16 @@
     <wsdl:part name="parameters" element="tns:assignQuizResponse">
     </wsdl:part>
   </wsdl:message>
+  <wsdl:message name="compileTexResponse">
+    <wsdl:part name="parameters" element="tns:compileTexResponse">
+    </wsdl:part>
+  </wsdl:message>
   <wsdl:message name="generateStudentRosterResponse">
     <wsdl:part name="parameters" element="tns:generateStudentRosterResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="errorOut">
+    <wsdl:part name="parameters" element="tns:errorOut">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="createQuestionRequest">
@@ -273,6 +297,10 @@
   </wsdl:message>
   <wsdl:message name="generateSuggestionFormResponse">
     <wsdl:part name="parameters" element="tns:generateSuggestionFormResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="errorOutResponse">
+    <wsdl:part name="parameters" element="tns:errorOutResponse">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="writeTex">
@@ -436,9 +464,48 @@
       <wsdl:output message="tns:writeTexResponse">
     </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="compileTex">
+      <wsdl:input message="tns:compileTex">
+    </wsdl:input>
+      <wsdl:output message="tns:compileTexResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="errorOut">
+      <wsdl:input message="tns:errorOut">
+    </wsdl:input>
+      <wsdl:output message="tns:errorOutResponse">
+    </wsdl:output>
+    </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="documentMasterSOAP" type="tns:documentMaster">
     <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="errorOut">
+      <soap:operation soapAction="http://gutenberg/blocs/errorOut"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="writeTex">
+      <soap:operation soapAction="http://gutenberg/blocs/writeTex"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="compileTex">
+      <soap:operation soapAction="http://gutenberg/blocs/compileTex"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="buildQuiz">
       <soap:operation soapAction="http://gutenberg/blocs/buildQuiz"/>
       <wsdl:input>
@@ -549,15 +616,6 @@
     </wsdl:operation>
     <wsdl:operation name="resolveScan">
       <soap:operation soapAction="http://gutenberg/blocs/resolveScan"/>
-      <wsdl:input>
-        <soap:body use="literal"/>
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal"/>
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="writeTex">
-      <soap:operation soapAction="http://gutenberg/blocs/writeTex"/>
       <wsdl:input>
         <soap:body use="literal"/>
       </wsdl:input>

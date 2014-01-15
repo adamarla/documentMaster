@@ -6,6 +6,11 @@
  */
 package gutenberg.blocs;
 
+import gutenberg.blocs.WriteTex;
+import gutenberg.blocs.WriteTexResponse;
+import gutenberg.blocs.CompileTex;
+import gutenberg.blocs.CompileTexResponse;
+
 import gutenberg.workers.Config;
 import gutenberg.workers.FrontDesk;
 import gutenberg.workers.Locker;
@@ -47,8 +52,8 @@ public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
             config = new Config();
             locker = new Locker(config);
             String scanId = annotateScan.getAnnotateScan().getScanId();
-            PointType[] points = annotateScan.getAnnotateScan()
-                    .getCoordinates();
+            PointType[] points =
+                    annotateScan.getAnnotateScan().getCoordinates();
             response.setManifest(locker.annotate(scanId, points));
         } catch (Exception e) {
             e.printStackTrace();
@@ -73,7 +78,7 @@ public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
             e.printStackTrace();
             response.setError(e.getMessage());
         }
-        UndoAnnotateResponse undoAnnotateResponse = new UndoAnnotateResponse(); 
+        UndoAnnotateResponse undoAnnotateResponse = new UndoAnnotateResponse();
         undoAnnotateResponse.setUndoAnnotateResponse(response);
         return undoAnnotateResponse;
     }
@@ -96,7 +101,7 @@ public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
         rotateScanResponse.setRotateScanResponse(response);
         return rotateScanResponse;
     }
-    
+
     @Override
     public gutenberg.blocs.CreateQuestionResponse createQuestion(
             gutenberg.blocs.CreateQuestion createQuestion) {
@@ -111,7 +116,8 @@ public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
             e.printStackTrace();
             response.setError(e.getMessage());
         }
-        CreateQuestionResponse createQuestionResponse = new CreateQuestionResponse();
+        CreateQuestionResponse createQuestionResponse =
+                new CreateQuestionResponse();
         createQuestionResponse.setCreateQuestionResponse(response);
         return createQuestionResponse;
     }
@@ -164,15 +170,17 @@ public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
         try {
             config = new Config();
             frontdesk = new FrontDesk(config);
-            StudentGroupType studentGroup = generateStudentRoster.getGenerateStudentRoster();
+            StudentGroupType studentGroup =
+                    generateStudentRoster.getGenerateStudentRoster();
             response.setManifest(frontdesk.generateStudentRoster(studentGroup));
         } catch (Exception e) {
             e.printStackTrace();
             response.setError(e.getMessage());
         }
-        GenerateStudentRosterResponse
-            generateStudentRosterResponse = new GenerateStudentRosterResponse();
-        generateStudentRosterResponse.setGenerateStudentRosterResponse(response);
+        GenerateStudentRosterResponse generateStudentRosterResponse =
+                new GenerateStudentRosterResponse();
+        generateStudentRosterResponse
+                .setGenerateStudentRosterResponse(response);
         return generateStudentRosterResponse;
     }
 
@@ -185,22 +193,22 @@ public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
         try {
             config = new Config();
             frontdesk = new FrontDesk(config);
-            StudentGroupType studentGroup = generateQuizReport.getGenerateQuizReport();
+            StudentGroupType studentGroup =
+                    generateQuizReport.getGenerateQuizReport();
             response.setManifest(frontdesk.generateQuizReport(studentGroup));
         } catch (Exception e) {
             e.printStackTrace();
             response.setError(e.getMessage());
         }
-        GenerateQuizReportResponse
-            generateQuizReportResponse = new GenerateQuizReportResponse();
+        GenerateQuizReportResponse generateQuizReportResponse =
+                new GenerateQuizReportResponse();
         generateQuizReportResponse.setGenerateQuizReportResponse(response);
         return generateQuizReportResponse;
 
     }
 
     @Override
-    public PrepTestResponse prepTest(
-            PrepTest prepTest) {
+    public PrepTestResponse prepTest(PrepTest prepTest) {
         Config config = null;
         Mint mint = null;
         ResponseType response = new ResponseType();
@@ -213,8 +221,7 @@ public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
             e.printStackTrace();
             response.setError(e.getMessage());
         }
-        PrepTestResponse 
-            prepTestResponse = new PrepTestResponse();
+        PrepTestResponse prepTestResponse = new PrepTestResponse();
         prepTestResponse.setPrepTestResponse(response);
         return prepTestResponse;
     }
@@ -228,36 +235,39 @@ public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
         try {
             config = new Config();
             locker = new Locker(config);
-            SuggestionType suggestion = uploadSuggestion.getUploadSuggestion();            
-            response.setManifest(locker.uploadSuggestion(suggestion.getSignature(),
-                    suggestion.getTeacher(), suggestion.getContent()));
+            SuggestionType suggestion = uploadSuggestion.getUploadSuggestion();
+            response.setManifest(locker.uploadSuggestion(
+                    suggestion.getSignature(), suggestion.getTeacher(),
+                    suggestion.getContent()));
         } catch (Exception e) {
             e.printStackTrace();
             response.setError(e.getMessage());
         }
-        UploadSuggestionResponse uploadSuggestionResponse = new UploadSuggestionResponse();
+        UploadSuggestionResponse uploadSuggestionResponse =
+                new UploadSuggestionResponse();
         uploadSuggestionResponse.setUploadSuggestionResponse(response);
         return uploadSuggestionResponse;
     }
 
     @Override
     public FetchUnresolvedScansResponse fetchUnresolvedScans(
-        FetchUnresolvedScans fetchUnresolvedScans) {
+            FetchUnresolvedScans fetchUnresolvedScans) {
         Locker locker = null;
         Config config = null;
         ResponseType response = new ResponseType();
         try {
             config = new Config();
             locker = new Locker(config);
-            WorkRequestType workRequest = fetchUnresolvedScans.
-                getFetchUnresolvedScans();
+            WorkRequestType workRequest =
+                    fetchUnresolvedScans.getFetchUnresolvedScans();
             response.setManifest(locker.fetchUnresolved(
-                workRequest.getGrader(), workRequest.getMaxQuantity()));
+                    workRequest.getGrader(), workRequest.getMaxQuantity()));
         } catch (Exception e) {
             e.printStackTrace();
             response.setError(e.getMessage());
         }
-        FetchUnresolvedScansResponse fetchUnresolvedScansResponse = new FetchUnresolvedScansResponse();
+        FetchUnresolvedScansResponse fetchUnresolvedScansResponse =
+                new FetchUnresolvedScansResponse();
         fetchUnresolvedScansResponse.setFetchUnresolvedScansResponse(response);
         return fetchUnresolvedScansResponse;
     }
@@ -271,7 +281,8 @@ public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
             config = new Config();
             locker = new Locker(config);
             EntryType scan = resolveScan.getResolveScan();
-            response.setManifest(locker.resolveScan(scan.getId(), scan.getValue()));
+            response.setManifest(locker.resolveScan(scan.getId(),
+                    scan.getValue()));
         } catch (Exception e) {
             e.printStackTrace();
             response.setError(e.getMessage());
@@ -282,22 +293,74 @@ public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
     }
 
     @Override
-    public WriteTexResponse writeTex(WriteTex writeTex) {
-        ResponseType response = new ResponseType();
-        Config config = null;
-        Mint mint = null;
+    public WriteTexResponse writeTex(WriteTex flags) {
+        ResponseType resp = new ResponseType();
+        TexFlagsType f = flags.getWriteTex();
+
         try {
-            config = new Config();
-            mint = new Mint(config);
-            TexFlagsType texFlags = writeTex.getWriteTex();            
-            response.setManifest(mint.writeTex(texFlags));
+            Config cnfg = new Config();
+            Mint mint = new Mint(cnfg);
+
+            if (mint.createTex(f) == 0) {
+                ManifestType m = new ManifestType();
+                m.setRoot(f.getTarget());
+                resp.setManifest(m);
+            } else {
+                resp.setError("(" + f.getTarget() + ") ---> TeX writing failed");
+            }
         } catch (Exception e) {
             e.printStackTrace();
-            response.setError(e.getMessage());
+            resp.setError(e.getMessage());
         }
-        WriteTexResponse writeTexResponse = new WriteTexResponse();
-        writeTexResponse.setWriteTexResponse(response);
-        return writeTexResponse;
+        WriteTexResponse r = new WriteTexResponse();
+        r.setWriteTexResponse(resp);
+        return r;
     }
 
+    @Override
+    public CompileTexResponse compileTex(CompileTex flags) {
+        ResponseType resp = new ResponseType();
+        MkFlagsType f = flags.getCompileTex();
+        try {
+            Config cnfg = new Config();
+            Mint mint = new Mint(cnfg);
+            if (mint.compileTex(f) == 0) {
+                ManifestType m = new ManifestType();
+                m.setRoot(f.getPath());
+                resp.setManifest(m);
+            } else {
+                resp.setError("(" + f.getPath() + ") --> compilation failed");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            resp.setError(e.getMessage());
+        }
+        CompileTexResponse r = new CompileTexResponse();
+        r.setCompileTexResponse(resp);
+        return r;
+    }
+
+    @Override
+    public ErrorOutResponse errorOut(ErrorOut path) {
+        ResponseType resp = new ResponseType();
+        MkFlagsType f = path.getErrorOut();
+        try {
+            Config cnfg = new Config();
+            Mint mint = new Mint(cnfg);
+            String lnk = mint.errorOut(f);
+            if (lnk != null) {
+                ManifestType m = new ManifestType();
+                m.setRoot(lnk);
+                resp.setManifest(m);
+            } else {
+                resp.setError("(" + f.getPath() + ") --> error out failed");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            resp.setError(e.getMessage());
+        }
+        ErrorOutResponse r = new ErrorOutResponse();
+        r.setErrorOutResponse(resp);
+        return r;
+    }
 }

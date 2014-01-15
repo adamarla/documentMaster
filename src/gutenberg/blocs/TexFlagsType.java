@@ -25,36 +25,6 @@
             
 
                         /**
-                        * field for Mode
-                        */
-
-                        
-                                    protected java.lang.String localMode ;
-                                
-
-                           /**
-                           * Auto generated getter method
-                           * @return java.lang.String
-                           */
-                           public  java.lang.String getMode(){
-                               return localMode;
-                           }
-
-                           
-                        
-                            /**
-                               * Auto generated setter method
-                               * @param param Mode
-                               */
-                               public void setMode(java.lang.String param){
-                            
-                                            this.localMode=param;
-                                    
-
-                               }
-                            
-
-                        /**
                         * field for Target
                         */
 
@@ -85,20 +55,50 @@
                             
 
                         /**
-                        * field for _import
+                        * field for Mode
+                        */
+
+                        
+                                    protected java.lang.String localMode ;
+                                
+
+                           /**
+                           * Auto generated getter method
+                           * @return java.lang.String
+                           */
+                           public  java.lang.String getMode(){
+                               return localMode;
+                           }
+
+                           
+                        
+                            /**
+                               * Auto generated setter method
+                               * @param param Mode
+                               */
+                               public void setMode(java.lang.String param){
+                            
+                                            this.localMode=param;
+                                    
+
+                               }
+                            
+
+                        /**
+                        * field for Imports
                         * This was an Array!
                         */
 
                         
-                                    protected java.lang.String[] local_import ;
+                                    protected java.lang.String[] localImports ;
                                 
 
                            /**
                            * Auto generated getter method
                            * @return java.lang.String[]
                            */
-                           public  java.lang.String[] get_import(){
-                               return local_import;
+                           public  java.lang.String[] getImports(){
+                               return localImports;
                            }
 
                            
@@ -107,9 +107,9 @@
 
                                
                               /**
-                               * validate the array for _import
+                               * validate the array for Imports
                                */
-                              protected void validate_import(java.lang.String[] param){
+                              protected void validateImports(java.lang.String[] param){
                              
                               if ((param != null) && (param.length < 1)){
                                 throw new java.lang.RuntimeException();
@@ -120,14 +120,14 @@
 
                              /**
                               * Auto generated setter method
-                              * @param param _import
+                              * @param param Imports
                               */
-                              public void set_import(java.lang.String[] param){
+                              public void setImports(java.lang.String[] param){
                               
-                                   validate_import(param);
+                                   validateImports(param);
 
                                
-                                      this.local_import=param;
+                                      this.localImports=param;
                               }
 
                                
@@ -136,17 +136,17 @@
                              * Auto generated add method for the array for convenience
                              * @param param java.lang.String
                              */
-                             public void add_import(java.lang.String param){
-                                   if (local_import == null){
-                                   local_import = new java.lang.String[]{};
+                             public void addImports(java.lang.String param){
+                                   if (localImports == null){
+                                   localImports = new java.lang.String[]{};
                                    }
 
                             
 
                                java.util.List list =
-                            org.apache.axis2.databinding.utils.ConverterUtil.toList(local_import);
+                            org.apache.axis2.databinding.utils.ConverterUtil.toList(localImports);
                                list.add(param);
-                               this.local_import =
+                               this.localImports =
                              (java.lang.String[])list.toArray(
                             new java.lang.String[list.size()]);
 
@@ -339,24 +339,6 @@
                    }
                
                                     namespace = "http://gutenberg/blocs";
-                                    writeStartElement(null, namespace, "mode", xmlWriter);
-                             
-
-                                          if (localMode==null){
-                                              // write the nil attribute
-                                              
-                                                     throw new org.apache.axis2.databinding.ADBException("mode cannot be null!!");
-                                                  
-                                          }else{
-
-                                        
-                                                   xmlWriter.writeCharacters(localMode);
-                                            
-                                          }
-                                    
-                                   xmlWriter.writeEndElement();
-                             
-                                    namespace = "http://gutenberg/blocs";
                                     writeStartElement(null, namespace, "target", xmlWriter);
                              
 
@@ -374,29 +356,47 @@
                                     
                                    xmlWriter.writeEndElement();
                              
-                             if (local_import!=null) {
+                                    namespace = "http://gutenberg/blocs";
+                                    writeStartElement(null, namespace, "mode", xmlWriter);
+                             
+
+                                          if (localMode==null){
+                                              // write the nil attribute
+                                              
+                                                     throw new org.apache.axis2.databinding.ADBException("mode cannot be null!!");
+                                                  
+                                          }else{
+
+                                        
+                                                   xmlWriter.writeCharacters(localMode);
+                                            
+                                          }
+                                    
+                                   xmlWriter.writeEndElement();
+                             
+                             if (localImports!=null) {
                                    namespace = "http://gutenberg/blocs";
-                                   for (int i = 0;i < local_import.length;i++){
+                                   for (int i = 0;i < localImports.length;i++){
                                         
-                                            if (local_import[i] != null){
+                                            if (localImports[i] != null){
                                         
-                                                writeStartElement(null, namespace, "import", xmlWriter);
+                                                writeStartElement(null, namespace, "imports", xmlWriter);
 
                                             
-                                                        xmlWriter.writeCharacters(org.apache.axis2.databinding.utils.ConverterUtil.convertToString(local_import[i]));
+                                                        xmlWriter.writeCharacters(org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localImports[i]));
                                                     
                                                 xmlWriter.writeEndElement();
                                               
                                                 } else {
                                                    
-                                                           throw new org.apache.axis2.databinding.ADBException("import cannot be null!!");
+                                                           throw new org.apache.axis2.databinding.ADBException("imports cannot be null!!");
                                                        
                                                 }
 
                                    }
                              } else {
                                  
-                                         throw new org.apache.axis2.databinding.ADBException("import cannot be null!!");
+                                         throw new org.apache.axis2.databinding.ADBException("imports cannot be null!!");
                                     
                              }
 
@@ -617,15 +617,6 @@
 
                 
                                       elementList.add(new javax.xml.namespace.QName("http://gutenberg/blocs",
-                                                                      "mode"));
-                                 
-                                        if (localMode != null){
-                                            elementList.add(org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localMode));
-                                        } else {
-                                           throw new org.apache.axis2.databinding.ADBException("mode cannot be null!!");
-                                        }
-                                    
-                                      elementList.add(new javax.xml.namespace.QName("http://gutenberg/blocs",
                                                                       "target"));
                                  
                                         if (localTarget != null){
@@ -634,17 +625,26 @@
                                            throw new org.apache.axis2.databinding.ADBException("target cannot be null!!");
                                         }
                                     
-                            if (local_import!=null){
-                                  for (int i = 0;i < local_import.length;i++){
+                                      elementList.add(new javax.xml.namespace.QName("http://gutenberg/blocs",
+                                                                      "mode"));
+                                 
+                                        if (localMode != null){
+                                            elementList.add(org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localMode));
+                                        } else {
+                                           throw new org.apache.axis2.databinding.ADBException("mode cannot be null!!");
+                                        }
+                                    
+                            if (localImports!=null){
+                                  for (int i = 0;i < localImports.length;i++){
                                       
-                                         if (local_import[i] != null){
+                                         if (localImports[i] != null){
                                           elementList.add(new javax.xml.namespace.QName("http://gutenberg/blocs",
-                                                                              "import"));
+                                                                              "imports"));
                                           elementList.add(
-                                          org.apache.axis2.databinding.utils.ConverterUtil.convertToString(local_import[i]));
+                                          org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localImports[i]));
                                           } else {
                                              
-                                                    throw new org.apache.axis2.databinding.ADBException("import cannot be null!!");
+                                                    throw new org.apache.axis2.databinding.ADBException("imports cannot be null!!");
                                                 
                                           }
                                       
@@ -652,7 +652,7 @@
                                   }
                             } else {
                               
-                                    throw new org.apache.axis2.databinding.ADBException("import cannot be null!!");
+                                    throw new org.apache.axis2.databinding.ADBException("imports cannot be null!!");
                                 
                             }
 
@@ -764,25 +764,6 @@
                                     
                                     while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
                                 
-                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://gutenberg/blocs","mode").equals(reader.getName())){
-                                
-                                    java.lang.String content = reader.getElementText();
-                                    
-                                              object.setMode(
-                                                    org.apache.axis2.databinding.utils.ConverterUtil.convertToString(content));
-                                              
-                                        reader.next();
-                                    
-                              }  // End of if for expected property start element
-                                
-                                else{
-                                    // A start element we are not expecting indicates an invalid parameter was passed
-                                    throw new org.apache.axis2.databinding.ADBException("Unexpected subelement " + reader.getName());
-                                }
-                            
-                                    
-                                    while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
-                                
                                     if (reader.isStartElement() && new javax.xml.namespace.QName("http://gutenberg/blocs","target").equals(reader.getName())){
                                 
                                     java.lang.String content = reader.getElementText();
@@ -802,7 +783,26 @@
                                     
                                     while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
                                 
-                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://gutenberg/blocs","import").equals(reader.getName())){
+                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://gutenberg/blocs","mode").equals(reader.getName())){
+                                
+                                    java.lang.String content = reader.getElementText();
+                                    
+                                              object.setMode(
+                                                    org.apache.axis2.databinding.utils.ConverterUtil.convertToString(content));
+                                              
+                                        reader.next();
+                                    
+                              }  // End of if for expected property start element
+                                
+                                else{
+                                    // A start element we are not expecting indicates an invalid parameter was passed
+                                    throw new org.apache.axis2.databinding.ADBException("Unexpected subelement " + reader.getName());
+                                }
+                            
+                                    
+                                    while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
+                                
+                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://gutenberg/blocs","imports").equals(reader.getName())){
                                 
                                     
                                     
@@ -825,7 +825,7 @@
                                                     //two continuous end elements means we are exiting the xml structure
                                                     loopDone3 = true;
                                                 } else {
-                                                    if (new javax.xml.namespace.QName("http://gutenberg/blocs","import").equals(reader.getName())){
+                                                    if (new javax.xml.namespace.QName("http://gutenberg/blocs","imports").equals(reader.getName())){
                                                          list3.add(reader.getElementText());
                                                         
                                                     }else{
@@ -835,7 +835,7 @@
                                             }
                                             // call the converter utility  to convert and set the array
                                             
-                                                    object.set_import((java.lang.String[])
+                                                    object.setImports((java.lang.String[])
                                                         list3.toArray(new java.lang.String[list3.size()]));
                                                 
                               }  // End of if for expected property start element

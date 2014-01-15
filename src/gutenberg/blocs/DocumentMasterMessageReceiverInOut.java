@@ -37,269 +37,307 @@
 
         
 
+            if("errorOut".equals(methodName)){
+                
+                gutenberg.blocs.ErrorOutResponse errorOutResponse33 = null;
+	                        gutenberg.blocs.ErrorOut wrappedParam =
+                                                             (gutenberg.blocs.ErrorOut)fromOM(
+                                    msgContext.getEnvelope().getBody().getFirstElement(),
+                                    gutenberg.blocs.ErrorOut.class,
+                                    getEnvelopeNamespaces(msgContext.getEnvelope()));
+                                                
+                                               errorOutResponse33 =
+                                                   
+                                                   
+                                                         skel.errorOut(wrappedParam)
+                                                    ;
+                                            
+                                        envelope = toEnvelope(getSOAPFactory(msgContext), errorOutResponse33, false, new javax.xml.namespace.QName("http://gutenberg/blocs",
+                                                    "errorOut"));
+                                    } else 
+
             if("tagQuestion".equals(methodName)){
                 
-                gutenberg.blocs.TagQuestionResponse tagQuestionResponse29 = null;
+                gutenberg.blocs.TagQuestionResponse tagQuestionResponse35 = null;
 	                        gutenberg.blocs.TagQuestion wrappedParam =
                                                              (gutenberg.blocs.TagQuestion)fromOM(
                                     msgContext.getEnvelope().getBody().getFirstElement(),
                                     gutenberg.blocs.TagQuestion.class,
                                     getEnvelopeNamespaces(msgContext.getEnvelope()));
                                                 
-                                               tagQuestionResponse29 =
+                                               tagQuestionResponse35 =
                                                    
                                                    
                                                          skel.tagQuestion(wrappedParam)
                                                     ;
                                             
-                                        envelope = toEnvelope(getSOAPFactory(msgContext), tagQuestionResponse29, false, new javax.xml.namespace.QName("http://gutenberg/blocs",
+                                        envelope = toEnvelope(getSOAPFactory(msgContext), tagQuestionResponse35, false, new javax.xml.namespace.QName("http://gutenberg/blocs",
                                                     "tagQuestion"));
                                     } else 
 
             if("uploadSuggestion".equals(methodName)){
                 
-                gutenberg.blocs.UploadSuggestionResponse uploadSuggestionResponse31 = null;
+                gutenberg.blocs.UploadSuggestionResponse uploadSuggestionResponse37 = null;
 	                        gutenberg.blocs.UploadSuggestion wrappedParam =
                                                              (gutenberg.blocs.UploadSuggestion)fromOM(
                                     msgContext.getEnvelope().getBody().getFirstElement(),
                                     gutenberg.blocs.UploadSuggestion.class,
                                     getEnvelopeNamespaces(msgContext.getEnvelope()));
                                                 
-                                               uploadSuggestionResponse31 =
+                                               uploadSuggestionResponse37 =
                                                    
                                                    
                                                          skel.uploadSuggestion(wrappedParam)
                                                     ;
                                             
-                                        envelope = toEnvelope(getSOAPFactory(msgContext), uploadSuggestionResponse31, false, new javax.xml.namespace.QName("http://gutenberg/blocs",
+                                        envelope = toEnvelope(getSOAPFactory(msgContext), uploadSuggestionResponse37, false, new javax.xml.namespace.QName("http://gutenberg/blocs",
                                                     "uploadSuggestion"));
                                     } else 
 
             if("fetchUnresolvedScans".equals(methodName)){
                 
-                gutenberg.blocs.FetchUnresolvedScansResponse fetchUnresolvedScansResponse33 = null;
+                gutenberg.blocs.FetchUnresolvedScansResponse fetchUnresolvedScansResponse39 = null;
 	                        gutenberg.blocs.FetchUnresolvedScans wrappedParam =
                                                              (gutenberg.blocs.FetchUnresolvedScans)fromOM(
                                     msgContext.getEnvelope().getBody().getFirstElement(),
                                     gutenberg.blocs.FetchUnresolvedScans.class,
                                     getEnvelopeNamespaces(msgContext.getEnvelope()));
                                                 
-                                               fetchUnresolvedScansResponse33 =
+                                               fetchUnresolvedScansResponse39 =
                                                    
                                                    
                                                          skel.fetchUnresolvedScans(wrappedParam)
                                                     ;
                                             
-                                        envelope = toEnvelope(getSOAPFactory(msgContext), fetchUnresolvedScansResponse33, false, new javax.xml.namespace.QName("http://gutenberg/blocs",
+                                        envelope = toEnvelope(getSOAPFactory(msgContext), fetchUnresolvedScansResponse39, false, new javax.xml.namespace.QName("http://gutenberg/blocs",
                                                     "fetchUnresolvedScans"));
                                     } else 
 
             if("resolveScan".equals(methodName)){
                 
-                gutenberg.blocs.ResolveScanResponse resolveScanResponse35 = null;
+                gutenberg.blocs.ResolveScanResponse resolveScanResponse41 = null;
 	                        gutenberg.blocs.ResolveScan wrappedParam =
                                                              (gutenberg.blocs.ResolveScan)fromOM(
                                     msgContext.getEnvelope().getBody().getFirstElement(),
                                     gutenberg.blocs.ResolveScan.class,
                                     getEnvelopeNamespaces(msgContext.getEnvelope()));
                                                 
-                                               resolveScanResponse35 =
+                                               resolveScanResponse41 =
                                                    
                                                    
                                                          skel.resolveScan(wrappedParam)
                                                     ;
                                             
-                                        envelope = toEnvelope(getSOAPFactory(msgContext), resolveScanResponse35, false, new javax.xml.namespace.QName("http://gutenberg/blocs",
+                                        envelope = toEnvelope(getSOAPFactory(msgContext), resolveScanResponse41, false, new javax.xml.namespace.QName("http://gutenberg/blocs",
                                                     "resolveScan"));
                                     } else 
 
             if("createQuestion".equals(methodName)){
                 
-                gutenberg.blocs.CreateQuestionResponse createQuestionResponse37 = null;
+                gutenberg.blocs.CreateQuestionResponse createQuestionResponse43 = null;
 	                        gutenberg.blocs.CreateQuestion wrappedParam =
                                                              (gutenberg.blocs.CreateQuestion)fromOM(
                                     msgContext.getEnvelope().getBody().getFirstElement(),
                                     gutenberg.blocs.CreateQuestion.class,
                                     getEnvelopeNamespaces(msgContext.getEnvelope()));
                                                 
-                                               createQuestionResponse37 =
+                                               createQuestionResponse43 =
                                                    
                                                    
                                                          skel.createQuestion(wrappedParam)
                                                     ;
                                             
-                                        envelope = toEnvelope(getSOAPFactory(msgContext), createQuestionResponse37, false, new javax.xml.namespace.QName("http://gutenberg/blocs",
+                                        envelope = toEnvelope(getSOAPFactory(msgContext), createQuestionResponse43, false, new javax.xml.namespace.QName("http://gutenberg/blocs",
                                                     "createQuestion"));
                                     } else 
 
             if("prepTest".equals(methodName)){
                 
-                gutenberg.blocs.PrepTestResponse prepTestResponse39 = null;
+                gutenberg.blocs.PrepTestResponse prepTestResponse45 = null;
 	                        gutenberg.blocs.PrepTest wrappedParam =
                                                              (gutenberg.blocs.PrepTest)fromOM(
                                     msgContext.getEnvelope().getBody().getFirstElement(),
                                     gutenberg.blocs.PrepTest.class,
                                     getEnvelopeNamespaces(msgContext.getEnvelope()));
                                                 
-                                               prepTestResponse39 =
+                                               prepTestResponse45 =
                                                    
                                                    
                                                          skel.prepTest(wrappedParam)
                                                     ;
                                             
-                                        envelope = toEnvelope(getSOAPFactory(msgContext), prepTestResponse39, false, new javax.xml.namespace.QName("http://gutenberg/blocs",
+                                        envelope = toEnvelope(getSOAPFactory(msgContext), prepTestResponse45, false, new javax.xml.namespace.QName("http://gutenberg/blocs",
                                                     "prepTest"));
                                     } else 
 
             if("annotateScan".equals(methodName)){
                 
-                gutenberg.blocs.AnnotateScanResponse annotateScanResponse41 = null;
+                gutenberg.blocs.AnnotateScanResponse annotateScanResponse47 = null;
 	                        gutenberg.blocs.AnnotateScan wrappedParam =
                                                              (gutenberg.blocs.AnnotateScan)fromOM(
                                     msgContext.getEnvelope().getBody().getFirstElement(),
                                     gutenberg.blocs.AnnotateScan.class,
                                     getEnvelopeNamespaces(msgContext.getEnvelope()));
                                                 
-                                               annotateScanResponse41 =
+                                               annotateScanResponse47 =
                                                    
                                                    
                                                          skel.annotateScan(wrappedParam)
                                                     ;
                                             
-                                        envelope = toEnvelope(getSOAPFactory(msgContext), annotateScanResponse41, false, new javax.xml.namespace.QName("http://gutenberg/blocs",
+                                        envelope = toEnvelope(getSOAPFactory(msgContext), annotateScanResponse47, false, new javax.xml.namespace.QName("http://gutenberg/blocs",
                                                     "annotateScan"));
                                     } else 
 
             if("buildQuiz".equals(methodName)){
                 
-                gutenberg.blocs.BuildQuizResponse buildQuizResponse43 = null;
+                gutenberg.blocs.BuildQuizResponse buildQuizResponse49 = null;
 	                        gutenberg.blocs.BuildQuiz wrappedParam =
                                                              (gutenberg.blocs.BuildQuiz)fromOM(
                                     msgContext.getEnvelope().getBody().getFirstElement(),
                                     gutenberg.blocs.BuildQuiz.class,
                                     getEnvelopeNamespaces(msgContext.getEnvelope()));
                                                 
-                                               buildQuizResponse43 =
+                                               buildQuizResponse49 =
                                                    
                                                    
                                                          skel.buildQuiz(wrappedParam)
                                                     ;
                                             
-                                        envelope = toEnvelope(getSOAPFactory(msgContext), buildQuizResponse43, false, new javax.xml.namespace.QName("http://gutenberg/blocs",
+                                        envelope = toEnvelope(getSOAPFactory(msgContext), buildQuizResponse49, false, new javax.xml.namespace.QName("http://gutenberg/blocs",
                                                     "buildQuiz"));
                                     } else 
 
             if("generateQuizReport".equals(methodName)){
                 
-                gutenberg.blocs.GenerateQuizReportResponse generateQuizReportResponse45 = null;
+                gutenberg.blocs.GenerateQuizReportResponse generateQuizReportResponse51 = null;
 	                        gutenberg.blocs.GenerateQuizReport wrappedParam =
                                                              (gutenberg.blocs.GenerateQuizReport)fromOM(
                                     msgContext.getEnvelope().getBody().getFirstElement(),
                                     gutenberg.blocs.GenerateQuizReport.class,
                                     getEnvelopeNamespaces(msgContext.getEnvelope()));
                                                 
-                                               generateQuizReportResponse45 =
+                                               generateQuizReportResponse51 =
                                                    
                                                    
                                                          skel.generateQuizReport(wrappedParam)
                                                     ;
                                             
-                                        envelope = toEnvelope(getSOAPFactory(msgContext), generateQuizReportResponse45, false, new javax.xml.namespace.QName("http://gutenberg/blocs",
+                                        envelope = toEnvelope(getSOAPFactory(msgContext), generateQuizReportResponse51, false, new javax.xml.namespace.QName("http://gutenberg/blocs",
                                                     "generateQuizReport"));
                                     } else 
 
             if("undoAnnotate".equals(methodName)){
                 
-                gutenberg.blocs.UndoAnnotateResponse undoAnnotateResponse47 = null;
+                gutenberg.blocs.UndoAnnotateResponse undoAnnotateResponse53 = null;
 	                        gutenberg.blocs.UndoAnnotate wrappedParam =
                                                              (gutenberg.blocs.UndoAnnotate)fromOM(
                                     msgContext.getEnvelope().getBody().getFirstElement(),
                                     gutenberg.blocs.UndoAnnotate.class,
                                     getEnvelopeNamespaces(msgContext.getEnvelope()));
                                                 
-                                               undoAnnotateResponse47 =
+                                               undoAnnotateResponse53 =
                                                    
                                                    
                                                          skel.undoAnnotate(wrappedParam)
                                                     ;
                                             
-                                        envelope = toEnvelope(getSOAPFactory(msgContext), undoAnnotateResponse47, false, new javax.xml.namespace.QName("http://gutenberg/blocs",
+                                        envelope = toEnvelope(getSOAPFactory(msgContext), undoAnnotateResponse53, false, new javax.xml.namespace.QName("http://gutenberg/blocs",
                                                     "undoAnnotate"));
+                                    } else 
+
+            if("compileTex".equals(methodName)){
+                
+                gutenberg.blocs.CompileTexResponse compileTexResponse55 = null;
+	                        gutenberg.blocs.CompileTex wrappedParam =
+                                                             (gutenberg.blocs.CompileTex)fromOM(
+                                    msgContext.getEnvelope().getBody().getFirstElement(),
+                                    gutenberg.blocs.CompileTex.class,
+                                    getEnvelopeNamespaces(msgContext.getEnvelope()));
+                                                
+                                               compileTexResponse55 =
+                                                   
+                                                   
+                                                         skel.compileTex(wrappedParam)
+                                                    ;
+                                            
+                                        envelope = toEnvelope(getSOAPFactory(msgContext), compileTexResponse55, false, new javax.xml.namespace.QName("http://gutenberg/blocs",
+                                                    "compileTex"));
                                     } else 
 
             if("generateStudentRoster".equals(methodName)){
                 
-                gutenberg.blocs.GenerateStudentRosterResponse generateStudentRosterResponse49 = null;
+                gutenberg.blocs.GenerateStudentRosterResponse generateStudentRosterResponse57 = null;
 	                        gutenberg.blocs.GenerateStudentRoster wrappedParam =
                                                              (gutenberg.blocs.GenerateStudentRoster)fromOM(
                                     msgContext.getEnvelope().getBody().getFirstElement(),
                                     gutenberg.blocs.GenerateStudentRoster.class,
                                     getEnvelopeNamespaces(msgContext.getEnvelope()));
                                                 
-                                               generateStudentRosterResponse49 =
+                                               generateStudentRosterResponse57 =
                                                    
                                                    
                                                          skel.generateStudentRoster(wrappedParam)
                                                     ;
                                             
-                                        envelope = toEnvelope(getSOAPFactory(msgContext), generateStudentRosterResponse49, false, new javax.xml.namespace.QName("http://gutenberg/blocs",
+                                        envelope = toEnvelope(getSOAPFactory(msgContext), generateStudentRosterResponse57, false, new javax.xml.namespace.QName("http://gutenberg/blocs",
                                                     "generateStudentRoster"));
                                     } else 
 
             if("writeTex".equals(methodName)){
                 
-                gutenberg.blocs.WriteTexResponse writeTexResponse51 = null;
+                gutenberg.blocs.WriteTexResponse writeTexResponse59 = null;
 	                        gutenberg.blocs.WriteTex wrappedParam =
                                                              (gutenberg.blocs.WriteTex)fromOM(
                                     msgContext.getEnvelope().getBody().getFirstElement(),
                                     gutenberg.blocs.WriteTex.class,
                                     getEnvelopeNamespaces(msgContext.getEnvelope()));
                                                 
-                                               writeTexResponse51 =
+                                               writeTexResponse59 =
                                                    
                                                    
                                                          skel.writeTex(wrappedParam)
                                                     ;
                                             
-                                        envelope = toEnvelope(getSOAPFactory(msgContext), writeTexResponse51, false, new javax.xml.namespace.QName("http://gutenberg/blocs",
+                                        envelope = toEnvelope(getSOAPFactory(msgContext), writeTexResponse59, false, new javax.xml.namespace.QName("http://gutenberg/blocs",
                                                     "writeTex"));
                                     } else 
 
             if("rotateScan".equals(methodName)){
                 
-                gutenberg.blocs.RotateScanResponse rotateScanResponse53 = null;
+                gutenberg.blocs.RotateScanResponse rotateScanResponse61 = null;
 	                        gutenberg.blocs.RotateScan wrappedParam =
                                                              (gutenberg.blocs.RotateScan)fromOM(
                                     msgContext.getEnvelope().getBody().getFirstElement(),
                                     gutenberg.blocs.RotateScan.class,
                                     getEnvelopeNamespaces(msgContext.getEnvelope()));
                                                 
-                                               rotateScanResponse53 =
+                                               rotateScanResponse61 =
                                                    
                                                    
                                                          skel.rotateScan(wrappedParam)
                                                     ;
                                             
-                                        envelope = toEnvelope(getSOAPFactory(msgContext), rotateScanResponse53, false, new javax.xml.namespace.QName("http://gutenberg/blocs",
+                                        envelope = toEnvelope(getSOAPFactory(msgContext), rotateScanResponse61, false, new javax.xml.namespace.QName("http://gutenberg/blocs",
                                                     "rotateScan"));
                                     } else 
 
             if("assignQuiz".equals(methodName)){
                 
-                gutenberg.blocs.AssignQuizResponse assignQuizResponse55 = null;
+                gutenberg.blocs.AssignQuizResponse assignQuizResponse63 = null;
 	                        gutenberg.blocs.AssignQuiz wrappedParam =
                                                              (gutenberg.blocs.AssignQuiz)fromOM(
                                     msgContext.getEnvelope().getBody().getFirstElement(),
                                     gutenberg.blocs.AssignQuiz.class,
                                     getEnvelopeNamespaces(msgContext.getEnvelope()));
                                                 
-                                               assignQuizResponse55 =
+                                               assignQuizResponse63 =
                                                    
                                                    
                                                          skel.assignQuiz(wrappedParam)
                                                     ;
                                             
-                                        envelope = toEnvelope(getSOAPFactory(msgContext), assignQuizResponse55, false, new javax.xml.namespace.QName("http://gutenberg/blocs",
+                                        envelope = toEnvelope(getSOAPFactory(msgContext), assignQuizResponse63, false, new javax.xml.namespace.QName("http://gutenberg/blocs",
                                                     "assignQuiz"));
                                     
             } else {
@@ -316,6 +354,34 @@
         }
         
         //
+            private  org.apache.axiom.om.OMElement  toOM(gutenberg.blocs.ErrorOut param, boolean optimizeContent)
+            throws org.apache.axis2.AxisFault {
+
+            
+                        try{
+                             return param.getOMElement(gutenberg.blocs.ErrorOut.MY_QNAME,
+                                          org.apache.axiom.om.OMAbstractFactory.getOMFactory());
+                        } catch(org.apache.axis2.databinding.ADBException e){
+                            throw org.apache.axis2.AxisFault.makeFault(e);
+                        }
+                    
+
+            }
+        
+            private  org.apache.axiom.om.OMElement  toOM(gutenberg.blocs.ErrorOutResponse param, boolean optimizeContent)
+            throws org.apache.axis2.AxisFault {
+
+            
+                        try{
+                             return param.getOMElement(gutenberg.blocs.ErrorOutResponse.MY_QNAME,
+                                          org.apache.axiom.om.OMAbstractFactory.getOMFactory());
+                        } catch(org.apache.axis2.databinding.ADBException e){
+                            throw org.apache.axis2.AxisFault.makeFault(e);
+                        }
+                    
+
+            }
+        
             private  org.apache.axiom.om.OMElement  toOM(gutenberg.blocs.TagQuestion param, boolean optimizeContent)
             throws org.apache.axis2.AxisFault {
 
@@ -596,6 +662,34 @@
 
             }
         
+            private  org.apache.axiom.om.OMElement  toOM(gutenberg.blocs.CompileTex param, boolean optimizeContent)
+            throws org.apache.axis2.AxisFault {
+
+            
+                        try{
+                             return param.getOMElement(gutenberg.blocs.CompileTex.MY_QNAME,
+                                          org.apache.axiom.om.OMAbstractFactory.getOMFactory());
+                        } catch(org.apache.axis2.databinding.ADBException e){
+                            throw org.apache.axis2.AxisFault.makeFault(e);
+                        }
+                    
+
+            }
+        
+            private  org.apache.axiom.om.OMElement  toOM(gutenberg.blocs.CompileTexResponse param, boolean optimizeContent)
+            throws org.apache.axis2.AxisFault {
+
+            
+                        try{
+                             return param.getOMElement(gutenberg.blocs.CompileTexResponse.MY_QNAME,
+                                          org.apache.axiom.om.OMAbstractFactory.getOMFactory());
+                        } catch(org.apache.axis2.databinding.ADBException e){
+                            throw org.apache.axis2.AxisFault.makeFault(e);
+                        }
+                    
+
+            }
+        
             private  org.apache.axiom.om.OMElement  toOM(gutenberg.blocs.GenerateStudentRoster param, boolean optimizeContent)
             throws org.apache.axis2.AxisFault {
 
@@ -708,6 +802,25 @@
 
             }
         
+                    private  org.apache.axiom.soap.SOAPEnvelope toEnvelope(org.apache.axiom.soap.SOAPFactory factory, gutenberg.blocs.ErrorOutResponse param, boolean optimizeContent, javax.xml.namespace.QName methodQName)
+                        throws org.apache.axis2.AxisFault{
+                      try{
+                          org.apache.axiom.soap.SOAPEnvelope emptyEnvelope = factory.getDefaultEnvelope();
+                           
+                                    emptyEnvelope.getBody().addChild(param.getOMElement(gutenberg.blocs.ErrorOutResponse.MY_QNAME,factory));
+                                
+
+                         return emptyEnvelope;
+                    } catch(org.apache.axis2.databinding.ADBException e){
+                        throw org.apache.axis2.AxisFault.makeFault(e);
+                    }
+                    }
+                    
+                         private gutenberg.blocs.ErrorOutResponse wraperrorOut(){
+                                gutenberg.blocs.ErrorOutResponse wrappedElement = new gutenberg.blocs.ErrorOutResponse();
+                                return wrappedElement;
+                         }
+                    
                     private  org.apache.axiom.soap.SOAPEnvelope toEnvelope(org.apache.axiom.soap.SOAPFactory factory, gutenberg.blocs.TagQuestionResponse param, boolean optimizeContent, javax.xml.namespace.QName methodQName)
                         throws org.apache.axis2.AxisFault{
                       try{
@@ -879,6 +992,25 @@
                                 return wrappedElement;
                          }
                     
+                    private  org.apache.axiom.soap.SOAPEnvelope toEnvelope(org.apache.axiom.soap.SOAPFactory factory, gutenberg.blocs.CompileTexResponse param, boolean optimizeContent, javax.xml.namespace.QName methodQName)
+                        throws org.apache.axis2.AxisFault{
+                      try{
+                          org.apache.axiom.soap.SOAPEnvelope emptyEnvelope = factory.getDefaultEnvelope();
+                           
+                                    emptyEnvelope.getBody().addChild(param.getOMElement(gutenberg.blocs.CompileTexResponse.MY_QNAME,factory));
+                                
+
+                         return emptyEnvelope;
+                    } catch(org.apache.axis2.databinding.ADBException e){
+                        throw org.apache.axis2.AxisFault.makeFault(e);
+                    }
+                    }
+                    
+                         private gutenberg.blocs.CompileTexResponse wrapcompileTex(){
+                                gutenberg.blocs.CompileTexResponse wrappedElement = new gutenberg.blocs.CompileTexResponse();
+                                return wrappedElement;
+                         }
+                    
                     private  org.apache.axiom.soap.SOAPEnvelope toEnvelope(org.apache.axiom.soap.SOAPFactory factory, gutenberg.blocs.UndoAnnotateResponse param, boolean optimizeContent, javax.xml.namespace.QName methodQName)
                         throws org.apache.axis2.AxisFault{
                       try{
@@ -991,6 +1123,20 @@
 
         try {
         
+                if (gutenberg.blocs.ErrorOut.class.equals(type)){
+                
+                           return gutenberg.blocs.ErrorOut.Factory.parse(param.getXMLStreamReaderWithoutCaching());
+                    
+
+                }
+           
+                if (gutenberg.blocs.ErrorOutResponse.class.equals(type)){
+                
+                           return gutenberg.blocs.ErrorOutResponse.Factory.parse(param.getXMLStreamReaderWithoutCaching());
+                    
+
+                }
+           
                 if (gutenberg.blocs.TagQuestion.class.equals(type)){
                 
                            return gutenberg.blocs.TagQuestion.Factory.parse(param.getXMLStreamReaderWithoutCaching());
@@ -1127,6 +1273,20 @@
                 if (gutenberg.blocs.UndoAnnotateResponse.class.equals(type)){
                 
                            return gutenberg.blocs.UndoAnnotateResponse.Factory.parse(param.getXMLStreamReaderWithoutCaching());
+                    
+
+                }
+           
+                if (gutenberg.blocs.CompileTex.class.equals(type)){
+                
+                           return gutenberg.blocs.CompileTex.Factory.parse(param.getXMLStreamReaderWithoutCaching());
+                    
+
+                }
+           
+                if (gutenberg.blocs.CompileTexResponse.class.equals(type)){
+                
+                           return gutenberg.blocs.CompileTexResponse.Factory.parse(param.getXMLStreamReaderWithoutCaching());
                     
 
                 }

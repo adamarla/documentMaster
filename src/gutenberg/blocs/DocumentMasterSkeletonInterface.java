@@ -15,6 +15,20 @@
         /**
          * Auto generated method signature
          * 
+                                    * @param errorOut
+         */
+
+        
+                public gutenberg.blocs.ErrorOutResponse errorOut
+                (
+                  gutenberg.blocs.ErrorOut errorOut
+                 )
+            ;
+        
+         
+        /**
+         * Auto generated method signature
+         * 
                                     * @param tagQuestion
          */
 
@@ -148,6 +162,20 @@
                 public gutenberg.blocs.UndoAnnotateResponse undoAnnotate
                 (
                   gutenberg.blocs.UndoAnnotate undoAnnotate
+                 )
+            ;
+        
+         
+        /**
+         * Auto generated method signature
+         * 
+                                    * @param compileTex
+         */
+
+        
+                public gutenberg.blocs.CompileTexResponse compileTex
+                (
+                  gutenberg.blocs.CompileTex compileTex
                  )
             ;
         
