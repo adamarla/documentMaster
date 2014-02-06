@@ -53,21 +53,33 @@ public class Mint implements ITagLib {
 
         pb.redirectErrorStream(true);
         if (skel) {
-            pb.redirectOutput(logf);
+            // pb.redirectOutput(logf);
             pb.command().add("skel");
         } else if (ltx != null) {
-            pb.redirectOutput(Redirect.appendTo(logf));
+            // pb.redirectOutput(Redirect.appendTo(logf));
         } else {
             throw new Exception("Mint.java:61 LATEX_ROOT not inferred");
         }
         p = pb.start();
-        return p.waitFor();
+        BufferedReader messages =
+                new BufferedReader(new InputStreamReader(
+                        p.getInputStream()));
+
+        String line = null;
+        while ((line = messages.readLine()) != null) {
+            System.out.println(line);
+        }
+
+        int ret = p.waitFor();
+        return ret ;
     }
 
     public int compileTex(MkFlagsType f) throws Exception {
         Path path = mintPath.resolve(f.getPath());
-        this.make(path, false);
-        return 0;
+        System.out.println(" ---> Starting make") ;
+        int ret = this.make(path, false);
+        System.out.println(" ---> Ending make --> " + ret) ;
+        return ret;
     }
 
     public String errorOut(MkFlagsType f) throws Exception {
