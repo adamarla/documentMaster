@@ -152,6 +152,13 @@
                     <xsd:element name="versionTriggers" type="xsd:string"/>
                 </xsd:sequence>
             </xsd:complexType>
+            
+            <xsd:complexType name="examType">
+                <xsd:sequence>
+                    <xsd:element name="uid" type="xsd:string"/>
+                    <xsd:element name="worksheetUid" type="xsd:string" maxOccurs="unbounded"/>
+                </xsd:sequence>
+            </xsd:complexType>
         
             <xsd:complexType name="wFlagsType">
                 <xsd:sequence>
@@ -256,6 +263,13 @@
             <xsd:element name="compileTexResponse"
                 type="tns:responseType">
             </xsd:element>
+            
+            <xsd:element name="destroyExam" type="tns:examType">
+            </xsd:element>
+            <xsd:element name="destroyExamResponse"
+                type="tns:responseType">
+            </xsd:element>
+            
 		</xsd:schema>
 	</wsdl:types>
 	<wsdl:message name="buildQuizRequest">
@@ -366,6 +380,12 @@
 	<wsdl:message name="errorOutResponse">
 		<wsdl:part name="parameters" element="tns:errorOutResponse"></wsdl:part>
 	</wsdl:message>
+    <wsdl:message name="destroyExam">
+        <wsdl:part name="parameters" element="tns:destroyExam"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="destroyExamResponse">
+        <wsdl:part name="parameters" element="tns:destroyExamResponse"></wsdl:part>
+    </wsdl:message>
 	<wsdl:portType name="documentMaster">
 		<wsdl:operation name="buildQuiz">
 			<wsdl:input message="tns:buildQuizRequest" />
@@ -431,6 +451,10 @@
 			<wsdl:input message="tns:errorOut"></wsdl:input>
 			<wsdl:output message="tns:errorOutResponse"></wsdl:output>
 		</wsdl:operation>
+        <wsdl:operation name="destroyExam">
+            <wsdl:input message="tns:destroyExam"></wsdl:input>
+            <wsdl:output message="tns:destroyExamResponse"></wsdl:output>
+        </wsdl:operation>
 	</wsdl:portType>
 	<wsdl:binding name="documentMasterSOAP" type="tns:documentMaster">
 		<soap:binding style="document"
@@ -579,6 +603,15 @@
 				<soap:body use="literal" />
 			</wsdl:output>
 		</wsdl:operation>
+        <wsdl:operation name="destroyExam">
+            <soap:operation soapAction="http://gutenberg/blocs/destroyExam" />
+            <wsdl:input>
+                <soap:body use="literal" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal" />
+            </wsdl:output>
+        </wsdl:operation>
 	</wsdl:binding>
 	<wsdl:service name="documentMaster">
 		<wsdl:port binding="tns:documentMasterSOAP" name="documentMasterSOAP">

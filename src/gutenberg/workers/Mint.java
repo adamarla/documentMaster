@@ -1,6 +1,7 @@
 package gutenberg.workers;
 
 import gutenberg.blocs.AssignmentType;
+import gutenberg.blocs.ExamType;
 import gutenberg.blocs.MkFlagsType;
 import gutenberg.blocs.QFlagsType;
 import gutenberg.blocs.TexFlagsType;
@@ -10,15 +11,18 @@ import gutenberg.blocs.ManifestType;
 import gutenberg.blocs.QuizType;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.FileWriter;
 import java.io.InputStreamReader;
-import java.lang.ProcessBuilder.Redirect;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.DirectoryStream;
 import java.io.File;
+import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
 import java.nio.file.StandardCopyOption;
 
 public class Mint implements ITagLib {
@@ -138,6 +142,38 @@ public class Mint implements ITagLib {
         out.close();
         this.make(target, true);
         return 0;
+    }
+    
+    public ManifestType destroyExam(ExamType exam) throws Exception {
+        String examUid = exam.getUid();
+        Path examDir = mintPath.resolve(examUid);
+        String[] worksheetUid = exam.getWorksheetUid();
+        for (String wsUid : worksheetUid) {
+            Path wsDir = examDir.resolve(wsUid);            
+            Files.walkFileTree(wsDir, new SimpleFileVisitor<Path>() {           
+                @Override
+                public FileVisitResult visitFile(Path file,
+                        BasicFileAttributes attrs) throws IOException {           
+                    System.out.println("Deleting file: " + file);
+                    Files.delete(file);
+                    return FileVisitResult.CONTINUE;
+                }           
+                @Override
+                public FileVisitResult postVisitDirectory(Path dir,
+                        IOException exc) throws IOException {           
+                    System.out.println("Deleting dir: " + dir);
+                    if (exc == null) {
+                        Files.delete(dir);
+                        return FileVisitResult.CONTINUE;
+                    } else {
+                        throw exc;
+                    }
+                }
+            });
+        }        
+        ManifestType manifest = new ManifestType();
+        manifest.setRoot(examUid);
+        return manifest;
     }
 
     public ManifestType generate(QuizType quiz) throws Exception {

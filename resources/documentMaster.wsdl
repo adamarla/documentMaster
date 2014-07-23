@@ -132,6 +132,13 @@
                     <xsd:element name="versionTriggers" type="xsd:string"/>
                 </xsd:sequence>
             </xsd:complexType>
+            
+            <xsd:complexType name="examType">
+                <xsd:sequence>
+                    <xsd:element name="uid" type="xsd:string"/>
+                    <xsd:element maxOccurs="unbounded" name="worksheetUid" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
         
             <xsd:complexType name="wFlagsType">
                 <xsd:sequence>
@@ -233,6 +240,12 @@
             </xsd:element>
             <xsd:element name="compileTexResponse" type="tns:responseType">
             </xsd:element>
+            
+            <xsd:element name="destroyExam" type="tns:examType">
+            </xsd:element>
+            <xsd:element name="destroyExamResponse" type="tns:responseType">
+            </xsd:element>
+            
 		</xsd:schema>
   </wsdl:types>
   <wsdl:message name="undoAnnotateRequest">
@@ -261,6 +274,10 @@
   </wsdl:message>
   <wsdl:message name="buildQuizRequest">
     <wsdl:part name="parameters" element="tns:buildQuiz">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="destroyExamResponse">
+    <wsdl:part name="parameters" element="tns:destroyExamResponse">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="fetchUnresolvedScansRequest">
@@ -345,6 +362,10 @@
   </wsdl:message>
   <wsdl:message name="prepTestResponse">
     <wsdl:part name="parameters" element="tns:prepTestResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="destroyExam">
+    <wsdl:part name="parameters" element="tns:destroyExam">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="prepTestRequest">
@@ -474,6 +495,12 @@
       <wsdl:input message="tns:errorOut">
     </wsdl:input>
       <wsdl:output message="tns:errorOutResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="destroyExam">
+      <wsdl:input message="tns:destroyExam">
+    </wsdl:input>
+      <wsdl:output message="tns:destroyExamResponse">
     </wsdl:output>
     </wsdl:operation>
   </wsdl:portType>
@@ -616,6 +643,15 @@
     </wsdl:operation>
     <wsdl:operation name="resolveScan">
       <soap:operation soapAction="http://gutenberg/blocs/resolveScan"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="destroyExam">
+      <soap:operation soapAction="http://gutenberg/blocs/destroyExam"/>
       <wsdl:input>
         <soap:body use="literal"/>
       </wsdl:input>

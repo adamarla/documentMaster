@@ -57,6 +57,10 @@
             <actionMapping>http://gutenberg/blocs/compileTex</actionMapping>
             <outputActionMapping>http://gutenberg/blocs/documentMaster/compileTexResponse</outputActionMapping>
         </operation>
+        <operation name="destroyExam" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://gutenberg/blocs">
+            <actionMapping>http://gutenberg/blocs/destroyExam</actionMapping>
+            <outputActionMapping>http://gutenberg/blocs/documentMaster/destroyExamResponse</outputActionMapping>
+        </operation>
         <operation name="generateStudentRoster" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://gutenberg/blocs">
             <actionMapping>http://gutenberg/blocs/generateStudentRoster</actionMapping>
             <outputActionMapping>http://gutenberg/blocs/documentMaster/generateStudentRosterResponse</outputActionMapping>

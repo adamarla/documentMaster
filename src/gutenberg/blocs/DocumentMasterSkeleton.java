@@ -363,4 +363,21 @@ public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
         r.setErrorOutResponse(resp);
         return r;
     }
+
+    @Override
+    public DestroyExamResponse destroyExam(DestroyExam destroyExam) {
+        ResponseType resp = new ResponseType();
+        try {
+            Config cnfg = new Config();
+            Mint mint = new Mint(cnfg);
+            mint.destroyExam(destroyExam.getDestroyExam());
+        } catch (Exception e) {
+            e.printStackTrace();
+            resp.setError(e.getMessage());
+        }
+        DestroyExamResponse r = new DestroyExamResponse();
+        r.setDestroyExamResponse(resp);
+        return r;
+    }
+    
 }
