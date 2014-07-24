@@ -170,6 +170,7 @@ public class Mint implements ITagLib {
                     }
                 }
             });
+            Files.delete(wsDir.getParent());
         }        
         ManifestType manifest = new ManifestType();
         manifest.setRoot(examUid);

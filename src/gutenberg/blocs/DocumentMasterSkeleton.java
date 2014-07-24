@@ -370,7 +370,8 @@ public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
         try {
             Config cnfg = new Config();
             Mint mint = new Mint(cnfg);
-            mint.destroyExam(destroyExam.getDestroyExam());
+            ManifestType m = mint.destroyExam(destroyExam.getDestroyExam());
+            resp.setManifest(m);
         } catch (Exception e) {
             e.printStackTrace();
             resp.setError(e.getMessage());
