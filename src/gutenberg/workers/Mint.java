@@ -149,11 +149,12 @@ public class Mint implements ITagLib {
         Path examDir = mintPath.resolve(examUid);
         String[] worksheetUid = exam.getWorksheetUid();
         for (String wsUid : worksheetUid) {
-            Path wsDir = examDir.resolve(wsUid);            
+            Path wsDir = examDir.resolve(wsUid).getParent();
+            System.out.println("Deleting: " + wsDir.getFileName());
             Files.walkFileTree(wsDir, new SimpleFileVisitor<Path>() {           
                 @Override
                 public FileVisitResult visitFile(Path file,
-                        BasicFileAttributes attrs) throws IOException {           
+                        BasicFileAttributes attrs) throws IOException {
                     System.out.println("Deleting file: " + file);
                     Files.delete(file);
                     return FileVisitResult.CONTINUE;
@@ -170,7 +171,6 @@ public class Mint implements ITagLib {
                     }
                 }
             });
-            Files.delete(wsDir.getParent());
         }        
         ManifestType manifest = new ManifestType();
         manifest.setRoot(examUid);
