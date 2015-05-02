@@ -2,7 +2,7 @@ package gutenberg.workers;
 
 public enum Resource {
 	bank,
-	vault,
+	vault,	
 	locker,
 	mint,
 	atm,
@@ -10,5 +10,6 @@ public enum Resource {
 	scantray,
 	frontdesk,
 	common,
-	latexRoot
+	latexRoot,
+	bundles
 }

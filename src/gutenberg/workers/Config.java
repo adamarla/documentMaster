@@ -29,34 +29,14 @@ public class Config {
         switch (id) {
         case bank:
             break;
-        case mint:
-            path = path.resolve("mint");
-            break;
-        case locker:
-            path = path.resolve("locker");
-            break;
-        case atm:
-            path = path.resolve("atm");
-            break;
-        case vault:
-            path = path.resolve("vault");
-            break;
-        case shared:
-            path = path.resolve("shared");
-            break;
-        case scantray:
-            path = path.resolve("scantray");
-            break;
         case frontdesk:
             path = path.resolve("front-desk");
             break;
-        case common:
-            path = path.resolve("common");
-            break;
         case latexRoot: 
         	path = Paths.get(latexRoot);
-        	break;
+        	break;       
         default:
+            path = path.resolve(id.toString());
         }
         return path;
     }

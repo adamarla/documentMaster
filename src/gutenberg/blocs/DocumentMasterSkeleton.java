@@ -10,7 +10,7 @@ import gutenberg.blocs.WriteTex;
 import gutenberg.blocs.WriteTexResponse;
 import gutenberg.blocs.CompileTex;
 import gutenberg.blocs.CompileTexResponse;
-
+import gutenberg.workers.Bundles;
 import gutenberg.workers.Config;
 import gutenberg.workers.FrontDesk;
 import gutenberg.workers.Locker;
@@ -379,6 +379,48 @@ public class DocumentMasterSkeleton implements DocumentMasterSkeletonInterface {
         DestroyExamResponse r = new DestroyExamResponse();
         r.setDestroyExamResponse(resp);
         return r;
+    }
+
+    @Override
+    public CreateBundleResponse createBundle(CreateBundle createBundle) {
+        ResponseType resp = new ResponseType();
+        try {
+            Config cnfg = new Config();
+            Bundles bundles = new Bundles(cnfg);
+            ManifestType m = bundles.create(createBundle.getCreateBundle());
+            resp.setManifest(m);
+        } catch (Exception e) {
+            e.printStackTrace();
+            resp.setError(e.getMessage());
+        }
+        CreateBundleResponse r = new CreateBundleResponse();
+        r.setCreateBundleResponse(resp);
+        return r;
+    }
+
+    @Override
+    public AddToBundleResponse addToBundle(AddToBundle addToBundle) {
+        ResponseType resp = new ResponseType();
+        try {
+            Config cnfg = new Config();
+            Bundles bundles = new Bundles(cnfg);
+            BundleType bundle = addToBundle.getAddToBundle();
+            ManifestType m = bundles.addTo(bundle.getBundleId(), bundle.getQuestions());
+            resp.setManifest(m);
+        } catch (Exception e) {
+            e.printStackTrace();
+            resp.setError(e.getMessage());
+        }
+        AddToBundleResponse r = new AddToBundleResponse();
+        r.setAddToBundleResponse(resp);
+        return r;
+    }
+
+    @Override
+    public RemoveFromBundleResponse removeFromBundle(
+        RemoveFromBundle removeFromBundle) {
+        // TODO Auto-generated method stub
+        return null;
     }
     
 }

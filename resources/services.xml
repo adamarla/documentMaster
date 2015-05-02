@@ -29,6 +29,10 @@
             <actionMapping>http://gutenberg/blocs/resolveScan</actionMapping>
             <outputActionMapping>http://gutenberg/blocs/documentMaster/resolveScanResponse</outputActionMapping>
         </operation>
+        <operation name="createBundle" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://gutenberg/blocs">
+            <actionMapping>http://gutenberg/blocs/createBundle</actionMapping>
+            <outputActionMapping>http://gutenberg/blocs/documentMaster/createBundleResponse</outputActionMapping>
+        </operation>
         <operation name="createQuestion" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://gutenberg/blocs">
             <actionMapping>http://gutenberg/blocs/createQuestion</actionMapping>
             <outputActionMapping>http://gutenberg/blocs/documentMaster/createQuestionResponse</outputActionMapping>
@@ -44,6 +48,10 @@
         <operation name="buildQuiz" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://gutenberg/blocs">
             <actionMapping>http://gutenberg/blocs/buildQuiz</actionMapping>
             <outputActionMapping>http://gutenberg/blocs/documentMaster/buildQuizResponse</outputActionMapping>
+        </operation>
+        <operation name="addToBundle" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://gutenberg/blocs">
+            <actionMapping>http://gutenberg/blocs/addToBundle</actionMapping>
+            <outputActionMapping>http://gutenberg/blocs/documentMaster/addToBundleResponse</outputActionMapping>
         </operation>
         <operation name="generateQuizReport" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://gutenberg/blocs">
             <actionMapping>http://gutenberg/blocs/generateQuizReport</actionMapping>
@@ -76,6 +84,10 @@
         <operation name="assignQuiz" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://gutenberg/blocs">
             <actionMapping>http://gutenberg/blocs/assignQuiz</actionMapping>
             <outputActionMapping>http://gutenberg/blocs/documentMaster/assignQuizResponse</outputActionMapping>
+        </operation>
+        <operation name="removeFromBundle" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://gutenberg/blocs">
+            <actionMapping>http://gutenberg/blocs/removeFromBundle</actionMapping>
+            <outputActionMapping>http://gutenberg/blocs/documentMaster/removeFromBundleResponse</outputActionMapping>
         </operation>
     </service>
 </serviceGroup>

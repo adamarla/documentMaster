@@ -153,6 +153,13 @@
                 </xsd:sequence>
             </xsd:complexType>
             
+            <xsd:complexType name="bundleType">
+                <xsd:sequence>
+                    <xsd:element name="bundleId" type="xsd:string"/>
+                    <xsd:element maxOccurs="unbounded" name="questions" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            
 			<xsd:element name="buildQuiz" type="tns:quizType">
 			</xsd:element>
 			<xsd:element name="buildQuizResponse" type="tns:responseType">
@@ -246,8 +253,21 @@
             <xsd:element name="destroyExamResponse" type="tns:responseType">
             </xsd:element>
             
+            <xsd:element name="createBundle" type="xsd:string"/>
+            <xsd:element name="createBundleResponse" type="tns:responseType"/>
+            
+            <xsd:element name="addToBundle" type="tns:bundleType"/>
+            <xsd:element name="addToBundleResponse" type="tns:responseType"/>
+            
+            <xsd:element name="removeFromBundle" type="tns:bundleType"/>
+            <xsd:element name="removeFromBundleResponse" type="tns:responseType"/>
+            
 		</xsd:schema>
   </wsdl:types>
+  <wsdl:message name="removeFromBundle">
+    <wsdl:part name="parameters" element="tns:removeFromBundle">
+    </wsdl:part>
+  </wsdl:message>
   <wsdl:message name="undoAnnotateRequest">
     <wsdl:part name="parameters" element="tns:undoAnnotate">
     </wsdl:part>
@@ -292,6 +312,10 @@
     <wsdl:part name="parameters" element="tns:compileTexResponse">
     </wsdl:part>
   </wsdl:message>
+  <wsdl:message name="createBundle">
+    <wsdl:part name="parameters" element="tns:createBundle">
+    </wsdl:part>
+  </wsdl:message>
   <wsdl:message name="generateStudentRosterResponse">
     <wsdl:part name="parameters" element="tns:generateStudentRosterResponse">
     </wsdl:part>
@@ -314,6 +338,10 @@
   </wsdl:message>
   <wsdl:message name="generateSuggestionFormResponse">
     <wsdl:part name="parameters" element="tns:generateSuggestionFormResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="removeFromBundleResponse">
+    <wsdl:part name="parameters" element="tns:removeFromBundleResponse">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="errorOutResponse">
@@ -344,8 +372,16 @@
     <wsdl:part name="parameters" element="tns:buildQuizResponse">
     </wsdl:part>
   </wsdl:message>
+  <wsdl:message name="createBundleResponse">
+    <wsdl:part name="parameters" element="tns:createBundleResponse">
+    </wsdl:part>
+  </wsdl:message>
   <wsdl:message name="generateQuizReportResponse">
     <wsdl:part name="parameters" element="tns:generateQuizReportResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="addToBundleResponse">
+    <wsdl:part name="parameters" element="tns:addToBundleResponse">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="generateSuggestionFormRequest">
@@ -398,6 +434,10 @@
   </wsdl:message>
   <wsdl:message name="annotateScanRequest">
     <wsdl:part name="parameters" element="tns:annotateScan">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="addToBundle">
+    <wsdl:part name="parameters" element="tns:addToBundle">
     </wsdl:part>
   </wsdl:message>
   <wsdl:portType name="documentMaster">
@@ -501,6 +541,24 @@
       <wsdl:input message="tns:destroyExam">
     </wsdl:input>
       <wsdl:output message="tns:destroyExamResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="createBundle">
+      <wsdl:input message="tns:createBundle">
+    </wsdl:input>
+      <wsdl:output message="tns:createBundleResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="addToBundle">
+      <wsdl:input message="tns:addToBundle">
+    </wsdl:input>
+      <wsdl:output message="tns:addToBundleResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="removeFromBundle">
+      <wsdl:input message="tns:removeFromBundle">
+    </wsdl:input>
+      <wsdl:output message="tns:removeFromBundleResponse">
     </wsdl:output>
     </wsdl:operation>
   </wsdl:portType>
@@ -652,6 +710,33 @@
     </wsdl:operation>
     <wsdl:operation name="destroyExam">
       <soap:operation soapAction="http://gutenberg/blocs/destroyExam"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="createBundle">
+      <soap:operation soapAction="http://gutenberg/blocs/createBundle"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="addToBundle">
+      <soap:operation soapAction="http://gutenberg/blocs/addToBundle"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="removeFromBundle">
+      <soap:operation soapAction="http://gutenberg/blocs/removeFromBundle"/>
       <wsdl:input>
         <soap:body use="literal"/>
       </wsdl:input>
