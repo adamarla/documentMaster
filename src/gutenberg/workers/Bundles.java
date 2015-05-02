@@ -52,7 +52,7 @@ public class Bundles {
             
             final Path root = fs.getPath("/");
             String manifestXML = String.format("%s.xml", bundleId);
-            Path zipManifest = bundlePath.resolve(manifestXML);
+            Path zipManifest = vaultPath.resolve(manifestXML);
             PrintWriter pw = new PrintWriter(zipManifest.toFile());
             
             if (Files.exists(root.resolve(manifestXML))) {
@@ -79,6 +79,7 @@ public class Bundles {
             Path srcDir, destDir = null;
             for (String question : questions) {
                 String path = question.split("\\|")[0], label = question.split("\\|")[1];
+                
                 // Create question dir
                 destDir = fs.getPath(root.toString(), path.replace('/', '-'));
                 if (Files.notExists(destDir)) Files.createDirectory(destDir);
@@ -92,8 +93,9 @@ public class Bundles {
                     }
                     Files.copy(srcDir.resolve(QSN_XML), destDir.resolve(QSN_XML), 
                         StandardCopyOption.REPLACE_EXISTING);
-                }                
+                }
                 pw.println(String.format("    <question tag=\"%s\" label=\"%s\"/>", path, label));
+                System.out.println("Processed " + srcDir.resolve(QSN_XML).toString());
             }
             pw.println("</qbundle>");
             pw.close();
@@ -113,7 +115,6 @@ public class Bundles {
     }
     
     Path vaultPath, bundlePath;
-    final String QSN_XML = "question.xml",
-        MANIFEST = "manifest.xml";
+    final String QSN_XML = "question.xml";
 
 }
