@@ -112,7 +112,6 @@ public class Bundles {
     
     private String getSHA1Sum(Path path) throws Exception {
         MessageDigest md = MessageDigest.getInstance("SHA-1");
-
         int bytesRead = 0;
         byte[] byteBuf = new byte[1024];
         try (java.io.InputStream is = new FileInputStream(path.toFile())) {
@@ -125,13 +124,12 @@ public class Bundles {
         StringBuffer sb = new StringBuffer();
         for (byte b : SHA1digest){
             sb.append(String.format("%02x", b));
-        }
-        
+        }        
         return sb.toString().substring(0, 12);
     }
     
     Path vaultPath, bundlePath;
     final String QSN_XML = "question.xml";
-    final String QSN_TAG = "    <question tag=\"%s\" label=\"%s\" id=\"%s\" signature=\"\"/>";
+    final String QSN_TAG = "    <question tag=\"%s\" label=\"%s\" id=\"%s\" signature=\"%s\"/>";
 
 }
