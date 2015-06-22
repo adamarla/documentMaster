@@ -82,15 +82,15 @@ public class Vault implements ITagLib {
         String dirName = String.format("%s/%s/%s", examinerId, levelOne, levelTwo);
         
         Path questionDir = vaultPath.resolve(dirName);
-        Path templatesDir = sharedPath.resolve(templates);
-        String[] files = {texFile, plotFile, bc2FigFile};
+//        Path templatesDir = sharedPath.resolve(templates);
+//        String[] files = {texFile, plotFile, bc2FigFile};
         
         Files.createDirectories(questionDir);
         
         // Copy question.tex etc. 
-        for(String f: files) {
-        	Files.copy(templatesDir.resolve(f), questionDir.resolve(f)) ;
-        }
+//        for(String f: files) {
+//        	Files.copy(templatesDir.resolve(f), questionDir.resolve(f)) ;
+//        }
         
         // Ensure that Makefiles are present all the way down to examinerId/levelOne
         String[] hierarchy = {examinerId, examinerId + "/" + levelOne} ;
