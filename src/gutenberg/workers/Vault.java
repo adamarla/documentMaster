@@ -86,7 +86,9 @@ public class Vault implements ITagLib {
 //        String[] files = {texFile, plotFile, bc2FigFile};
         
         Files.createDirectories(questionDir);
-        
+        Path dummy = questionDir.resolve(".dummy");
+        if (Files.notExists(dummy))
+            Files.createFile(dummy);
         // Copy question.tex etc. 
 //        for(String f: files) {
 //        	Files.copy(templatesDir.resolve(f), questionDir.resolve(f)) ;
